@@ -1,5 +1,8 @@
 package com.tsp.new_tsp_front.api.model.service;
 
+import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
+import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
+import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.service.impl.FrontModelJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +29,7 @@ public class FrontModelJpaApiService {
 	 * @param modelMap
 	 * @throws Exception
 	 */
-	public long getModelListCnt(ConcurrentHashMap modelMap) throws Exception {
+	public Long getModelListCnt(ConcurrentHashMap modelMap) throws Exception {
 		return frontModelJpaRepository.getModelListCnt(modelMap);
 	}
 
@@ -42,7 +45,39 @@ public class FrontModelJpaApiService {
 	 * @param modelMap
 	 * @throws Exception
 	 */
-	public List<FrontModelEntity> getModelList(ConcurrentHashMap modelMap) throws Exception {
+	public List<FrontModelDTO> getModelList(ConcurrentHashMap modelMap) throws Exception {
 		return frontModelJpaRepository.getModelList(modelMap);
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : getModelImageListCnt
+	 * 2. ClassName  : FrontModelJpaApiService.java
+	 * 3. Comment    : 프론트 > 모델 이미지 수 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 01. 02.
+	 * </pre>
+	 *
+	 * @param modelMap
+	 * @throws Exception
+	 */
+	public Long getModelImageListCnt(ConcurrentHashMap modelMap) throws Exception {
+		return frontModelJpaRepository.getModelImageListCnt(modelMap);
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : getModelImageList
+	 * 2. ClassName  : FrontModelJpaApiService.java
+	 * 3. Comment    : 프론트 > 모델 이미지 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 01. 02.
+	 * </pre>
+	 *
+	 * @param modelMap
+	 * @throws Exception
+	 */
+	public List<CommonImageDTO> getModelImageList(ConcurrentHashMap modelMap) throws Exception {
+		return frontModelJpaRepository.getModelImageList(modelMap);
 	}
 }

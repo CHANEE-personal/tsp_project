@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_front.api.model.domain;
 
+import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

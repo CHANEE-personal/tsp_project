@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_front.api.model.domain;
 
+import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCodeEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonMappedClass;
 import lombok.AllArgsConstructor;
@@ -71,4 +72,8 @@ public class FrontModelEntity extends NewCommonMappedClass {
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "category_cd", insertable = false, updatable = false)
 	private NewCodeEntity newModelCodeJpaDTO;
+
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "idx", referencedColumnName = "type_idx", insertable = false, updatable = false)
+	private CommonImageEntity newCommonImageJpaDTO;
 }
