@@ -15,6 +15,7 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @Setter
 @Builder
+@Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tsp_image")

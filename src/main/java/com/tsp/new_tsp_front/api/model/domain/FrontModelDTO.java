@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @SuperBuilder
@@ -61,4 +64,6 @@ public class FrontModelDTO extends NewCommonDTO {
 
 	@ApiModelProperty(required = true, value = "visible")
 	private String visible;
+
+	private CommonImageDTO modelImage = new CommonImageDTO();
 }

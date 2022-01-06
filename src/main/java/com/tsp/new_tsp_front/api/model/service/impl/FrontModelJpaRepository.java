@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -34,7 +33,6 @@ public class FrontModelJpaRepository {
 		String searchKeyword = StringUtil.getString(modelMap.get("searchKeyword"),"");
 		Integer categoryCd = StringUtil.getInt(modelMap.get("categoryCd"),0);
 
-		System.out.println("===modelMap==="+modelMap);
 		if ("0".equals(searchType)) {
 			return frontModelEntity.modelKorName.contains(searchKeyword)
 					.or(frontModelEntity.modelEngName.contains(searchKeyword)

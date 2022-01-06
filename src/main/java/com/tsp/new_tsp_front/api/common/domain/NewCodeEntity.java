@@ -42,8 +42,4 @@ public class NewCodeEntity extends NewCommonMappedClass {
 
 	@OneToMany(mappedBy = "newModelCodeJpaDTO", cascade = CascadeType.MERGE, fetch = LAZY)
 	private List<FrontModelEntity> frontModelEntityList = new ArrayList<>();
-
-	/*@OneToMany(mappedBy = "newPortFolioJpaDTO", cascade = CascadeType.MERGE, fetch = LAZY)
-	private List<AdminPortFolioEntity> adminPortFolioEntityList = new ArrayList<>();*/
-
 }
