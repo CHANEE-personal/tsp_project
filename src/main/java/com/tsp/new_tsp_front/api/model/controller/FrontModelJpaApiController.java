@@ -1,9 +1,7 @@
 package com.tsp.new_tsp_front.api.model.controller;
 
 import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
-import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
-import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.service.FrontModelJpaApiService;
 import com.tsp.new_tsp_front.common.SearchCommon;
 import com.tsp.new_tsp_front.common.paging.Page;
@@ -49,10 +47,10 @@ public class FrontModelJpaApiController {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/lists/{categoryCd}")
-	public ConcurrentHashMap getModelList(@PathVariable("categoryCd") Integer categoryCd,
+	public ConcurrentHashMap<String, Object> getModelList(@PathVariable("categoryCd") Integer categoryCd,
 										  @RequestParam(required = false) Map<String, Object> paramMap,
 										  Page page) throws Exception {
-		ConcurrentHashMap resultMap = new ConcurrentHashMap();
+		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
 		// 페이징 및 검색
 		ConcurrentHashMap<String, Object> modelMap = searchCommon.searchCommon(page, paramMap);
 		modelMap.put("categoryCd", categoryCd);
@@ -68,7 +66,7 @@ public class FrontModelJpaApiController {
 		// 리스트 수
 		resultMap.put("pageSize", page.getSize());
 		// 전체 페이지 수
-		resultMap.put("perPageListCnt", Math.ceil((modelListCnt - 1) / page.getSize() + 1));
+		resultMap.put("perPageListCnt", Math.ceil((modelListCnt-1)/page.getSize()+1));
 		// 전체 아이템 수
 		resultMap.put("modelListTotalCnt", modelListCnt);
 
@@ -98,10 +96,10 @@ public class FrontModelJpaApiController {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/image/{categoryCd}")
-	public ConcurrentHashMap getModelImageList(@PathVariable("categoryCd") Integer categoryCd,
+	public ConcurrentHashMap<String, Object> getModelImageList(@PathVariable("categoryCd") Integer categoryCd,
 										  @RequestParam(required = false) Map<String, Object> paramMap,
 										  Page page) throws Exception {
-		ConcurrentHashMap resultMap = new ConcurrentHashMap();
+		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
 		// 페이징 및 검색
 		ConcurrentHashMap<String, Object> modelMap = searchCommon.searchCommon(page, paramMap);
 		modelMap.put("categoryCd", categoryCd);
@@ -117,7 +115,7 @@ public class FrontModelJpaApiController {
 		// 리스트 수
 		resultMap.put("pageSize", page.getSize());
 		// 전체 페이지 수
-		resultMap.put("perPageListCnt", Math.ceil((modelImageListCnt - 1) / page.getSize() + 1));
+		resultMap.put("perPageListCnt", Math.ceil((modelImageListCnt-1)/page.getSize()+1));
 		// 전체 아이템 수
 		resultMap.put("modelImageListTotalCnt", modelImageListCnt);
 
