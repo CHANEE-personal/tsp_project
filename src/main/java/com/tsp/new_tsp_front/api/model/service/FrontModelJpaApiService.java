@@ -1,9 +1,7 @@
 package com.tsp.new_tsp_front.api.model.service;
 
 import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
-import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
-import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.service.impl.FrontModelJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
