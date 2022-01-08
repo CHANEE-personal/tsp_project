@@ -4,6 +4,7 @@ import com.tsp.new_tsp_front.common.paging.Page;
 import com.tsp.new_tsp_front.common.utils.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,7 +27,7 @@ public class SearchCommon {
 	 * @return ConcurrentHashMap
 	 * @throws Exception
 	 */
-	public ConcurrentHashMap<String, Object> searchCommon(Page page, Map<String, Object> paramMap) {
+	public ConcurrentHashMap<String, Object> searchCommon(Page page, @RequestParam(required = false) Map<String, Object> paramMap) {
 
 		ConcurrentHashMap<String, Object> searchMap = new ConcurrentHashMap<>();
 

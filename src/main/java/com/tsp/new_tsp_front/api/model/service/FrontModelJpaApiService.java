@@ -29,7 +29,7 @@ public class FrontModelJpaApiService {
 	 * @param modelMap
 	 * @throws Exception
 	 */
-	public Long getModelListCnt(ConcurrentHashMap modelMap) throws Exception {
+	public long getModelListCnt(ConcurrentHashMap modelMap) throws Exception {
 		return frontModelJpaRepository.getModelListCnt(modelMap);
 	}
 
@@ -61,7 +61,7 @@ public class FrontModelJpaApiService {
 	 * @param modelMap
 	 * @throws Exception
 	 */
-	public Long getModelImageListCnt(ConcurrentHashMap modelMap) throws Exception {
+	public long getModelImageListCnt(ConcurrentHashMap modelMap) throws Exception {
 		return frontModelJpaRepository.getModelImageListCnt(modelMap);
 	}
 

@@ -50,7 +50,7 @@ public class FrontProductionJpaRepository {
 	 * @param productionMap
 	 * @throws Exception
 	 */
-	public Long getProductionListCnt(Map<String, Object> productionMap) throws Exception {
+	public long getProductionListCnt(Map<String, Object> productionMap) throws Exception {
 
 		return queryFactory.selectFrom(frontProductionEntity)
 				.where(searchProduction(productionMap))

@@ -26,7 +26,7 @@ public class FrontProductionJpaApiService {
 	 * @param productionMap
 	 * @throws Exception
 	 */
-	public Long getProductionListCnt(ConcurrentHashMap<String, Object> productionMap) throws Exception {
+	public long getProductionListCnt(ConcurrentHashMap<String, Object> productionMap) throws Exception {
 		return frontProductionJpaRepository.getProductionListCnt(productionMap);
 	}
 

@@ -5,6 +5,7 @@ import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.service.FrontModelJpaApiService;
 import com.tsp.new_tsp_front.common.SearchCommon;
 import com.tsp.new_tsp_front.common.paging.Page;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -20,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @RequiredArgsConstructor
+@Api(tags = "모델관련 API")
 @RequestMapping("/api/model")
 public class FrontModelJpaApiController {
 
@@ -47,7 +49,7 @@ public class FrontModelJpaApiController {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/lists/{categoryCd}")
-	public ConcurrentHashMap<String, Object> getModelList(@PathVariable("categoryCd") Integer categoryCd,
+	public ConcurrentHashMap<String, Object> getModelList(@PathVariable("categoryCd") String categoryCd,
 										  @RequestParam(required = false) Map<String, Object> paramMap,
 										  Page page) throws Exception {
 		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
@@ -55,7 +57,7 @@ public class FrontModelJpaApiController {
 		ConcurrentHashMap<String, Object> modelMap = searchCommon.searchCommon(page, paramMap);
 		modelMap.put("categoryCd", categoryCd);
 
-		Long modelListCnt = this.frontModelJpaApiService.getModelListCnt(modelMap);
+		long modelListCnt = this.frontModelJpaApiService.getModelListCnt(modelMap);
 
 		List<FrontModelDTO> modelList = new ArrayList<>();
 
@@ -96,7 +98,7 @@ public class FrontModelJpaApiController {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/image/{categoryCd}")
-	public ConcurrentHashMap<String, Object> getModelImageList(@PathVariable("categoryCd") Integer categoryCd,
+	public ConcurrentHashMap<String, Object> getModelImageList(@PathVariable("categoryCd") String categoryCd,
 										  @RequestParam(required = false) Map<String, Object> paramMap,
 										  Page page) throws Exception {
 		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
@@ -104,7 +106,7 @@ public class FrontModelJpaApiController {
 		ConcurrentHashMap<String, Object> modelMap = searchCommon.searchCommon(page, paramMap);
 		modelMap.put("categoryCd", categoryCd);
 
-		Long modelImageListCnt = this.frontModelJpaApiService.getModelImageListCnt(modelMap);
+		long modelImageListCnt = this.frontModelJpaApiService.getModelImageListCnt(modelMap);
 
 		List<CommonImageDTO> modelImageList = new ArrayList<>();
 

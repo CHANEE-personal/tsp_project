@@ -1,10 +1,10 @@
 package com.tsp.new_tsp_front.api.production.controller;
 
-import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
 import com.tsp.new_tsp_front.api.production.service.FrontProductionJpaApiService;
 import com.tsp.new_tsp_front.common.SearchCommon;
 import com.tsp.new_tsp_front.common.paging.Page;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -20,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @RequiredArgsConstructor
+@Api(tags = "프로덕션관련 API")
 @RequestMapping("/api/production")
 public class FrontProductionJpaApiController {
 
@@ -47,7 +48,7 @@ public class FrontProductionJpaApiController {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/lists/{categoryCd}")
-	public ConcurrentHashMap<String, Object> getProductionList(@PathVariable("categoryCd") Integer categoryCd,
+	public ConcurrentHashMap<String, Object> getProductionList(@PathVariable("categoryCd") String categoryCd,
 														  @RequestParam(required = false) Map<String, Object> paramMap,
 														  Page page) throws Exception {
 		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
@@ -55,7 +56,7 @@ public class FrontProductionJpaApiController {
 		ConcurrentHashMap<String, Object> modelMap = searchCommon.searchCommon(page, paramMap);
 		modelMap.put("categoryCd", categoryCd);
 
-		Long productionListCnt = this.frontProductionJpaApiService.getProductionListCnt(modelMap);
+		long productionListCnt = this.frontProductionJpaApiService.getProductionListCnt(modelMap);
 
 		List<FrontProductionDTO> productionList = new ArrayList<>();
 

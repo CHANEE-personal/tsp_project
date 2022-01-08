@@ -65,5 +65,6 @@ public class FrontModelDTO extends NewCommonDTO {
 	@ApiModelProperty(required = true, value = "visible")
 	private String visible;
 
+	@ApiModelProperty(required = true, value = "modelImageList", hidden = true)
 	private CommonImageDTO modelImage = new CommonImageDTO();
 }

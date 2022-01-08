@@ -64,7 +64,7 @@ public class FrontModelJpaRepository {
 	 * @throws Exception
 	 * @return
 	 */
-	public Long getModelListCnt(Map<String, Object> modelMap) throws Exception {
+	public long getModelListCnt(Map<String, Object> modelMap) throws Exception {
 
 		return queryFactory.selectFrom(frontModelEntity)
 				.where(searchModel(modelMap))
@@ -115,7 +115,7 @@ public class FrontModelJpaRepository {
 	 * @throws Exception
 	 * @return
 	 */
-	public Long getModelImageListCnt(Map<String, Object> modelMap) throws Exception {
+	public long getModelImageListCnt(Map<String, Object> modelMap) throws Exception {
 
 		return queryFactory.selectFrom(commonImageEntity)
 				.where(commonImageEntity.typeName.eq("model").
