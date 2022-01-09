@@ -1,6 +1,7 @@
 package com.tsp.new_tsp_front.api.model.domain;
 
 import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
+import com.tsp.new_tsp_front.api.common.domain.FrontModelImageDTO;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -9,6 +10,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -71,8 +75,14 @@ public class FrontModelDTO extends NewCommonDTO {
 	@ApiModelProperty(required = true, value = "model second name")
 	private String model_second_name;
 
-	@ApiModelProperty(required = true, value = "model third name")
-	private String model_third_name;
+	@ApiModelProperty(required = true, value = "model kor first name")
+	private String model_kor_first_name;
+
+	@ApiModelProperty(required = true, value = "model kor second name")
+	private String model_kor_second_name;
+
+//	@ApiModelProperty(required = true, value = "modelImageList", hidden = true)
+//	private List<FrontModelImageDTO> modelImage = new ArrayList<>();
 
 	@ApiModelProperty(required = true, value = "modelImageList", hidden = true)
 	private CommonImageDTO modelImage = new CommonImageDTO();

@@ -13,6 +13,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -81,15 +84,23 @@ public class FrontModelEntity extends NewCommonMappedClass {
 	@NotEmpty(message = "모델 두번째 이름 입력은 필수입니다.")
 	private String model_second_name;
 
-	@Column(name = "model_third_name")
-	@NotEmpty(message = "모델 세번째 이름 입력은 필수입니다.")
-	private String model_third_name;
+	@Column(name = "model_kor_first_name")
+	@NotEmpty(message = "모델 국문 첫번째 이름 입력은 필수입니다.")
+	private String model_kor_first_name;
+
+	@Column(name = "model_kor_second_name")
+	@NotEmpty(message = "모델 국문 두번째 이름 입력은 필수입니다.")
+	private String model_kor_second_name;
 
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "category_cd", insertable = false, updatable = false)
 	private NewCodeEntity newModelCodeJpaDTO;
 
+//	@OneToMany(mappedBy = "modelEntity")
+//	private List<FrontModelImageEntity> modelImages = new ArrayList<>();
+
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "idx", referencedColumnName = "type_idx", insertable = false, updatable = false)
 	private CommonImageEntity newCommonImageJpaDTO;
+
 }

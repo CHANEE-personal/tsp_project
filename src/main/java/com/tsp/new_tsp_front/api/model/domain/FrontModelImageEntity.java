@@ -1,33 +1,27 @@
-package com.tsp.new_tsp_front.api.common.domain;
+package com.tsp.new_tsp_front.api.model.domain;
 
-import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
-import com.tsp.new_tsp_front.api.model.domain.FrontModelImageEntity;
+import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
+@SuperBuilder
 @AllArgsConstructor
-@Table(name = "tsp_image")
-public class CommonImageEntity implements Serializable {
-
-	@Transient
-	private Integer rnum;
+@NoArgsConstructor
+@Table(name = "tsp_model_image")
+public class FrontModelImageEntity {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "idx")
-	@ApiModelProperty(value = "파일 IDX", required = true, hidden = true)
 	private Integer idx;
 
 	@Column(name = "type_idx")
@@ -70,10 +64,12 @@ public class CommonImageEntity implements Serializable {
 	@ApiModelProperty(value = "등록일자", hidden = true)
 	private String regDate;
 
-	@OneToMany(mappedBy = "newCommonImageJpaDTO", cascade = CascadeType.MERGE, fetch = LAZY)
-	private List<FrontModelEntity> frontModelEntityList = new ArrayList<>();
+	@ManyToOne
+	@JoinColumn(name = "type_idx", insertable = false, updatable = false)
+	private FrontModelEntity modelEntity;
 
+	@ManyToOne
+	@JoinColumn(name = "idx", referencedColumnName = "type_idx", insertable = false, updatable = false)
+	private CommonImageEntity imageEntity;
 
-//	@OneToMany(mappedBy = "imageEntity", cascade = CascadeType.MERGE, fetch = LAZY)
-//	private List<FrontModelImageEntity> imageModels = new ArrayList<>();
 }
