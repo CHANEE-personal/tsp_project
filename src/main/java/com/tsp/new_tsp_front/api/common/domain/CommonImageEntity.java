@@ -70,10 +70,14 @@ public class CommonImageEntity implements Serializable {
 	@ApiModelProperty(value = "등록일자", hidden = true)
 	private String regDate;
 
-	@OneToMany(mappedBy = "newCommonImageJpaDTO", cascade = CascadeType.MERGE, fetch = LAZY)
-	private List<FrontModelEntity> frontModelEntityList = new ArrayList<>();
+//	@OneToMany(mappedBy = "newCommonImageJpaDTO", cascade = CascadeType.MERGE, fetch = LAZY)
+//	private List<FrontModelEntity> frontModelEntityList = new ArrayList<>();
 
 
 //	@OneToMany(mappedBy = "imageEntity", cascade = CascadeType.MERGE, fetch = LAZY)
 //	private List<FrontModelImageEntity> imageModels = new ArrayList<>();
+
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "type_idx", referencedColumnName = "idx", insertable = false, updatable = false)
+	private FrontModelEntity frontModelEntity;
 }

@@ -36,7 +36,7 @@ public class ModelMapperImpl implements ModelMapper {
 				.createTime(entity.getCreateTime())
 				.updater(entity.getUpdater())
 				.updateTime(entity.getUpdateTime())
-				.modelImage(ModelImageMapperImpl.INSTANCE.toDto(entity.getNewCommonImageJpaDTO()))
+				.modelImage(ModelImageMapperImpl.INSTANCE.toDtoList(entity.getCommonImageEntityList()))
 				.build();
 	}
 

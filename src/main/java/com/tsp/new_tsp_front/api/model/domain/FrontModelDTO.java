@@ -85,5 +85,5 @@ public class FrontModelDTO extends NewCommonDTO {
 //	private List<FrontModelImageDTO> modelImage = new ArrayList<>();
 
 	@ApiModelProperty(required = true, value = "modelImageList", hidden = true)
-	private CommonImageDTO modelImage = new CommonImageDTO();
+	private List<CommonImageDTO> modelImage = new ArrayList<>();
 }

@@ -101,9 +101,9 @@ public class FrontModelJpaRepository {
 		List<FrontModelEntity> modelList = queryFactory
 				.selectFrom(frontModelEntity)
 				.orderBy(frontModelEntity.idx.desc())
-				.leftJoin(frontModelEntity.newCommonImageJpaDTO, commonImageEntity)
+				.leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
 				.fetchJoin()
-				.where(searchModel(modelMap).and(commonImageEntity.imageType.eq("main")))
+				.where(searchModel(modelMap).and(frontModelEntity.model_main_yn.eq("Y")))
 				.offset(StringUtil.getInt(modelMap.get("jpaStartPage"),0))
 				.limit(StringUtil.getInt(modelMap.get("size"),0))
 				.fetch();
