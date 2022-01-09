@@ -69,6 +69,22 @@ public class FrontModelEntity extends NewCommonMappedClass {
 	@Column(name = "visible")
 	private String visible;
 
+	@Column(name = "model_main_yn")
+	@NotEmpty(message = "모델 메인 전시 여부는 필수입니다.")
+	private String model_main_yn;
+
+	@Column(name = "model_first_name")
+	@NotEmpty(message = "모델 첫번째 이름 입력은 필수입니다.")
+	private String model_first_name;
+
+	@Column(name = "model_second_name")
+	@NotEmpty(message = "모델 두번째 이름 입력은 필수입니다.")
+	private String model_second_name;
+
+	@Column(name = "model_third_name")
+	@NotEmpty(message = "모델 세번째 이름 입력은 필수입니다.")
+	private String model_third_name;
+
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "category_cd", insertable = false, updatable = false)
 	private NewCodeEntity newModelCodeJpaDTO;
