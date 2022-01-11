@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity.*;
+
 @RestController
 @RequiredArgsConstructor
 @Api(tags = "프로덕션관련 API")
@@ -37,7 +39,6 @@ public class FrontProductionJpaApiController {
 	 * 5. 작성일       : 2022. 01. 06.
 	 * </pre>
 	 *
-	 * @param categoryCd
 	 * @param paramMap
 	 * @param page
 	 * @throws Exception
@@ -48,14 +49,12 @@ public class FrontProductionJpaApiController {
 			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
-	@GetMapping(value = "/lists/{categoryCd}")
-	public ConcurrentHashMap<String, Object> getProductionList(@PathVariable("categoryCd") String categoryCd,
-														  @RequestParam(required = false) Map<String, Object> paramMap,
+	@GetMapping(value = "/lists")
+	public ConcurrentHashMap<String, Object> getProductionList(@RequestParam(required = false) Map<String, Object> paramMap,
 														  Page page) throws Exception {
 		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
 		// 페이징 및 검색
 		ConcurrentHashMap<String, Object> modelMap = searchCommon.searchCommon(page, paramMap);
-		modelMap.put("categoryCd", categoryCd);
 
 		long productionListCnt = this.frontProductionJpaApiService.getProductionListCnt(modelMap);
 
@@ -99,7 +98,7 @@ public class FrontProductionJpaApiController {
 	public ConcurrentHashMap<String, Object> getProductionInfo(@PathVariable("idx") Integer idx) throws Exception {
 		ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
 
-		FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(idx).build();
+		FrontProductionEntity frontProductionEntity = builder().idx(idx).build();
 
 		productionMap.put("productionInfo", this.frontProductionJpaApiService.getProductionInfo(frontProductionEntity));
 

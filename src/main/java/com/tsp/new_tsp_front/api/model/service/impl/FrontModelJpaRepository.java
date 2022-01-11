@@ -64,7 +64,6 @@ public class FrontModelJpaRepository {
 	 * @return
 	 */
 	public long getModelListCnt(Map<String, Object> modelMap) throws Exception {
-
 		return queryFactory.selectFrom(frontModelEntity)
 				.where(searchModel(modelMap))
 				.fetchCount();
@@ -122,15 +121,15 @@ public class FrontModelJpaRepository {
 		FrontModelEntity getModelInfo = queryFactory
 				.selectFrom(frontModelEntity)
 				.where(frontModelEntity.idx.eq(existFrontModelEntity.getIdx())
-						.and(frontModelEntity.visible.eq("Y")))
+				.and(frontModelEntity.visible.eq("Y")))
 				.fetchOne();
 
 		//모델 이미지 조회
 		List<CommonImageEntity> modelImageList = queryFactory
 				.selectFrom(commonImageEntity)
-				.where(commonImageEntity.typeIdx.eq(existFrontModelEntity.getIdx()),
-						commonImageEntity.visible.eq("Y"),
-						commonImageEntity.typeName.eq("model")).fetch();
+				.where(commonImageEntity.typeIdx.eq(existFrontModelEntity.getIdx())
+				.and(commonImageEntity.visible.eq("Y"))
+				.and(commonImageEntity.typeName.eq("model"))).fetch();
 
 		modelMap.put("modelInfo", ModelMapper.INSTANCE.toDto(getModelInfo));
 		modelMap.put("modelImageList", ModelImageMapper.INSTANCE.toDtoList(modelImageList));
