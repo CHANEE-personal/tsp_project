@@ -3,17 +3,13 @@ package com.tsp.new_tsp_front.api.production.service.impl;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
-import com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity;
 import com.tsp.new_tsp_front.api.model.service.impl.ModelImageMapper;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
-import com.tsp.new_tsp_front.api.production.domain.QFrontProductionEntity;
-import com.tsp.new_tsp_front.api.production.service.impl.jpa.ProductionMapper;
 import com.tsp.new_tsp_front.common.utils.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,8 +22,6 @@ import static com.tsp.new_tsp_front.api.production.domain.QFrontProductionEntity
 public class FrontProductionJpaRepository {
 
 	private final JPAQueryFactory queryFactory;
-	private final EntityManager em;
-
 
 	private BooleanExpression searchProduction(Map<String, Object> productionMap) {
 		String searchType = StringUtil.getString(productionMap.get("searchType"),"");

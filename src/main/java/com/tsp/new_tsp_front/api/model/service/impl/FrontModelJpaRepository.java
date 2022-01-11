@@ -25,7 +25,6 @@ import static com.tsp.new_tsp_front.api.model.domain.QFrontModelEntity.frontMode
 public class FrontModelJpaRepository {
 
 	private final JPAQueryFactory queryFactory;
-	private final EntityManager em;
 
 	private BooleanExpression searchModel(Map<String, Object> modelMap) {
 		String searchType = StringUtil.getString(modelMap.get("searchType"),"");

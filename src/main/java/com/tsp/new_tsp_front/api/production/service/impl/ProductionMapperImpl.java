@@ -1,4 +1,4 @@
-package com.tsp.new_tsp_front.api.production.service.impl.jpa;
+package com.tsp.new_tsp_front.api.production.service.impl;
 
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;

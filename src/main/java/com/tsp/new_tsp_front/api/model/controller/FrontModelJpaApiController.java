@@ -1,6 +1,5 @@
 package com.tsp.new_tsp_front.api.model.controller;
 
-import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.service.FrontModelJpaApiService;
