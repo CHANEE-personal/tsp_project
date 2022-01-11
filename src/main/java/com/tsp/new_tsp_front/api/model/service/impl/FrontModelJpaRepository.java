@@ -4,10 +4,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
-import com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
-import com.tsp.new_tsp_front.api.model.domain.FrontModelImageEntity;
 import com.tsp.new_tsp_front.common.utils.StringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +18,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity.commonImageEntity;
 import static com.tsp.new_tsp_front.api.model.domain.QFrontModelEntity.frontModelEntity;
-//import static com.tsp.new_tsp_front.api.model.domain.QFrontModelImageEntity.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -87,17 +84,6 @@ public class FrontModelJpaRepository {
 	 * @return
 	 */
 	public List<FrontModelDTO> getModelList(Map<String, Object> modelMap) throws Exception {
-//		List<FrontModelEntity> modelList = queryFactory
-//				.selectFrom(frontModelEntity)
-//				.orderBy(frontModelEntity.idx.desc())
-//				.leftJoin(frontModelImageEntity)
-//				.on(frontModelEntity.idx.eq(frontModelImageEntity.typeIdx))
-//				.fetchJoin()
-//				.where(searchModel(modelMap).and(frontModelEntity.model_main_yn.eq("Y")
-//						.and(frontModelImageEntity.imageType.eq("main"))))
-//				.offset(StringUtil.getInt(modelMap.get("jpaStartPage"),0))
-//				.limit(StringUtil.getInt(modelMap.get("size"),0))
-//				.fetch();
 		List<FrontModelEntity> modelList = queryFactory
 				.selectFrom(frontModelEntity)
 				.orderBy(frontModelEntity.idx.desc())

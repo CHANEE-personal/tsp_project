@@ -2,6 +2,9 @@ package com.tsp.new_tsp_front.api.production.service.impl;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
+import com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity;
+import com.tsp.new_tsp_front.api.model.service.impl.ModelImageMapper;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 import com.tsp.new_tsp_front.api.production.domain.QFrontProductionEntity;
@@ -13,7 +16,9 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+import static com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity.commonImageEntity;
 import static com.tsp.new_tsp_front.api.production.domain.QFrontProductionEntity.frontProductionEntity;
 
 @Repository
@@ -87,5 +92,41 @@ public class FrontProductionJpaRepository {
 
 		return productionDtoList;
 
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : getProductionInfo
+	 * 2. ClassName  : FrontProductionJpaRepository.java
+	 * 3. Comment    : 프로덕션 상세 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 01. 12.
+	 * </pre>
+	 *
+	 * @param existFrontProductionEntity
+	 * @throws Exception
+	 */
+	public ConcurrentHashMap<String, Object> getProductionInfo(FrontProductionEntity existFrontProductionEntity) throws Exception {
+		ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
+
+		//프로덕션 상세 조회
+		FrontProductionEntity getProductionInfo = queryFactory
+				.selectFrom(frontProductionEntity)
+				.where(frontProductionEntity.idx.eq(existFrontProductionEntity.getIdx())
+				.and(frontProductionEntity.visible.eq("Y")))
+				.fetchOne();
+
+		//프로덕션 이미지 조회
+		List<CommonImageEntity> productionImageList = queryFactory
+				.selectFrom(commonImageEntity)
+				.where(commonImageEntity.typeIdx.eq(existFrontProductionEntity.getIdx())
+				.and(commonImageEntity.visible.eq("Y")
+				.and(commonImageEntity.typeName.eq("production"))))
+				.fetch();
+
+		productionMap.put("productionInfo", ProductionMapper.INSTANCE.toDto(getProductionInfo));
+		productionMap.put("productionImageList", ModelImageMapper.INSTANCE.toDtoList(productionImageList));
+
+		return productionMap;
 	}
 }

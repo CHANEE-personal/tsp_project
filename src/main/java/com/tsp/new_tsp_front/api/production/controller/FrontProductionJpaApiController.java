@@ -1,6 +1,7 @@
 package com.tsp.new_tsp_front.api.production.controller;
 
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
+import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 import com.tsp.new_tsp_front.api.production.service.FrontProductionJpaApiService;
 import com.tsp.new_tsp_front.common.SearchCommon;
 import com.tsp.new_tsp_front.common.paging.Page;
@@ -74,5 +75,34 @@ public class FrontProductionJpaApiController {
 		resultMap.put("productionList", productionList);
 
 		return resultMap;
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : {idx}
+	 * 2. ClassName  : FrontProductionJpaApiController.java
+	 * 3. Comment    : 프론트 > 프로덕션 상세 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 01. 11.
+	 * </pre>
+	 *
+	 * @param idx
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "프로덕션 상세 조회", notes = "프로덕션을 상세 조회한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@GetMapping(value = "/{idx}")
+	public ConcurrentHashMap<String, Object> getProductionInfo(@PathVariable("idx") Integer idx) throws Exception {
+		ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
+
+		FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(idx).build();
+
+		productionMap.put("productionInfo", this.frontProductionJpaApiService.getProductionInfo(frontProductionEntity));
+
+		return productionMap;
 	}
 }
