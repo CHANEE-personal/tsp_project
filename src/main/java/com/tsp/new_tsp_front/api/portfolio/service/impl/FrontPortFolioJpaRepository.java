@@ -2,14 +2,19 @@ package com.tsp.new_tsp_front.api.portfolio.service.impl;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
+import com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity;
+import com.tsp.new_tsp_front.api.model.service.impl.ModelImageMapper;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
+import com.tsp.new_tsp_front.api.portfolio.domain.QFrontPortFolioEntity;
 import com.tsp.new_tsp_front.common.utils.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.tsp.new_tsp_front.api.portfolio.domain.QFrontPortFolioEntity.frontPortFolioEntity;
 
@@ -81,5 +86,40 @@ public class FrontPortFolioJpaRepository {
 		}
 
 		return portFolioDtoList;
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : getPortFolioInfo
+	 * 2. ClassName  : FrontPortFolioList.java
+	 * 3. Comment    : 포트폴리오 상세 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 01. 12.
+	 * </pre>
+	 *
+	 * @param existFrontPortFolioEntity
+	 * @throws Exception
+	 */
+	public ConcurrentHashMap<String, Object> getPortFolioInfo(FrontPortFolioEntity existFrontPortFolioEntity) throws Exception {
+
+		ConcurrentHashMap<String, Object> portFolioMap = new ConcurrentHashMap<>();
+
+		FrontPortFolioEntity getPortFolioInfo = queryFactory
+				.selectFrom(QFrontPortFolioEntity.frontPortFolioEntity)
+				.where(QFrontPortFolioEntity.frontPortFolioEntity.idx.eq(existFrontPortFolioEntity.getIdx())
+						.and(frontPortFolioEntity.visible.eq("Y")))
+				.fetchOne();
+
+		List<CommonImageEntity> getPortFolioImageList = queryFactory
+				.selectFrom(QCommonImageEntity.commonImageEntity)
+				.where(QCommonImageEntity.commonImageEntity.typeName.eq("portfolio")
+				.and(QCommonImageEntity.commonImageEntity.typeIdx.eq(existFrontPortFolioEntity.getIdx())
+				.and(QCommonImageEntity.commonImageEntity.visible.eq("Y"))))
+				.fetch();
+
+		portFolioMap.put("portFolioMap", PortFolioMapper.INSTANCE.toDto(getPortFolioInfo));
+		portFolioMap.put("portFolioImageList", ModelImageMapper.INSTANCE.toDtoList(getPortFolioImageList));
+
+		return portFolioMap;
 	}
 }

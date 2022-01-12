@@ -2,6 +2,7 @@ package com.tsp.new_tsp_front.api.portfolio.controller;
 
 import com.tsp.new_tsp_front.api.portfolio.FrontPortFolioJpaApiService;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO;
+import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
 import com.tsp.new_tsp_front.common.SearchCommon;
 import com.tsp.new_tsp_front.common.paging.Page;
 import io.swagger.annotations.Api;
@@ -9,10 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.rmi.ServerError;
@@ -20,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity.builder;
 
 @RestController
 @RequiredArgsConstructor
@@ -73,5 +73,34 @@ public class FrontPortFolioJpaApiController {
 		resultMap.put("portFolioList", portFolioList);
 
 		return resultMap;
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : {idx}
+	 * 2. ClassName  : FrontPortFolioJpaApiController.java
+	 * 3. Comment    : 프론트 > 포트폴리오 상세 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 01. 11.
+	 * </pre>
+	 *
+	 * @param idx
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "포트폴리오 상세 조회", notes = "포트폴리오를 상세 조회한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = Map.class),
+			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+	})
+	@GetMapping(value = "/{idx}")
+	public ConcurrentHashMap<String, Object> getPortFolioInfo(@PathVariable("idx") Integer idx) throws Exception {
+		ConcurrentHashMap<String, Object> portFolioMap = new ConcurrentHashMap<>();
+
+		FrontPortFolioEntity frontPortFolioEntity = builder().idx(idx).build();
+
+		portFolioMap.put("portFolioInfo", this.frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity));
+
+		return portFolioMap;
 	}
 }
