@@ -96,13 +96,6 @@ public class FrontModelEntity extends NewCommonMappedClass {
 	@JoinColumn(name = "category_cd", insertable = false, updatable = false)
 	private NewCodeEntity newModelCodeJpaDTO;
 
-//	@OneToMany(mappedBy = "modelEntity")
-//	private List<FrontModelImageEntity> modelImages = new ArrayList<>();
-
-//	@ManyToOne(fetch = LAZY)
-//	@JoinColumn(name = "idx", referencedColumnName = "type_idx", insertable = false, updatable = false)
-//	private CommonImageEntity newCommonImageJpaDTO;
-
 	@OneToMany(mappedBy = "frontModelEntity")
 	private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 

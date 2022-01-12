@@ -47,7 +47,7 @@ public class FrontPortFolioEntity extends NewCommonMappedClass {
 	private String hashTag;
 
 	@Column(name = "video_url")
-	@NotEmpty(message = "포트폴리오 비디오URL 입력은 필수입니다.")
+	@NotEmpty(message = "포트폴리오 비디오 URL 입력은 필수입니다.")
 	private String videoUrl;
 
 	@Column(name = "visible")
