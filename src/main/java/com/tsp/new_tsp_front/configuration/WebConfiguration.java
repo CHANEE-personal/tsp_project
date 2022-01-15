@@ -1,6 +1,5 @@
 package com.tsp.new_tsp_front.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,17 +8,12 @@ import org.springframework.validation.DefaultMessageCodesResolver;
 import org.springframework.validation.MessageCodesResolver;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfiguration implements WebMvcConfigurer {
-
-//	@Autowired
-//	private HandlerInterceptor loginCheckInterceptor;
 
 	private static final String[] CLASSPATH_RESOURCE_LOCATIONS =
 			{"classpath:/static/",
@@ -29,6 +23,18 @@ public class WebConfiguration implements WebMvcConfigurer {
 					"classpath:/META-INF/resources/",
 					"classpath:/META-INF/resources/webjars/"};
 
+
+	/**
+	 * <pre>
+	 * 1. MethodName : addCorsMappings
+	 * 2. ClassName  : WebConfiguration.java
+	 * 3. Comment    : Cors error
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 01. 15.
+	 * </pre>
+	 *
+	 * @throws Exception
+	 */
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
@@ -40,29 +46,49 @@ public class WebConfiguration implements WebMvcConfigurer {
 				.maxAge(3600);
 	}
 
-//	@Override
-//	public void addInterceptors(InterceptorRegistry registry) {
-//		registry.addInterceptor(loginCheckInterceptor)
-//				.order(1)
-//				.excludePathPatterns("/api/auth/admin-login")
-//				.excludePathPatterns(
-//						"/v2/api-docs",
-//						"/swagger-resources/**",
-//						"/swagger-ui.html",
-//						"/webjars/**"
-//				);
-//	}
-
+	/**
+	 * <pre>
+	 * 1. MethodName : addResourceHandlers
+	 * 2. ClassName  : WebConfiguration.java
+	 * 3. Comment    : static resource config
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 01. 15.
+	 * </pre>
+	 *
+	 * @throws Exception
+	 */
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/**").addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS);
 	}
 
+	/**
+	 * <pre>
+	 * 1. MethodName : methodValidationPostProcessor
+	 * 2. ClassName  : WebConfiguration.java
+	 * 3. Comment    : method parameter or return validation check
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 01. 15.
+	 * </pre>
+	 *
+	 * @throws Exception
+	 */
 	@Bean
 	public MethodValidationPostProcessor methodValidationPostProcessor() {
 		return new MethodValidationPostProcessor();
 	}
 
+	/**
+	 * <pre>
+	 * 1. MethodName : getMessageCodesResolver
+	 * 2. ClassName  : WebConfiguration.java
+	 * 3. Comment    : DefaultMessageCodesResolver Format
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 01. 15.
+	 * </pre>
+	 *
+	 * @throws Exception
+	 */
 	@Override
 	public MessageCodesResolver getMessageCodesResolver() {
 		DefaultMessageCodesResolver codesResolver = new DefaultMessageCodesResolver();
@@ -70,6 +96,17 @@ public class WebConfiguration implements WebMvcConfigurer {
 		return codesResolver;
 	}
 
+	/**
+	 * <pre>
+	 * 1. MethodName : messageSource
+	 * 2. ClassName  : WebConfiguration.java
+	 * 3. Comment    : validation Message path 설정
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 01. 15.
+	 * </pre>
+	 *
+	 * @throws Exception
+	 */
 	@Bean
 	public MessageSource messageSource() {
 		ReloadableResourceBundleMessageSource messageSource =
@@ -79,6 +116,17 @@ public class WebConfiguration implements WebMvcConfigurer {
 		return messageSource;
 	}
 
+	/**
+	 * <pre>
+	 * 1. MethodName : getValidator
+	 * 2. ClassName  : WebConfiguration.java
+	 * 3. Comment    : DTO or Entity validation Message expression
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 01. 15.
+	 * </pre>
+	 *
+	 * @throws Exception
+	 */
 	@Bean
 	public LocalValidatorFactoryBean getValidator(MessageSource messageSource) {
 		LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();

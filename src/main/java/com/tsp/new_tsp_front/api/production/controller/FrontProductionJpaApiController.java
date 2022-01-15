@@ -41,7 +41,6 @@ public class FrontProductionJpaApiController {
 	 *
 	 * @param paramMap
 	 * @param page
-	 * @throws Exception
 	 */
 	@ApiOperation(value = "프로덕션 조회", notes = "프로덕션을 조회한다.")
 	@ApiResponses({
@@ -51,7 +50,7 @@ public class FrontProductionJpaApiController {
 	})
 	@GetMapping(value = "/lists")
 	public ConcurrentHashMap<String, Object> getProductionList(@RequestParam(required = false) Map<String, Object> paramMap,
-														  Page page) throws Exception {
+														  Page page) {
 		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
 		// 페이징 및 검색
 		ConcurrentHashMap<String, Object> modelMap = searchCommon.searchCommon(page, paramMap);
@@ -86,7 +85,6 @@ public class FrontProductionJpaApiController {
 	 * </pre>
 	 *
 	 * @param idx
-	 * @throws Exception
 	 */
 	@ApiOperation(value = "프로덕션 상세 조회", notes = "프로덕션을 상세 조회한다.")
 	@ApiResponses({
@@ -95,7 +93,7 @@ public class FrontProductionJpaApiController {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/{idx}")
-	public ConcurrentHashMap<String, Object> getProductionInfo(@PathVariable("idx") Integer idx) throws Exception {
+	public ConcurrentHashMap<String, Object> getProductionInfo(@PathVariable("idx") Integer idx) {
 		ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
 
 		FrontProductionEntity frontProductionEntity = builder().idx(idx).build();

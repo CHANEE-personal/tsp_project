@@ -55,9 +55,8 @@ public class FrontProductionJpaApiService {
 	 * </pre>
 	 *
 	 * @param frontProductionEntity
-	 * @throws Exception
 	 */
-	public ConcurrentHashMap<String, Object> getProductionInfo(FrontProductionEntity frontProductionEntity) throws Exception {
+	public ConcurrentHashMap<String, Object> getProductionInfo(FrontProductionEntity frontProductionEntity) {
 		return frontProductionJpaRepository.getProductionInfo(frontProductionEntity);
 	}
 }

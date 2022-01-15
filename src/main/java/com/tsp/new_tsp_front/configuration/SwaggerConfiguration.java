@@ -20,6 +20,17 @@ import java.util.List;
 @EnableSwagger2
 public class SwaggerConfiguration {
 
+	/**
+	 * <pre>
+	 * 1. MethodName : apiInfo
+	 * 2. ClassName  : SwaggerConfiguration.java
+	 * 3. Comment    : api Info
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 01. 15.
+	 * </pre>
+	 *
+	 * @throws Exception
+	 */
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder()
 				.title("Tsp Model")
@@ -27,6 +38,17 @@ public class SwaggerConfiguration {
 				.build();
 	}
 
+	/**
+	 * <pre>
+	 * 1. MethodName : commonApi
+	 * 2. ClassName  : SwaggerConfiguration.java
+	 * 3. Comment    : Api path and info config
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 01. 15.
+	 * </pre>
+	 *
+	 * @throws Exception
+	 */
 	@Bean
 	public Docket commonApi() {
 		return new Docket(DocumentationType.SWAGGER_2)

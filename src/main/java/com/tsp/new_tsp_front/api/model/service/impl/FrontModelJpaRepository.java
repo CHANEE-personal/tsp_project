@@ -62,7 +62,7 @@ public class FrontModelJpaRepository {
 	 * @param modelMap
 	 * @return
 	 */
-	public long getModelListCnt(Map<String, Object> modelMap) {
+	public Long getModelListCnt(Map<String, Object> modelMap) {
 
 		try {
 			return queryFactory.selectFrom(frontModelEntity)

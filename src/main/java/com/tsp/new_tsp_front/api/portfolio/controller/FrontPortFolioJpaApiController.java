@@ -41,7 +41,6 @@ public class FrontPortFolioJpaApiController {
 	 *
 	 * @param paramMap
 	 * @param page
-	 * @throws Exception
 	 */
 	@ApiOperation(value = "포트폴리오 조회", notes = "포트폴리오를 조회한다.")
 	@ApiResponses({
@@ -51,7 +50,7 @@ public class FrontPortFolioJpaApiController {
 	})
 	@GetMapping(value = "/lists")
 	public ConcurrentHashMap<String, Object> getPortFolioList(@RequestParam(required = false) Map<String, Object> paramMap,
-													   Page page) throws Exception {
+													   Page page) {
 		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
 		// 페이징 및 검색
 		ConcurrentHashMap<String, Object> portFolioMap = searchCommon.searchCommon(page, paramMap);
@@ -85,7 +84,6 @@ public class FrontPortFolioJpaApiController {
 	 * </pre>
 	 *
 	 * @param idx
-	 * @throws Exception
 	 */
 	@ApiOperation(value = "포트폴리오 상세 조회", notes = "포트폴리오를 상세 조회한다.")
 	@ApiResponses({
@@ -94,7 +92,7 @@ public class FrontPortFolioJpaApiController {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/{idx}")
-	public ConcurrentHashMap<String, Object> getPortFolioInfo(@PathVariable("idx") Integer idx) throws Exception {
+	public ConcurrentHashMap<String, Object> getPortFolioInfo(@PathVariable("idx") Integer idx) {
 		ConcurrentHashMap<String, Object> portFolioMap = new ConcurrentHashMap<>();
 
 		FrontPortFolioEntity frontPortFolioEntity = builder().idx(idx).build();
