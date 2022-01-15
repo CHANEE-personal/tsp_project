@@ -25,9 +25,8 @@ public class FrontProductionJpaApiService {
 	 * </pre>
 	 *
 	 * @param productionMap
-	 * @throws Exception
 	 */
-	public long getProductionListCnt(ConcurrentHashMap<String, Object> productionMap) throws Exception {
+	public Long getProductionListCnt(ConcurrentHashMap<String, Object> productionMap) {
 		return frontProductionJpaRepository.getProductionListCnt(productionMap);
 	}
 
@@ -41,9 +40,8 @@ public class FrontProductionJpaApiService {
 	 * </pre>
 	 *
 	 * @param productionMap
-	 * @throws Exception
 	 */
-	public List<FrontProductionDTO> getProductionList(ConcurrentHashMap<String, Object> productionMap) throws Exception {
+	public List<FrontProductionDTO> getProductionList(ConcurrentHashMap<String, Object> productionMap) {
 		return frontProductionJpaRepository.getProductionList(productionMap);
 	}
 

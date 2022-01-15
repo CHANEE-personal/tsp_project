@@ -3,6 +3,8 @@ package com.tsp.new_tsp_front.api.portfolio;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
 import com.tsp.new_tsp_front.api.portfolio.service.impl.FrontPortFolioJpaRepository;
+import com.tsp.new_tsp_front.exception.ApiExceptionType;
+import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +27,8 @@ public class FrontPortFolioJpaApiService {
 	 * </pre>
 	 *
 	 * @param portFolioMap
-	 * @throws Exception
 	 */
-	public long getPortFolioListCnt(ConcurrentHashMap portFolioMap) throws Exception {
+	public long getPortFolioListCnt(ConcurrentHashMap portFolioMap) {
 		return frontPortFolioJpaRepository.getPortFolioListCnt(portFolioMap);
 	}
 
@@ -41,9 +42,8 @@ public class FrontPortFolioJpaApiService {
 	 * </pre>
 	 *
 	 * @param portFolioMap
-	 * @throws Exception
 	 */
-	public List<FrontPortFolioDTO> getPortFolioList(ConcurrentHashMap portFolioMap) throws Exception {
+	public List<FrontPortFolioDTO> getPortFolioList(ConcurrentHashMap portFolioMap) {
 		return frontPortFolioJpaRepository.getPortFolioList(portFolioMap);
 	}
 
@@ -57,9 +57,8 @@ public class FrontPortFolioJpaApiService {
 	 * </pre>
 	 *
 	 * @param frontPortFolioEntity
-	 * @throws Exception
 	 */
-	public ConcurrentHashMap<String, Object> getPortFolioInfo(FrontPortFolioEntity frontPortFolioEntity) throws Exception {
+	public ConcurrentHashMap<String, Object> getPortFolioInfo(FrontPortFolioEntity frontPortFolioEntity) {
 		return frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
 	}
 }

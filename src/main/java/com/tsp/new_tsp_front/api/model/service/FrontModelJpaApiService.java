@@ -28,12 +28,8 @@ public class FrontModelJpaApiService {
 	 *
 	 * @param modelMap
 	 */
-	public long getModelListCnt(ConcurrentHashMap<String, Object> modelMap) {
-		try {
-			return frontModelJpaRepository.getModelListCnt(modelMap);
-		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
-		}
+	public Long getModelListCnt(ConcurrentHashMap<String, Object> modelMap) {
+		return frontModelJpaRepository.getModelListCnt(modelMap);
 	}
 
 	/**
@@ -48,11 +44,7 @@ public class FrontModelJpaApiService {
 	 * @param modelMap
 	 */
 	public List<FrontModelDTO> getModelList(ConcurrentHashMap modelMap) {
-		try {
-			return frontModelJpaRepository.getModelList(modelMap);
-		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
-		}
+		return frontModelJpaRepository.getModelList(modelMap);
 	}
 
 	/**
@@ -67,10 +59,6 @@ public class FrontModelJpaApiService {
 	 * @param frontModelEntity
 	 */
 	public ConcurrentHashMap<String, Object> getModelInfo(FrontModelEntity frontModelEntity) {
-		try {
-			return this.frontModelJpaRepository.getModelInfo(frontModelEntity);
-		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL);
-		}
+		return this.frontModelJpaRepository.getModelInfo(frontModelEntity);
 	}
 }

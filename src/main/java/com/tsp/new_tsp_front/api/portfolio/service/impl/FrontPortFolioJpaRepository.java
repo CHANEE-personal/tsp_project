@@ -9,6 +9,8 @@ import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
 import com.tsp.new_tsp_front.api.portfolio.domain.QFrontPortFolioEntity;
 import com.tsp.new_tsp_front.common.utils.StringUtil;
+import com.tsp.new_tsp_front.exception.ApiExceptionType;
+import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -48,13 +50,16 @@ public class FrontPortFolioJpaRepository {
 	 * </pre>
 	 *
 	 * @param portFolioMap
-	 * @throws Exception
 	 */
-	public Long getPortFolioListCnt(Map<String, Object> portFolioMap) throws Exception {
+	public Long getPortFolioListCnt(Map<String, Object> portFolioMap) {
 
-		return queryFactory.selectFrom(frontPortFolioEntity)
-				.where(searchPortFolio(portFolioMap))
-				.fetchCount();
+		try {
+			return queryFactory.selectFrom(frontPortFolioEntity)
+					.where(searchPortFolio(portFolioMap))
+					.fetchCount();
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.NOT_FOUND_PORTFOLIO_LIST);
+		}
 	}
 
 	/**
@@ -67,25 +72,28 @@ public class FrontPortFolioJpaRepository {
 	 * </pre>
 	 *
 	 * @param portFolioMap
-	 * @throws Exception
 	 */
-	public List<FrontPortFolioDTO> getPortFolioList(Map<String, Object> portFolioMap) throws Exception {
+	public List<FrontPortFolioDTO> getPortFolioList(Map<String, Object> portFolioMap) {
 
-		List<FrontPortFolioEntity> portFolioList = queryFactory
-				.selectFrom(frontPortFolioEntity)
-				.where(searchPortFolio(portFolioMap))
-				.orderBy(frontPortFolioEntity.idx.desc())
-				.offset(StringUtil.getInt(portFolioMap.get("jpaStartPage"),0))
-				.limit(StringUtil.getInt(portFolioMap.get("size"),0))
-				.fetch();
+		try {
+			List<FrontPortFolioEntity> portFolioList = queryFactory
+					.selectFrom(frontPortFolioEntity)
+					.where(searchPortFolio(portFolioMap))
+					.orderBy(frontPortFolioEntity.idx.desc())
+					.offset(StringUtil.getInt(portFolioMap.get("jpaStartPage"),0))
+					.limit(StringUtil.getInt(portFolioMap.get("size"),0))
+					.fetch();
 
-		List<FrontPortFolioDTO> portFolioDtoList = PortFolioMapper.INSTANCE.toDtoList(portFolioList);
+			List<FrontPortFolioDTO> portFolioDtoList = PortFolioMapper.INSTANCE.toDtoList(portFolioList);
 
-		for(int i = 0; i < portFolioDtoList.size(); i++) {
-			portFolioDtoList.get(i).setRnum(StringUtil.getInt(portFolioMap.get("startPage"),1)*(StringUtil.getInt(portFolioMap.get("size"),1))-(2-i));
+			for(int i = 0; i < portFolioDtoList.size(); i++) {
+				portFolioDtoList.get(i).setRnum(StringUtil.getInt(portFolioMap.get("startPage"),1)*(StringUtil.getInt(portFolioMap.get("size"),1))-(2-i));
+			}
+
+			return portFolioDtoList;
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.NOT_FOUND_PORTFOLIO_LIST);
 		}
-
-		return portFolioDtoList;
 	}
 
 	/**
@@ -98,28 +106,31 @@ public class FrontPortFolioJpaRepository {
 	 * </pre>
 	 *
 	 * @param existFrontPortFolioEntity
-	 * @throws Exception
 	 */
-	public ConcurrentHashMap<String, Object> getPortFolioInfo(FrontPortFolioEntity existFrontPortFolioEntity) throws Exception {
+	public ConcurrentHashMap<String, Object> getPortFolioInfo(FrontPortFolioEntity existFrontPortFolioEntity) {
 
-		ConcurrentHashMap<String, Object> portFolioMap = new ConcurrentHashMap<>();
+		try {
+			ConcurrentHashMap<String, Object> portFolioMap = new ConcurrentHashMap<>();
 
-		FrontPortFolioEntity getPortFolioInfo = queryFactory
-				.selectFrom(QFrontPortFolioEntity.frontPortFolioEntity)
-				.where(QFrontPortFolioEntity.frontPortFolioEntity.idx.eq(existFrontPortFolioEntity.getIdx())
-						.and(frontPortFolioEntity.visible.eq("Y")))
-				.fetchOne();
+			FrontPortFolioEntity getPortFolioInfo = queryFactory
+					.selectFrom(QFrontPortFolioEntity.frontPortFolioEntity)
+					.where(QFrontPortFolioEntity.frontPortFolioEntity.idx.eq(existFrontPortFolioEntity.getIdx())
+							.and(frontPortFolioEntity.visible.eq("Y")))
+					.fetchOne();
 
-		List<CommonImageEntity> getPortFolioImageList = queryFactory
-				.selectFrom(QCommonImageEntity.commonImageEntity)
-				.where(QCommonImageEntity.commonImageEntity.typeName.eq("portfolio")
-				.and(QCommonImageEntity.commonImageEntity.typeIdx.eq(existFrontPortFolioEntity.getIdx())
-				.and(QCommonImageEntity.commonImageEntity.visible.eq("Y"))))
-				.fetch();
+			List<CommonImageEntity> getPortFolioImageList = queryFactory
+					.selectFrom(QCommonImageEntity.commonImageEntity)
+					.where(QCommonImageEntity.commonImageEntity.typeName.eq("portfolio")
+							.and(QCommonImageEntity.commonImageEntity.typeIdx.eq(existFrontPortFolioEntity.getIdx())
+									.and(QCommonImageEntity.commonImageEntity.visible.eq("Y"))))
+					.fetch();
 
-		portFolioMap.put("portFolioMap", PortFolioMapper.INSTANCE.toDto(getPortFolioInfo));
-		portFolioMap.put("portFolioImageList", ModelImageMapper.INSTANCE.toDtoList(getPortFolioImageList));
+			portFolioMap.put("portFolioMap", PortFolioMapper.INSTANCE.toDto(getPortFolioInfo));
+			portFolioMap.put("portFolioImageList", ModelImageMapper.INSTANCE.toDtoList(getPortFolioImageList));
 
-		return portFolioMap;
+			return portFolioMap;
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.NOT_FOUND_PORTFOLIO);
+		}
 	}
 }

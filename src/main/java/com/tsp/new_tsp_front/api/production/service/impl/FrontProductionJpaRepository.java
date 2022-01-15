@@ -7,6 +7,8 @@ import com.tsp.new_tsp_front.api.model.service.impl.ModelImageMapper;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 import com.tsp.new_tsp_front.common.utils.StringUtil;
+import com.tsp.new_tsp_front.exception.ApiExceptionType;
+import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -47,13 +49,16 @@ public class FrontProductionJpaRepository {
 	 * </pre>
 	 *
 	 * @param productionMap
-	 * @throws Exception
 	 */
-	public long getProductionListCnt(Map<String, Object> productionMap) throws Exception {
+	public Long getProductionListCnt(Map<String, Object> productionMap) {
 
-		return queryFactory.selectFrom(frontProductionEntity)
-				.where(searchProduction(productionMap))
-				.fetchCount();
+		try {
+			return queryFactory.selectFrom(frontProductionEntity)
+					.where(searchProduction(productionMap))
+					.fetchCount();
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.NOT_FOUND_PRODUCTION_LIST);
+		}
 	}
 
 	/**
@@ -66,26 +71,28 @@ public class FrontProductionJpaRepository {
 	 * </pre>
 	 *
 	 * @param productionMap
-	 * @throws Exception
 	 */
-	public List<FrontProductionDTO> getProductionList(Map<String, Object> productionMap) throws Exception {
+	public List<FrontProductionDTO> getProductionList(Map<String, Object> productionMap) {
 
-		List<FrontProductionEntity> productionList = queryFactory
-				.selectFrom(frontProductionEntity)
-				.where(searchProduction(productionMap))
-				.orderBy(frontProductionEntity.idx.desc())
-				.offset(StringUtil.getInt(productionMap.get("jpaStartPage"),0))
-				.limit(StringUtil.getInt(productionMap.get("size"),0))
-				.fetch();
+		try {
+			List<FrontProductionEntity> productionList = queryFactory
+					.selectFrom(frontProductionEntity)
+					.where(searchProduction(productionMap))
+					.orderBy(frontProductionEntity.idx.desc())
+					.offset(StringUtil.getInt(productionMap.get("jpaStartPage"),0))
+					.limit(StringUtil.getInt(productionMap.get("size"),0))
+					.fetch();
 
-		List<FrontProductionDTO> productionDtoList = ProductionMapper.INSTANCE.toDtoList(productionList);
+			List<FrontProductionDTO> productionDtoList = ProductionMapper.INSTANCE.toDtoList(productionList);
 
-		for(int i = 0; i < productionDtoList.size(); i++) {
-			productionDtoList.get(i).setRnum(StringUtil.getInt(productionMap.get("startPage"),1)*(StringUtil.getInt(productionMap.get("size"),1))-(2-i));
+			for(int i = 0; i < productionDtoList.size(); i++) {
+				productionDtoList.get(i).setRnum(StringUtil.getInt(productionMap.get("startPage"),1)*(StringUtil.getInt(productionMap.get("size"),1))-(2-i));
+			}
+
+			return productionDtoList;
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.NOT_FOUND_PRODUCTION_LIST);
 		}
-
-		return productionDtoList;
-
 	}
 
 	/**
@@ -98,29 +105,32 @@ public class FrontProductionJpaRepository {
 	 * </pre>
 	 *
 	 * @param existFrontProductionEntity
-	 * @throws Exception
 	 */
-	public ConcurrentHashMap<String, Object> getProductionInfo(FrontProductionEntity existFrontProductionEntity) throws Exception {
-		ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
+	public ConcurrentHashMap<String, Object> getProductionInfo(FrontProductionEntity existFrontProductionEntity) {
+		try {
+			ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
 
-		//프로덕션 상세 조회
-		FrontProductionEntity getProductionInfo = queryFactory
-				.selectFrom(frontProductionEntity)
-				.where(frontProductionEntity.idx.eq(existFrontProductionEntity.getIdx())
-				.and(frontProductionEntity.visible.eq("Y")))
-				.fetchOne();
+			//프로덕션 상세 조회
+			FrontProductionEntity getProductionInfo = queryFactory
+					.selectFrom(frontProductionEntity)
+					.where(frontProductionEntity.idx.eq(existFrontProductionEntity.getIdx())
+							.and(frontProductionEntity.visible.eq("Y")))
+					.fetchOne();
 
-		//프로덕션 이미지 조회
-		List<CommonImageEntity> productionImageList = queryFactory
-				.selectFrom(commonImageEntity)
-				.where(commonImageEntity.typeIdx.eq(existFrontProductionEntity.getIdx())
-				.and(commonImageEntity.visible.eq("Y")
-				.and(commonImageEntity.typeName.eq("production"))))
-				.fetch();
+			//프로덕션 이미지 조회
+			List<CommonImageEntity> productionImageList = queryFactory
+					.selectFrom(commonImageEntity)
+					.where(commonImageEntity.typeIdx.eq(existFrontProductionEntity.getIdx())
+							.and(commonImageEntity.visible.eq("Y")
+									.and(commonImageEntity.typeName.eq("production"))))
+					.fetch();
 
-		productionMap.put("productionInfo", ProductionMapper.INSTANCE.toDto(getProductionInfo));
-		productionMap.put("productionImageList", ModelImageMapper.INSTANCE.toDtoList(productionImageList));
+			productionMap.put("productionInfo", ProductionMapper.INSTANCE.toDto(getProductionInfo));
+			productionMap.put("productionImageList", ModelImageMapper.INSTANCE.toDtoList(productionImageList));
 
-		return productionMap;
+			return productionMap;
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.NOT_FOUND_PRODUCTION);
+		}
 	}
 }
