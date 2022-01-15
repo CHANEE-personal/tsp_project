@@ -7,11 +7,12 @@ import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.common.utils.StringUtil;
+import com.tsp.new_tsp_front.exception.ApiExceptionType;
+import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -59,13 +60,17 @@ public class FrontModelJpaRepository {
 	 * </pre>
 	 *
 	 * @param modelMap
-	 * @throws Exception
 	 * @return
 	 */
-	public long getModelListCnt(Map<String, Object> modelMap) throws Exception {
-		return queryFactory.selectFrom(frontModelEntity)
-				.where(searchModel(modelMap))
-				.fetchCount();
+	public long getModelListCnt(Map<String, Object> modelMap) {
+
+		try {
+			return queryFactory.selectFrom(frontModelEntity)
+					.where(searchModel(modelMap))
+					.fetchCount();
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
+		}
 	}
 
 	/**
@@ -78,25 +83,29 @@ public class FrontModelJpaRepository {
 	 * </pre>
 	 *
 	 * @param modelMap
-	 * @throws Exception
 	 * @return
 	 */
-	public List<FrontModelDTO> getModelList(Map<String, Object> modelMap) throws Exception {
-		List<FrontModelEntity> modelList = queryFactory
-				.selectFrom(frontModelEntity)
-				.orderBy(frontModelEntity.idx.desc())
-				.leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
-				.fetchJoin()
-				.where(searchModel(modelMap).and(frontModelEntity.model_main_yn.eq("Y")))
-				.offset(StringUtil.getInt(modelMap.get("jpaStartPage"),0))
-				.limit(StringUtil.getInt(modelMap.get("size"),0))
-				.fetch();
+	public List<FrontModelDTO> getModelList(Map<String, Object> modelMap) {
 
-		for(int i = 0; i < modelList.size(); i++) {
-			modelList.get(i).setRnum(StringUtil.getInt(modelMap.get("startPage"),1)*(StringUtil.getInt(modelMap.get("size"),1))-(2-i));
+		try {
+			List<FrontModelEntity> modelList = queryFactory
+					.selectFrom(frontModelEntity)
+					.orderBy(frontModelEntity.idx.desc())
+					.leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
+					.fetchJoin()
+					.where(searchModel(modelMap).and(frontModelEntity.model_main_yn.eq("Y")))
+					.offset(StringUtil.getInt(modelMap.get("jpaStartPage"),0))
+					.limit(StringUtil.getInt(modelMap.get("size"),0))
+					.fetch();
+
+			for(int i = 0; i < modelList.size(); i++) {
+				modelList.get(i).setRnum(StringUtil.getInt(modelMap.get("startPage"),1)*(StringUtil.getInt(modelMap.get("size"),1))-(2-i));
+			}
+
+			return ModelMapper.INSTANCE.toDtoList(modelList);
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
 		}
-
-		return ModelMapper.INSTANCE.toDtoList(modelList);
 	}
 
 	/**
@@ -109,30 +118,33 @@ public class FrontModelJpaRepository {
 	 * </pre>
 	 *
 	 * @param existFrontModelEntity
-	 * @throws Exception
 	 * @return
 	 */
-	public ConcurrentHashMap<String, Object> getModelInfo(FrontModelEntity existFrontModelEntity) throws Exception {
+	public ConcurrentHashMap<String, Object> getModelInfo(FrontModelEntity existFrontModelEntity) {
 
-		ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
+		try {
+			ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
 
-		//모델 상세 조회
-		FrontModelEntity getModelInfo = queryFactory
-				.selectFrom(frontModelEntity)
-				.where(frontModelEntity.idx.eq(existFrontModelEntity.getIdx())
-				.and(frontModelEntity.visible.eq("Y")))
-				.fetchOne();
+			//모델 상세 조회
+			FrontModelEntity getModelInfo = queryFactory
+					.selectFrom(frontModelEntity)
+					.where(frontModelEntity.idx.eq(existFrontModelEntity.getIdx())
+							.and(frontModelEntity.visible.eq("Y")))
+					.fetchOne();
 
-		//모델 이미지 조회
-		List<CommonImageEntity> modelImageList = queryFactory
-				.selectFrom(commonImageEntity)
-				.where(commonImageEntity.typeIdx.eq(existFrontModelEntity.getIdx())
-				.and(commonImageEntity.visible.eq("Y"))
-				.and(commonImageEntity.typeName.eq("model"))).fetch();
+			//모델 이미지 조회
+			List<CommonImageEntity> modelImageList = queryFactory
+					.selectFrom(commonImageEntity)
+					.where(commonImageEntity.typeIdx.eq(existFrontModelEntity.getIdx())
+							.and(commonImageEntity.visible.eq("Y"))
+							.and(commonImageEntity.typeName.eq("model"))).fetch();
 
-		modelMap.put("modelInfo", ModelMapper.INSTANCE.toDto(getModelInfo));
-		modelMap.put("modelImageList", ModelImageMapper.INSTANCE.toDtoList(modelImageList));
+			modelMap.put("modelInfo", ModelMapper.INSTANCE.toDto(getModelInfo));
+			modelMap.put("modelImageList", ModelImageMapper.INSTANCE.toDtoList(modelImageList));
 
-		return modelMap;
+			return modelMap;
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL);
+		}
 	}
 }

@@ -3,6 +3,8 @@ package com.tsp.new_tsp_front.api.model.service;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.service.impl.FrontModelJpaRepository;
+import com.tsp.new_tsp_front.exception.ApiExceptionType;
+import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +27,13 @@ public class FrontModelJpaApiService {
 	 * </pre>
 	 *
 	 * @param modelMap
-	 * @throws Exception
 	 */
-	public long getModelListCnt(ConcurrentHashMap modelMap) throws Exception {
-		return frontModelJpaRepository.getModelListCnt(modelMap);
+	public long getModelListCnt(ConcurrentHashMap<String, Object> modelMap) {
+		try {
+			return frontModelJpaRepository.getModelListCnt(modelMap);
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
+		}
 	}
 
 	/**
@@ -41,10 +46,13 @@ public class FrontModelJpaApiService {
 	 * </pre>
 	 *
 	 * @param modelMap
-	 * @throws Exception
 	 */
-	public List<FrontModelDTO> getModelList(ConcurrentHashMap modelMap) throws Exception {
-		return frontModelJpaRepository.getModelList(modelMap);
+	public List<FrontModelDTO> getModelList(ConcurrentHashMap modelMap) {
+		try {
+			return frontModelJpaRepository.getModelList(modelMap);
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
+		}
 	}
 
 	/**
@@ -57,9 +65,12 @@ public class FrontModelJpaApiService {
 	 * </pre>
 	 *
 	 * @param frontModelEntity
-	 * @throws Exception
 	 */
-	public ConcurrentHashMap<String, Object> getModelInfo(FrontModelEntity frontModelEntity) throws Exception {
-		return this.frontModelJpaRepository.getModelInfo(frontModelEntity);
+	public ConcurrentHashMap<String, Object> getModelInfo(FrontModelEntity frontModelEntity) {
+		try {
+			return this.frontModelJpaRepository.getModelInfo(frontModelEntity);
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL);
+		}
 	}
 }
