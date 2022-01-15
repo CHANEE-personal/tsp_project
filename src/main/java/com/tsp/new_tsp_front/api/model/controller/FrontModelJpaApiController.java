@@ -15,10 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import java.rmi.ServerError;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +56,7 @@ public class FrontModelJpaApiController {
 	@GetMapping(value = "/lists/{categoryCd}")
 	public ConcurrentHashMap<String, Object> getModelList(@PathVariable("categoryCd")
 														  @Range(min = 1, max = 3, message = "{modelCategory.Range}")
-														  @NotBlank String categoryCd,
+														  Integer categoryCd,
 										  @RequestParam(required = false) Map<String, Object> paramMap,
 										  Page page) {
 		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
@@ -108,7 +105,7 @@ public class FrontModelJpaApiController {
 	@GetMapping(value = "/{categoryCd}/{idx}")
 	public ConcurrentHashMap<String, Object> getModelInfo(@PathVariable("categoryCd")
 														  @Range(min = 1, max = 3, message = "{modelCategory.Range}")
-														  @NotBlank String categoryCd,
+														  Integer categoryCd,
 														  @PathVariable("idx") Integer idx) {
 		ConcurrentHashMap<String, Object> modelInfoMap = new ConcurrentHashMap<>();
 

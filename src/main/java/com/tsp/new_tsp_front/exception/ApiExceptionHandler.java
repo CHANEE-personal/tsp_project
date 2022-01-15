@@ -31,16 +31,66 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	private final MessageSource messageSource;
 
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	static class Error {
+		private String code;
+		private int status;
+		private String message;
+
+		static Error create(BaseExceptionType exception) {
+			return new Error(exception.getErrorCode(), exception.getHttpStatus(), exception.getErrorMessage());
+		}
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : exception
+	 * 2. ClassName  : ApiExceptionHandler.java
+	 * 3. Comment    : Tsp 예외처리
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 01. 15.
+	 * </pre>
+	 *
+	 * @param tspException
+	 */
 	@ExceptionHandler(TspException.class)
 	public ResponseEntity<Error> exception(TspException tspException) {
 		return new ResponseEntity<>(Error.create(tspException.getBaseExceptionType()), HttpStatus.OK);
 	}
 
-	@ExceptionHandler(value = {ConstraintViolationException.class})
+	/**
+	 * <pre>
+	 * 1. MethodName : handleConstraintViolation
+	 * 2. ClassName  : ApiExceptionHandler.java
+	 * 3. Comment    : Parameter Validation Check
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 01. 15.
+	 * </pre>
+	 *
+	 * @param e
+	 * @param request
+	 */
+	@ExceptionHandler(ConstraintViolationException.class)
 	protected ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException e, WebRequest request) {
 		return handleExceptionInternal(e, messageSource.getMessage("modelCategory.Range", new String[]{}, Locale.KOREA), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 
+	/**
+	 * <pre>
+	 * 1. MethodName : handleMethodArgumentNotValid
+	 * 2. ClassName  : ApiExceptionHandler.java
+	 * 3. Comment    : Entity or DTO Validation Check
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 01. 15.
+	 * </pre>
+	 *
+	 * @param ex
+	 * @param headers
+	 * @param status
+	 * @param request
+	 */
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(
 			MethodArgumentNotValidException ex, HttpHeaders headers,
@@ -65,18 +115,5 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			log.error("error message: {}", message);
 		}
 		return super.handleMethodArgumentNotValid(ex, headers, status, request);
-	}
-
-	@Getter
-	@NoArgsConstructor
-	@AllArgsConstructor
-	static class Error {
-		private String code;
-		private int status;
-		private String message;
-
-		static Error create(BaseExceptionType exception) {
-			return new Error(exception.getErrorCode(), exception.getHttpStatus(), exception.getErrorMessage());
-		}
 	}
 }
