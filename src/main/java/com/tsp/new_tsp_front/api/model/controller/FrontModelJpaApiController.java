@@ -15,7 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
-import javax.validation.constraints.NotBlank;
 import java.rmi.ServerError;
 import java.util.ArrayList;
 import java.util.List;

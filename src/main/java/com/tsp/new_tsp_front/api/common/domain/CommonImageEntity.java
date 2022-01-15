@@ -1,14 +1,11 @@
 package com.tsp.new_tsp_front.api.common.domain;
 
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
-import com.tsp.new_tsp_front.api.model.domain.FrontModelImageEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -69,13 +66,6 @@ public class CommonImageEntity implements Serializable {
 	@Column(name = "reg_date", insertable = false, updatable = false)
 	@ApiModelProperty(value = "등록일자", hidden = true)
 	private String regDate;
-
-//	@OneToMany(mappedBy = "newCommonImageJpaDTO", cascade = CascadeType.MERGE, fetch = LAZY)
-//	private List<FrontModelEntity> frontModelEntityList = new ArrayList<>();
-
-
-//	@OneToMany(mappedBy = "imageEntity", cascade = CascadeType.MERGE, fetch = LAZY)
-//	private List<FrontModelImageEntity> imageModels = new ArrayList<>();
 
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "type_idx", referencedColumnName = "idx", insertable = false, updatable = false)
