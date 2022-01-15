@@ -10,9 +10,15 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraints.Range;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.rmi.ServerError;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.tsp.new_tsp_front.api.model.domain.FrontModelEntity.*;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
 @Api(tags = "모델관련 API")
@@ -42,7 +49,6 @@ public class FrontModelJpaApiController {
 	 * @param categoryCd
 	 * @param paramMap
 	 * @param page
-	 * @throws Exception
 	 */
 	@ApiOperation(value = "모델 조회", notes = "모델을 조회한다.")
 	@ApiResponses({
@@ -51,9 +57,11 @@ public class FrontModelJpaApiController {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/lists/{categoryCd}")
-	public ConcurrentHashMap<String, Object> getModelList(@PathVariable("categoryCd") String categoryCd,
+	public ConcurrentHashMap<String, Object> getModelList(@PathVariable("categoryCd")
+														  @Range(min = 1, max = 3, message = "{modelCategory.Range}")
+														  @NotBlank String categoryCd,
 										  @RequestParam(required = false) Map<String, Object> paramMap,
-										  Page page) throws Exception {
+										  Page page) {
 		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
 		// 페이징 및 검색
 		ConcurrentHashMap<String, Object> modelMap = searchCommon.searchCommon(page, paramMap);
@@ -90,7 +98,6 @@ public class FrontModelJpaApiController {
 	 *
 	 * @param categoryCd
 	 * @param idx
-	 * @throws Exception
 	 */
 	@ApiOperation(value = "모델 상세 조회", notes = "모델을 상세 조회한다.")
 	@ApiResponses({
@@ -99,8 +106,10 @@ public class FrontModelJpaApiController {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/{categoryCd}/{idx}")
-	public ConcurrentHashMap<String, Object> getModelInfo(@PathVariable("categoryCd") Integer categoryCd,
-														  @PathVariable("idx") Integer idx) throws Exception {
+	public ConcurrentHashMap<String, Object> getModelInfo(@PathVariable("categoryCd")
+														  @Range(min = 1, max = 3, message = "{modelCategory.Range}")
+														  @NotBlank String categoryCd,
+														  @PathVariable("idx") Integer idx) {
 		ConcurrentHashMap<String, Object> modelInfoMap = new ConcurrentHashMap<>();
 
 		FrontModelEntity frontModelEntity = builder().categoryCd(categoryCd).idx(idx).build();

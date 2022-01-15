@@ -8,10 +8,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,9 +37,10 @@ public class FrontModelEntity extends NewCommonMappedClass {
 	@Column(name = "idx")
 	private Integer idx;
 
-	@Column(name = "category_cd")
+	@Column(name = "category_cd", length = 1)
+	@Range(min = 1, max = 3, message = "모델 카테고리 값은 1~3 사이 값만 입력할 수 있습니다")
 	@NotNull(message = "모델 카테고리 선택은 필수입니다.")
-	private Integer categoryCd;
+	private String categoryCd;
 
 	@Column(name = "category_age")
 	@NotEmpty(message = "모델 연령대 선택은 필수입니다.")

@@ -3,17 +3,68 @@ package com.tsp.new_tsp_front.exception;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
+import org.springframework.context.NoSuchMessageException;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import javax.validation.ConstraintViolationException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 @RestControllerAdvice
-public class ApiExceptionHandler {
+@Slf4j
+@RequiredArgsConstructor
+public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
-	@ExceptionHandler({TspException.class})
+	private final MessageSource messageSource;
+
+	@ExceptionHandler(TspException.class)
 	public ResponseEntity<Error> exception(TspException tspException) {
 		return new ResponseEntity<>(Error.create(tspException.getBaseExceptionType()), HttpStatus.OK);
+	}
+
+	@ExceptionHandler(value = {ConstraintViolationException.class})
+	protected ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException e, WebRequest request) {
+		return handleExceptionInternal(e, messageSource.getMessage("modelCategory.Range", new String[]{}, Locale.KOREA), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(
+			MethodArgumentNotValidException ex, HttpHeaders headers,
+			HttpStatus status, WebRequest request) {
+
+		List<ObjectError> allErrors = ex.getBindingResult().getAllErrors();
+		for (ObjectError error : allErrors) {
+			String message = Arrays.stream(Objects.requireNonNull(error.getCodes()))
+					.map(c -> {
+						Object[] arguments = error.getArguments();
+						Locale locale = LocaleContextHolder.getLocale();
+						try {
+							return messageSource.getMessage(c, arguments, locale);
+						} catch (NoSuchMessageException e) {
+							return null;
+						}
+					}).filter(Objects::nonNull)
+					.findFirst()
+					// 코드를 찾지 못할 경우 기본 메시지 사용.
+					.orElse(error.getDefaultMessage());
+
+			log.error("error message: {}", message);
+		}
+		return super.handleMethodArgumentNotValid(ex, headers, status, request);
 	}
 
 	@Getter

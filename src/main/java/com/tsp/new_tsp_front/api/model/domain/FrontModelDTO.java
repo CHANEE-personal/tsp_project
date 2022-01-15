@@ -29,7 +29,7 @@ public class FrontModelDTO extends NewCommonDTO {
 	private Integer idx;
 
 	@ApiModelProperty(required = true, value = "category code")
-	private Integer categoryCd;
+	private String categoryCd;
 
 	@ApiModelProperty(required = true, value = "category age")
 	private String categoryAge;
