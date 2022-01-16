@@ -16,7 +16,16 @@ import java.lang.reflect.Method;
 @Component
 public class TspCommonAop {
 
-	// com.aop.controller 이하 패키지의 모든 클래스 이하 모든 메서드에 적용
+	/**
+	 * <pre>
+	 * 1. MethodName : cut
+	 * 2. ClassName  : TspCommonAop.java
+	 * 3. Comment    : com.tsp.new_tsp_front..api 이하 패키지의 모든 클래스 이하 모든 메서드에 적용
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 01. 16.
+	 * </pre>
+	 *
+	 */
 	@Pointcut("execution(* com.tsp.new_tsp_front..api..*.*(..))")
 	private void cut(){}
 
