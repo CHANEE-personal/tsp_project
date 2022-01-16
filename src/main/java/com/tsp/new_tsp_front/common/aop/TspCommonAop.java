@@ -20,7 +20,17 @@ public class TspCommonAop {
 	@Pointcut("execution(* com.tsp.new_tsp_front..api..*.*(..))")
 	private void cut(){}
 
-	// Pointcut에 의해 필터링된 경로로 들어오는 경우 메서드 호출 전에 적용
+	/**
+	 * <pre>
+	 * 1. MethodName : beforeParameterLog
+	 * 2. ClassName  : TspCommonAop.java
+	 * 3. Comment    : Pointcut에 의해 필터링된 경로로 들어오는 경우 메서드 호출 전에 적용
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 01. 16.
+	 * </pre>
+	 *
+	 * @param joinPoint
+	 */
 	@Before("cut()")
 	public void beforeParameterLog(JoinPoint joinPoint) {
 		// 메서드 정보 받아오기
@@ -36,7 +46,18 @@ public class TspCommonAop {
 		}
 	}
 
-	// Poincut에 의해 필터링된 경로로 들어오는 경우 메서드 리턴 후에 적용
+	/**
+	 * <pre>
+	 * 1. MethodName : afterReturnLog
+	 * 2. ClassName  : TspCommonAop.java
+	 * 3. Comment    : Poincut에 의해 필터링된 경로로 들어오는 경우 메서드 리턴 후에 적용
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 01. 16.
+	 * </pre>
+	 *
+	 * @param joinPoint
+	 * @param returnObj
+	 */
 	@AfterReturning(value = "cut()", returning = "returnObj")
 	public void afterReturnLog(JoinPoint joinPoint, Object returnObj) {
 		// 메서드 정보 받아오기
