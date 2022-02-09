@@ -62,6 +62,17 @@ public class SwaggerConfiguration {
 				.securitySchemes(List.of(apikey()));
 	}
 
+	/**
+	 * <pre>
+	 * 1. MethodName : apiKey
+	 * 2. ClassName  : SwaggerConfiguration.java
+	 * 3. Comment    : api key 설정
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 01. 15.
+	 * </pre>
+	 *
+	 * @throws Exception
+	 */
 	private ApiKey apikey() {
 		return new ApiKey("JWT", "Authorization", "header");
 	}
