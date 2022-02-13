@@ -1,8 +1,10 @@
 package com.tsp.new_tsp_front.api.portfolio.controller;
 
+import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.portfolio.FrontPortFolioJpaApiService;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
+import com.tsp.new_tsp_front.api.portfolio.domain.QFrontPortFolioEntity;
 import com.tsp.new_tsp_front.common.SearchCommon;
 import com.tsp.new_tsp_front.common.paging.Page;
 import io.swagger.annotations.Api;
@@ -19,7 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity.builder;
+import static com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity.*;
+
 
 @RestController
 @RequiredArgsConstructor
