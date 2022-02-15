@@ -1,6 +1,7 @@
 package com.tsp.new_tsp_front.configuration;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -13,6 +14,7 @@ import javax.persistence.PersistenceContext;
 public class QuerydslConfiguration {
 
 	@PersistenceContext
+	@Qualifier(value = "entityManagerFactory")
 	private EntityManager em;
 
 	@Bean

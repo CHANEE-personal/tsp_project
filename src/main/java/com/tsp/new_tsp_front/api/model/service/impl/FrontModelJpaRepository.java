@@ -1,8 +1,8 @@
 package com.tsp.new_tsp_front.api.model.service.impl;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
