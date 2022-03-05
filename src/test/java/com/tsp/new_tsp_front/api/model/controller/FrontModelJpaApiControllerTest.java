@@ -1,49 +1,56 @@
 package com.tsp.new_tsp_front.api.model.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
-import com.tsp.new_tsp_front.api.model.service.impl.FrontModelJpaRepository;
-import com.tsp.new_tsp_front.configuration.TestConfiguration;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-import javax.transaction.Transactional;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@DataJpaTest
 @AutoConfigureMockMvc
-@Transactional
-@AutoConfigureRestDocs(
-        outputDir = "target/snippets",
-        uriScheme = "http",
-        uriHost = "localhost",
-        uriPort = 80
-)
-@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
+@TestPropertySource(locations = "classpath:application-local.properties")
+@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
 class FrontModelJpaApiControllerTest {
 
     @Autowired
-    protected MockMvc mvc;
+    private MockMvc mockMvc;
+
     @Autowired
-    protected ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @Test
+    @DisplayName("모델 조회 테스트")
     public void 모델조회() throws Exception {
-        FrontModelDTO frontModelDTO = new FrontModelDTO();
-        // given
+        mockMvc.perform(get("/api/model/lists/1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.modelList.length()", equalTo(9)));
+    }
 
-        // when
-
-        // then
+    @Test
+    @DisplayName("모델 상세 조회 테스트")
+    public void 모델상세조회() throws Exception {
+        mockMvc.perform(get("/api/model/1/3"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.modelInfoMap.modelInfo.modelFirstName").value("CHO"))
+                .andExpect(jsonPath("$.modelInfoMap.modelInfo.modelSecondName").value("CHAN HEE"))
+                .andExpect(jsonPath("$.modelInfoMap.modelInfo.modelKorFirstName").value("조"))
+                .andExpect(jsonPath("$.modelInfoMap.modelInfo.modelKorSecondName").value("찬희"))
+                .andExpect(jsonPath("$.modelInfoMap.modelInfo.height").value("170"))
+                .andExpect(jsonPath("$.modelInfoMap.modelInfo.size3").value("34-24-34"))
+                .andExpect(jsonPath("$.modelInfoMap.modelInfo.shoes").value("270"));
     }
 }

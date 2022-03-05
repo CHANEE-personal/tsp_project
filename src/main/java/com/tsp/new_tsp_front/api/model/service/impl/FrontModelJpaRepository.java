@@ -93,7 +93,7 @@ public class FrontModelJpaRepository {
 					.orderBy(frontModelEntity.idx.desc())
 					.leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
 					.fetchJoin()
-					.where(searchModel(modelMap).and(frontModelEntity.model_main_yn.eq("Y")))
+					.where(searchModel(modelMap).and(frontModelEntity.modelMainYn.eq("Y")))
 					.offset(StringUtil.getInt(modelMap.get("jpaStartPage"),0))
 					.limit(StringUtil.getInt(modelMap.get("size"),0))
 					.fetch();

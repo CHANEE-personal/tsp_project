@@ -84,23 +84,23 @@ public class FrontModelEntity extends NewCommonMappedClass {
 
 	@Column(name = "model_main_yn")
 	@NotEmpty(message = "모델 메인 전시 여부는 필수입니다.")
-	private String model_main_yn;
+	private String modelMainYn;
 
 	@Column(name = "model_first_name")
 	@NotEmpty(message = "모델 첫번째 이름 입력은 필수입니다.")
-	private String model_first_name;
+	private String modelFirstName;
 
 	@Column(name = "model_second_name")
 	@NotEmpty(message = "모델 두번째 이름 입력은 필수입니다.")
-	private String model_second_name;
+	private String modelSecondName;
 
 	@Column(name = "model_kor_first_name")
 	@NotEmpty(message = "모델 국문 첫번째 이름 입력은 필수입니다.")
-	private String model_kor_first_name;
+	private String modelKorFirstName;
 
 	@Column(name = "model_kor_second_name")
 	@NotEmpty(message = "모델 국문 두번째 이름 입력은 필수입니다.")
-	private String model_kor_second_name;
+	private String modelKorSecondName;
 
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "category_cd", insertable = false, updatable = false)
