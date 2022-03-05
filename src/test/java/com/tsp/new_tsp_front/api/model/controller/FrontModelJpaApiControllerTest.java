@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -42,6 +41,7 @@ class FrontModelJpaApiControllerTest {
     @Test
     @DisplayName("남성 모델 상세 조회 테스트")
     public void 남성모델상세조회() throws Exception {
+        // 사용
         mockMvc.perform(get("/api/model/1/3"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -54,11 +54,18 @@ class FrontModelJpaApiControllerTest {
                 .andExpect(jsonPath("$.modelInfoMap.modelInfo.height").value("170"))
                 .andExpect(jsonPath("$.modelInfoMap.modelInfo.size3").value("34-24-34"))
                 .andExpect(jsonPath("$.modelInfoMap.modelInfo.shoes").value("270"));
+
+        // 미사용
+        mockMvc.perform(get("/api/model/1/-1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("NOT_FOUND_MODEL"));
     }
 
     @Test
     @DisplayName("여성 모델 상세 조회 테스트")
     public void 여성모델상세조회() throws Exception {
+        // 사용
         mockMvc.perform(get("/api/model/2/6"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -72,11 +79,18 @@ class FrontModelJpaApiControllerTest {
                 .andExpect(jsonPath("$.modelInfoMap.modelInfo.size3").value("31-21-31"))
                 .andExpect(jsonPath("$.modelInfoMap.modelInfo.shoes").value("220"))
                 .andExpect(jsonPath("$.modelInfoMap.modelInfo.modelMainYn").value("Y"));
+
+        // 미사용
+        mockMvc.perform(get("/api/model/2/-1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("NOT_FOUND_MODEL"));
     }
 
     @Test
     @DisplayName("시니어 모델 상세 조회 테스트")
     public void 시니어모델상세조회() throws Exception {
+        // 사용
         mockMvc.perform(get("/api/model/3/12"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -90,5 +104,11 @@ class FrontModelJpaApiControllerTest {
                 .andExpect(jsonPath("$.modelInfoMap.modelInfo.size3").value("31-24-31"))
                 .andExpect(jsonPath("$.modelInfoMap.modelInfo.shoes").value("220"))
                 .andExpect(jsonPath("$.modelInfoMap.modelInfo.modelMainYn").value("Y"));
+
+        // 미사용
+        mockMvc.perform(get("/api/model/3/-1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("NOT_FOUND_MODEL"));
     }
 }

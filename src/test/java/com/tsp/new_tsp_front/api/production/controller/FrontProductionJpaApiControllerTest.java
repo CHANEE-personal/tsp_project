@@ -1,22 +1,16 @@
 package com.tsp.new_tsp_front.api.production.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO;
-import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-import javax.transaction.Transactional;
-
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -55,7 +49,7 @@ class FrontProductionJpaApiControllerTest {
                 .andExpect(jsonPath("$.productionInfo.productionInfo.description").value("프로덕션 테스트"));
 
         // 미사용
-        mockMvc.perform(get("/api/production/39"))
+        mockMvc.perform(get("/api/production/-1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("NOT_FOUND_PRODUCTION"));
