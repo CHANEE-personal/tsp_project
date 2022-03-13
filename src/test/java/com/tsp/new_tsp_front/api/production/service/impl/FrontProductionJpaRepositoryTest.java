@@ -1,9 +1,5 @@
 package com.tsp.new_tsp_front.api.production.service.impl;
 
-import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
-import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
-import com.tsp.new_tsp_front.api.model.service.FrontModelJpaApiService;
-import com.tsp.new_tsp_front.api.model.service.impl.FrontModelJpaRepository;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 import com.tsp.new_tsp_front.api.production.service.FrontProductionJpaApiService;
