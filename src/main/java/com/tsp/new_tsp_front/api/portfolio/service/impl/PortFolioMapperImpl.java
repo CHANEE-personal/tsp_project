@@ -1,6 +1,5 @@
 package com.tsp.new_tsp_front.api.portfolio.service.impl;
 
-import com.tsp.new_tsp_front.api.model.service.impl.ModelImageMapperImpl;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
 

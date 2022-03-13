@@ -3,8 +3,6 @@ package com.tsp.new_tsp_front.api.portfolio;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
 import com.tsp.new_tsp_front.api.portfolio.service.impl.FrontPortFolioJpaRepository;
-import com.tsp.new_tsp_front.exception.ApiExceptionType;
-import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
