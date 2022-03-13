@@ -3,10 +3,12 @@ package com.tsp.new_tsp_front.api.production.service.impl;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 import com.tsp.new_tsp_front.common.mapStruct.StructMapper;
+import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
+@Mapper
 public interface ProductionMapper extends StructMapper<FrontProductionDTO, FrontProductionEntity> {
 
 	ProductionMapper INSTANCE = Mappers.getMapper(ProductionMapper.class);

@@ -93,13 +93,10 @@ public class FrontProductionJpaApiController {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/{idx}")
-	public ConcurrentHashMap<String, Object> getProductionInfo(@PathVariable("idx") Integer idx) {
-		ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
+	public FrontProductionDTO getProductionInfo(@PathVariable("idx") Integer idx) {
 
 		FrontProductionEntity frontProductionEntity = builder().idx(idx).build();
 
-		productionMap.put("productionInfo", this.frontProductionJpaApiService.getProductionInfo(frontProductionEntity));
-
-		return productionMap;
+		return this.frontProductionJpaApiService.getProductionInfo(frontProductionEntity);
 	}
 }

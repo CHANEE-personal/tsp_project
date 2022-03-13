@@ -56,7 +56,7 @@ public class FrontProductionJpaApiService {
 	 *
 	 * @param frontProductionEntity
 	 */
-	public ConcurrentHashMap<String, Object> getProductionInfo(FrontProductionEntity frontProductionEntity) {
+	public FrontProductionDTO getProductionInfo(FrontProductionEntity frontProductionEntity) {
 		return frontProductionJpaRepository.getProductionInfo(frontProductionEntity);
 	}
 }

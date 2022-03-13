@@ -132,7 +132,8 @@ public class FrontModelJpaRepository {
 					.leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
 					.fetchJoin()
 					.where(frontModelEntity.idx.eq(existFrontModelEntity.getIdx())
-							.and(frontModelEntity.visible.eq("Y")))
+							.and(frontModelEntity.visible.eq("Y"))
+							.and(commonImageEntity.typeName.eq("model")))
 					.fetchOne();
 
 //			//모델 이미지 조회

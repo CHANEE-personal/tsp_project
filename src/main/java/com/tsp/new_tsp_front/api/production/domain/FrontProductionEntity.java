@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_front.api.production.domain;
 
+import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonMappedClass;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +10,8 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -38,4 +41,7 @@ public class FrontProductionEntity extends NewCommonMappedClass {
 
 	@Column(name = "visible")
 	private String visible;
+
+	@OneToMany(mappedBy = "frontProductionEntity")
+	private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 }

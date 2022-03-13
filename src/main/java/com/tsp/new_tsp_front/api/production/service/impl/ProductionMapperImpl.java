@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_front.api.production.service.impl;
 
+import com.tsp.new_tsp_front.api.model.service.impl.ModelImageMapperImpl;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 
@@ -24,6 +25,7 @@ public class ProductionMapperImpl implements ProductionMapper {
 				.createTime(entity.getCreateTime())
 				.updater(entity.getUpdater())
 				.updateTime(entity.getUpdateTime())
+				.productionImage(ProductionImageMapperImpl.INSTANCE.toDtoList(entity.getCommonImageEntityList()))
 				.build();
 	}
 

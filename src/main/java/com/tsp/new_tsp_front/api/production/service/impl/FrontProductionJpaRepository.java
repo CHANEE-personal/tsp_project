@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity.commonImageEntity;
+import static com.tsp.new_tsp_front.api.model.domain.QFrontModelEntity.frontModelEntity;
 import static com.tsp.new_tsp_front.api.production.domain.QFrontProductionEntity.frontProductionEntity;
 
 @Repository
@@ -106,29 +107,31 @@ public class FrontProductionJpaRepository {
 	 *
 	 * @param existFrontProductionEntity
 	 */
-	public ConcurrentHashMap<String, Object> getProductionInfo(FrontProductionEntity existFrontProductionEntity) {
+	public FrontProductionDTO getProductionInfo(FrontProductionEntity existFrontProductionEntity) {
 		try {
-			ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
-
 			//프로덕션 상세 조회
 			FrontProductionEntity getProductionInfo = queryFactory
 					.selectFrom(frontProductionEntity)
+					.orderBy(frontProductionEntity.idx.desc())
+					.leftJoin(frontProductionEntity.commonImageEntityList, commonImageEntity)
+					.fetchJoin()
 					.where(frontProductionEntity.idx.eq(existFrontProductionEntity.getIdx())
-							.and(frontProductionEntity.visible.eq("Y")))
+							.and(frontProductionEntity.visible.eq("Y"))
+							.and(commonImageEntity.typeName.eq("production")))
 					.fetchOne();
 
-			//프로덕션 이미지 조회
-			List<CommonImageEntity> productionImageList = queryFactory
-					.selectFrom(commonImageEntity)
-					.where(commonImageEntity.typeIdx.eq(existFrontProductionEntity.getIdx())
-							.and(commonImageEntity.visible.eq("Y")
-									.and(commonImageEntity.typeName.eq("production"))))
-					.fetch();
+//			//프로덕션 이미지 조회
+//			List<CommonImageEntity> productionImageList = queryFactory
+//					.selectFrom(commonImageEntity)
+//					.where(commonImageEntity.typeIdx.eq(existFrontProductionEntity.getIdx())
+//							.and(commonImageEntity.visible.eq("Y")
+//									.and(commonImageEntity.typeName.eq("production"))))
+//					.fetch();
 
-			productionMap.put("productionInfo", ProductionMapper.INSTANCE.toDto(getProductionInfo));
-			productionMap.put("productionImageList", ModelImageMapper.INSTANCE.toDtoList(productionImageList));
+//			productionMap.put("productionInfo", ProductionMapper.INSTANCE.toDto(getProductionInfo));
+//			productionMap.put("productionImageList", ModelImageMapper.INSTANCE.toDtoList(productionImageList));
 
-			return productionMap;
+			return ProductionMapper.INSTANCE.toDto(getProductionInfo);
 		} catch (Exception e) {
 			throw new TspException(ApiExceptionType.NOT_FOUND_PRODUCTION);
 		}
