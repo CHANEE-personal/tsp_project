@@ -3,7 +3,6 @@ package com.tsp.new_tsp_front.api.model.service.impl;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.common.utils.StringUtil;
@@ -123,8 +122,6 @@ public class FrontModelJpaRepository {
 	public FrontModelDTO getModelInfo(FrontModelEntity existFrontModelEntity) {
 
 		try {
-			ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
-
 			//모델 상세 조회
 			FrontModelEntity getModelInfo = queryFactory
 					.selectFrom(frontModelEntity)

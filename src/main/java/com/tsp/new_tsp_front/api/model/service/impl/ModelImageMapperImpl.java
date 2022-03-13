@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
-public class ModelImageMapperImpl implements  ModelImageMapper{
+public class ModelImageMapperImpl implements  ModelImageMapper {
 
 	@Override
 	public CommonImageDTO toDto(CommonImageEntity entity) {

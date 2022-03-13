@@ -58,7 +58,7 @@ public class FrontPortFolioJpaApiService {
 	 *
 	 * @param frontPortFolioEntity
 	 */
-	public ConcurrentHashMap<String, Object> getPortFolioInfo(FrontPortFolioEntity frontPortFolioEntity) {
+	public FrontPortFolioDTO getPortFolioInfo(FrontPortFolioEntity frontPortFolioEntity) {
 		return frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
 	}
 }

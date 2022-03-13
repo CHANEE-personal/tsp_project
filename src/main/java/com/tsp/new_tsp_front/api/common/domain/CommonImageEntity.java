@@ -1,6 +1,7 @@
 package com.tsp.new_tsp_front.api.common.domain;
 
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
+import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -75,4 +76,8 @@ public class CommonImageEntity implements Serializable {
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "type_idx", referencedColumnName = "idx", insertable = false, updatable = false)
 	private FrontProductionEntity frontProductionEntity;
+
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "type_idx", referencedColumnName = "idx", insertable = false, updatable = false)
+	private FrontPortFolioEntity frontPortFolioEntity;
 }

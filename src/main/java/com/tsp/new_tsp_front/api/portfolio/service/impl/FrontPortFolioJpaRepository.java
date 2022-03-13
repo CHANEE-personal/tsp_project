@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity.commonImageEntity;
+import static com.tsp.new_tsp_front.api.portfolio.domain.QFrontPortFolioEntity.*;
 import static com.tsp.new_tsp_front.api.portfolio.domain.QFrontPortFolioEntity.frontPortFolioEntity;
 
 @Repository
@@ -107,28 +109,30 @@ public class FrontPortFolioJpaRepository {
 	 *
 	 * @param existFrontPortFolioEntity
 	 */
-	public ConcurrentHashMap<String, Object> getPortFolioInfo(FrontPortFolioEntity existFrontPortFolioEntity) {
+	public FrontPortFolioDTO getPortFolioInfo(FrontPortFolioEntity existFrontPortFolioEntity) {
 
 		try {
-			ConcurrentHashMap<String, Object> portFolioMap = new ConcurrentHashMap<>();
-
 			FrontPortFolioEntity getPortFolioInfo = queryFactory
-					.selectFrom(QFrontPortFolioEntity.frontPortFolioEntity)
-					.where(QFrontPortFolioEntity.frontPortFolioEntity.idx.eq(existFrontPortFolioEntity.getIdx())
-							.and(frontPortFolioEntity.visible.eq("Y")))
+					.selectFrom(frontPortFolioEntity)
+					.orderBy(frontPortFolioEntity.idx.desc())
+					.leftJoin(frontPortFolioEntity.commonImageEntityList, commonImageEntity)
+					.fetchJoin()
+					.where(frontPortFolioEntity.idx.eq(existFrontPortFolioEntity.getIdx())
+							.and(frontPortFolioEntity.visible.eq("Y"))
+							.and(commonImageEntity.typeName.eq("portfolio")))
 					.fetchOne();
 
-			List<CommonImageEntity> getPortFolioImageList = queryFactory
-					.selectFrom(QCommonImageEntity.commonImageEntity)
-					.where(QCommonImageEntity.commonImageEntity.typeName.eq("portfolio")
-							.and(QCommonImageEntity.commonImageEntity.typeIdx.eq(existFrontPortFolioEntity.getIdx())
-									.and(QCommonImageEntity.commonImageEntity.visible.eq("Y"))))
-					.fetch();
+//			List<CommonImageEntity> getPortFolioImageList = queryFactory
+//					.selectFrom(commonImageEntity)
+//					.where(commonImageEntity.typeName.eq("portfolio")
+//							.and(commonImageEntity.typeIdx.eq(existFrontPortFolioEntity.getIdx())
+//									.and(commonImageEntity.visible.eq("Y"))))
+//					.fetch();
+//
+//			portFolioMap.put("portFolioMap", PortFolioMapper.INSTANCE.toDto(getPortFolioInfo));
+//			portFolioMap.put("portFolioImageList", ModelImageMapper.INSTANCE.toDtoList(getPortFolioImageList));
 
-			portFolioMap.put("portFolioMap", PortFolioMapper.INSTANCE.toDto(getPortFolioInfo));
-			portFolioMap.put("portFolioImageList", ModelImageMapper.INSTANCE.toDtoList(getPortFolioImageList));
-
-			return portFolioMap;
+			return PortFolioMapper.INSTANCE.toDto(getPortFolioInfo);
 		} catch (Exception e) {
 			throw new TspException(ApiExceptionType.NOT_FOUND_PORTFOLIO);
 		}

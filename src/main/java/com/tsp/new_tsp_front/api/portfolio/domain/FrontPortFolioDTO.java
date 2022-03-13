@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_front.api.portfolio.domain;
 
+import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -10,6 +11,8 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -45,4 +48,7 @@ public class FrontPortFolioDTO extends NewCommonDTO {
 
 	@ApiModelProperty(required = true, value = "visible")
 	String visible;
+
+	@ApiModelProperty(required = true, value = "portfolioImageList", hidden = true)
+	private List<CommonImageDTO> portfolioImage = new ArrayList<>();
 }

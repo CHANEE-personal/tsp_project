@@ -95,13 +95,10 @@ public class FrontPortFolioJpaApiController {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/{idx}")
-	public ConcurrentHashMap<String, Object> getPortFolioInfo(@PathVariable("idx") Integer idx) {
-		ConcurrentHashMap<String, Object> portFolioMap = new ConcurrentHashMap<>();
+	public FrontPortFolioDTO getPortFolioInfo(@PathVariable("idx") Integer idx) {
 
 		FrontPortFolioEntity frontPortFolioEntity = builder().idx(idx).build();
 
-		portFolioMap.put("portFolioInfo", this.frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity));
-
-		return portFolioMap;
+		return this.frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity);
 	}
 }
