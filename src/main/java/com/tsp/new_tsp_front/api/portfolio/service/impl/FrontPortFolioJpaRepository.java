@@ -2,12 +2,8 @@ package com.tsp.new_tsp_front.api.portfolio.service.impl;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
-import com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity;
-import com.tsp.new_tsp_front.api.model.service.impl.ModelImageMapper;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
-import com.tsp.new_tsp_front.api.portfolio.domain.QFrontPortFolioEntity;
 import com.tsp.new_tsp_front.common.utils.StringUtil;
 import com.tsp.new_tsp_front.exception.ApiExceptionType;
 import com.tsp.new_tsp_front.exception.TspException;
@@ -16,10 +12,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity.commonImageEntity;
-import static com.tsp.new_tsp_front.api.portfolio.domain.QFrontPortFolioEntity.*;
 import static com.tsp.new_tsp_front.api.portfolio.domain.QFrontPortFolioEntity.frontPortFolioEntity;
 
 @Repository
