@@ -82,8 +82,14 @@ class FrontPortFolioJpaRepositoryTest {
                 });
 
         assertThat(portfolioInfo.getPortfolioImage().get(0).getTypeName()).isEqualTo("portfolio");
+        assertThat(portfolioInfo.getPortfolioImage().get(0).getImageType()).isEqualTo("main");
         assertThat(portfolioInfo.getPortfolioImage().get(0).getFileName()).isEqualTo("52d4fdc8-f109-408e-b243-85cc1be207c5.jpg");
         assertThat(portfolioInfo.getPortfolioImage().get(0).getFilePath()).isEqualTo("/var/www/dist/upload/1223043918525.jpg");
+
+        assertThat(portfolioInfo.getPortfolioImage().get(1).getTypeName()).isEqualTo("portfolio");
+        assertThat(portfolioInfo.getPortfolioImage().get(1).getImageType()).isEqualTo("sub1");
+        assertThat(portfolioInfo.getPortfolioImage().get(1).getFileName()).isEqualTo("e13f6930-17a5-407c-96ed-fd625b720d21.jpg");
+        assertThat(portfolioInfo.getPortfolioImage().get(1).getFilePath()).isEqualTo("/var/www/dist/upload/1223043918557.jpg");
 
     }
 }
