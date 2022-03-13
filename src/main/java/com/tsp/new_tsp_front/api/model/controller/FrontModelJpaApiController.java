@@ -102,16 +102,13 @@ public class FrontModelJpaApiController {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/{categoryCd}/{idx}")
-	public ConcurrentHashMap<String, Object> getModelInfo(@PathVariable("categoryCd")
+	public FrontModelDTO getModelInfo(@PathVariable("categoryCd")
 														  @Range(min = 1, max = 3, message = "{modelCategory.Range}")
 														  Integer categoryCd,
 														  @PathVariable("idx") Integer idx) {
-		ConcurrentHashMap<String, Object> modelInfoMap = new ConcurrentHashMap<>();
 
 		FrontModelEntity frontModelEntity = builder().categoryCd(categoryCd).idx(idx).build();
 
-		modelInfoMap.put("modelInfoMap", this.frontModelJpaApiService.getModelInfo(frontModelEntity));
-
-		return modelInfoMap;
+		return this.frontModelJpaApiService.getModelInfo(frontModelEntity);
 	}
 }

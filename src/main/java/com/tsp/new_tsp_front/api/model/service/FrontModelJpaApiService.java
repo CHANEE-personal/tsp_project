@@ -58,7 +58,7 @@ public class FrontModelJpaApiService {
 	 *
 	 * @param frontModelEntity
 	 */
-	public ConcurrentHashMap<String, Object> getModelInfo(FrontModelEntity frontModelEntity) {
+	public FrontModelDTO getModelInfo(FrontModelEntity frontModelEntity) {
 		return this.frontModelJpaRepository.getModelInfo(frontModelEntity);
 	}
 }
