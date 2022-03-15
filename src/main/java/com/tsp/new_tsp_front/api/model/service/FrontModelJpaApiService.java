@@ -43,7 +43,7 @@ public class FrontModelJpaApiService {
 	 *
 	 * @param modelMap
 	 */
-	public List<FrontModelDTO> getModelList(ConcurrentHashMap modelMap) {
+	public List<FrontModelDTO> getModelList(ConcurrentHashMap<String, Object> modelMap) {
 		return frontModelJpaRepository.getModelList(modelMap);
 	}
 

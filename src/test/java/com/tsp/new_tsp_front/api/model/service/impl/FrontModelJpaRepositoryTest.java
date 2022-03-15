@@ -3,11 +3,9 @@ package com.tsp.new_tsp_front.api.model.service.impl;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
-import com.tsp.new_tsp_front.api.model.service.FrontModelJpaApiService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,9 +37,6 @@ class FrontModelJpaRepositoryTest {
 
     @Mock
     private FrontModelJpaRepository mockFrontModelJpaRepository;
-
-    @InjectMocks
-    private FrontModelJpaApiService frontModelJpaApiService;
 
     @Test
     public void 모델리스트조회테스트() throws Exception {
