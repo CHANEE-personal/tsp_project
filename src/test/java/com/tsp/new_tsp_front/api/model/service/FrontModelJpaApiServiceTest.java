@@ -40,18 +40,33 @@ class FrontModelJpaApiServiceTest {
 
         List<FrontModelDTO> returnModelList = new ArrayList<>();
 
-        returnModelList.add(builder().idx(1).categoryCd(1).modelKorName("조찬희").build());
+        returnModelList.add(builder().idx(1).categoryCd(1).modelKorName("조찬희").modelEngName("chochanhee").build());
 
         given(frontModelJpaRepository.getModelList(modelMap)).willReturn(returnModelList);
 
         // when
         List<FrontModelDTO> modelList = frontModelJpaApiService.getModelList(modelMap);
 
+        assertThat(modelList.get(0).getIdx()).isEqualTo(returnModelList.get(0).getIdx());
+        assertThat(modelList.get(0).getCategoryCd()).isEqualTo(returnModelList.get(0).getIdx());
         assertThat(modelList.get(0).getModelKorName()).isEqualTo(returnModelList.get(0).getModelKorName());
+        assertThat(modelList.get(0).getModelEngName()).isEqualTo(returnModelList.get(0).getModelEngName());
     }
 
     @Test
     public void 모델상세조회테스트() throws Exception {
+        // given
+        FrontModelEntity frontModelEntity = FrontModelEntity.builder().idx(1).categoryCd(1).build();
+        FrontModelDTO frontModelDTO = builder().idx(1).categoryCd(1).modelKorName("조찬희").modelEngName("chochanhee").build();
+        given(frontModelJpaRepository.getModelInfo(frontModelEntity)).willReturn(frontModelDTO);
 
+        // when
+        FrontModelDTO modelInfo = frontModelJpaApiService.getModelInfo(frontModelEntity);
+
+        // then
+        assertThat(modelInfo.getIdx()).isEqualTo(frontModelDTO.getIdx());
+        assertThat(modelInfo.getCategoryCd()).isEqualTo(frontModelDTO.getCategoryCd());
+        assertThat(modelInfo.getModelKorName()).isEqualTo(frontModelDTO.getModelKorName());
+        assertThat(modelInfo.getModelEngName()).isEqualTo(frontModelDTO.getModelEngName());
     }
 }
