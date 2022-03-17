@@ -40,17 +40,35 @@ class FrontModelJpaApiServiceTest {
 
         List<FrontModelDTO> returnModelList = new ArrayList<>();
 
-        returnModelList.add(builder().idx(1).categoryCd(1).modelKorName("조찬희").modelEngName("chochanhee").build());
+        // 남성
+        returnModelList.add(builder().idx(1).categoryCd(1).modelKorName("남성모델").modelEngName("menModel").build());
+        // 여성
+        returnModelList.add(builder().idx(2).categoryCd(2).modelKorName("여성모델").modelEngName("womenModel").build());
+        // 시니어
+        returnModelList.add(builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").build());
 
         given(frontModelJpaRepository.getModelList(modelMap)).willReturn(returnModelList);
 
         // when
         List<FrontModelDTO> modelList = frontModelJpaApiService.getModelList(modelMap);
 
+        assertThat(modelList.size()).isGreaterThan(0);
+        assertThat(modelList.size()).isEqualTo(3);
+
         assertThat(modelList.get(0).getIdx()).isEqualTo(returnModelList.get(0).getIdx());
         assertThat(modelList.get(0).getCategoryCd()).isEqualTo(returnModelList.get(0).getIdx());
         assertThat(modelList.get(0).getModelKorName()).isEqualTo(returnModelList.get(0).getModelKorName());
         assertThat(modelList.get(0).getModelEngName()).isEqualTo(returnModelList.get(0).getModelEngName());
+
+        assertThat(modelList.get(1).getIdx()).isEqualTo(returnModelList.get(1).getIdx());
+        assertThat(modelList.get(1).getCategoryCd()).isEqualTo(returnModelList.get(1).getIdx());
+        assertThat(modelList.get(1).getModelKorName()).isEqualTo(returnModelList.get(1).getModelKorName());
+        assertThat(modelList.get(1).getModelEngName()).isEqualTo(returnModelList.get(1).getModelEngName());
+
+        assertThat(modelList.get(2).getIdx()).isEqualTo(returnModelList.get(2).getIdx());
+        assertThat(modelList.get(2).getCategoryCd()).isEqualTo(returnModelList.get(2).getIdx());
+        assertThat(modelList.get(2).getModelKorName()).isEqualTo(returnModelList.get(2).getModelKorName());
+        assertThat(modelList.get(2).getModelEngName()).isEqualTo(returnModelList.get(2).getModelEngName());
     }
 
     @Test
