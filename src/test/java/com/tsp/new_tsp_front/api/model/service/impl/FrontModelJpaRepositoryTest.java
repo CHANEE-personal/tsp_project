@@ -16,6 +16,7 @@ import org.springframework.test.context.TestPropertySource;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.tsp.new_tsp_front.api.model.domain.FrontModelEntity.builder;
@@ -179,5 +180,23 @@ class FrontModelJpaRepositoryTest {
         assertThat(filePath).isEqualTo("/test/test.jpg");
         assertThat(imageType).isEqualTo("main");
         assertThat(typeName).isEqualTo("model");
+    }
+
+    @Test
+    public void 모델배너리스트조회테스트() throws Exception {
+
+        // given
+        ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
+        modelMap.put("categoryCd", "1");
+
+        // when
+        List<FrontModelDTO> mainModelList = frontModelJpaRepository.getMainModelList(modelMap);
+
+        Optional<FrontModelDTO> mainModelFirstInfo = frontModelJpaRepository.getMainModelList(modelMap).stream().findFirst();
+
+        // then
+        assertThat(mainModelList.size()).isGreaterThan(0);
+        assertThat(mainModelFirstInfo.get().getCategoryCd()).isEqualTo(1);
+        assertThat(mainModelFirstInfo.get().getModelMainYn()).isEqualTo("Y");
     }
 }

@@ -54,6 +54,15 @@ class FrontModelJpaApiControllerTest {
     }
 
     @Test
+    @DisplayName("모델 배너 조회 테스트")
+    public void 모델배너조회() throws Exception {
+        mockMvc.perform(get("/api/model/lists/main/1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.modelList.length()", equalTo(4)));
+    }
+
+    @Test
     @DisplayName("남성 모델 상세 조회 테스트")
     public void 남성모델상세조회() throws Exception {
         // 사용
