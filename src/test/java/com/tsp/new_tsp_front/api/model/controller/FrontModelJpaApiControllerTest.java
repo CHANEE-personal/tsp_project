@@ -56,10 +56,10 @@ class FrontModelJpaApiControllerTest {
     @Test
     @DisplayName("모델 배너 조회 테스트")
     public void 모델배너조회() throws Exception {
-        mockMvc.perform(get("/api/model/lists/main/1"))
+        mockMvc.perform(get("/api/model/lists/main"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.modelList.length()", equalTo(4)));
+                .andExpect(jsonPath("$.modelList.length()", equalTo(6)));
     }
 
     @Test

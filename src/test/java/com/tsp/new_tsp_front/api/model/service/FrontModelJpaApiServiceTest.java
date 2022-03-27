@@ -85,10 +85,10 @@ class FrontModelJpaApiServiceTest {
         // 시니어
         returnModelList.add(builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").modelMainYn("Y").build());
 
-        given(frontModelJpaRepository.getMainModelList(modelMap)).willReturn(returnModelList);
+        given(frontModelJpaRepository.getMainModelList()).willReturn(returnModelList);
 
         // when
-        List<FrontModelDTO> mainModelList = frontModelJpaApiService.getMainModelList(modelMap);
+        List<FrontModelDTO> mainModelList = frontModelJpaApiService.getMainModelList();
 
         assertThat(mainModelList.size()).isGreaterThan(0);
         assertThat(mainModelList.size()).isEqualTo(3);

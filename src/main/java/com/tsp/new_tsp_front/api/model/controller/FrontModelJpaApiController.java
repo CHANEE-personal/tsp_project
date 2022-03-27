@@ -129,22 +129,16 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
-    @GetMapping(value = "/lists/main/{categoryCd}")
-    public ConcurrentHashMap<String, Object> getMainModelList(@PathVariable("categoryCd")
-                                                          @Range(min = 1, max = 3, message = "{modelCategory.Range}")
-                                                                  Integer categoryCd) {
+    @GetMapping(value = "/lists/main")
+    public ConcurrentHashMap<String, Object> getMainModelList() {
         ConcurrentHashMap<String, Object> mainModelMap = new ConcurrentHashMap<>();
 
-        // 페이징 및 검색
-        ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
-        modelMap.put("categoryCd", categoryCd);
-
-        long mainModelListCnt = this.frontModelJpaApiService.getMainModelListCnt(modelMap);
+        long mainModelListCnt = this.frontModelJpaApiService.getMainModelListCnt();
 
         List<FrontModelDTO> mainModelList = new ArrayList<>();
 
         if (mainModelListCnt > 0) {
-            mainModelList = this.frontModelJpaApiService.getMainModelList(modelMap);
+            mainModelList = this.frontModelJpaApiService.getMainModelList();
         }
 
         // 전체 아이템 수

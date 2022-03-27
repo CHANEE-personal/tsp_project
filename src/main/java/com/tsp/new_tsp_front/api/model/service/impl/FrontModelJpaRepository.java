@@ -147,18 +147,17 @@ public class FrontModelJpaRepository {
      * 5. 작성일       : 2022. 03. 27.
      * </pre>
      *
-     * @param modelMap
      * @return
      */
-    public Long getMainModelListCnt(Map<String, Object> modelMap) {
+    public Long getMainModelListCnt() {
 
         try {
             return queryFactory.selectFrom(frontModelEntity)
                     .orderBy(frontModelEntity.idx.desc())
                     .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
                     .fetchJoin()
-                    .where(searchModel(modelMap).and(frontModelEntity.modelMainYn.eq("Y").and(frontModelEntity.visible.eq("Y")
-                            .and(commonImageEntity.typeName.eq("model").and(commonImageEntity.imageType.eq("main"))))))
+                    .where(frontModelEntity.modelMainYn.eq("Y").and(frontModelEntity.visible.eq("Y")
+                            .and(commonImageEntity.typeName.eq("model").and(commonImageEntity.imageType.eq("main")).and(commonImageEntity.visible.eq("Y")))))
                     .fetchCount();
 
         } catch (Exception e) {
@@ -175,10 +174,9 @@ public class FrontModelJpaRepository {
      * 5. 작성일       : 2022. 03. 27.
      * </pre>
      *
-     * @param modelMap
      * @return
      */
-    public List<FrontModelDTO> getMainModelList(Map<String, Object> modelMap) {
+    public List<FrontModelDTO> getMainModelList() {
 
         try {
             List<FrontModelEntity> modelList = queryFactory
@@ -186,12 +184,12 @@ public class FrontModelJpaRepository {
                     .orderBy(frontModelEntity.idx.desc())
                     .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
                     .fetchJoin()
-                    .where(searchModel(modelMap).and(frontModelEntity.modelMainYn.eq("Y").and(frontModelEntity.visible.eq("Y")
-                            .and(commonImageEntity.typeName.eq("model").and(commonImageEntity.imageType.eq("main"))))))
+                    .where(frontModelEntity.modelMainYn.eq("Y").and(frontModelEntity.visible.eq("Y")
+                            .and(commonImageEntity.typeName.eq("model").and(commonImageEntity.imageType.eq("main")).and(commonImageEntity.visible.eq("Y")))))
                     .fetch();
 
             for (int i = 0; i < modelList.size(); i++) {
-                modelList.get(i).setRnum(StringUtil.getInt(modelMap.get("startPage"), 1) * (StringUtil.getInt(modelMap.get("size"), 1)) - (2 - i));
+                modelList.get(i).setRnum(i);
             }
 
             return ModelMapper.INSTANCE.toDtoList(modelList);

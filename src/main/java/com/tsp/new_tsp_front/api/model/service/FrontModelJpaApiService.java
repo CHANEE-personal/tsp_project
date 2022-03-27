@@ -73,8 +73,8 @@ public class FrontModelJpaApiService {
 	 *
 	 * @param modelMap
 	 */
-	public Long getMainModelListCnt(ConcurrentHashMap<String, Object> modelMap) {
-		return this.frontModelJpaRepository.getMainModelListCnt(modelMap);
+	public Long getMainModelListCnt() {
+		return this.frontModelJpaRepository.getMainModelListCnt();
 	}
 
 	/**
@@ -88,7 +88,7 @@ public class FrontModelJpaApiService {
 	 *
 	 * @param modelMap
 	 */
-	public List<FrontModelDTO> getMainModelList(ConcurrentHashMap<String, Object> modelMap) {
-		return this.frontModelJpaRepository.getMainModelList(modelMap);
+	public List<FrontModelDTO> getMainModelList() {
+		return this.frontModelJpaRepository.getMainModelList();
 	}
 }

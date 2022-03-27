@@ -185,14 +185,10 @@ class FrontModelJpaRepositoryTest {
     @Test
     public void 모델배너리스트조회테스트() throws Exception {
 
-        // given
-        ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
-        modelMap.put("categoryCd", "1");
-
         // when
-        List<FrontModelDTO> mainModelList = frontModelJpaRepository.getMainModelList(modelMap);
+        List<FrontModelDTO> mainModelList = frontModelJpaRepository.getMainModelList();
 
-        Optional<FrontModelDTO> mainModelFirstInfo = frontModelJpaRepository.getMainModelList(modelMap).stream().findFirst();
+        Optional<FrontModelDTO> mainModelFirstInfo = frontModelJpaRepository.getMainModelList().stream().findFirst();
 
         // then
         assertThat(mainModelList.size()).isGreaterThan(0);
