@@ -61,4 +61,34 @@ public class FrontModelJpaApiService {
 	public FrontModelDTO getModelInfo(FrontModelEntity frontModelEntity) {
 		return this.frontModelJpaRepository.getModelInfo(frontModelEntity);
 	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : getMainModelListCnt
+	 * 2. ClassName  : FrontModelJpaApiService.java
+	 * 3. Comment    : 프론트 > 메인 모델 수 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 03. 27.
+	 * </pre>
+	 *
+	 * @param modelMap
+	 */
+	public Long getMainModelListCnt(ConcurrentHashMap<String, Object> modelMap) {
+		return this.frontModelJpaRepository.getMainModelListCnt(modelMap);
+	}
+
+	/**
+	 * <pre>
+	 * 1. MethodName : getMainModelList
+	 * 2. ClassName  : FrontModelJpaApiService.java
+	 * 3. Comment    : 프론트 > 메인 모델 리스트 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 03. 27.
+	 * </pre>
+	 *
+	 * @param modelMap
+	 */
+	public List<FrontModelDTO> getMainModelList(ConcurrentHashMap<String, Object> modelMap) {
+		return this.frontModelJpaRepository.getMainModelList(modelMap);
+	}
 }
