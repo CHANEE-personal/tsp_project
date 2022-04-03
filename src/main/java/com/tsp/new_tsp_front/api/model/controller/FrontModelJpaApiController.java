@@ -35,6 +35,42 @@ public class FrontModelJpaApiController {
 
     /**
      * <pre>
+     * 1. MethodName : lists/main/{categoryCd}/{idx}
+     * 2. ClassName  : FrontModelJpaApiController.java
+     * 3. Comment    : 프론트 > 메인 모델 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 03. 27.
+     * </pre>
+     *
+     */
+    @ApiOperation(value = "메인 모델 배너", notes = "메인 배너 모델을 조회한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공", response = Map.class),
+            @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+            @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+    })
+    @GetMapping(value = "/lists/main")
+    public ConcurrentHashMap<String, Object> getMainModelList() {
+        ConcurrentHashMap<String, Object> mainModelMap = new ConcurrentHashMap<>();
+
+        long mainModelListCnt = this.frontModelJpaApiService.getMainModelListCnt();
+
+        List<FrontModelDTO> mainModelList = new ArrayList<>();
+
+        if (mainModelListCnt > 0) {
+            mainModelList = this.frontModelJpaApiService.getMainModelList();
+        }
+
+        // 전체 아이템 수
+        mainModelMap.put("modelListTotalCnt", mainModelListCnt);
+
+        mainModelMap.put("modelList", mainModelList);
+
+        return mainModelMap;
+    }
+
+    /**
+     * <pre>
      * 1. MethodName : lists/{categoryCd}
      * 2. ClassName  : FrontModelJpaApiController.java
      * 3. Comment    : 프론트 > 모델 조회
@@ -110,42 +146,5 @@ public class FrontModelJpaApiController {
         FrontModelEntity frontModelEntity = builder().categoryCd(categoryCd).idx(idx).build();
 
         return this.frontModelJpaApiService.getModelInfo(frontModelEntity);
-    }
-
-    /**
-     * <pre>
-     * 1. MethodName : lists/main/{categoryCd}/{idx}
-     * 2. ClassName  : FrontModelJpaApiController.java
-     * 3. Comment    : 프론트 > 메인 모델 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 03. 27.
-     * </pre>
-     *
-     * @param categoryCd
-     */
-    @ApiOperation(value = "메인 모델 배너", notes = "메인 배너 모델을 조회한다.")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "성공", response = Map.class),
-            @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
-            @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
-    })
-    @GetMapping(value = "/lists/main")
-    public ConcurrentHashMap<String, Object> getMainModelList() {
-        ConcurrentHashMap<String, Object> mainModelMap = new ConcurrentHashMap<>();
-
-        long mainModelListCnt = this.frontModelJpaApiService.getMainModelListCnt();
-
-        List<FrontModelDTO> mainModelList = new ArrayList<>();
-
-        if (mainModelListCnt > 0) {
-            mainModelList = this.frontModelJpaApiService.getMainModelList();
-        }
-
-        // 전체 아이템 수
-        mainModelMap.put("modelListTotalCnt", mainModelListCnt);
-
-        mainModelMap.put("modelList", mainModelList);
-
-        return mainModelMap;
     }
 }

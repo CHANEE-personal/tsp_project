@@ -50,6 +50,39 @@ public class FrontModelJpaRepository {
 
     /**
      * <pre>
+     * 1. MethodName : getMainModelList
+     * 2. ClassName  : FrontModelJpaRepository.java
+     * 3. Comment    : 프론트 메인 모델 리스트 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 03. 27.
+     * </pre>
+     *
+     * @return
+     */
+    public List<FrontModelDTO> getMainModelList() {
+
+        try {
+            List<FrontModelEntity> modelList = queryFactory
+                    .selectFrom(frontModelEntity)
+                    .orderBy(frontModelEntity.idx.desc())
+                    .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
+                    .fetchJoin()
+                    .where(frontModelEntity.modelMainYn.eq("Y").and(frontModelEntity.visible.eq("Y")
+                            .and(commonImageEntity.typeName.eq("model").and(commonImageEntity.imageType.eq("main")).and(commonImageEntity.visible.eq("Y")))))
+                    .fetch();
+
+            for (int i = 0; i < modelList.size(); i++) {
+                modelList.get(i).setRnum(i);
+            }
+
+            return ModelMapper.INSTANCE.toDtoList(modelList);
+        } catch (Exception e) {
+            throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
+        }
+    }
+
+    /**
+     * <pre>
      * 1. MethodName : getModelListCnt
      * 2. ClassName  : FrontModelJpaRepository.java
      * 3. Comment    : 프론트 모델 리스트 갯수 조회
@@ -160,39 +193,6 @@ public class FrontModelJpaRepository {
                             .and(commonImageEntity.typeName.eq("model").and(commonImageEntity.imageType.eq("main")).and(commonImageEntity.visible.eq("Y")))))
                     .fetchCount();
 
-        } catch (Exception e) {
-            throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
-        }
-    }
-
-    /**
-     * <pre>
-     * 1. MethodName : getMainModelList
-     * 2. ClassName  : FrontModelJpaRepository.java
-     * 3. Comment    : 프론트 메인 모델 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 03. 27.
-     * </pre>
-     *
-     * @return
-     */
-    public List<FrontModelDTO> getMainModelList() {
-
-        try {
-            List<FrontModelEntity> modelList = queryFactory
-                    .selectFrom(frontModelEntity)
-                    .orderBy(frontModelEntity.idx.desc())
-                    .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
-                    .fetchJoin()
-                    .where(frontModelEntity.modelMainYn.eq("Y").and(frontModelEntity.visible.eq("Y")
-                            .and(commonImageEntity.typeName.eq("model").and(commonImageEntity.imageType.eq("main")).and(commonImageEntity.visible.eq("Y")))))
-                    .fetch();
-
-            for (int i = 0; i < modelList.size(); i++) {
-                modelList.get(i).setRnum(i);
-            }
-
-            return ModelMapper.INSTANCE.toDtoList(modelList);
         } catch (Exception e) {
             throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
         }

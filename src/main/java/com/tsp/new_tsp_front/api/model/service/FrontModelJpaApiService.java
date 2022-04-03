@@ -71,7 +71,6 @@ public class FrontModelJpaApiService {
 	 * 5. 작성일       : 2022. 03. 27.
 	 * </pre>
 	 *
-	 * @param modelMap
 	 */
 	public Long getMainModelListCnt() {
 		return this.frontModelJpaRepository.getMainModelListCnt();
@@ -86,7 +85,6 @@ public class FrontModelJpaApiService {
 	 * 5. 작성일       : 2022. 03. 27.
 	 * </pre>
 	 *
-	 * @param modelMap
 	 */
 	public List<FrontModelDTO> getMainModelList() {
 		return this.frontModelJpaRepository.getMainModelList();
