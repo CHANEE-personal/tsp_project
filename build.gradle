@@ -72,6 +72,9 @@ dependencies {
     compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'
 
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+
+    // cache 추가
+    compile('org.springframework.boot:spring-boot-starter-cache')
 }
 
 //test {
