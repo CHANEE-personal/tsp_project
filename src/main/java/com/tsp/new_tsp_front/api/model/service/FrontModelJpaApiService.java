@@ -3,9 +3,8 @@ package com.tsp.new_tsp_front.api.model.service;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.service.impl.FrontModelJpaRepository;
-import com.tsp.new_tsp_front.exception.ApiExceptionType;
-import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +27,7 @@ public class FrontModelJpaApiService {
 	 *
 	 * @param modelMap
 	 */
+	@Cacheable(value = "model")
 	public Long getModelListCnt(ConcurrentHashMap<String, Object> modelMap) {
 		return frontModelJpaRepository.getModelListCnt(modelMap);
 	}
@@ -43,6 +43,7 @@ public class FrontModelJpaApiService {
 	 *
 	 * @param modelMap
 	 */
+	@Cacheable(value = "model")
 	public List<FrontModelDTO> getModelList(ConcurrentHashMap<String, Object> modelMap) {
 		return frontModelJpaRepository.getModelList(modelMap);
 	}
@@ -58,6 +59,7 @@ public class FrontModelJpaApiService {
 	 *
 	 * @param frontModelEntity
 	 */
+	@Cacheable(value = "model")
 	public FrontModelDTO getModelInfo(FrontModelEntity frontModelEntity) {
 		return this.frontModelJpaRepository.getModelInfo(frontModelEntity);
 	}
@@ -72,6 +74,7 @@ public class FrontModelJpaApiService {
 	 * </pre>
 	 *
 	 */
+	@Cacheable(value = "model")
 	public Long getMainModelListCnt() {
 		return this.frontModelJpaRepository.getMainModelListCnt();
 	}
@@ -86,6 +89,7 @@ public class FrontModelJpaApiService {
 	 * </pre>
 	 *
 	 */
+	@Cacheable(value = "model")
 	public List<FrontModelDTO> getMainModelList() {
 		return this.frontModelJpaRepository.getMainModelList();
 	}

@@ -18,7 +18,9 @@ public class CacheConfiguration {
     public CacheManager cacheManager() {
         SimpleCacheManager cacheManager = new SimpleCacheManager();
         cacheManager.setCaches(List.of(
-                new ConcurrentMapCache("model")));
+                new ConcurrentMapCache("model"),
+                new ConcurrentMapCache("production"),
+                new ConcurrentMapCache("portfolio")));
         return cacheManager;
     }
 }
