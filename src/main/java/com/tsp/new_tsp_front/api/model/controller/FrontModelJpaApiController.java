@@ -53,16 +53,10 @@ public class FrontModelJpaApiController {
     public ConcurrentHashMap<String, Object> getMainModelList() {
         ConcurrentHashMap<String, Object> mainModelMap = new ConcurrentHashMap<>();
 
-        long mainModelListCnt = this.frontModelJpaApiService.getMainModelListCnt();
-
-        List<FrontModelDTO> mainModelList = new ArrayList<>();
-
-        if (mainModelListCnt > 0) {
-            mainModelList = this.frontModelJpaApiService.getMainModelList();
-        }
+        List<FrontModelDTO> mainModelList = this.frontModelJpaApiService.getMainModelList();;
 
         // 전체 아이템 수
-        mainModelMap.put("modelListTotalCnt", mainModelListCnt);
+        mainModelMap.put("modelListTotalCnt", mainModelList.size());
 
         mainModelMap.put("modelList", mainModelList);
 

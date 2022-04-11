@@ -182,16 +182,19 @@ public class FrontModelJpaRepository {
      *
      * @return
      */
-    public Long getMainModelListCnt() {
+    public long getMainModelListCnt() {
 
         try {
-            return queryFactory.selectFrom(frontModelEntity)
+            List<FrontModelEntity> modelList = queryFactory
+                    .selectFrom(frontModelEntity)
                     .orderBy(frontModelEntity.idx.desc())
                     .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
                     .fetchJoin()
                     .where(frontModelEntity.modelMainYn.eq("Y").and(frontModelEntity.visible.eq("Y")
                             .and(commonImageEntity.typeName.eq("model").and(commonImageEntity.imageType.eq("main")).and(commonImageEntity.visible.eq("Y")))))
-                    .fetchCount();
+                    .fetch();
+
+            return modelList.size();
 
         } catch (Exception e) {
             throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
