@@ -1,10 +1,8 @@
 package com.tsp.new_tsp_front.api.portfolio.controller;
 
-import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.portfolio.FrontPortFolioJpaApiService;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
-import com.tsp.new_tsp_front.api.portfolio.domain.QFrontPortFolioEntity;
 import com.tsp.new_tsp_front.common.SearchCommon;
 import com.tsp.new_tsp_front.common.paging.Page;
 import io.swagger.annotations.Api;
@@ -58,20 +56,14 @@ public class FrontPortFolioJpaApiController {
 		// 페이징 및 검색
 		ConcurrentHashMap<String, Object> portFolioMap = searchCommon.searchCommon(page, paramMap);
 
-		long portFolioListCnt = this.frontPortFolioJpaApiService.getPortFolioListCnt(portFolioMap);
-
-		List<FrontPortFolioDTO> portFolioList = new ArrayList<>();
-
-		if(portFolioListCnt > 0) {
-			portFolioList = this.frontPortFolioJpaApiService.getPortFolioList(portFolioMap);
-		}
+		List<FrontPortFolioDTO> portFolioList = this.frontPortFolioJpaApiService.getPortFolioList(portFolioMap);
 
 		// 리스트 수
 		resultMap.put("pageSize", page.getSize());
 		// 전체 페이지 수
-		resultMap.put("perPageListCnt", Math.ceil((portFolioListCnt-1)/page.getSize()+1));
+		resultMap.put("perPageListCnt", Math.ceil((portFolioList.size()-1)/page.getSize()+1));
 		// 전체 아이템 수
-		resultMap.put("portFolioListTotalCnt", portFolioListCnt);
+		resultMap.put("portFolioListTotalCnt", portFolioList.size());
 		resultMap.put("portFolioList", portFolioList);
 
 		return resultMap;

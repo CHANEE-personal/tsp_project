@@ -38,28 +38,6 @@ public class FrontProductionJpaRepository {
 
 	/**
 	 * <pre>
-	 * 1. MethodName : getProductionListCnt
-	 * 2. ClassName  : FrontProductionJpaRepository.java
-	 * 3. Comment    : 프로덕션 리스트 갯수 조회
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2022. 01. 06.
-	 * </pre>
-	 *
-	 * @param productionMap
-	 */
-	public Long getProductionListCnt(Map<String, Object> productionMap) {
-
-		try {
-			return queryFactory.selectFrom(frontProductionEntity)
-					.where(searchProduction(productionMap))
-					.fetchCount();
-		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_PRODUCTION_LIST);
-		}
-	}
-
-	/**
-	 * <pre>
 	 * 1. MethodName : getProductionList
 	 * 2. ClassName  : FrontProductionJpaRepository.java
 	 * 3. Comment    : 프로덕션 리스트 조회

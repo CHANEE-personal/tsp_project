@@ -38,28 +38,6 @@ public class FrontPortFolioJpaRepository {
 
 	/**
 	 * <pre>
-	 * 1. MethodName : getPortFolioListCnt
-	 * 2. ClassName  : FrontPortFolioJpaRepository.java
-	 * 3. Comment    : 포트폴리오 수 조회
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2022. 01. 11.
-	 * </pre>
-	 *
-	 * @param portFolioMap
-	 */
-	public Long getPortFolioListCnt(Map<String, Object> portFolioMap) {
-
-		try {
-			return queryFactory.selectFrom(frontPortFolioEntity)
-					.where(searchPortFolio(portFolioMap))
-					.fetchCount();
-		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_PORTFOLIO_LIST);
-		}
-	}
-
-	/**
-	 * <pre>
 	 * 1. MethodName : getPortFolioList
 	 * 2. ClassName  : FrontPortFolioList.java
 	 * 3. Comment    : 포트폴리오 리스트 조회

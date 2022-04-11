@@ -55,20 +55,14 @@ public class FrontProductionJpaApiController {
 		// 페이징 및 검색
 		ConcurrentHashMap<String, Object> modelMap = searchCommon.searchCommon(page, paramMap);
 
-		long productionListCnt = this.frontProductionJpaApiService.getProductionListCnt(modelMap);
-
-		List<FrontProductionDTO> productionList = new ArrayList<>();
-
-		if (productionListCnt > 0) {
-			productionList = this.frontProductionJpaApiService.getProductionList(modelMap);
-		}
+		List<FrontProductionDTO> productionList = this.frontProductionJpaApiService.getProductionList(modelMap);
 
 		// 리스트 수
 		resultMap.put("pageSize", page.getSize());
 		// 전체 페이지 수
-		resultMap.put("perPageListCnt", Math.ceil((productionListCnt-1)/page.getSize()+1));
+		resultMap.put("perPageListCnt", Math.ceil((productionList.size()-1)/page.getSize()+1));
 		// 전체 아이템 수
-		resultMap.put("productionListTotalCnt", productionListCnt);
+		resultMap.put("productionListTotalCnt", productionList.size());
 
 		resultMap.put("productionList", productionList);
 

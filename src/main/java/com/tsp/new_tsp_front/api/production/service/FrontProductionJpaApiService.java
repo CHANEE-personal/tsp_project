@@ -17,21 +17,6 @@ public class FrontProductionJpaApiService {
 
 	/**
 	 * <pre>
-	 * 1. MethodName : getProductionListCnt
-	 * 2. ClassName  : FrontProductionJpaService.java
-	 * 3. Comment    : 프론트 > 프로덕션 수 조회
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2022. 01. 06.
-	 * </pre>
-	 *
-	 * @param productionMap
-	 */
-	public Long getProductionListCnt(ConcurrentHashMap<String, Object> productionMap) {
-		return frontProductionJpaRepository.getProductionListCnt(productionMap);
-	}
-
-	/**
-	 * <pre>
 	 * 1. MethodName : getProductionList
 	 * 2. ClassName  : FrontProductionJpaService.java
 	 * 3. Comment    : 프론트 > 프로덕션 리스트 조회
