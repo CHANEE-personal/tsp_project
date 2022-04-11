@@ -53,7 +53,7 @@ public class FrontModelJpaApiController {
     public ConcurrentHashMap<String, Object> getMainModelList() {
         ConcurrentHashMap<String, Object> mainModelMap = new ConcurrentHashMap<>();
 
-        List<FrontModelDTO> mainModelList = this.frontModelJpaApiService.getMainModelList();;
+        List<FrontModelDTO> mainModelList = this.frontModelJpaApiService.getMainModelList();
 
         // 전체 아이템 수
         mainModelMap.put("modelListTotalCnt", mainModelList.size());
@@ -93,20 +93,14 @@ public class FrontModelJpaApiController {
         ConcurrentHashMap<String, Object> modelMap = searchCommon.searchCommon(page, paramMap);
         modelMap.put("categoryCd", categoryCd);
 
-        long modelListCnt = this.frontModelJpaApiService.getModelListCnt(modelMap);
-
-        List<FrontModelDTO> modelList = new ArrayList<>();
-
-        if (modelListCnt > 0) {
-            modelList = this.frontModelJpaApiService.getModelList(modelMap);
-        }
+        List<FrontModelDTO> modelList = this.frontModelJpaApiService.getModelList(modelMap);
 
         // 리스트 수
         resultMap.put("pageSize", page.getSize());
         // 전체 페이지 수
-        resultMap.put("perPageListCnt", Math.ceil((modelListCnt - 1) / page.getSize() + 1));
+        resultMap.put("perPageListCnt", Math.ceil((modelList.size() - 1) / page.getSize() + 1));
         // 전체 아이템 수
-        resultMap.put("modelListTotalCnt", modelListCnt);
+        resultMap.put("modelListTotalCnt", modelList.size());
 
         resultMap.put("modelList", modelList);
 

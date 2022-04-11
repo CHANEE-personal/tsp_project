@@ -6,6 +6,7 @@ import com.tsp.new_tsp_front.api.model.service.impl.FrontModelJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,22 +16,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class FrontModelJpaApiService {
 
 	private final FrontModelJpaRepository frontModelJpaRepository;
-
-	/**
-	 * <pre>
-	 * 1. MethodName : getModelListCnt
-	 * 2. ClassName  : FrontModelJpaApiService.java
-	 * 3. Comment    : 프론트 > 모델 수 조회
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2022. 01. 02.
-	 * </pre>
-	 *
-	 * @param modelMap
-	 */
-	@Cacheable(value = "model")
-	public Long getModelListCnt(ConcurrentHashMap<String, Object> modelMap) {
-		return frontModelJpaRepository.getModelListCnt(modelMap);
-	}
 
 	/**
 	 * <pre>
@@ -62,21 +47,6 @@ public class FrontModelJpaApiService {
 	@Cacheable(value = "model")
 	public FrontModelDTO getModelInfo(FrontModelEntity frontModelEntity) {
 		return this.frontModelJpaRepository.getModelInfo(frontModelEntity);
-	}
-
-	/**
-	 * <pre>
-	 * 1. MethodName : getMainModelListCnt
-	 * 2. ClassName  : FrontModelJpaApiService.java
-	 * 3. Comment    : 프론트 > 메인 모델 수 조회
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2022. 03. 27.
-	 * </pre>
-	 *
-	 */
-	@Cacheable(value = "model")
-	public Long getMainModelListCnt() {
-		return this.frontModelJpaRepository.getMainModelListCnt();
 	}
 
 	/**

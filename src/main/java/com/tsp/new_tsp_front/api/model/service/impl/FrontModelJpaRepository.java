@@ -83,29 +83,6 @@ public class FrontModelJpaRepository {
 
     /**
      * <pre>
-     * 1. MethodName : getModelListCnt
-     * 2. ClassName  : FrontModelJpaRepository.java
-     * 3. Comment    : 프론트 모델 리스트 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 02.
-     * </pre>
-     *
-     * @param modelMap
-     * @return
-     */
-    public Long getModelListCnt(Map<String, Object> modelMap) {
-
-        try {
-            return queryFactory.selectFrom(frontModelEntity)
-                    .where(searchModel(modelMap))
-                    .fetchCount();
-        } catch (Exception e) {
-            throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
-        }
-    }
-
-    /**
-     * <pre>
      * 1. MethodName : getModelList
      * 2. ClassName  : FrontModelJpaRepository.java
      * 3. Comment    : 프론트 모델 리스트 조회
@@ -168,36 +145,6 @@ public class FrontModelJpaRepository {
             return ModelMapper.INSTANCE.toDto(getModelInfo);
         } catch (Exception e) {
             throw new TspException(ApiExceptionType.NOT_FOUND_MODEL);
-        }
-    }
-
-    /**
-     * <pre>
-     * 1. MethodName : getMainModelListCnt
-     * 2. ClassName  : FrontModelJpaRepository.java
-     * 3. Comment    : 프론트 메인 모델 리스트 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 03. 27.
-     * </pre>
-     *
-     * @return
-     */
-    public long getMainModelListCnt() {
-
-        try {
-            List<FrontModelEntity> modelList = queryFactory
-                    .selectFrom(frontModelEntity)
-                    .orderBy(frontModelEntity.idx.desc())
-                    .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
-                    .fetchJoin()
-                    .where(frontModelEntity.modelMainYn.eq("Y").and(frontModelEntity.visible.eq("Y")
-                            .and(commonImageEntity.typeName.eq("model").and(commonImageEntity.imageType.eq("main")).and(commonImageEntity.visible.eq("Y")))))
-                    .fetch();
-
-            return modelList.size();
-
-        } catch (Exception e) {
-            throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
         }
     }
 }
