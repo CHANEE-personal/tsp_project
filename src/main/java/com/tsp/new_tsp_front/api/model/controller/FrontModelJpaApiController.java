@@ -41,7 +41,6 @@ public class FrontModelJpaApiController {
      * 4. 작성자       : CHO
      * 5. 작성일       : 2022. 03. 27.
      * </pre>
-     *
      */
     @ApiOperation(value = "메인 모델 배너", notes = "메인 배너 모델을 조회한다.")
     @ApiResponses({
@@ -84,8 +83,7 @@ public class FrontModelJpaApiController {
     })
     @GetMapping(value = "/lists/{categoryCd}")
     public ConcurrentHashMap<String, Object> getModelList(@PathVariable("categoryCd")
-                                                          @Range(min = 1, max = 3, message = "{modelCategory.Range}")
-                                                                  Integer categoryCd,
+                                                          @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
                                                           @RequestParam(required = false) Map<String, Object> paramMap,
                                                           Page page) {
         ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
@@ -127,8 +125,7 @@ public class FrontModelJpaApiController {
     })
     @GetMapping(value = "/{categoryCd}/{idx}")
     public FrontModelDTO getModelInfo(@PathVariable("categoryCd")
-                                      @Range(min = 1, max = 3, message = "{modelCategory.Range}")
-                                              Integer categoryCd,
+                                      @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
                                       @PathVariable("idx") Integer idx) {
 
         FrontModelEntity frontModelEntity = builder().categoryCd(categoryCd).idx(idx).build();

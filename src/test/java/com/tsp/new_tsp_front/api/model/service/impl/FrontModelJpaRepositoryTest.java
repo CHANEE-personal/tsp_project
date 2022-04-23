@@ -56,64 +56,6 @@ class FrontModelJpaRepositoryTest {
     }
 
     @Test
-    public void 모델상세조회테스트() {
-        // given
-        FrontModelEntity frontModelEntity = builder().categoryCd(1).idx(3).build();
-
-        // when
-        FrontModelDTO modelInfo = frontModelJpaRepository.getModelInfo(frontModelEntity);
-
-        // then
-        assertAll(() -> assertThat(modelInfo.getIdx()).isEqualTo(3),
-                () -> {
-                    assertThat(modelInfo.getCategoryCd()).isEqualTo(1);
-                    assertNotNull(modelInfo.getCategoryCd());
-                },
-                () -> {
-                    assertThat(modelInfo.getCategoryAge()).isEqualTo("2");
-                    assertNotNull(modelInfo.getCategoryAge());
-                },
-                () -> {
-                    assertThat(modelInfo.getModelKorName()).isEqualTo("조찬희");
-                    assertNotNull(modelInfo.getModelKorName());
-                },
-                () -> {
-                    assertThat(modelInfo.getModelEngName()).isEqualTo("CHOCHANHEE");
-                    assertNotNull(modelInfo.getModelEngName());
-                },
-                () -> {
-                    assertThat(modelInfo.getModelDescription()).isEqualTo("chaneeCho");
-                    assertNotNull(modelInfo.getModelDescription());
-                },
-                () -> {
-                    assertThat(modelInfo.getHeight()).isEqualTo("170");
-                    assertNotNull(modelInfo.getHeight());
-                },
-                () -> {
-                    assertThat(modelInfo.getSize3()).isEqualTo("34-24-34");
-                    assertNotNull(modelInfo.getSize3());
-                },
-                () -> {
-                    assertThat(modelInfo.getShoes()).isEqualTo("270");
-                    assertNotNull(modelInfo.getShoes());
-                },
-                () -> {
-                    assertThat(modelInfo.getVisible()).isEqualTo("Y");
-                    assertNotNull(modelInfo.getVisible());
-                });
-
-        assertThat(modelInfo.getModelImage().get(0).getTypeName()).isEqualTo("model");
-        assertThat(modelInfo.getModelImage().get(0).getImageType()).isEqualTo("main");
-        assertThat(modelInfo.getModelImage().get(0).getFileName()).isEqualTo("52d4fdc8-f109-408e-b243-85cc1be207c5.jpg");
-        assertThat(modelInfo.getModelImage().get(0).getFilePath()).isEqualTo("/var/www/dist/upload/1223023959779.jpg");
-
-        assertThat(modelInfo.getModelImage().get(1).getTypeName()).isEqualTo("model");
-        assertThat(modelInfo.getModelImage().get(1).getImageType()).isEqualTo("sub1");
-        assertThat(modelInfo.getModelImage().get(1).getFileName()).isEqualTo("e13f6930-17a5-407c-96ed-fd625b720d21.jpg");
-        assertThat(modelInfo.getModelImage().get(1).getFilePath()).isEqualTo("/var/www/dist/upload/1223023959823.jpg");
-    }
-
-    @Test
     public void 모델상세BDD조회테스트() throws Exception {
 
         // given

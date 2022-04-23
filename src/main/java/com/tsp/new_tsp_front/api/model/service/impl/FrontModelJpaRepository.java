@@ -56,8 +56,6 @@ public class FrontModelJpaRepository {
      * 4. 작성자       : CHO
      * 5. 작성일       : 2022. 03. 27.
      * </pre>
-     *
-     * @return
      */
     public List<FrontModelDTO> getMainModelList() {
 
@@ -89,9 +87,6 @@ public class FrontModelJpaRepository {
      * 4. 작성자       : CHO
      * 5. 작성일       : 2022. 01. 02.
      * </pre>
-     *
-     * @param modelMap
-     * @return
      */
     public List<FrontModelDTO> getModelList(Map<String, Object> modelMap) {
 
@@ -124,9 +119,6 @@ public class FrontModelJpaRepository {
      * 4. 작성자       : CHO
      * 5. 작성일       : 2022. 01. 09.
      * </pre>
-     *
-     * @param existFrontModelEntity
-     * @return
      */
     public FrontModelDTO getModelInfo(FrontModelEntity existFrontModelEntity) {
 
