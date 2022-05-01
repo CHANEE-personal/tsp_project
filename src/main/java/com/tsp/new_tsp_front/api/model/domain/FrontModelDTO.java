@@ -83,6 +83,9 @@ public class FrontModelDTO extends NewCommonDTO {
 	@ApiModelProperty(required = true, value = "model kor second name")
 	private String modelKorSecondName;
 
+	@ApiModelProperty(required = false, value = "model career")
+	private String career;
+
 	@ApiModelProperty(required = true, value = "modelImageList", hidden = true)
 	private List<CommonImageDTO> modelImage = new ArrayList<>();
 }

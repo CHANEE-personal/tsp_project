@@ -102,6 +102,9 @@ public class FrontModelEntity extends NewCommonMappedClass {
 	@NotEmpty(message = "모델 국문 두번째 이름 입력은 필수입니다.")
 	private String modelKorSecondName;
 
+	@Column(name = "career")
+	private String career;
+
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "category_cd", insertable = false, updatable = false)
 	private NewCodeEntity newModelCodeJpaDTO;
