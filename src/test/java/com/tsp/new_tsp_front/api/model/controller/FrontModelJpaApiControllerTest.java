@@ -15,8 +15,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -70,21 +69,15 @@ class FrontModelJpaApiControllerTest {
         mockMvc.perform(get("/api/model/1/3"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.idx").value("3"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.categoryCd").value("1"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.modelFirstName").value("CHO"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.modelSecondName").value("CHAN HEE"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.modelKorFirstName").value("조"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.modelKorSecondName").value("찬희"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.height").value("170"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.size3").value("34-24-34"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.shoes").value("270"));
-
-        // 미사용
-        mockMvc.perform(get("/api/model/1/-1"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value("NOT_FOUND_MODEL"));
+                .andExpect(jsonPath("$.idx").value("3"))
+                .andExpect(jsonPath("$.categoryCd").value("1"))
+                .andExpect(jsonPath("$.modelFirstName").value("CHO"))
+                .andExpect(jsonPath("$.modelSecondName").value("CHAN HEE"))
+                .andExpect(jsonPath("$.modelKorFirstName").value("조"))
+                .andExpect(jsonPath("$.modelKorSecondName").value("찬희"))
+                .andExpect(jsonPath("$.height").value("170"))
+                .andExpect(jsonPath("$.size3").value("34-24-34"))
+                .andExpect(jsonPath("$.shoes").value("270"));
     }
 
     @Test
@@ -94,22 +87,16 @@ class FrontModelJpaApiControllerTest {
         mockMvc.perform(get("/api/model/2/6"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.idx").value("6"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.categoryCd").value("2"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.modelFirstName").value("KIM"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.modelSecondName").value("YE YOUNG"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.modelKorFirstName").value("김"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.modelKorSecondName").value("예영"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.height").value("170"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.size3").value("31-21-31"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.shoes").value("220"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.modelMainYn").value("Y"));
-
-        // 미사용
-        mockMvc.perform(get("/api/model/2/-1"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value("NOT_FOUND_MODEL"));
+                .andExpect(jsonPath("$.idx").value("6"))
+                .andExpect(jsonPath("$.categoryCd").value("2"))
+                .andExpect(jsonPath("$.modelFirstName").value("KIM"))
+                .andExpect(jsonPath("$.modelSecondName").value("YE YOUNG"))
+                .andExpect(jsonPath("$.modelKorFirstName").value("김"))
+                .andExpect(jsonPath("$.modelKorSecondName").value("예영"))
+                .andExpect(jsonPath("$.height").value("170"))
+                .andExpect(jsonPath("$.size3").value("31-21-31"))
+                .andExpect(jsonPath("$.shoes").value("220"))
+                .andExpect(jsonPath("$.modelMainYn").value("Y"));
     }
 
     @Test
@@ -119,21 +106,15 @@ class FrontModelJpaApiControllerTest {
         mockMvc.perform(get("/api/model/3/12"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.idx").value("12"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.categoryCd").value("3"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.modelFirstName").value("cho"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.modelSecondName").value("chanhee"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.modelKorFirstName").value("조"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.modelKorSecondName").value("찬희"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.height").value("170"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.size3").value("31-24-31"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.shoes").value("220"))
-                .andExpect(jsonPath("$.modelInfoMap.modelInfo.modelMainYn").value("Y"));
-
-        // 미사용
-        mockMvc.perform(get("/api/model/3/-1"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value("NOT_FOUND_MODEL"));
+                .andExpect(jsonPath("$.idx").value("12"))
+                .andExpect(jsonPath("$.categoryCd").value("3"))
+                .andExpect(jsonPath("$.modelFirstName").value("cho"))
+                .andExpect(jsonPath("$.modelSecondName").value("chanhee"))
+                .andExpect(jsonPath("$.modelKorFirstName").value("조"))
+                .andExpect(jsonPath("$.modelKorSecondName").value("찬희"))
+                .andExpect(jsonPath("$.height").value("170"))
+                .andExpect(jsonPath("$.size3").value("31-24-31"))
+                .andExpect(jsonPath("$.shoes").value("220"))
+                .andExpect(jsonPath("$.modelMainYn").value("Y"));
     }
 }

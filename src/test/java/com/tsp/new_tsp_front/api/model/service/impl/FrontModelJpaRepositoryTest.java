@@ -21,7 +21,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.tsp.new_tsp_front.api.model.domain.FrontModelEntity.builder;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
 
