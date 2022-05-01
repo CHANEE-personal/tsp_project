@@ -64,15 +64,9 @@ class FrontPortFolioJpaApiControllerTest {
         mockMvc.perform(get("/api/portfolio/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.portFolioInfo.portFolioMap.title").value("포트폴리오 테스트"))
-                .andExpect(jsonPath("$.portFolioInfo.portFolioMap.description").value("포트폴리오 테스트"))
-                .andExpect(jsonPath("$.portFolioInfo.portFolioMap.hashTag").value("TEST"))
-                .andExpect(jsonPath("$.portFolioInfo.portFolioMap.videoUrl").value("http://youtube.com"));
-
-        // 미사용
-        mockMvc.perform(get("/api/portfolio/-1"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value("NOT_FOUND_PORTFOLIO"));
+                .andExpect(jsonPath("$.title").value("포트폴리오 테스트"))
+                .andExpect(jsonPath("$.description").value("포트폴리오 테스트"))
+                .andExpect(jsonPath("$.hashTag").value("TEST"))
+                .andExpect(jsonPath("$.videoUrl").value("http://youtube.com"));
     }
 }
