@@ -136,6 +136,7 @@ public class FrontModelJpaRepository {
 
             return ModelMapper.INSTANCE.toDto(getModelInfo);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new TspException(ApiExceptionType.NOT_FOUND_MODEL);
         }
     }

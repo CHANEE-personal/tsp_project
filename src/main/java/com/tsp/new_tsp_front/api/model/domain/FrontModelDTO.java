@@ -2,6 +2,7 @@ package com.tsp.new_tsp_front.api.model.domain;
 
 import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonDTO;
+import com.tsp.new_tsp_front.common.CustomConverter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.Range;
 
+import javax.persistence.Convert;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
@@ -83,8 +85,9 @@ public class FrontModelDTO extends NewCommonDTO {
 	@ApiModelProperty(required = true, value = "model kor second name")
 	private String modelKorSecondName;
 
+	@Convert(converter = CustomConverter.class)
 	@ApiModelProperty(required = false, value = "model career")
-	private String career;
+	private ArrayList<CareerJson> careerList;
 
 	@ApiModelProperty(required = true, value = "modelImageList", hidden = true)
 	private List<CommonImageDTO> modelImage = new ArrayList<>();

@@ -3,6 +3,7 @@ package com.tsp.new_tsp_front.api.model.domain;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCodeEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonMappedClass;
+import com.tsp.new_tsp_front.common.CustomConverter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -102,8 +103,9 @@ public class FrontModelEntity extends NewCommonMappedClass {
 	@NotEmpty(message = "모델 국문 두번째 이름 입력은 필수입니다.")
 	private String modelKorSecondName;
 
-	@Column(name = "career")
-	private String career;
+	@Column(name = "career_list")
+	@Convert(converter = CustomConverter.class)
+	private ArrayList<CareerJson> careerList;
 
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "category_cd", insertable = false, updatable = false)
