@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_front.api.model.service.impl;
 
+import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
@@ -52,6 +53,43 @@ class FrontModelJpaRepositoryTest {
 
         // then
         assertThat(modelList.size()).isGreaterThan(0);
+    }
+
+    @Test
+    public void 모델BDD조회테스트() throws Exception {
+
+        // given
+        ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
+        modelMap.put("categoryCd", "1");
+        modelMap.put("jpaStartPage", 1);
+        modelMap.put("size", 3);
+
+        CommonImageDTO commonImageDTO = CommonImageDTO.builder()
+                .idx(1)
+                .imageType("main")
+                .fileName("test.jpg")
+                .fileMask("test.jpg")
+                .filePath("/test/test.jpg")
+                .typeIdx(1)
+                .typeName("model")
+                .build();
+
+        List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
+        commonImageDtoList.add(commonImageDTO);
+
+        List<FrontModelDTO> modelList = new ArrayList<>();
+        modelList.add(FrontModelDTO.builder().idx(3).categoryCd(1).modelKorName("조찬희").modelImage(commonImageDtoList).build());
+
+        given(mockFrontModelJpaRepository.getModelList(modelMap)).willReturn(modelList);
+
+        // when
+        Integer idx = mockFrontModelJpaRepository.getModelList(modelMap).get(0).getIdx();
+        Integer categoryCd = mockFrontModelJpaRepository.getModelList(modelMap).get(0).getCategoryCd();
+        String modelKorName = mockFrontModelJpaRepository.getModelList(modelMap).get(0).getModelKorName();
+
+        assertThat(idx).isEqualTo(modelList.get(0).getIdx());
+        assertThat(categoryCd).isEqualTo(modelList.get(0).getCategoryCd());
+        assertThat(modelKorName).isEqualTo(modelList.get(0).getModelKorName());
     }
 
     @Test
