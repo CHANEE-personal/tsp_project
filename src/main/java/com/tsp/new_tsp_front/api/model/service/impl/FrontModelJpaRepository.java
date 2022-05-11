@@ -69,9 +69,7 @@ public class FrontModelJpaRepository {
                             .and(commonImageEntity.typeName.eq("model").and(commonImageEntity.imageType.eq("main")).and(commonImageEntity.visible.eq("Y")))))
                     .fetch();
 
-            for (int i = 0; i < modelList.size(); i++) {
-                modelList.get(i).setRnum(i);
-            }
+            modelList.forEach(list -> modelList.get(modelList.indexOf(list)).setRnum(modelList.indexOf(list)));
 
             return ModelMapper.INSTANCE.toDtoList(modelList);
         } catch (Exception e) {
@@ -101,9 +99,7 @@ public class FrontModelJpaRepository {
                     .limit(StringUtil.getInt(modelMap.get("size"), 0))
                     .fetch();
 
-            for (int i = 0; i < modelList.size(); i++) {
-                modelList.get(i).setRnum(StringUtil.getInt(modelMap.get("startPage"), 1) * (StringUtil.getInt(modelMap.get("size"), 1)) - (2 - i));
-            }
+            modelList.forEach(list -> modelList.get(modelList.indexOf(list)).setRnum(StringUtil.getInt(modelMap.get("startPage"),1)*(StringUtil.getInt(modelMap.get("size"),1))-(2-modelList.indexOf(list))));
 
             return ModelMapper.INSTANCE.toDtoList(modelList);
         } catch (Exception e) {
