@@ -60,9 +60,7 @@ public class FrontPortFolioJpaRepository {
 
 			List<FrontPortFolioDTO> portFolioDtoList = PortFolioMapper.INSTANCE.toDtoList(portFolioList);
 
-			for(int i = 0; i < portFolioDtoList.size(); i++) {
-				portFolioDtoList.get(i).setRnum(StringUtil.getInt(portFolioMap.get("startPage"),1)*(StringUtil.getInt(portFolioMap.get("size"),1))-(2-i));
-			}
+			portFolioDtoList.forEach(list -> portFolioDtoList.get(portFolioDtoList.indexOf(list)).setRnum(StringUtil.getInt(portFolioMap.get("startPage"),1)*(StringUtil.getInt(portFolioMap.get("size"),1))-(2-portFolioDtoList.indexOf(list))));
 
 			return portFolioDtoList;
 		} catch (Exception e) {
@@ -93,16 +91,6 @@ public class FrontPortFolioJpaRepository {
 							.and(frontPortFolioEntity.visible.eq("Y"))
 							.and(commonImageEntity.typeName.eq("portfolio")))
 					.fetchOne();
-
-//			List<CommonImageEntity> getPortFolioImageList = queryFactory
-//					.selectFrom(commonImageEntity)
-//					.where(commonImageEntity.typeName.eq("portfolio")
-//							.and(commonImageEntity.typeIdx.eq(existFrontPortFolioEntity.getIdx())
-//									.and(commonImageEntity.visible.eq("Y"))))
-//					.fetch();
-//
-//			portFolioMap.put("portFolioMap", PortFolioMapper.INSTANCE.toDto(getPortFolioInfo));
-//			portFolioMap.put("portFolioImageList", ModelImageMapper.INSTANCE.toDtoList(getPortFolioImageList));
 
 			return PortFolioMapper.INSTANCE.toDto(getPortFolioInfo);
 		} catch (Exception e) {

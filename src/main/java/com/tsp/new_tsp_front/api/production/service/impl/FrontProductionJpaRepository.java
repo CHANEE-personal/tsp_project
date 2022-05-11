@@ -60,9 +60,7 @@ public class FrontProductionJpaRepository {
 
 			List<FrontProductionDTO> productionDtoList = ProductionMapper.INSTANCE.toDtoList(productionList);
 
-			for(int i = 0; i < productionDtoList.size(); i++) {
-				productionDtoList.get(i).setRnum(StringUtil.getInt(productionMap.get("startPage"),1)*(StringUtil.getInt(productionMap.get("size"),1))-(2-i));
-			}
+			productionDtoList.forEach(list -> productionDtoList.get(productionDtoList.indexOf(list)).setRnum(StringUtil.getInt(productionMap.get("startPage"),1)*(StringUtil.getInt(productionMap.get("size"),1))-(2-productionDtoList.indexOf(list))));
 
 			return productionDtoList;
 		} catch (Exception e) {
@@ -93,17 +91,6 @@ public class FrontProductionJpaRepository {
 							.and(frontProductionEntity.visible.eq("Y"))
 							.and(commonImageEntity.typeName.eq("production")))
 					.fetchOne();
-
-//			//프로덕션 이미지 조회
-//			List<CommonImageEntity> productionImageList = queryFactory
-//					.selectFrom(commonImageEntity)
-//					.where(commonImageEntity.typeIdx.eq(existFrontProductionEntity.getIdx())
-//							.and(commonImageEntity.visible.eq("Y")
-//									.and(commonImageEntity.typeName.eq("production"))))
-//					.fetch();
-
-//			productionMap.put("productionInfo", ProductionMapper.INSTANCE.toDto(getProductionInfo));
-//			productionMap.put("productionImageList", ModelImageMapper.INSTANCE.toDtoList(productionImageList));
 
 			return ProductionMapper.INSTANCE.toDto(getProductionInfo);
 		} catch (Exception e) {
