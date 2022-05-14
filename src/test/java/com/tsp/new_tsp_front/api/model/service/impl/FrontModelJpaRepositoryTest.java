@@ -4,6 +4,7 @@ import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,9 +40,28 @@ class FrontModelJpaRepositoryTest {
     @Mock
     private FrontModelJpaRepository mockFrontModelJpaRepository;
 
+    @BeforeEach
+    public void init() {
+        FrontModelEntity frontModelEntity = builder()
+                .categoryCd(1)
+                .categoryAge("2")
+                .modelKorFirstName("조")
+                .modelKorSecondName("찬희")
+                .modelKorName("조찬희")
+                .modelFirstName("CHO")
+                .modelSecondName("CHANHEE")
+                .modelEngName("CHOCHANHEE")
+                .modelDescription("chaneeCho")
+                .modelMainYn("Y")
+                .height("170")
+                .size3("34-24-34")
+                .shoes("270")
+                .visible("Y")
+                .build();
+    }
+
     @Test
     public void 모델리스트조회테스트() throws Exception {
-
         // given
         ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
         modelMap.put("categoryCd", "1");
@@ -86,10 +106,12 @@ class FrontModelJpaRepositoryTest {
         Integer idx = mockFrontModelJpaRepository.getModelList(modelMap).get(0).getIdx();
         Integer categoryCd = mockFrontModelJpaRepository.getModelList(modelMap).get(0).getCategoryCd();
         String modelKorName = mockFrontModelJpaRepository.getModelList(modelMap).get(0).getModelKorName();
+        String fileName = mockFrontModelJpaRepository.getModelList(modelMap).get(0).getModelImage().get(0).getFileName();
 
         assertThat(idx).isEqualTo(modelList.get(0).getIdx());
         assertThat(categoryCd).isEqualTo(modelList.get(0).getCategoryCd());
         assertThat(modelKorName).isEqualTo(modelList.get(0).getModelKorName());
+        assertThat(fileName).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
     }
 
     @Test
