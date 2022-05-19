@@ -3,6 +3,7 @@ package com.tsp.new_tsp_front.api.portfolio.service.impl;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import javax.transaction.Transactional;
 
@@ -23,6 +26,7 @@ import static com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @DataJpaTest
 @Transactional
@@ -37,6 +41,39 @@ class FrontPortFolioJpaRepositoryTest {
 
     @Mock
     FrontPortFolioJpaRepository mockFrontPortFolioJpaRepository;
+
+    private FrontPortFolioDTO portFolioDTO;
+    private CommonImageEntity commonImageEntity;
+    private FrontPortFolioEntity frontPortFolioEntity;
+
+    @BeforeEach
+    public void setup() {
+        commonImageEntity = CommonImageEntity.builder()
+                .idx(1)
+                .imageType("main")
+                .fileName("test.jpg")
+                .fileMask("test.jpg")
+                .filePath("/test/test.jpg")
+                .typeIdx(1)
+                .typeName("portfolio")
+                .build();
+
+        List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
+        commonImageEntityList.add(commonImageEntity);
+
+        frontPortFolioEntity = builder().idx(1).commonImageEntityList(commonImageEntityList).build();
+
+        portFolioDTO = FrontPortFolioDTO.builder()
+                .idx(1)
+                .title("포트폴리오 Test")
+                .description("포트폴리오 Test")
+                .categoryCd(2)
+                .hashTag("포트폴리오 Test")
+                .videoUrl("https://youtube.com")
+                .visible("Y")
+                .portfolioImage(PortFolioImageMapper.INSTANCE.toDtoList(commonImageEntityList))
+                .build();
+    }
 
     @Test
     public void 포트폴리오조회테스트() throws Exception {
@@ -98,32 +135,6 @@ class FrontPortFolioJpaRepositoryTest {
     public void 포트폴리오상세BDD조회테스트() throws Exception {
 
         // given
-        CommonImageEntity commonImageEntity = CommonImageEntity.builder()
-                .idx(1)
-                .imageType("main")
-                .fileName("test.jpg")
-                .fileMask("test.jpg")
-                .filePath("/test/test.jpg")
-                .typeIdx(1)
-                .typeName("portfolio")
-                .build();
-
-        List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
-        commonImageEntityList.add(commonImageEntity);
-
-        FrontPortFolioEntity frontPortFolioEntity = builder().idx(1).commonImageEntityList(commonImageEntityList).build();
-
-        FrontPortFolioDTO portFolioDTO = FrontPortFolioDTO.builder()
-                .idx(1)
-                .title("포트폴리오 Test")
-                .description("포트폴리오 Test")
-                .categoryCd(2)
-                .hashTag("포트폴리오 Test")
-                .videoUrl("https://youtube.com")
-                .visible("Y")
-                .portfolioImage(PortFolioImageMapper.INSTANCE.toDtoList(commonImageEntityList))
-                .build();
-
         given(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity)).willReturn(portFolioDTO);
 
         // when
