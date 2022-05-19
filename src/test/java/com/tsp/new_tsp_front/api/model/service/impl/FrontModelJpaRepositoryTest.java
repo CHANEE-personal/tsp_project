@@ -15,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
 
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +36,8 @@ class FrontModelJpaRepositoryTest {
 
     private FrontModelEntity frontModelEntity;
     private CommonImageEntity commonImageEntity;
+    private FrontModelDTO frontModelDTO;
+    List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 
 
     @Autowired
@@ -72,6 +73,22 @@ class FrontModelJpaRepositoryTest {
                 .filePath("/test/test.jpg")
                 .typeIdx(1)
                 .typeName("model")
+                .build();
+
+        commonImageEntityList.add(commonImageEntity);
+
+        frontModelDTO = FrontModelDTO.builder()
+                .idx(1)
+                .categoryCd(1)
+                .categoryAge("2")
+                .modelKorName("조찬희")
+                .modelEngName("CHOCHANHEE")
+                .modelDescription("chaneeCho")
+                .height("170")
+                .size3("34-24-34")
+                .shoes("270")
+                .visible("Y")
+                .modelImage(ModelImageMapper.INSTANCE.toDtoList(commonImageEntityList))
                 .build();
     }
 
@@ -133,24 +150,7 @@ class FrontModelJpaRepositoryTest {
     public void 모델상세BDD조회테스트() throws Exception {
 
         // given
-        List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
-        commonImageEntityList.add(commonImageEntity);
-
         frontModelEntity = builder().idx(1).commonImageEntityList(commonImageEntityList).build();
-
-        FrontModelDTO frontModelDTO = FrontModelDTO.builder()
-                .idx(1)
-                .categoryCd(1)
-                .categoryAge("2")
-                .modelKorName("조찬희")
-                .modelEngName("CHOCHANHEE")
-                .modelDescription("chaneeCho")
-                .height("170")
-                .size3("34-24-34")
-                .shoes("270")
-                .visible("Y")
-                .modelImage(ModelImageMapper.INSTANCE.toDtoList(commonImageEntityList))
-                .build();
 
         given(mockFrontModelJpaRepository.getModelInfo(frontModelEntity)).willReturn(frontModelDTO);
 
