@@ -35,8 +35,9 @@ import static org.mockito.BDDMockito.given;
 class FrontModelJpaRepositoryTest {
 
     private FrontModelEntity frontModelEntity;
-    private CommonImageEntity commonImageEntity;
     private FrontModelDTO frontModelDTO;
+    private CommonImageEntity commonImageEntity;
+    private CommonImageDTO commonImageDTO;
     List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 
 
@@ -65,18 +66,6 @@ class FrontModelJpaRepositoryTest {
                 .visible("Y")
                 .build();
 
-        commonImageEntity = CommonImageEntity.builder()
-                .idx(1)
-                .imageType("main")
-                .fileName("test.jpg")
-                .fileMask("test.jpg")
-                .filePath("/test/test.jpg")
-                .typeIdx(1)
-                .typeName("model")
-                .build();
-
-        commonImageEntityList.add(commonImageEntity);
-
         frontModelDTO = FrontModelDTO.builder()
                 .idx(1)
                 .categoryCd(1)
@@ -89,6 +78,26 @@ class FrontModelJpaRepositoryTest {
                 .shoes("270")
                 .visible("Y")
                 .modelImage(ModelImageMapper.INSTANCE.toDtoList(commonImageEntityList))
+                .build();
+
+        commonImageEntity = CommonImageEntity.builder()
+                .idx(1)
+                .imageType("main")
+                .fileName("test.jpg")
+                .fileMask("test.jpg")
+                .filePath("/test/test.jpg")
+                .typeIdx(1)
+                .typeName("model")
+                .build();
+
+        commonImageDTO = CommonImageDTO.builder()
+                .idx(1)
+                .imageType("main")
+                .fileName("test.jpg")
+                .fileMask("test.jpg")
+                .filePath("/test/test.jpg")
+                .typeIdx(1)
+                .typeName("model")
                 .build();
     }
 
@@ -116,16 +125,6 @@ class FrontModelJpaRepositoryTest {
         modelMap.put("jpaStartPage", 1);
         modelMap.put("size", 3);
 
-        CommonImageDTO commonImageDTO = CommonImageDTO.builder()
-                .idx(1)
-                .imageType("main")
-                .fileName("test.jpg")
-                .fileMask("test.jpg")
-                .filePath("/test/test.jpg")
-                .typeIdx(1)
-                .typeName("model")
-                .build();
-
         List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
         commonImageDtoList.add(commonImageDTO);
 
@@ -150,7 +149,23 @@ class FrontModelJpaRepositoryTest {
     public void 모델상세BDD조회테스트() throws Exception {
 
         // given
+        commonImageEntityList.add(commonImageEntity);
+
         frontModelEntity = builder().idx(1).commonImageEntityList(commonImageEntityList).build();
+
+        frontModelDTO = FrontModelDTO.builder()
+                .idx(1)
+                .categoryCd(1)
+                .categoryAge("2")
+                .modelKorName("조찬희")
+                .modelEngName("CHOCHANHEE")
+                .modelDescription("chaneeCho")
+                .height("170")
+                .size3("34-24-34")
+                .shoes("270")
+                .visible("Y")
+                .modelImage(ModelImageMapper.INSTANCE.toDtoList(commonImageEntityList))
+                .build();
 
         given(mockFrontModelJpaRepository.getModelInfo(frontModelEntity)).willReturn(frontModelDTO);
 

@@ -35,8 +35,8 @@ import static org.mockito.BDDMockito.given;
 @DisplayName("프로덕션 Repository Test")
 class FrontProductionJpaRepositoryTest {
     private FrontProductionEntity frontProductionEntity;
-    private CommonImageEntity commonImageEntity;
     private FrontProductionDTO frontProductionDTO;
+    private CommonImageEntity commonImageEntity;
     List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
     @Autowired
     private FrontProductionJpaRepository frontProductionJpaRepository;
@@ -49,6 +49,8 @@ class FrontProductionJpaRepositoryTest {
 
     @BeforeEach
     public void init() {
+        frontProductionEntity = builder().idx(1).commonImageEntityList(commonImageEntityList).build();
+
         commonImageEntity = CommonImageEntity.builder()
                 .idx(1)
                 .imageType("main")
@@ -89,8 +91,6 @@ class FrontProductionJpaRepositoryTest {
     public void 프로덕션상세BDD조회테스트() throws Exception {
 
         // given
-        FrontProductionEntity frontProductionEntity = builder().idx(1).commonImageEntityList(commonImageEntityList).build();
-
         given(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity)).willReturn(frontProductionDTO);
 
         // when
