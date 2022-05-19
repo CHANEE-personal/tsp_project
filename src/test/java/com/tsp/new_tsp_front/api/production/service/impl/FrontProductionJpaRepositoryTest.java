@@ -4,6 +4,7 @@ import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 import com.tsp.new_tsp_front.api.production.service.FrontProductionJpaApiService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,6 +34,10 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 @DisplayName("프로덕션 Repository Test")
 class FrontProductionJpaRepositoryTest {
+    private FrontProductionEntity frontProductionEntity;
+    private CommonImageEntity commonImageEntity;
+    private FrontProductionDTO frontProductionDTO;
+    List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
     @Autowired
     private FrontProductionJpaRepository frontProductionJpaRepository;
 
@@ -41,6 +46,29 @@ class FrontProductionJpaRepositoryTest {
 
     @InjectMocks
     private FrontProductionJpaApiService frontProductionJpaApiService;
+
+    @BeforeEach
+    public void init() {
+        commonImageEntity = CommonImageEntity.builder()
+                .idx(1)
+                .imageType("main")
+                .fileName("test.jpg")
+                .fileMask("test.jpg")
+                .filePath("/test/test.jpg")
+                .typeIdx(1)
+                .typeName("production")
+                .build();
+
+        commonImageEntityList.add(commonImageEntity);
+
+        frontProductionDTO = FrontProductionDTO.builder()
+                .idx(1)
+                .title("프로덕션 테스트")
+                .description("프로덕션 테스트")
+                .visible("Y")
+                .productionImage(ProductionImageMapper.INSTANCE.toDtoList(commonImageEntityList))
+                .build();
+    }
 
     @Test
     public void 프로덕션리스트조회테스트() throws Exception {
@@ -58,61 +86,12 @@ class FrontProductionJpaRepositoryTest {
     }
 
     @Test
-    public void 프로덕션상세조회테스트() throws Exception {
-        // given
-        FrontProductionEntity frontProductionEntity = builder().idx(1).build();
-
-        // when
-        FrontProductionDTO productionInfo = frontProductionJpaRepository.getProductionInfo(frontProductionEntity);
-
-        // then
-        assertAll(() -> assertThat(productionInfo.getIdx()).isEqualTo(1),
-                () -> {
-                    assertThat(productionInfo.getTitle()).isEqualTo("프로덕션 테스트");
-                    assertNotNull(productionInfo.getTitle());
-                },
-                () -> {
-                    assertThat(productionInfo.getDescription()).isEqualTo("프로덕션 테스트");
-                    assertNotNull(productionInfo.getDescription());
-                },
-                () -> {
-                    assertThat(productionInfo.getVisible()).isEqualTo("Y");
-                    assertNotNull(productionInfo.getVisible());
-                });
-
-        assertThat(productionInfo.getProductionImage().get(0).getTypeName()).isEqualTo("production");
-        assertThat(productionInfo.getProductionImage().get(0).getFileName()).isEqualTo("52d4fdc8-f109-408e-b243-85cc1be207c5.jpg");
-        assertThat(productionInfo.getProductionImage().get(0).getFilePath()).isEqualTo("/var/www/dist/upload/1223024921206.jpg");
-    }
-
-    @Test
     public void 프로덕션상세BDD조회테스트() throws Exception {
 
         // given
-        CommonImageEntity commonImageEntity = CommonImageEntity.builder()
-                .idx(1)
-                .imageType("main")
-                .fileName("test.jpg")
-                .fileMask("test.jpg")
-                .filePath("/test/test.jpg")
-                .typeIdx(1)
-                .typeName("production")
-                .build();
-
-        List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
-        commonImageEntityList.add(commonImageEntity);
-
         FrontProductionEntity frontProductionEntity = builder().idx(1).commonImageEntityList(commonImageEntityList).build();
 
-        FrontProductionDTO productionDTO = FrontProductionDTO.builder()
-                .idx(1)
-                .title("프로덕션 테스트")
-                .description("프로덕션 테스트")
-                .visible("Y")
-                .productionImage(ProductionImageMapper.INSTANCE.toDtoList(commonImageEntityList))
-                .build();
-
-        given(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity)).willReturn(productionDTO);
+        given(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity)).willReturn(frontProductionDTO);
 
         // when
         Integer idx = mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity).getIdx();
