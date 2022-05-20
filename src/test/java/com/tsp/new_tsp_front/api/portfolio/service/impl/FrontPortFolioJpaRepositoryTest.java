@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_front.api.portfolio.service.impl;
 
+import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
@@ -38,6 +39,7 @@ class FrontPortFolioJpaRepositoryTest {
     private FrontPortFolioEntity frontPortFolioEntity;
     private FrontPortFolioDTO frontPortFolioDTO;
     private CommonImageEntity commonImageEntity;
+    private CommonImageDTO commonImageDTO;
 
     List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 
@@ -52,6 +54,16 @@ class FrontPortFolioJpaRepositoryTest {
         frontPortFolioEntity = builder().idx(1).commonImageEntityList(commonImageEntityList).build();
 
         commonImageEntity = CommonImageEntity.builder()
+                .idx(1)
+                .imageType("main")
+                .fileName("test.jpg")
+                .fileMask("test.jpg")
+                .filePath("/test/test.jpg")
+                .typeIdx(1)
+                .typeName("portfolio")
+                .build();
+
+        commonImageDTO = CommonImageDTO.builder()
                 .idx(1)
                 .imageType("main")
                 .fileName("test.jpg")
@@ -125,6 +137,38 @@ class FrontPortFolioJpaRepositoryTest {
         assertThat(frontPortFolioDTO.getPortfolioImage().get(1).getImageType()).isEqualTo("sub1");
         assertThat(frontPortFolioDTO.getPortfolioImage().get(1).getFileName()).isEqualTo("e13f6930-17a5-407c-96ed-fd625b720d21.jpg");
         assertThat(frontPortFolioDTO.getPortfolioImage().get(1).getFilePath()).isEqualTo("/var/www/dist/upload/1223043918557.jpg");
+    }
+
+    @Test
+    public void 포트폴리오BDD조회테스트() throws Exception {
+        // given
+        ConcurrentHashMap<String, Object> portfolioMap = new ConcurrentHashMap<>();
+        portfolioMap.put("jpaStartPage", 1);
+        portfolioMap.put("size", 3);
+
+        List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
+        commonImageDtoList.add(commonImageDTO);
+
+        List<FrontPortFolioDTO> portfolioList = new ArrayList<>();
+        portfolioList.add(FrontPortFolioDTO.builder().idx(1).title("포트폴리오").description("포트폴리오")
+                .hashTag("#test").portfolioImage(commonImageDtoList).visible("Y").build());
+
+        given(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap)).willReturn(portfolioList);
+
+        // when
+        Integer idx = mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getIdx();
+        String title = mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getTitle();
+        String description = mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getDescription();
+        String hashTag = mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getHashTag();
+        String fileName = mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getPortfolioImage().get(0).getFileName();
+        String typeName = mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getPortfolioImage().get(0).getTypeName();
+
+        assertThat(idx).isEqualTo(portfolioList.get(0).getIdx());
+        assertThat(title).isEqualTo(portfolioList.get(0).getTitle());
+        assertThat(description).isEqualTo(portfolioList.get(0).getDescription());
+        assertThat(hashTag).isEqualTo(portfolioList.get(0).getHashTag());
+        assertThat(fileName).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getFileName());
+        assertThat(typeName).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getTypeName());
     }
 
     @Test

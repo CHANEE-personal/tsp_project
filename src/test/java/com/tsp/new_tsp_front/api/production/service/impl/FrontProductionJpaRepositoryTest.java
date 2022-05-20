@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_front.api.production.service.impl;
 
+import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
@@ -37,6 +38,8 @@ class FrontProductionJpaRepositoryTest {
     private FrontProductionEntity frontProductionEntity;
     private FrontProductionDTO frontProductionDTO;
     private CommonImageEntity commonImageEntity;
+    private CommonImageDTO commonImageDTO;
+
     List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
     @Autowired
     private FrontProductionJpaRepository frontProductionJpaRepository;
@@ -52,6 +55,16 @@ class FrontProductionJpaRepositoryTest {
         frontProductionEntity = builder().idx(1).commonImageEntityList(commonImageEntityList).build();
 
         commonImageEntity = CommonImageEntity.builder()
+                .idx(1)
+                .imageType("main")
+                .fileName("test.jpg")
+                .fileMask("test.jpg")
+                .filePath("/test/test.jpg")
+                .typeIdx(1)
+                .typeName("production")
+                .build();
+
+        commonImageDTO = CommonImageDTO.builder()
                 .idx(1)
                 .imageType("main")
                 .fileName("test.jpg")
@@ -85,6 +98,36 @@ class FrontProductionJpaRepositoryTest {
 
         // then
         assertThat(productionList.size()).isGreaterThan(0);
+    }
+
+    @Test
+    public void 프로덕션BDD조회테스트() throws Exception {
+        // given
+        ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
+        productionMap.put("jpaStartPage", 1);
+        productionMap.put("size", 3);
+
+        List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
+        commonImageDtoList.add(commonImageDTO);
+
+        List<FrontProductionDTO> productionList = new ArrayList<>();
+        productionList.add(FrontProductionDTO.builder().idx(1).title("프로덕션").description("프로덕션").visible("Y")
+                .productionImage(commonImageDtoList).build());
+
+        given(mockFrontProductionJpaRepository.getProductionList(productionMap)).willReturn(productionList);
+
+        // when
+        Integer idx = mockFrontProductionJpaRepository.getProductionList(productionMap).get(0).getIdx();
+        String title = mockFrontProductionJpaRepository.getProductionList(productionMap).get(0).getTitle();
+        String description = mockFrontProductionJpaRepository.getProductionList(productionMap).get(0).getDescription();
+        String fileName = mockFrontProductionJpaRepository.getProductionList(productionMap).get(0).getProductionImage().get(0).getFileName();
+        String typeName = mockFrontProductionJpaRepository.getProductionList(productionMap).get(0).getProductionImage().get(0).getTypeName();
+
+        assertThat(idx).isEqualTo(productionList.get(0).getIdx());
+        assertThat(title).isEqualTo(productionList.get(0).getTitle());
+        assertThat(description).isEqualTo(productionList.get(0).getDescription());
+        assertThat(fileName).isEqualTo(productionList.get(0).getProductionImage().get(0).getFileName());
+        assertThat(typeName).isEqualTo(productionList.get(0).getProductionImage().get(0).getTypeName());
     }
 
     @Test
