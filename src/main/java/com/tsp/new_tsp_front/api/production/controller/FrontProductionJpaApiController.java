@@ -1,7 +1,6 @@
 package com.tsp.new_tsp_front.api.production.controller;
 
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
-import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 import com.tsp.new_tsp_front.api.production.service.FrontProductionJpaApiService;
 import com.tsp.new_tsp_front.common.SearchCommon;
 import com.tsp.new_tsp_front.common.paging.Page;
@@ -52,10 +51,8 @@ public class FrontProductionJpaApiController {
 	public ConcurrentHashMap<String, Object> getProductionList(@RequestParam(required = false) Map<String, Object> paramMap,
 														  Page page) {
 		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
-		// 페이징 및 검색
-		ConcurrentHashMap<String, Object> modelMap = searchCommon.searchCommon(page, paramMap);
 
-		List<FrontProductionDTO> productionList = this.frontProductionJpaApiService.getProductionList(modelMap);
+		List<FrontProductionDTO> productionList = this.frontProductionJpaApiService.getProductionList(searchCommon.searchCommon(page, paramMap));
 
 		// 리스트 수
 		resultMap.put("pageSize", page.getSize());
@@ -88,9 +85,6 @@ public class FrontProductionJpaApiController {
 	})
 	@GetMapping(value = "/{idx}")
 	public FrontProductionDTO getProductionInfo(@PathVariable("idx") Integer idx) {
-
-		FrontProductionEntity frontProductionEntity = builder().idx(idx).build();
-
-		return this.frontProductionJpaApiService.getProductionInfo(frontProductionEntity);
+		return this.frontProductionJpaApiService.getProductionInfo(builder().idx(idx).build());
 	}
 }

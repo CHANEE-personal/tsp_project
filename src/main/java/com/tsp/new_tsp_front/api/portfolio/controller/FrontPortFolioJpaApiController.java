@@ -2,7 +2,6 @@ package com.tsp.new_tsp_front.api.portfolio.controller;
 
 import com.tsp.new_tsp_front.api.portfolio.FrontPortFolioJpaApiService;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO;
-import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
 import com.tsp.new_tsp_front.common.SearchCommon;
 import com.tsp.new_tsp_front.common.paging.Page;
 import io.swagger.annotations.Api;
@@ -53,10 +52,8 @@ public class FrontPortFolioJpaApiController {
 	public ConcurrentHashMap<String, Object> getPortFolioList(@RequestParam(required = false) Map<String, Object> paramMap,
 													   Page page) {
 		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
-		// 페이징 및 검색
-		ConcurrentHashMap<String, Object> portFolioMap = searchCommon.searchCommon(page, paramMap);
 
-		List<FrontPortFolioDTO> portFolioList = this.frontPortFolioJpaApiService.getPortFolioList(portFolioMap);
+		List<FrontPortFolioDTO> portFolioList = this.frontPortFolioJpaApiService.getPortFolioList(searchCommon.searchCommon(page, paramMap));
 
 		// 리스트 수
 		resultMap.put("pageSize", page.getSize());
@@ -88,9 +85,6 @@ public class FrontPortFolioJpaApiController {
 	})
 	@GetMapping(value = "/{idx}")
 	public FrontPortFolioDTO getPortFolioInfo(@PathVariable("idx") Integer idx) {
-
-		FrontPortFolioEntity frontPortFolioEntity = builder().idx(idx).build();
-
-		return this.frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity);
+		return this.frontPortFolioJpaApiService.getPortFolioInfo(builder().idx(idx).build());
 	}
 }

@@ -1,7 +1,6 @@
 package com.tsp.new_tsp_front.api.model.controller;
 
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
-import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.service.FrontModelJpaApiService;
 import com.tsp.new_tsp_front.common.SearchCommon;
 import com.tsp.new_tsp_front.common.paging.Page;
@@ -127,9 +126,6 @@ public class FrontModelJpaApiController {
     public FrontModelDTO getModelInfo(@PathVariable("categoryCd")
                                       @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
                                       @PathVariable("idx") Integer idx) {
-
-        FrontModelEntity frontModelEntity = builder().categoryCd(categoryCd).idx(idx).build();
-
-        return this.frontModelJpaApiService.getModelInfo(frontModelEntity);
+        return this.frontModelJpaApiService.getModelInfo(builder().categoryCd(categoryCd).idx(idx).build());
     }
 }
