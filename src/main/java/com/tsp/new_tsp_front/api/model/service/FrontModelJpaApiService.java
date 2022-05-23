@@ -19,6 +19,20 @@ public class FrontModelJpaApiService {
 
 	/**
 	 * <pre>
+	 * 1. MethodName : getModelCount
+	 * 2. ClassName  : FrontModelJpaApiService.java
+	 * 3. Comment    : 프론트 > 모델 리스트 갯수 조회
+	 * 4. 작성자       : CHO
+	 * 5. 작성일       : 2022. 01. 02.
+	 * </pre>
+	 *
+	 */
+	public Long getModelCount() {
+		return frontModelJpaRepository.getModelCount();
+	}
+
+	/**
+	 * <pre>
 	 * 1. MethodName : getModelList
 	 * 2. ClassName  : FrontModelJpaApiService.java
 	 * 3. Comment    : 프론트 > 모델 리스트 조회
