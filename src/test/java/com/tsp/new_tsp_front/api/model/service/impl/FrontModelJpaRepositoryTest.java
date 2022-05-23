@@ -102,6 +102,18 @@ class FrontModelJpaRepositoryTest {
     }
 
     @Test
+    public void 모델리스트갯수조회테스트() throws Exception {
+        ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
+        modelMap.put("categoryCd", "1");
+
+        // when
+        Long modelListCount = frontModelJpaRepository.getModelCount(modelMap);
+
+        // then
+        assertThat(modelListCount).isGreaterThan(0);
+    }
+
+    @Test
     public void 모델리스트조회테스트() throws Exception {
         // given
         ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();

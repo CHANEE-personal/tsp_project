@@ -57,10 +57,11 @@ public class FrontModelJpaRepository {
      * 5. 작성일       : 2022. 03. 27.
      * </pre>
      */
-    public Long getModelCount() {
+    public Long getModelCount(Map<String, Object> modelMap) {
         return queryFactory
                 .selectFrom(frontModelEntity)
-                .where(frontModelEntity.visible.eq("Y"))
+                .where(searchModel(modelMap)
+                .and(frontModelEntity.visible.eq("Y")))
                 .fetchCount();
     }
 
