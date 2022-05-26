@@ -65,36 +65,36 @@ class FrontModelJpaApiControllerTest {
     @DisplayName("남성 모델 상세 조회 테스트")
     public void 남성모델상세조회() throws Exception {
         // 사용
-        mockMvc.perform(get("/api/model/1/3"))
+        mockMvc.perform(get("/api/model/1/156"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.idx").value("3"))
+                .andExpect(jsonPath("$.idx").value("156"))
                 .andExpect(jsonPath("$.categoryCd").value("1"))
-                .andExpect(jsonPath("$.modelFirstName").value("CHO"))
-                .andExpect(jsonPath("$.modelSecondName").value("CHAN HEE"))
-                .andExpect(jsonPath("$.modelKorFirstName").value("조"))
-                .andExpect(jsonPath("$.modelKorSecondName").value("찬희"))
-                .andExpect(jsonPath("$.height").value("170"))
-                .andExpect(jsonPath("$.size3").value("34-24-34"))
-                .andExpect(jsonPath("$.shoes").value("270"));
+                .andExpect(jsonPath("$.modelFirstName").value("Joo"))
+                .andExpect(jsonPath("$.modelSecondName").value("seon woo"))
+                .andExpect(jsonPath("$.modelKorFirstName").value("주"))
+                .andExpect(jsonPath("$.modelKorSecondName").value("선우"))
+                .andExpect(jsonPath("$.height").value("181"))
+                .andExpect(jsonPath("$.size3").value("31-24-34"))
+                .andExpect(jsonPath("$.shoes").value("275"));
     }
 
     @Test
     @DisplayName("여성 모델 상세 조회 테스트")
     public void 여성모델상세조회() throws Exception {
         // 사용
-        mockMvc.perform(get("/api/model/2/6"))
+        mockMvc.perform(get("/api/model/2/143"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.idx").value("6"))
+                .andExpect(jsonPath("$.idx").value("143"))
                 .andExpect(jsonPath("$.categoryCd").value("2"))
-                .andExpect(jsonPath("$.modelFirstName").value("KIM"))
-                .andExpect(jsonPath("$.modelSecondName").value("YE YOUNG"))
+                .andExpect(jsonPath("$.modelFirstName").value("kim"))
+                .andExpect(jsonPath("$.modelSecondName").value("ye yeong"))
                 .andExpect(jsonPath("$.modelKorFirstName").value("김"))
                 .andExpect(jsonPath("$.modelKorSecondName").value("예영"))
-                .andExpect(jsonPath("$.height").value("170"))
-                .andExpect(jsonPath("$.size3").value("31-21-31"))
-                .andExpect(jsonPath("$.shoes").value("220"))
+                .andExpect(jsonPath("$.height").value("173"))
+                .andExpect(jsonPath("$.size3").value("31-24-34"))
+                .andExpect(jsonPath("$.shoes").value("240"))
                 .andExpect(jsonPath("$.modelMainYn").value("Y"));
     }
 
