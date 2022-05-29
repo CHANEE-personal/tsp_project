@@ -14,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.filter.CharacterEncodingFilter;
 
 import javax.transaction.Transactional;
 
@@ -49,8 +47,7 @@ class FrontPortFolioJpaRepositoryTest {
     @Mock
     FrontPortFolioJpaRepository mockFrontPortFolioJpaRepository;
 
-    @BeforeEach
-    public void setup() {
+    private void createPortfolio() {
         frontPortFolioEntity = builder().idx(1).commonImageEntityList(commonImageEntityList).build();
 
         commonImageEntity = CommonImageEntity.builder()
@@ -87,6 +84,11 @@ class FrontPortFolioJpaRepositoryTest {
                 .build();
     }
 
+    @BeforeEach
+    public void setup() {
+        createPortfolio();
+    }
+
     @Test
     public void 포트폴리오조회테스트() throws Exception {
         // given
@@ -94,11 +96,8 @@ class FrontPortFolioJpaRepositoryTest {
         portfolioMap.put("jpaStartPage", 1);
         portfolioMap.put("size", 3);
 
-        // when
-        List<FrontPortFolioDTO> portfolioList = frontPortFolioJpaRepository.getPortFolioList(portfolioMap);
-
         // then
-        assertThat(portfolioList.size()).isGreaterThan(0);
+        assertThat(frontPortFolioJpaRepository.getPortFolioList(portfolioMap).size()).isGreaterThan(0);
     }
 
     @Test
@@ -155,20 +154,12 @@ class FrontPortFolioJpaRepositoryTest {
 
         given(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap)).willReturn(portfolioList);
 
-        // when
-        Integer idx = mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getIdx();
-        String title = mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getTitle();
-        String description = mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getDescription();
-        String hashTag = mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getHashTag();
-        String fileName = mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getPortfolioImage().get(0).getFileName();
-        String typeName = mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getPortfolioImage().get(0).getTypeName();
-
-        assertThat(idx).isEqualTo(portfolioList.get(0).getIdx());
-        assertThat(title).isEqualTo(portfolioList.get(0).getTitle());
-        assertThat(description).isEqualTo(portfolioList.get(0).getDescription());
-        assertThat(hashTag).isEqualTo(portfolioList.get(0).getHashTag());
-        assertThat(fileName).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getFileName());
-        assertThat(typeName).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getTypeName());
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getIdx()).isEqualTo(portfolioList.get(0).getIdx());
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getTitle()).isEqualTo(portfolioList.get(0).getTitle());
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getDescription()).isEqualTo(portfolioList.get(0).getDescription());
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getHashTag()).isEqualTo(portfolioList.get(0).getHashTag());
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getPortfolioImage().get(0).getFileName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getFileName());
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getPortfolioImage().get(0).getTypeName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getTypeName());
     }
 
     @Test
@@ -177,32 +168,18 @@ class FrontPortFolioJpaRepositoryTest {
         // given
         given(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity)).willReturn(frontPortFolioDTO);
 
-        // when
-        Integer idx = mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getIdx();
-        String title = mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getTitle();
-        String description = mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getDescription();
-        Integer categoryCd = mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getCategoryCd();
-        String hashTag = mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getHashTag();
-        String videoUrl = mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getVideoUrl();
-        String visible = mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getVisible();
-        String fileName = mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getFileName();
-        String fileMask = mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getFileMask();
-        String filePath = mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getFilePath();
-        String imageType = mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getImageType();
-        String typeName = mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getTypeName();
-
         // then
-        assertThat(idx).isEqualTo(1);
-        assertThat(title).isEqualTo("포트폴리오 Test");
-        assertThat(description).isEqualTo("포트폴리오 Test");
-        assertThat(categoryCd).isEqualTo(2);
-        assertThat(hashTag).isEqualTo("포트폴리오 Test");
-        assertThat(videoUrl).isEqualTo("https://youtube.com");
-        assertThat(visible).isEqualTo("Y");
-        assertThat(fileName).isEqualTo("test.jpg");
-        assertThat(fileMask).isEqualTo("test.jpg");
-        assertThat(filePath).isEqualTo("/test/test.jpg");
-        assertThat(imageType).isEqualTo("main");
-        assertThat(typeName).isEqualTo("portfolio");
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getIdx()).isEqualTo(1);
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getTitle()).isEqualTo("포트폴리오 Test");
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getDescription()).isEqualTo("포트폴리오 Test");
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getCategoryCd()).isEqualTo(2);
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getHashTag()).isEqualTo("포트폴리오 Test");
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getVideoUrl()).isEqualTo("https://youtube.com");
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getVisible()).isEqualTo("Y");
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getFileName()).isEqualTo("test.jpg");
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getFileMask()).isEqualTo("test.jpg");
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getFilePath()).isEqualTo("/test/test.jpg");
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getImageType()).isEqualTo("main");
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getTypeName()).isEqualTo("portfolio");
     }
 }

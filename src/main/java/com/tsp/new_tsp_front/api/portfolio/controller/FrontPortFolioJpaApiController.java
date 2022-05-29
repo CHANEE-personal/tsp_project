@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.rmi.ServerError;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -52,16 +51,13 @@ public class FrontPortFolioJpaApiController {
 													   Page page) {
 		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
 
-		List<FrontPortFolioDTO> portFolioList = this.frontPortFolioJpaApiService.getPortFolioList(searchCommon.searchCommon(page, paramMap));
-
 		// 리스트 수
 		resultMap.put("pageSize", page.getSize());
 		// 전체 페이지 수
-		resultMap.put("perPageListCnt", Math.ceil((portFolioList.size()-1)/page.getSize()+1));
+		resultMap.put("perPageListCnt", Math.ceil((this.frontPortFolioJpaApiService.getPortFolioList(searchCommon.searchCommon(page, paramMap)).size()-1)/page.getSize()+1));
 		// 전체 아이템 수
-		resultMap.put("portFolioListTotalCnt", portFolioList.size());
-		resultMap.put("portFolioList", portFolioList);
-
+		resultMap.put("portFolioListTotalCnt", this.frontPortFolioJpaApiService.getPortFolioList(searchCommon.searchCommon(page, paramMap)).size());
+		resultMap.put("portFolioList", this.frontPortFolioJpaApiService.getPortFolioList(searchCommon.searchCommon(page, paramMap)));
 		return resultMap;
 	}
 

@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.rmi.ServerError;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -52,16 +50,13 @@ public class FrontProductionJpaApiController {
 														  Page page) {
 		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
 
-		List<FrontProductionDTO> productionList = this.frontProductionJpaApiService.getProductionList(searchCommon.searchCommon(page, paramMap));
-
 		// 리스트 수
 		resultMap.put("pageSize", page.getSize());
 		// 전체 페이지 수
-		resultMap.put("perPageListCnt", Math.ceil((productionList.size()-1)/page.getSize()+1));
+		resultMap.put("perPageListCnt", Math.ceil((this.frontProductionJpaApiService.getProductionList(searchCommon.searchCommon(page, paramMap)).size()-1)/page.getSize()+1));
 		// 전체 아이템 수
-		resultMap.put("productionListTotalCnt", productionList.size());
-
-		resultMap.put("productionList", productionList);
+		resultMap.put("productionListTotalCnt", this.frontProductionJpaApiService.getProductionList(searchCommon.searchCommon(page, paramMap)).size());
+		resultMap.put("productionList", this.frontProductionJpaApiService.getProductionList(searchCommon.searchCommon(page, paramMap)));
 
 		return resultMap;
 	}
