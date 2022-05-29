@@ -191,7 +191,7 @@ class FrontModelJpaRepositoryTest {
     }
 
     @Test
-    public void 모델배너리스트조회테스트() throws Exception {
+    public void 모델메인배너리스트조회테스트() throws Exception {
 
         // when
         List<FrontModelDTO> mainModelList = frontModelJpaRepository.getMainModelList();

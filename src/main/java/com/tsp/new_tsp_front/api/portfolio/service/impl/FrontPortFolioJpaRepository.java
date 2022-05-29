@@ -58,11 +58,9 @@ public class FrontPortFolioJpaRepository {
 					.limit(StringUtil.getInt(portFolioMap.get("size"),0))
 					.fetch();
 
-			List<FrontPortFolioDTO> portFolioDtoList = PortFolioMapper.INSTANCE.toDtoList(portFolioList);
+			portFolioList.forEach(list -> portFolioList.get(portFolioList.indexOf(list)).setRnum(StringUtil.getInt(portFolioMap.get("startPage"),1)*(StringUtil.getInt(portFolioMap.get("size"),1))-(2-portFolioList.indexOf(list))));
 
-			portFolioDtoList.forEach(list -> portFolioDtoList.get(portFolioDtoList.indexOf(list)).setRnum(StringUtil.getInt(portFolioMap.get("startPage"),1)*(StringUtil.getInt(portFolioMap.get("size"),1))-(2-portFolioDtoList.indexOf(list))));
-
-			return portFolioDtoList;
+			return PortFolioMapper.INSTANCE.toDtoList(portFolioList);
 		} catch (Exception e) {
 			throw new TspException(ApiExceptionType.NOT_FOUND_PORTFOLIO_LIST);
 		}
@@ -84,7 +82,6 @@ public class FrontPortFolioJpaRepository {
 		try {
 			FrontPortFolioEntity getPortFolioInfo = queryFactory
 					.selectFrom(frontPortFolioEntity)
-					.orderBy(frontPortFolioEntity.idx.desc())
 					.leftJoin(frontPortFolioEntity.commonImageEntityList, commonImageEntity)
 					.fetchJoin()
 					.where(frontPortFolioEntity.idx.eq(existFrontPortFolioEntity.getIdx())

@@ -65,8 +65,11 @@ public class FrontModelJpaRepository {
                     .orderBy(frontModelEntity.idx.desc())
                     .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
                     .fetchJoin()
-                    .where(frontModelEntity.modelMainYn.eq("Y").and(frontModelEntity.visible.eq("Y")
-                            .and(commonImageEntity.typeName.eq("model").and(commonImageEntity.imageType.eq("main")).and(commonImageEntity.visible.eq("Y")))))
+                    .where(frontModelEntity.modelMainYn.eq("Y")
+                            .and(frontModelEntity.visible.eq("Y")
+                            .and(commonImageEntity.typeName.eq("model")
+                                    .and(commonImageEntity.imageType.eq("main"))
+                                    .and(commonImageEntity.visible.eq("Y")))))
                     .fetch();
 
             modelList.forEach(list -> modelList.get(modelList.indexOf(list)).setRnum(modelList.indexOf(list)));
@@ -139,7 +142,6 @@ public class FrontModelJpaRepository {
             //모델 상세 조회
             FrontModelEntity getModelInfo = queryFactory
                     .selectFrom(frontModelEntity)
-                    .orderBy(frontModelEntity.idx.desc())
                     .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
                     .fetchJoin()
                     .where(frontModelEntity.idx.eq(existFrontModelEntity.getIdx())
