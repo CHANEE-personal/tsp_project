@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.rmi.ServerError;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -51,13 +49,9 @@ public class FrontModelJpaApiController {
     public ConcurrentHashMap<String, Object> getMainModelList() {
         ConcurrentHashMap<String, Object> mainModelMap = new ConcurrentHashMap<>();
 
-        List<FrontModelDTO> mainModelList = this.frontModelJpaApiService.getMainModelList();
-
         // 전체 아이템 수
-        mainModelMap.put("modelListTotalCnt", mainModelList.size());
-
-        mainModelMap.put("modelList", mainModelList);
-
+        mainModelMap.put("modelListTotalCnt", this.frontModelJpaApiService.getMainModelList().size());
+        mainModelMap.put("modelList", this.frontModelJpaApiService.getMainModelList());
         return mainModelMap;
     }
 
@@ -90,16 +84,13 @@ public class FrontModelJpaApiController {
         ConcurrentHashMap<String, Object> modelMap = searchCommon.searchCommon(page, paramMap);
         modelMap.put("categoryCd", categoryCd);
 
-        List<FrontModelDTO> modelList = this.frontModelJpaApiService.getModelList(modelMap);
-
         // 리스트 수
         resultMap.put("pageSize", page.getSize());
         // 전체 페이지 수
-        resultMap.put("perPageListCnt", Math.ceil((modelList.size() - 1) / page.getSize() + 1));
+        resultMap.put("perPageListCnt", Math.ceil((this.frontModelJpaApiService.getModelList(modelMap).size() - 1) / page.getSize() + 1));
         // 전체 아이템 수
         resultMap.put("modelListTotalCnt", this.frontModelJpaApiService.getModelCount(modelMap));
-
-        resultMap.put("modelList", modelList);
+        resultMap.put("modelList", this.frontModelJpaApiService.getModelList(modelMap));
 
         return resultMap;
     }

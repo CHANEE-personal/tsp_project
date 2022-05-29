@@ -50,23 +50,6 @@ public class FrontModelJpaRepository {
 
     /**
      * <pre>
-     * 1. MethodName : getModelCount
-     * 2. ClassName  : FrontModelJpaRepository.java
-     * 3. Comment    : 프론트 모델 리스트 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 03. 27.
-     * </pre>
-     */
-    public Long getModelCount(Map<String, Object> modelMap) {
-        return queryFactory
-                .selectFrom(frontModelEntity)
-                .where(searchModel(modelMap)
-                .and(frontModelEntity.visible.eq("Y")))
-                .fetchCount();
-    }
-
-    /**
-     * <pre>
      * 1. MethodName : getMainModelList
      * 2. ClassName  : FrontModelJpaRepository.java
      * 3. Comment    : 프론트 메인 모델 리스트 조회
@@ -92,6 +75,23 @@ public class FrontModelJpaRepository {
         } catch (Exception e) {
             throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
         }
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : getModelCount
+     * 2. ClassName  : FrontModelJpaRepository.java
+     * 3. Comment    : 프론트 모델 리스트 갯수 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 03. 27.
+     * </pre>
+     */
+    public Long getModelCount(Map<String, Object> modelMap) {
+        return queryFactory
+                .selectFrom(frontModelEntity)
+                .where(searchModel(modelMap)
+                        .and(frontModelEntity.visible.eq("Y")))
+                .fetchCount();
     }
 
     /**
