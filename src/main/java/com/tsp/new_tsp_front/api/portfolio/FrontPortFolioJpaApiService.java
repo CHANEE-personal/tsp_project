@@ -4,7 +4,9 @@ import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
 import com.tsp.new_tsp_front.api.portfolio.service.impl.FrontPortFolioJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,6 +28,8 @@ public class FrontPortFolioJpaApiService {
 	 *
 	 * @param portFolioMap
 	 */
+	@Cacheable(value = "portfolio")
+	@Transactional(readOnly = true)
 	public List<FrontPortFolioDTO> getPortFolioList(ConcurrentHashMap portFolioMap) {
 		return frontPortFolioJpaRepository.getPortFolioList(portFolioMap);
 	}
@@ -41,6 +45,8 @@ public class FrontPortFolioJpaApiService {
 	 *
 	 * @param frontPortFolioEntity
 	 */
+	@Cacheable(value = "portfolio")
+	@Transactional(readOnly = true)
 	public FrontPortFolioDTO getPortFolioInfo(FrontPortFolioEntity frontPortFolioEntity) {
 		return frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
 	}

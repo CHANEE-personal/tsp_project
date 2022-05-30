@@ -4,7 +4,9 @@ import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 import com.tsp.new_tsp_front.api.production.service.impl.FrontProductionJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,6 +28,8 @@ public class FrontProductionJpaApiService {
 	 *
 	 * @param productionMap
 	 */
+	@Cacheable(value = "production")
+	@Transactional(readOnly = true)
 	public List<FrontProductionDTO> getProductionList(ConcurrentHashMap<String, Object> productionMap) {
 		return frontProductionJpaRepository.getProductionList(productionMap);
 	}
@@ -41,6 +45,8 @@ public class FrontProductionJpaApiService {
 	 *
 	 * @param frontProductionEntity
 	 */
+	@Cacheable(value = "production")
+	@Transactional(readOnly = true)
 	public FrontProductionDTO getProductionInfo(FrontProductionEntity frontProductionEntity) {
 		return frontProductionJpaRepository.getProductionInfo(frontProductionEntity);
 	}
