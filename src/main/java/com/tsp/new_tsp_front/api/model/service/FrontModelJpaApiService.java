@@ -28,8 +28,6 @@ public class FrontModelJpaApiService {
 	 * </pre>
 	 *
 	 */
-	@Cacheable(value = "model")
-	@Transactional(readOnly = true)
 	public Long getModelCount(Map<String, Object> modelMap) {
 		return frontModelJpaRepository.getModelCount(modelMap);
 	}
