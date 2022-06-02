@@ -28,7 +28,6 @@ public class FrontProductionJpaApiService {
 	 *
 	 * @param productionMap
 	 */
-	@Cacheable(value = "production")
 	@Transactional(readOnly = true)
 	public List<FrontProductionDTO> getProductionList(ConcurrentHashMap<String, Object> productionMap) {
 		return frontProductionJpaRepository.getProductionList(productionMap);
@@ -45,7 +44,6 @@ public class FrontProductionJpaApiService {
 	 *
 	 * @param frontProductionEntity
 	 */
-	@Cacheable(value = "production")
 	@Transactional(readOnly = true)
 	public FrontProductionDTO getProductionInfo(FrontProductionEntity frontProductionEntity) {
 		return frontProductionJpaRepository.getProductionInfo(frontProductionEntity);

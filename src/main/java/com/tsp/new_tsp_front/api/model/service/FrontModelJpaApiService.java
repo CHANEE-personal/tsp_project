@@ -43,7 +43,6 @@ public class FrontModelJpaApiService {
 	 *
 	 * @param modelMap
 	 */
-	@Cacheable(value = "model")
 	@Transactional(readOnly = true)
 	public List<FrontModelDTO> getModelList(ConcurrentHashMap<String, Object> modelMap) {
 		return frontModelJpaRepository.getModelList(modelMap);
@@ -60,7 +59,6 @@ public class FrontModelJpaApiService {
 	 *
 	 * @param frontModelEntity
 	 */
-	@Cacheable(value = "model")
 	@Transactional(readOnly = true)
 	public FrontModelDTO getModelInfo(FrontModelEntity frontModelEntity) {
 		return this.frontModelJpaRepository.getModelInfo(frontModelEntity);
@@ -76,7 +74,6 @@ public class FrontModelJpaApiService {
 	 * </pre>
 	 *
 	 */
-	@Cacheable(value = "model")
 	@Transactional(readOnly = true)
 	public List<FrontModelDTO> getMainModelList() {
 		return this.frontModelJpaRepository.getMainModelList();

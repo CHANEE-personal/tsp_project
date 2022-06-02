@@ -28,7 +28,6 @@ public class FrontPortFolioJpaApiService {
 	 *
 	 * @param portFolioMap
 	 */
-	@Cacheable(value = "portfolio")
 	@Transactional(readOnly = true)
 	public List<FrontPortFolioDTO> getPortFolioList(ConcurrentHashMap portFolioMap) {
 		return frontPortFolioJpaRepository.getPortFolioList(portFolioMap);
@@ -45,7 +44,6 @@ public class FrontPortFolioJpaApiService {
 	 *
 	 * @param frontPortFolioEntity
 	 */
-	@Cacheable(value = "portfolio")
 	@Transactional(readOnly = true)
 	public FrontPortFolioDTO getPortFolioInfo(FrontPortFolioEntity frontPortFolioEntity) {
 		return frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
