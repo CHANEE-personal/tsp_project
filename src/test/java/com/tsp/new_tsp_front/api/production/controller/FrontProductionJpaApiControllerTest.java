@@ -62,5 +62,12 @@ class FrontProductionJpaApiControllerTest {
                 .andExpect(jsonPath("$.idx").value("1"))
                 .andExpect(jsonPath("$.title").value("프로덕션 테스트"))
                 .andExpect(jsonPath("$.description").value("프로덕션 테스트"));
+
+        // 예외
+        mockMvc.perform(get("/api/production/-1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("NOT_FOUND_PRODUCTION"))
+                .andExpect(jsonPath("$.message").value("해당 프로덕션 없음"));
     }
 }

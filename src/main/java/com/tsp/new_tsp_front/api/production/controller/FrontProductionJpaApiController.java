@@ -46,8 +46,7 @@ public class FrontProductionJpaApiController {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/lists")
-	public ConcurrentHashMap<String, Object> getProductionList(@RequestParam(required = false) Map<String, Object> paramMap,
-														  Page page) {
+	public ConcurrentHashMap<String, Object> getProductionList(@RequestParam(required = false) Map<String, Object> paramMap, Page page) throws Exception {
 		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
 
 		// 리스트 수
@@ -79,7 +78,7 @@ public class FrontProductionJpaApiController {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/{idx}")
-	public FrontProductionDTO getProductionInfo(@PathVariable("idx") Integer idx) {
+	public FrontProductionDTO getProductionInfo(@PathVariable("idx") Integer idx) throws Exception {
 		return this.frontProductionJpaApiService.getProductionInfo(builder().idx(idx).build());
 	}
 }

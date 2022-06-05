@@ -3,6 +3,8 @@ package com.tsp.new_tsp_front.api.portfolio;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
 import com.tsp.new_tsp_front.api.portfolio.service.impl.FrontPortFolioJpaRepository;
+import com.tsp.new_tsp_front.exception.ApiExceptionType;
+import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,8 +30,12 @@ public class FrontPortFolioJpaApiService {
 	 * @param portFolioMap
 	 */
 	@Transactional(readOnly = true)
-	public List<FrontPortFolioDTO> getPortFolioList(ConcurrentHashMap<String, Object> portFolioMap) {
-		return frontPortFolioJpaRepository.getPortFolioList(portFolioMap);
+	public List<FrontPortFolioDTO> getPortFolioList(ConcurrentHashMap<String, Object> portFolioMap) throws Exception {
+		try {
+			return frontPortFolioJpaRepository.getPortFolioList(portFolioMap);
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.NOT_FOUND_PORTFOLIO_LIST);
+		}
 	}
 
 	/**
@@ -44,7 +50,11 @@ public class FrontPortFolioJpaApiService {
 	 * @param frontPortFolioEntity
 	 */
 	@Transactional(readOnly = true)
-	public FrontPortFolioDTO getPortFolioInfo(FrontPortFolioEntity frontPortFolioEntity) {
-		return frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
+	public FrontPortFolioDTO getPortFolioInfo(FrontPortFolioEntity frontPortFolioEntity) throws Exception {
+		try {
+			return frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.NOT_FOUND_PORTFOLIO);
+		}
 	}
 }

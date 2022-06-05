@@ -47,8 +47,7 @@ public class FrontPortFolioJpaApiController {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/lists")
-	public ConcurrentHashMap<String, Object> getPortFolioList(@RequestParam(required = false) Map<String, Object> paramMap,
-													   Page page) {
+	public ConcurrentHashMap<String, Object> getPortFolioList(@RequestParam(required = false) Map<String, Object> paramMap, Page page) throws Exception {
 		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
 
 		// 리스트 수
@@ -79,7 +78,7 @@ public class FrontPortFolioJpaApiController {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/{idx}")
-	public FrontPortFolioDTO getPortFolioInfo(@PathVariable("idx") Integer idx) {
+	public FrontPortFolioDTO getPortFolioInfo(@PathVariable("idx") Integer idx) throws Exception {
 		return this.frontPortFolioJpaApiService.getPortFolioInfo(builder().idx(idx).build());
 	}
 }
