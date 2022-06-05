@@ -78,7 +78,7 @@ public class FrontModelJpaApiController {
     public ConcurrentHashMap<String, Object> getModelList(@PathVariable("categoryCd")
                                                           @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
                                                           @RequestParam(required = false) Map<String, Object> paramMap,
-                                                          Page page) {
+                                                          Page page) throws Exception {
         ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
         // 페이징 및 검색
         ConcurrentHashMap<String, Object> modelMap = searchCommon.searchCommon(page, paramMap);
@@ -116,7 +116,7 @@ public class FrontModelJpaApiController {
     @GetMapping(value = "/{categoryCd}/{idx}")
     public FrontModelDTO getModelInfo(@PathVariable("categoryCd")
                                       @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
-                                      @PathVariable("idx") Integer idx) {
+                                      @PathVariable("idx") Integer idx) throws Exception {
         return this.frontModelJpaApiService.getModelInfo(builder().categoryCd(categoryCd).idx(idx).build());
     }
 }

@@ -3,8 +3,9 @@ package com.tsp.new_tsp_front.api.model.service;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.service.impl.FrontModelJpaRepository;
+import com.tsp.new_tsp_front.exception.ApiExceptionType;
+import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,8 +45,12 @@ public class FrontModelJpaApiService {
 	 * @param modelMap
 	 */
 	@Transactional(readOnly = true)
-	public List<FrontModelDTO> getModelList(ConcurrentHashMap<String, Object> modelMap) {
-		return frontModelJpaRepository.getModelList(modelMap);
+	public List<FrontModelDTO> getModelList(ConcurrentHashMap<String, Object> modelMap) throws Exception {
+		try {
+			return frontModelJpaRepository.getModelList(modelMap);
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
+		}
 	}
 
 	/**
@@ -60,8 +65,12 @@ public class FrontModelJpaApiService {
 	 * @param frontModelEntity
 	 */
 	@Transactional(readOnly = true)
-	public FrontModelDTO getModelInfo(FrontModelEntity frontModelEntity) {
-		return this.frontModelJpaRepository.getModelInfo(frontModelEntity);
+	public FrontModelDTO getModelInfo(FrontModelEntity frontModelEntity) throws Exception {
+		try {
+			return this.frontModelJpaRepository.getModelInfo(frontModelEntity);
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL);
+		}
 	}
 
 	/**
