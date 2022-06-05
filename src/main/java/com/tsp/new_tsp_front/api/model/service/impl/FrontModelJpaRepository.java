@@ -57,7 +57,7 @@ public class FrontModelJpaRepository {
      * 5. 작성일       : 2022. 03. 27.
      * </pre>
      */
-    public List<FrontModelDTO> getMainModelList() {
+    public List<FrontModelDTO> getMainModelList() throws Exception {
 
         try {
             List<FrontModelEntity> modelList = queryFactory
@@ -89,12 +89,16 @@ public class FrontModelJpaRepository {
      * 5. 작성일       : 2022. 03. 27.
      * </pre>
      */
-    public Long getModelCount(Map<String, Object> modelMap) {
-        return queryFactory
-                .selectFrom(frontModelEntity)
-                .where(searchModel(modelMap)
-                        .and(frontModelEntity.visible.eq("Y")))
-                .fetchCount();
+    public Long getModelCount(Map<String, Object> modelMap) throws Exception {
+        try {
+            return queryFactory
+                    .selectFrom(frontModelEntity)
+                    .where(searchModel(modelMap)
+                            .and(frontModelEntity.visible.eq("Y")))
+                    .fetchCount();
+        } catch (Exception e) {
+            throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
+        }
     }
 
     /**
@@ -106,7 +110,7 @@ public class FrontModelJpaRepository {
      * 5. 작성일       : 2022. 01. 02.
      * </pre>
      */
-    public List<FrontModelDTO> getModelList(Map<String, Object> modelMap) {
+    public List<FrontModelDTO> getModelList(Map<String, Object> modelMap) throws Exception {
 
         try {
             List<FrontModelEntity> modelList = queryFactory
@@ -136,7 +140,7 @@ public class FrontModelJpaRepository {
      * 5. 작성일       : 2022. 01. 09.
      * </pre>
      */
-    public FrontModelDTO getModelInfo(FrontModelEntity existFrontModelEntity) {
+    public FrontModelDTO getModelInfo(FrontModelEntity existFrontModelEntity) throws Exception {
 
         try {
             //모델 상세 조회
@@ -151,7 +155,6 @@ public class FrontModelJpaRepository {
 
             return ModelMapper.INSTANCE.toDto(getModelInfo);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new TspException(ApiExceptionType.NOT_FOUND_MODEL);
         }
     }

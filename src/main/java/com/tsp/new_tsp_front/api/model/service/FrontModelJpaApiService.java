@@ -29,8 +29,12 @@ public class FrontModelJpaApiService {
 	 * </pre>
 	 *
 	 */
-	public Long getModelCount(Map<String, Object> modelMap) {
-		return frontModelJpaRepository.getModelCount(modelMap);
+	public Long getModelCount(Map<String, Object> modelMap) throws Exception {
+		try {
+			return frontModelJpaRepository.getModelCount(modelMap);
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
+		}
 	}
 
 	/**
@@ -84,7 +88,7 @@ public class FrontModelJpaApiService {
 	 *
 	 */
 	@Transactional(readOnly = true)
-	public List<FrontModelDTO> getMainModelList() {
+	public List<FrontModelDTO> getMainModelList() throws Exception {
 		return this.frontModelJpaRepository.getMainModelList();
 	}
 }

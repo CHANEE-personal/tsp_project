@@ -46,7 +46,7 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists/main")
-    public ConcurrentHashMap<String, Object> getMainModelList() {
+    public ConcurrentHashMap<String, Object> getMainModelList() throws Exception {
         ConcurrentHashMap<String, Object> mainModelMap = new ConcurrentHashMap<>();
 
         // 전체 아이템 수

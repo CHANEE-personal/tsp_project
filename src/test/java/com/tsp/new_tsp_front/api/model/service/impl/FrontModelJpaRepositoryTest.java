@@ -4,6 +4,8 @@ import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
+import com.tsp.new_tsp_front.exception.TspException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.tsp.new_tsp_front.api.model.domain.FrontModelEntity.builder;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
 
@@ -106,19 +109,21 @@ class FrontModelJpaRepositoryTest {
     }
 
     @Test
+    @DisplayName("모델 리스트 갯수 조회 테스트")
     public void 모델리스트갯수조회테스트() throws Exception {
+        // 정상
         ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
-        modelMap.put("categoryCd", "1");
+        modelMap.put("categoryCd", 1);
 
-        // then
         assertThat(frontModelJpaRepository.getModelCount(modelMap)).isGreaterThan(0);
     }
 
     @Test
+    @DisplayName("모델 리스트 조회 테스트")
     public void 모델리스트조회테스트() throws Exception {
         // given
         ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
-        modelMap.put("categoryCd", "1");
+        modelMap.put("categoryCd", 1);
         modelMap.put("jpaStartPage", 1);
         modelMap.put("size", 3);
 
@@ -127,11 +132,47 @@ class FrontModelJpaRepositoryTest {
     }
 
     @Test
-    public void 모델BDD조회테스트() throws Exception {
-
+    @DisplayName("모델 리스트 조회 예외 테스트")
+    public void 모델리스트조회예외테스트() throws Exception {
         // given
         ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
-        modelMap.put("categoryCd", "1");
+        modelMap.put("categoryCd", -1);
+
+        // then
+        assertThatThrownBy(() -> frontModelJpaRepository.getModelList(modelMap))
+                .isInstanceOf(TspException.class);
+    }
+
+    @Test
+    @DisplayName("모델 상세 조회 테스트")
+    public void 모델상세조회테스트() throws Exception {
+        // given
+        FrontModelEntity menFrontModelEntity = FrontModelEntity.builder().idx(156).build();
+
+        FrontModelDTO menModelDTO = frontModelJpaRepository.getModelInfo(menFrontModelEntity);
+        assertThat(menModelDTO.getIdx()).isEqualTo(156);
+        assertThat(menModelDTO.getModelKorFirstName()).isEqualTo("주");
+        assertThat(menModelDTO.getModelKorSecondName()).isEqualTo("선우");
+        assertThat(menModelDTO.getModelFirstName()).isEqualTo("Joo");
+        assertThat(menModelDTO.getModelSecondName()).isEqualTo("seon woo");
+
+        FrontModelEntity womenFrontModelEntity = FrontModelEntity.builder().idx(143).build();
+
+        FrontModelDTO womenModelDTO = frontModelJpaRepository.getModelInfo(womenFrontModelEntity);
+        assertThat(womenModelDTO.getIdx()).isEqualTo(143);
+        assertThat(womenModelDTO.getModelKorFirstName()).isEqualTo("김");
+        assertThat(womenModelDTO.getModelKorSecondName()).isEqualTo("예영");
+        assertThat(womenModelDTO.getModelFirstName()).isEqualTo("kim");
+        assertThat(womenModelDTO.getModelSecondName()).isEqualTo("ye yeong");
+    }
+
+    @Test
+    @DisplayName("모델 BDD 조회 테스트")
+    public void 모델BDD조회테스트() throws Exception {
+        // 정상
+        // given
+        ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
+        modelMap.put("categoryCd", 1);
         modelMap.put("jpaStartPage", 1);
         modelMap.put("size", 3);
 
@@ -150,6 +191,7 @@ class FrontModelJpaRepositoryTest {
     }
 
     @Test
+    @DisplayName("모델 상세 BDD 조회 테스트")
     public void 모델상세BDD조회테스트() throws Exception {
 
         // given
@@ -191,6 +233,7 @@ class FrontModelJpaRepositoryTest {
     }
 
     @Test
+    @DisplayName("모델 메인 배너 조회 테스트")
     public void 모델메인배너리스트조회테스트() throws Exception {
 
         // when
