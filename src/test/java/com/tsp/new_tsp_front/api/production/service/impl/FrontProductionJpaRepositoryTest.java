@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 @DataJpaTest
 @Transactional
@@ -45,8 +46,6 @@ class FrontProductionJpaRepositoryTest {
     private FrontProductionJpaRepository mockFrontProductionJpaRepository;
 
     private void createProduction() {
-        frontProductionEntity = builder().idx(1).commonImageEntityList(commonImageEntityList).build();
-
         commonImageEntity = CommonImageEntity.builder()
                 .idx(1)
                 .imageType("main")
@@ -76,6 +75,8 @@ class FrontProductionJpaRepositoryTest {
                 .visible("Y")
                 .productionImage(ProductionImageMapper.INSTANCE.toDtoList(commonImageEntityList))
                 .build();
+
+        frontProductionEntity = builder().idx(1).commonImageEntityList(commonImageEntityList).build();
     }
 
     @BeforeEach
@@ -84,7 +85,8 @@ class FrontProductionJpaRepositoryTest {
     }
 
     @Test
-    public void 프로덕션리스트조회테스트() throws Exception {
+    @DisplayName("프로덕션 리스트 조회 테스트")
+    public void 프로덕션리스트조회테스트() {
 
         // given
         ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
@@ -96,7 +98,8 @@ class FrontProductionJpaRepositoryTest {
     }
 
     @Test
-    public void 프로덕션BDD조회테스트() throws Exception {
+    @DisplayName("프로덕션 BDD 조회 테스트")
+    public void 프로덕션BDD조회테스트() {
         // given
         ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
         productionMap.put("jpaStartPage", 1);
@@ -109,20 +112,29 @@ class FrontProductionJpaRepositoryTest {
         productionList.add(FrontProductionDTO.builder().idx(1).title("프로덕션").description("프로덕션").visible("Y")
                 .productionImage(commonImageDtoList).build());
 
-        given(mockFrontProductionJpaRepository.getProductionList(productionMap)).willReturn(productionList);
+        // when
+//        given(mockFrontProductionJpaRepository.getProductionList(productionMap)).willReturn(productionList);
+        when(mockFrontProductionJpaRepository.getProductionList(productionMap)).thenReturn(productionList);
 
+        // then
         assertThat(mockFrontProductionJpaRepository.getProductionList(productionMap).get(0).getIdx()).isEqualTo(productionList.get(0).getIdx());
         assertThat(mockFrontProductionJpaRepository.getProductionList(productionMap).get(0).getTitle()).isEqualTo(productionList.get(0).getTitle());
         assertThat(mockFrontProductionJpaRepository.getProductionList(productionMap).get(0).getDescription()).isEqualTo(productionList.get(0).getDescription());
         assertThat(mockFrontProductionJpaRepository.getProductionList(productionMap).get(0).getProductionImage().get(0).getFileName()).isEqualTo(productionList.get(0).getProductionImage().get(0).getFileName());
         assertThat(mockFrontProductionJpaRepository.getProductionList(productionMap).get(0).getProductionImage().get(0).getTypeName()).isEqualTo(productionList.get(0).getProductionImage().get(0).getTypeName());
+
+        // verify
+        verify(mockFrontProductionJpaRepository, times(5)).getProductionList(productionMap);
+        verify(mockFrontProductionJpaRepository, atLeastOnce()).getProductionList(productionMap);
     }
 
     @Test
-    public void 프로덕션상세BDD조회테스트() throws Exception {
+    @DisplayName("프로덕션 상세 BDD 조회 테스트")
+    public void 프로덕션상세BDD조회테스트() {
 
         // given
-        given(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity)).willReturn(frontProductionDTO);
+//        given(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity)).willReturn(frontProductionDTO);
+        when(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity)).thenReturn(frontProductionDTO);
 
         // then
         assertThat(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity).getIdx()).isEqualTo(1);
@@ -133,5 +145,9 @@ class FrontProductionJpaRepositoryTest {
         assertThat(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity).getProductionImage().get(0).getFileMask()).isEqualTo("test.jpg");
         assertThat(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity).getProductionImage().get(0).getImageType()).isEqualTo("main");
         assertThat(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity).getProductionImage().get(0).getTypeName()).isEqualTo("production");
+
+        // verify
+        verify(mockFrontProductionJpaRepository, times(8)).getProductionInfo(frontProductionEntity);
+        verify(mockFrontProductionJpaRepository, atLeastOnce()).getProductionInfo(frontProductionEntity);
     }
 }
