@@ -45,7 +45,6 @@ public class FrontPortFolioJpaRepository {
 	 * 5. 작성일       : 2022. 01. 11.
 	 * </pre>
 	 *
-	 * @param portFolioMap
 	 */
 	public List<FrontPortFolioDTO> getPortFolioList(Map<String, Object> portFolioMap) {
 
@@ -75,7 +74,6 @@ public class FrontPortFolioJpaRepository {
 	 * 5. 작성일       : 2022. 01. 12.
 	 * </pre>
 	 *
-	 * @param existFrontPortFolioEntity
 	 */
 	public FrontPortFolioDTO getPortFolioInfo(FrontPortFolioEntity existFrontPortFolioEntity) {
 

@@ -25,6 +25,7 @@ import static com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @DataJpaTest
@@ -48,8 +49,6 @@ class FrontPortFolioJpaRepositoryTest {
     FrontPortFolioJpaRepository mockFrontPortFolioJpaRepository;
 
     private void createPortfolio() {
-        frontPortFolioEntity = builder().idx(1).commonImageEntityList(commonImageEntityList).build();
-
         commonImageEntity = CommonImageEntity.builder()
                 .idx(1)
                 .imageType("main")
@@ -82,6 +81,8 @@ class FrontPortFolioJpaRepositoryTest {
                 .visible("Y")
                 .portfolioImage(PortFolioImageMapper.INSTANCE.toDtoList(commonImageEntityList))
                 .build();
+
+        frontPortFolioEntity = builder().idx(1).commonImageEntityList(commonImageEntityList).build();
     }
 
     @BeforeEach
@@ -90,7 +91,8 @@ class FrontPortFolioJpaRepositoryTest {
     }
 
     @Test
-    public void 포트폴리오조회테스트() throws Exception {
+    @DisplayName("포트폴리오 조회 테스트")
+    public void 포트폴리오조회테스트() {
         // given
         ConcurrentHashMap<String, Object> portfolioMap = new ConcurrentHashMap<>();
         portfolioMap.put("jpaStartPage", 1);
@@ -101,7 +103,8 @@ class FrontPortFolioJpaRepositoryTest {
     }
 
     @Test
-    public void 포트폴리오상세조회테스트() throws Exception {
+    @DisplayName("포트폴리오 상세 조회 테스트")
+    public void 포트폴리오상세조회테스트() {
         frontPortFolioDTO = frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
 
         // then
@@ -139,7 +142,8 @@ class FrontPortFolioJpaRepositoryTest {
     }
 
     @Test
-    public void 포트폴리오BDD조회테스트() throws Exception {
+    @DisplayName("포트폴리오 BDD 조회 테스트")
+    public void 포트폴리오BDD조회테스트() {
         // given
         ConcurrentHashMap<String, Object> portfolioMap = new ConcurrentHashMap<>();
         portfolioMap.put("jpaStartPage", 1);
@@ -152,7 +156,9 @@ class FrontPortFolioJpaRepositoryTest {
         portfolioList.add(FrontPortFolioDTO.builder().idx(1).title("포트폴리오").description("포트폴리오")
                 .hashTag("#test").portfolioImage(commonImageDtoList).visible("Y").build());
 
-        given(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap)).willReturn(portfolioList);
+        // when
+//        given(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap)).willReturn(portfolioList);
+        when(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap)).thenReturn(portfolioList);
 
         assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getIdx()).isEqualTo(portfolioList.get(0).getIdx());
         assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getTitle()).isEqualTo(portfolioList.get(0).getTitle());
@@ -160,13 +166,19 @@ class FrontPortFolioJpaRepositoryTest {
         assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getHashTag()).isEqualTo(portfolioList.get(0).getHashTag());
         assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getPortfolioImage().get(0).getFileName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getFileName());
         assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getPortfolioImage().get(0).getTypeName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getTypeName());
+
+        // verify
+        verify(mockFrontPortFolioJpaRepository, times(6)).getPortFolioList(portfolioMap);
+        verify(mockFrontPortFolioJpaRepository, atLeastOnce()).getPortFolioList(portfolioMap);
     }
 
     @Test
-    public void 포트폴리오상세BDD조회테스트() throws Exception {
+    @DisplayName("포트폴리오 상세 BDD 조회 테스트")
+    public void 포트폴리오상세BDD조회테스트() {
 
-        // given
-        given(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity)).willReturn(frontPortFolioDTO);
+        // when
+//        given(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity)).willReturn(frontPortFolioDTO);
+        when(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity)).thenReturn(frontPortFolioDTO);
 
         // then
         assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getIdx()).isEqualTo(1);
@@ -181,5 +193,9 @@ class FrontPortFolioJpaRepositoryTest {
         assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getFilePath()).isEqualTo("/test/test.jpg");
         assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getImageType()).isEqualTo("main");
         assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getTypeName()).isEqualTo("portfolio");
+
+        // verify
+        verify(mockFrontPortFolioJpaRepository, times(12)).getPortFolioInfo(frontPortFolioEntity);
+        verify(mockFrontPortFolioJpaRepository, atLeastOnce()).getPortFolioInfo(frontPortFolioEntity);
     }
 }

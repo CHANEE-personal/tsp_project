@@ -45,7 +45,6 @@ public class FrontProductionJpaRepository {
 	 * 5. 작성일       : 2022. 01. 06.
 	 * </pre>
 	 *
-	 * @param productionMap
 	 */
 	public List<FrontProductionDTO> getProductionList(Map<String, Object> productionMap) {
 
@@ -75,7 +74,6 @@ public class FrontProductionJpaRepository {
 	 * 5. 작성일       : 2022. 01. 12.
 	 * </pre>
 	 *
-	 * @param existFrontProductionEntity
 	 */
 	public FrontProductionDTO getProductionInfo(FrontProductionEntity existFrontProductionEntity) {
 		try {
