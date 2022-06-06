@@ -5,7 +5,6 @@ import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.exception.TspException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static com.tsp.new_tsp_front.api.model.domain.FrontModelEntity.builder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 
 @DataJpaTest
@@ -110,7 +109,7 @@ class FrontModelJpaRepositoryTest {
 
     @Test
     @DisplayName("모델 리스트 갯수 조회 테스트")
-    public void 모델리스트갯수조회테스트() throws Exception {
+    public void 모델리스트갯수조회테스트() {
         // 정상
         ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
         modelMap.put("categoryCd", 1);
@@ -120,7 +119,7 @@ class FrontModelJpaRepositoryTest {
 
     @Test
     @DisplayName("모델 리스트 조회 테스트")
-    public void 모델리스트조회테스트() throws Exception {
+    public void 모델리스트조회테스트() {
         // given
         ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
         modelMap.put("categoryCd", 1);
@@ -133,7 +132,7 @@ class FrontModelJpaRepositoryTest {
 
     @Test
     @DisplayName("모델 리스트 조회 예외 테스트")
-    public void 모델리스트조회예외테스트() throws Exception {
+    public void 모델리스트조회예외테스트() {
         // given
         ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
         modelMap.put("categoryCd", -1);
@@ -145,7 +144,7 @@ class FrontModelJpaRepositoryTest {
 
     @Test
     @DisplayName("모델 상세 조회 테스트")
-    public void 모델상세조회테스트() throws Exception {
+    public void 모델상세조회테스트() {
         // given
         FrontModelEntity menFrontModelEntity = FrontModelEntity.builder().idx(156).build();
 
@@ -168,7 +167,7 @@ class FrontModelJpaRepositoryTest {
 
     @Test
     @DisplayName("모델 BDD 조회 테스트")
-    public void 모델BDD조회테스트() throws Exception {
+    public void 모델BDD조회테스트() {
         // 정상
         // given
         ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
@@ -182,17 +181,24 @@ class FrontModelJpaRepositoryTest {
         List<FrontModelDTO> modelList = new ArrayList<>();
         modelList.add(FrontModelDTO.builder().idx(3).categoryCd(1).modelKorName("조찬희").modelImage(commonImageDtoList).build());
 
-        given(mockFrontModelJpaRepository.getModelList(modelMap)).willReturn(modelList);
+        // when
+//        given(mockFrontModelJpaRepository.getModelList(modelMap)).willReturn(modelList);
+        when(mockFrontModelJpaRepository.getModelList(modelMap)).thenReturn(modelList);
 
+        // then
         assertThat(mockFrontModelJpaRepository.getModelList(modelMap).get(0).getIdx()).isEqualTo(modelList.get(0).getIdx());
         assertThat(mockFrontModelJpaRepository.getModelList(modelMap).get(0).getCategoryCd()).isEqualTo(modelList.get(0).getCategoryCd());
         assertThat(mockFrontModelJpaRepository.getModelList(modelMap).get(0).getModelKorName()).isEqualTo(modelList.get(0).getModelKorName());
         assertThat(mockFrontModelJpaRepository.getModelList(modelMap).get(0).getModelImage().get(0).getFileName()).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
+
+        // verify
+        verify(mockFrontModelJpaRepository, times(4)).getModelList(modelMap);
+        verify(mockFrontModelJpaRepository, atLeastOnce()).getModelList(modelMap);
     }
 
     @Test
     @DisplayName("모델 상세 BDD 조회 테스트")
-    public void 모델상세BDD조회테스트() throws Exception {
+    public void 모델상세BDD조회테스트() {
 
         // given
         commonImageEntityList.add(commonImageEntity);
@@ -213,7 +219,9 @@ class FrontModelJpaRepositoryTest {
                 .modelImage(ModelImageMapper.INSTANCE.toDtoList(commonImageEntityList))
                 .build();
 
-        given(mockFrontModelJpaRepository.getModelInfo(frontModelEntity)).willReturn(frontModelDTO);
+        // when
+//        given(mockFrontModelJpaRepository.getModelInfo(frontModelEntity)).willReturn(frontModelDTO);
+        when(mockFrontModelJpaRepository.getModelInfo(frontModelEntity)).thenReturn(frontModelDTO);
 
         assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getIdx()).isEqualTo(1);
         assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getCategoryCd()).isEqualTo(1);
@@ -230,11 +238,15 @@ class FrontModelJpaRepositoryTest {
         assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelImage().get(0).getFilePath()).isEqualTo("/test/test.jpg");
         assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelImage().get(0).getImageType()).isEqualTo("main");
         assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelImage().get(0).getTypeName()).isEqualTo("model");
+
+        // verify
+        verify(mockFrontModelJpaRepository, times(15)).getModelInfo(frontModelEntity);
+        verify(mockFrontModelJpaRepository, atLeastOnce()).getModelInfo(frontModelEntity);
     }
 
     @Test
     @DisplayName("모델 메인 배너 조회 테스트")
-    public void 모델메인배너리스트조회테스트() throws Exception {
+    public void 모델메인배너리스트조회테스트() {
 
         // when
         List<FrontModelDTO> mainModelList = frontModelJpaRepository.getMainModelList();

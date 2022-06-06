@@ -57,7 +57,7 @@ public class FrontModelJpaRepository {
      * 5. 작성일       : 2022. 03. 27.
      * </pre>
      */
-    public List<FrontModelDTO> getMainModelList() throws Exception {
+    public List<FrontModelDTO> getMainModelList() {
 
         try {
             List<FrontModelEntity> modelList = queryFactory
@@ -89,7 +89,7 @@ public class FrontModelJpaRepository {
      * 5. 작성일       : 2022. 03. 27.
      * </pre>
      */
-    public Long getModelCount(Map<String, Object> modelMap) throws Exception {
+    public Long getModelCount(Map<String, Object> modelMap) {
         try {
             return queryFactory
                     .selectFrom(frontModelEntity)
@@ -110,7 +110,7 @@ public class FrontModelJpaRepository {
      * 5. 작성일       : 2022. 01. 02.
      * </pre>
      */
-    public List<FrontModelDTO> getModelList(Map<String, Object> modelMap) throws Exception {
+    public List<FrontModelDTO> getModelList(Map<String, Object> modelMap) {
 
         try {
             List<FrontModelEntity> modelList = queryFactory
@@ -140,7 +140,7 @@ public class FrontModelJpaRepository {
      * 5. 작성일       : 2022. 01. 09.
      * </pre>
      */
-    public FrontModelDTO getModelInfo(FrontModelEntity existFrontModelEntity) throws Exception {
+    public FrontModelDTO getModelInfo(FrontModelEntity existFrontModelEntity) {
 
         try {
             //모델 상세 조회

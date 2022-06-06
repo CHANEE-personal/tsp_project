@@ -42,6 +42,8 @@ public class FrontModelJpaApiController {
     @ApiOperation(value = "메인 모델 배너", notes = "메인 배너 모델을 조회한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공", response = Map.class),
+            @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
+            @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
@@ -64,13 +66,12 @@ public class FrontModelJpaApiController {
      * 5. 작성일       : 2022. 01. 02.
      * </pre>
      *
-     * @param categoryCd
-     * @param paramMap
-     * @param page
      */
     @ApiOperation(value = "모델 조회", notes = "모델을 조회한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공", response = Map.class),
+            @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
+            @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
@@ -104,12 +105,12 @@ public class FrontModelJpaApiController {
      * 5. 작성일       : 2022. 01. 09.
      * </pre>
      *
-     * @param categoryCd
-     * @param idx
      */
     @ApiOperation(value = "모델 상세 조회", notes = "모델을 상세 조회한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공", response = Map.class),
+            @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
+            @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
