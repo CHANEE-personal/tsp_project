@@ -53,7 +53,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	 * 5. 작성일       : 2022. 01. 15.
 	 * </pre>
 	 *
-	 * @param tspException
 	 */
 	@ExceptionHandler(TspException.class)
 	public ResponseEntity<Error> exception(TspException tspException) {
@@ -69,8 +68,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	 * 5. 작성일       : 2022. 01. 15.
 	 * </pre>
 	 *
-	 * @param e
-	 * @param request
 	 */
 	@ExceptionHandler(ConstraintViolationException.class)
 	protected ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException e, WebRequest request) {
@@ -86,10 +83,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	 * 5. 작성일       : 2022. 01. 15.
 	 * </pre>
 	 *
-	 * @param ex
-	 * @param headers
-	 * @param status
-	 * @param request
 	 */
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(

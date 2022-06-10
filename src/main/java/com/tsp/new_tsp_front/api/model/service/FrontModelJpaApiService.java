@@ -46,7 +46,6 @@ public class FrontModelJpaApiService {
 	 * 5. 작성일       : 2022. 01. 02.
 	 * </pre>
 	 *
-	 * @param modelMap
 	 */
 	@Transactional(readOnly = true)
 	public List<FrontModelDTO> getModelList(ConcurrentHashMap<String, Object> modelMap) throws Exception {
@@ -66,7 +65,6 @@ public class FrontModelJpaApiService {
 	 * 5. 작성일       : 2022. 01. 09.
 	 * </pre>
 	 *
-	 * @param frontModelEntity
 	 */
 	@Transactional(readOnly = true)
 	public FrontModelDTO getModelInfo(FrontModelEntity frontModelEntity) throws Exception {

@@ -22,10 +22,6 @@ public class SearchCommon {
 	 * 5. 작성일       : 2021. 08. 08.
 	 * </pre>
 	 *
-	 * @param  page
-	 * @param  paramMap
-	 * @return ConcurrentHashMap
-	 * @throws Exception
 	 */
 	public ConcurrentHashMap<String, Object> searchCommon(Page page, @RequestParam(required = false) Map<String, Object> paramMap) {
 

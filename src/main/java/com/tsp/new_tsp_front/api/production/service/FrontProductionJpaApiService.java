@@ -27,7 +27,6 @@ public class FrontProductionJpaApiService {
 	 * 5. 작성일       : 2022. 01. 06.
 	 * </pre>
 	 *
-	 * @param productionMap
 	 */
 	@Transactional(readOnly = true)
 	public List<FrontProductionDTO> getProductionList(ConcurrentHashMap<String, Object> productionMap) throws Exception {
@@ -47,7 +46,6 @@ public class FrontProductionJpaApiService {
 	 * 5. 작성일       : 2022. 01. 11.
 	 * </pre>
 	 *
-	 * @param frontProductionEntity
 	 */
 	@Transactional(readOnly = true)
 	public FrontProductionDTO getProductionInfo(FrontProductionEntity frontProductionEntity) throws Exception {

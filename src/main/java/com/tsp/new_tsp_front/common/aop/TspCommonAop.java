@@ -38,7 +38,6 @@ public class TspCommonAop {
 	 * 5. 작성일       : 2022. 01. 16.
 	 * </pre>
 	 *
-	 * @param joinPoint
 	 */
 	@Before("cut()")
 	public void beforeParameterLog(JoinPoint joinPoint) {
@@ -64,8 +63,6 @@ public class TspCommonAop {
 	 * 5. 작성일       : 2022. 01. 16.
 	 * </pre>
 	 *
-	 * @param joinPoint
-	 * @param returnObj
 	 */
 	@AfterReturning(value = "cut()", returning = "returnObj")
 	public void afterReturnLog(JoinPoint joinPoint, Object returnObj) {

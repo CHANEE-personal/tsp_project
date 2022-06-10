@@ -27,7 +27,6 @@ public class FrontPortFolioJpaApiService {
 	 * 5. 작성일       : 2022. 01. 11.
 	 * </pre>
 	 *
-	 * @param portFolioMap
 	 */
 	@Transactional(readOnly = true)
 	public List<FrontPortFolioDTO> getPortFolioList(ConcurrentHashMap<String, Object> portFolioMap) throws Exception {
@@ -47,7 +46,6 @@ public class FrontPortFolioJpaApiService {
 	 * 5. 작성일       : 2022. 01. 12.
 	 * </pre>
 	 *
-	 * @param frontPortFolioEntity
 	 */
 	@Transactional(readOnly = true)
 	public FrontPortFolioDTO getPortFolioInfo(FrontPortFolioEntity frontPortFolioEntity) throws Exception {

@@ -66,10 +66,10 @@ public class FrontModelJpaRepository {
                     .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
                     .fetchJoin()
                     .where(frontModelEntity.modelMainYn.eq("Y")
-                            .and(frontModelEntity.visible.eq("Y")
-                            .and(commonImageEntity.typeName.eq("model")
-                                    .and(commonImageEntity.imageType.eq("main"))
-                                    .and(commonImageEntity.visible.eq("Y")))))
+                    .and(frontModelEntity.visible.eq("Y")
+                    .and(commonImageEntity.typeName.eq("model")
+                    .and(commonImageEntity.imageType.eq("main"))
+                    .and(commonImageEntity.visible.eq("Y")))))
                     .fetch();
 
             modelList.forEach(list -> modelList.get(modelList.indexOf(list)).setRnum(modelList.indexOf(list)));
@@ -94,7 +94,7 @@ public class FrontModelJpaRepository {
             return queryFactory
                     .selectFrom(frontModelEntity)
                     .where(searchModel(modelMap)
-                            .and(frontModelEntity.visible.eq("Y")))
+                    .and(frontModelEntity.visible.eq("Y")))
                     .fetchCount();
         } catch (Exception e) {
             throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
@@ -149,8 +149,8 @@ public class FrontModelJpaRepository {
                     .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
                     .fetchJoin()
                     .where(frontModelEntity.idx.eq(existFrontModelEntity.getIdx())
-                            .and(frontModelEntity.visible.eq("Y"))
-                            .and(commonImageEntity.typeName.eq("model")))
+                    .and(frontModelEntity.visible.eq("Y"))
+                    .and(commonImageEntity.typeName.eq("model")))
                     .fetchOne();
 
             return ModelMapper.INSTANCE.toDto(getModelInfo);
