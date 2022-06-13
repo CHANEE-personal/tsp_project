@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
@@ -47,7 +48,7 @@ public class FrontSupportJpaApiController {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@PostMapping
-	public FrontSupportDTO insertSupportModel(FrontSupportEntity frontSupportEntity) {
+	public FrontSupportDTO insertSupportModel(@RequestBody FrontSupportEntity frontSupportEntity) throws Exception {
 		return this.frontSupportJpaApiService.insertSupportModel(frontSupportEntity);
 	}
 }
