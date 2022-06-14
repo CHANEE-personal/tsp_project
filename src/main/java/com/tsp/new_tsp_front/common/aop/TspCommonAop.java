@@ -70,8 +70,10 @@ public class TspCommonAop {
 		Method method = getMethod(joinPoint);
 		log.info("======= method name = {} =======", method.getName());
 
-		log.info("return type = {}", returnObj.getClass().getSimpleName());
-		log.info("return value = {}", returnObj);
+		if (returnObj != null) {
+			log.info("return type = {}", returnObj.getClass().getSimpleName());
+			log.info("return value = {}", returnObj);
+		}
 	}
 
 	// JoinPoint로 메서드 정보 가져오기
