@@ -13,6 +13,16 @@ import java.util.List;
 @EnableCaching
 public class CacheConfiguration {
 
+    /**
+     * <pre>
+     * 1. MethodName : cacheManager
+     * 2. ClassName  : CacheConfiguration.java
+     * 3. Comment    : api cache 설정
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2021. 02. 09.
+     * </pre>
+     *
+     */
     @Bean
     public CacheManager cacheManager() {
         SimpleCacheManager cacheManager = new SimpleCacheManager();
