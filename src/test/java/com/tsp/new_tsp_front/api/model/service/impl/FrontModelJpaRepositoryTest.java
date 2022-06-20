@@ -67,19 +67,7 @@ class FrontModelJpaRepositoryTest {
                 .visible("Y")
                 .build();
 
-        frontModelDTO = FrontModelDTO.builder()
-                .idx(1)
-                .categoryCd(1)
-                .categoryAge("2")
-                .modelKorName("조찬희")
-                .modelEngName("CHOCHANHEE")
-                .modelDescription("chaneeCho")
-                .height("170")
-                .size3("34-24-34")
-                .shoes("270")
-                .visible("Y")
-                .modelImage(ModelImageMapper.INSTANCE.toDtoList(commonImageEntityList))
-                .build();
+        frontModelDTO = ModelMapperImpl.INSTANCE.toDto(frontModelEntity);
 
         commonImageEntity = CommonImageEntity.builder()
                 .idx(1)
@@ -91,15 +79,7 @@ class FrontModelJpaRepositoryTest {
                 .typeName("model")
                 .build();
 
-        commonImageDTO = CommonImageDTO.builder()
-                .idx(1)
-                .imageType("main")
-                .fileName("test.jpg")
-                .fileMask("test.jpg")
-                .filePath("/test/test.jpg")
-                .typeIdx(1)
-                .typeName("model")
-                .build();
+        commonImageDTO = ModelImageMapperImpl.INSTANCE.toDto(commonImageEntity);
     }
 
     @BeforeEach

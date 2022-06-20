@@ -59,15 +59,7 @@ class FrontPortFolioJpaRepositoryTest {
                 .typeName("portfolio")
                 .build();
 
-        commonImageDTO = CommonImageDTO.builder()
-                .idx(1)
-                .imageType("main")
-                .fileName("test.jpg")
-                .fileMask("test.jpg")
-                .filePath("/test/test.jpg")
-                .typeIdx(1)
-                .typeName("portfolio")
-                .build();
+        commonImageDTO = PortFolioImageMapperImpl.INSTANCE.toDto(commonImageEntity);
 
         commonImageEntityList.add(commonImageEntity);
 

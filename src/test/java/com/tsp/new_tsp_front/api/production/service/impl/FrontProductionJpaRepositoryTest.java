@@ -56,15 +56,7 @@ class FrontProductionJpaRepositoryTest {
                 .typeName("production")
                 .build();
 
-        commonImageDTO = CommonImageDTO.builder()
-                .idx(1)
-                .imageType("main")
-                .fileName("test.jpg")
-                .fileMask("test.jpg")
-                .filePath("/test/test.jpg")
-                .typeIdx(1)
-                .typeName("production")
-                .build();
+        commonImageDTO = ProductionImageMapperImpl.INSTANCE.toDto(commonImageEntity);
 
         commonImageEntityList.add(commonImageEntity);
 
