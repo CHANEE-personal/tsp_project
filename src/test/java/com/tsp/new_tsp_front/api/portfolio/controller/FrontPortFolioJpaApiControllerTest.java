@@ -2,6 +2,7 @@ package com.tsp.new_tsp_front.api.portfolio.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
@@ -47,6 +49,22 @@ class FrontPortFolioJpaApiControllerTest {
     @DisplayName("포트폴리오 조회 테스트")
     public void 포트폴리오조회() throws Exception {
         mockMvc.perform(get("/api/portfolio/lists").param("page", "1").param("size", "100"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.portFolioList.length()", equalTo(2)));
+    }
+
+    @Test
+    @Disabled
+    @DisplayName("포트폴리오 검색 조회 테스트")
+    public void 포트폴리오검색조회() throws Exception {
+        LinkedMultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
+        paramMap.add("jpaStartPage", "1");
+        paramMap.add("size", "3");
+        paramMap.add("searchType", "0");
+        paramMap.add("searchKeyword", "하하");
+
+        mockMvc.perform(get("/api/portfolio/lists").queryParams(paramMap))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.portFolioList.length()", equalTo(2)));

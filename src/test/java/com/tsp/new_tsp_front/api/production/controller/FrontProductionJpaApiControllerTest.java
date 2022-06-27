@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
@@ -50,6 +51,21 @@ class FrontProductionJpaApiControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.productionList.length()", equalTo(55)));
+    }
+
+    @Test
+    @DisplayName("프로덕션 검색 조회 테스트")
+    public void 프로덕션검색조회() throws Exception {
+        LinkedMultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
+        paramMap.add("jpaStartPage", "1");
+        paramMap.add("size", "3");
+        paramMap.add("searchType", "0");
+        paramMap.add("searchKeyword", "하하");
+
+        mockMvc.perform(get("/api/production/lists").queryParams(paramMap))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.productionList.length()", equalTo(1)));
     }
 
     @Test

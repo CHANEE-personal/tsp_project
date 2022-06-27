@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.rmi.ServerError;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity.*;
 
@@ -47,8 +47,8 @@ public class FrontPortFolioJpaApiController {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/lists")
-	public ConcurrentHashMap<String, Object> getPortFolioList(@RequestParam(required = false) Map<String, Object> paramMap, Page page) throws Exception {
-		ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
+	public Map<String, Object> getPortFolioList(@RequestParam(required = false) Map<String, Object> paramMap, Page page) throws Exception {
+		Map<String, Object> resultMap = new HashMap<>();
 
 		// 리스트 수
 		resultMap.put("pageSize", page.getSize());
