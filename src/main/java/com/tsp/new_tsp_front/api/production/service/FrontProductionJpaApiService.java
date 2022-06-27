@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +29,7 @@ public class FrontProductionJpaApiService {
 	 *
 	 */
 	@Transactional(readOnly = true)
-	public List<FrontProductionDTO> getProductionList(ConcurrentHashMap<String, Object> productionMap) throws Exception {
+	public List<FrontProductionDTO> getProductionList(Map<String, Object> productionMap) {
 		try {
 			return frontProductionJpaRepository.getProductionList(productionMap);
 		} catch (Exception e) {
@@ -48,7 +48,7 @@ public class FrontProductionJpaApiService {
 	 *
 	 */
 	@Transactional(readOnly = true)
-	public FrontProductionDTO getProductionInfo(FrontProductionEntity frontProductionEntity) throws Exception {
+	public FrontProductionDTO getProductionInfo(FrontProductionEntity frontProductionEntity) {
 		try {
 			return frontProductionJpaRepository.getProductionInfo(frontProductionEntity);
 		} catch (Exception e) {

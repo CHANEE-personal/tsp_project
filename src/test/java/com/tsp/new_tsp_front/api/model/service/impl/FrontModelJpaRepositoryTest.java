@@ -83,13 +83,13 @@ class FrontModelJpaRepositoryTest {
     }
 
     @BeforeEach
-    public void init() {
+    void init() {
         createModel();
     }
 
     @Test
     @DisplayName("모델 리스트 갯수 조회 테스트")
-    public void 모델리스트갯수조회테스트() {
+    void 모델리스트갯수조회테스트() {
         // 정상
         ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
         modelMap.put("categoryCd", 1);
@@ -99,7 +99,7 @@ class FrontModelJpaRepositoryTest {
 
     @Test
     @DisplayName("모델 리스트 조회 테스트")
-    public void 모델리스트조회테스트() {
+    void 모델리스트조회테스트() {
         // given
         ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
         modelMap.put("categoryCd", 1);
@@ -112,7 +112,7 @@ class FrontModelJpaRepositoryTest {
 
     @Test
     @DisplayName("모델 리스트 조회 예외 테스트")
-    public void 모델리스트조회예외테스트() {
+    void 모델리스트조회예외테스트() {
         // given
         ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
         modelMap.put("categoryCd", -1);
@@ -124,7 +124,7 @@ class FrontModelJpaRepositoryTest {
 
     @Test
     @DisplayName("모델 상세 조회 테스트")
-    public void 모델상세조회테스트() {
+    void 모델상세조회테스트() {
         // given
         FrontModelEntity menFrontModelEntity = FrontModelEntity.builder().idx(156).build();
 
@@ -147,7 +147,7 @@ class FrontModelJpaRepositoryTest {
 
     @Test
     @DisplayName("모델 BDD 조회 테스트")
-    public void 모델BDD조회테스트() {
+    void 모델BDD조회테스트() {
         // 정상
         // given
         ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
@@ -178,7 +178,7 @@ class FrontModelJpaRepositoryTest {
 
     @Test
     @DisplayName("모델 상세 BDD 조회 테스트")
-    public void 모델상세BDD조회테스트() {
+    void 모델상세BDD조회테스트() {
 
         // given
         commonImageEntityList.add(commonImageEntity);
@@ -226,7 +226,7 @@ class FrontModelJpaRepositoryTest {
 
     @Test
     @DisplayName("모델 메인 배너 조회 테스트")
-    public void 모델메인배너리스트조회테스트() {
+    void 모델메인배너리스트조회테스트() {
 
         // when
         List<FrontModelDTO> mainModelList = frontModelJpaRepository.getMainModelList();

@@ -89,13 +89,13 @@ public class FrontModelJpaRepository {
      * 5. 작성일       : 2022. 03. 27.
      * </pre>
      */
-    public Long getModelCount(Map<String, Object> modelMap) {
+    public int getModelCount(Map<String, Object> modelMap) {
         try {
             return queryFactory
                     .selectFrom(frontModelEntity)
                     .where(searchModel(modelMap)
                     .and(frontModelEntity.visible.eq("Y")))
-                    .fetchCount();
+                    .fetch().size();
         } catch (Exception e) {
             throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
         }

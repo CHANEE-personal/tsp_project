@@ -18,7 +18,9 @@ import org.springframework.test.context.TestPropertySource;
 import javax.transaction.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity.*;
@@ -72,18 +74,20 @@ class FrontProductionJpaRepositoryTest {
     }
 
     @BeforeEach
-    public void init() {
+    void init() {
         createProduction();
     }
 
     @Test
     @DisplayName("프로덕션 리스트 조회 테스트")
-    public void 프로덕션리스트조회테스트() {
+    void 프로덕션리스트조회테스트() {
 
         // given
-        ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
+        Map<String, Object> productionMap = new HashMap<>();
         productionMap.put("jpaStartPage", 1);
         productionMap.put("size", 3);
+        productionMap.put("searchType", 0);
+        productionMap.put("searchKeyword", "하하");
 
         // then
         assertThat(frontProductionJpaRepository.getProductionList(productionMap).size()).isGreaterThan(0);
@@ -91,7 +95,7 @@ class FrontProductionJpaRepositoryTest {
 
     @Test
     @DisplayName("프로덕션 BDD 조회 테스트")
-    public void 프로덕션BDD조회테스트() {
+    void 프로덕션BDD조회테스트() {
         // given
         ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
         productionMap.put("jpaStartPage", 1);
@@ -122,7 +126,7 @@ class FrontProductionJpaRepositoryTest {
 
     @Test
     @DisplayName("프로덕션 상세 BDD 조회 테스트")
-    public void 프로덕션상세BDD조회테스트() {
+    void 프로덕션상세BDD조회테스트() {
 
         // given
 //        given(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity)).willReturn(frontProductionDTO);

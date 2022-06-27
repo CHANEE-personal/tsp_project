@@ -22,9 +22,9 @@ public class FrontPortFolioJpaRepository {
 
 	private final JPAQueryFactory queryFactory;
 
-	private BooleanExpression searchPortFolio(Map<String, Object> modelMap) {
-		String searchType = StringUtil.getString(modelMap.get("searchType"),"");
-		String searchKeyword = StringUtil.getString(modelMap.get("searchKeyword"),"");
+	private BooleanExpression searchPortFolio(Map<String, Object> portfolioMap) {
+		String searchType = StringUtil.getString(portfolioMap.get("searchType"),"");
+		String searchKeyword = StringUtil.getString(portfolioMap.get("searchKeyword"),"");
 
 		if ("0".equals(searchType)) {
 			return frontPortFolioEntity.title.contains(searchKeyword)

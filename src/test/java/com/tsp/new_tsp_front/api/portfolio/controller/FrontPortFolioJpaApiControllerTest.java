@@ -38,7 +38,7 @@ class FrontPortFolioJpaApiControllerTest {
     private WebApplicationContext wac;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(wac)
                 .addFilters(new CharacterEncodingFilter("UTF-8", true))  // 필터 추가
                 .alwaysDo(print())
@@ -47,7 +47,7 @@ class FrontPortFolioJpaApiControllerTest {
 
     @Test
     @DisplayName("포트폴리오 조회 테스트")
-    public void 포트폴리오조회() throws Exception {
+    void 포트폴리오조회() throws Exception {
         mockMvc.perform(get("/api/portfolio/lists").param("page", "1").param("size", "100"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -57,7 +57,7 @@ class FrontPortFolioJpaApiControllerTest {
     @Test
     @Disabled
     @DisplayName("포트폴리오 검색 조회 테스트")
-    public void 포트폴리오검색조회() throws Exception {
+    void 포트폴리오검색조회() throws Exception {
         LinkedMultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
         paramMap.add("jpaStartPage", "1");
         paramMap.add("size", "3");
@@ -72,7 +72,7 @@ class FrontPortFolioJpaApiControllerTest {
 
     @Test
     @DisplayName("포트폴리오 상세 조회 테스트")
-    public void 포트폴리오상세조회() throws Exception {
+    void 포트폴리오상세조회() throws Exception {
         mockMvc.perform(get("/api/portfolio/1"))
                 .andDo(print())
                 .andExpect(status().isOk())

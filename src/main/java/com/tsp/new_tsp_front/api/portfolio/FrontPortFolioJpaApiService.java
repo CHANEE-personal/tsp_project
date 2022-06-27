@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +29,7 @@ public class FrontPortFolioJpaApiService {
 	 *
 	 */
 	@Transactional(readOnly = true)
-	public List<FrontPortFolioDTO> getPortFolioList(ConcurrentHashMap<String, Object> portFolioMap) throws Exception {
+	public List<FrontPortFolioDTO> getPortFolioList(Map<String, Object> portFolioMap) {
 		try {
 			return frontPortFolioJpaRepository.getPortFolioList(portFolioMap);
 		} catch (Exception e) {
@@ -48,7 +48,7 @@ public class FrontPortFolioJpaApiService {
 	 *
 	 */
 	@Transactional(readOnly = true)
-	public FrontPortFolioDTO getPortFolioInfo(FrontPortFolioEntity frontPortFolioEntity) throws Exception {
+	public FrontPortFolioDTO getPortFolioInfo(FrontPortFolioEntity frontPortFolioEntity) {
 		try {
 			return frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
 		} catch (Exception e) {

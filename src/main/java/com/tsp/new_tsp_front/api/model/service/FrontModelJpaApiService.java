@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +28,7 @@ public class FrontModelJpaApiService {
 	 * </pre>
 	 *
 	 */
-	public Long getModelCount(Map<String, Object> modelMap) throws Exception {
+	public int getModelCount(Map<String, Object> modelMap) {
 		try {
 			return frontModelJpaRepository.getModelCount(modelMap);
 		} catch (Exception e) {
@@ -48,7 +47,7 @@ public class FrontModelJpaApiService {
 	 *
 	 */
 	@Transactional(readOnly = true)
-	public List<FrontModelDTO> getModelList(ConcurrentHashMap<String, Object> modelMap) throws Exception {
+	public List<FrontModelDTO> getModelList(Map<String, Object> modelMap) {
 		try {
 			return frontModelJpaRepository.getModelList(modelMap);
 		} catch (Exception e) {
@@ -67,7 +66,7 @@ public class FrontModelJpaApiService {
 	 *
 	 */
 	@Transactional(readOnly = true)
-	public FrontModelDTO getModelInfo(FrontModelEntity frontModelEntity) throws Exception {
+	public FrontModelDTO getModelInfo(FrontModelEntity frontModelEntity) {
 		try {
 			return this.frontModelJpaRepository.getModelInfo(frontModelEntity);
 		} catch (Exception e) {
@@ -86,7 +85,7 @@ public class FrontModelJpaApiService {
 	 *
 	 */
 	@Transactional(readOnly = true)
-	public List<FrontModelDTO> getMainModelList() throws Exception {
+	public List<FrontModelDTO> getMainModelList() {
 		return this.frontModelJpaRepository.getMainModelList();
 	}
 }

@@ -46,7 +46,7 @@ public class FrontProductionJpaApiController {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/lists")
-	public Map<String, Object> getProductionList(@RequestParam(required = false) Map<String, Object> paramMap, Page page) throws Exception {
+	public Map<String, Object> getProductionList(@RequestParam(required = false) Map<String, Object> paramMap, Page page) {
 		Map<String, Object> resultMap = new HashMap<>();
 
 		// 리스트 수
@@ -79,7 +79,7 @@ public class FrontProductionJpaApiController {
 			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
 	})
 	@GetMapping(value = "/{idx}")
-	public FrontProductionDTO getProductionInfo(@PathVariable("idx") Integer idx) throws Exception {
+	public FrontProductionDTO getProductionInfo(@PathVariable("idx") Integer idx) {
 		return this.frontProductionJpaApiService.getProductionInfo(builder().idx(idx).build());
 	}
 }

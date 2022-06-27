@@ -36,7 +36,7 @@ class FrontModelJpaApiControllerTest {
     private WebApplicationContext wac;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(wac)
                 .addFilters(new CharacterEncodingFilter("UTF-8", true))  // 필터 추가
                 .alwaysDo(print())
@@ -45,7 +45,7 @@ class FrontModelJpaApiControllerTest {
 
     @Test
     @DisplayName("모델 조회 테스트")
-    public void 모델조회() throws Exception {
+    void 모델조회() throws Exception {
         mockMvc.perform(get("/api/model/lists/1").param("page", "1").param("size", "100"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -54,7 +54,7 @@ class FrontModelJpaApiControllerTest {
 
     @Test
     @DisplayName("모델 조회 예외 테스트")
-    public void 모델조회예외테스트() throws Exception {
+    void 모델조회예외테스트() throws Exception {
         mockMvc.perform(get("/api/model/lists/-1"))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
@@ -63,7 +63,7 @@ class FrontModelJpaApiControllerTest {
 
     @Test
     @DisplayName("모델 배너 조회 테스트")
-    public void 모델배너조회() throws Exception {
+    void 모델배너조회() throws Exception {
         mockMvc.perform(get("/api/model/lists/main"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -72,7 +72,7 @@ class FrontModelJpaApiControllerTest {
 
     @Test
     @DisplayName("남성 모델 상세 조회 테스트")
-    public void 남성모델상세조회() throws Exception {
+    void 남성모델상세조회() throws Exception {
         // 사용
         mockMvc.perform(get("/api/model/1/156"))
                 .andDo(print())
@@ -97,7 +97,7 @@ class FrontModelJpaApiControllerTest {
 
     @Test
     @DisplayName("여성 모델 상세 조회 테스트")
-    public void 여성모델상세조회() throws Exception {
+    void 여성모델상세조회() throws Exception {
         // 사용
         mockMvc.perform(get("/api/model/2/143"))
                 .andDo(print())
@@ -123,7 +123,7 @@ class FrontModelJpaApiControllerTest {
 
     @Test
     @DisplayName("시니어 모델 상세 조회 테스트")
-    public void 시니어모델상세조회() throws Exception {
+    void 시니어모델상세조회() throws Exception {
         // 사용
         mockMvc.perform(get("/api/model/3/12"))
                 .andDo(print())

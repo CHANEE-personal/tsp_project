@@ -37,7 +37,7 @@ class FrontProductionJpaApiControllerTest {
     private WebApplicationContext wac;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(wac)
                 .addFilters(new CharacterEncodingFilter("UTF-8", true))  // 필터 추가
                 .alwaysDo(print())
@@ -46,7 +46,7 @@ class FrontProductionJpaApiControllerTest {
 
     @Test
     @DisplayName("프로덕션 조회 테스트")
-    public void 프로덕션조회() throws Exception {
+    void 프로덕션조회() throws Exception {
         mockMvc.perform(get("/api/production/lists").param("page", "1").param("size", "100"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -55,7 +55,7 @@ class FrontProductionJpaApiControllerTest {
 
     @Test
     @DisplayName("프로덕션 검색 조회 테스트")
-    public void 프로덕션검색조회() throws Exception {
+    void 프로덕션검색조회() throws Exception {
         LinkedMultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
         paramMap.add("jpaStartPage", "1");
         paramMap.add("size", "3");
@@ -70,7 +70,7 @@ class FrontProductionJpaApiControllerTest {
 
     @Test
     @DisplayName("프로덕션 상세 조회 테스트")
-    public void 프로덕션상세조회() throws Exception {
+    void 프로덕션상세조회() throws Exception {
         // 사용
         mockMvc.perform(get("/api/production/1"))
                 .andDo(print())

@@ -78,13 +78,13 @@ class FrontPortFolioJpaRepositoryTest {
     }
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         createPortfolio();
     }
 
     @Test
     @DisplayName("포트폴리오 조회 테스트")
-    public void 포트폴리오조회테스트() {
+    void 포트폴리오조회테스트() {
         // given
         ConcurrentHashMap<String, Object> portfolioMap = new ConcurrentHashMap<>();
         portfolioMap.put("jpaStartPage", 1);
@@ -96,7 +96,7 @@ class FrontPortFolioJpaRepositoryTest {
 
     @Test
     @DisplayName("포트폴리오 상세 조회 테스트")
-    public void 포트폴리오상세조회테스트() {
+    void 포트폴리오상세조회테스트() {
         frontPortFolioDTO = frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
 
         // then
@@ -135,7 +135,7 @@ class FrontPortFolioJpaRepositoryTest {
 
     @Test
     @DisplayName("포트폴리오 BDD 조회 테스트")
-    public void 포트폴리오BDD조회테스트() {
+    void 포트폴리오BDD조회테스트() {
         // given
         ConcurrentHashMap<String, Object> portfolioMap = new ConcurrentHashMap<>();
         portfolioMap.put("jpaStartPage", 1);
@@ -166,7 +166,7 @@ class FrontPortFolioJpaRepositoryTest {
 
     @Test
     @DisplayName("포트폴리오 상세 BDD 조회 테스트")
-    public void 포트폴리오상세BDD조회테스트() {
+    void 포트폴리오상세BDD조회테스트() {
 
         // when
 //        given(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity)).willReturn(frontPortFolioDTO);

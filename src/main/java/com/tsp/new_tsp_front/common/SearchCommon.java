@@ -6,8 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Component
@@ -23,9 +23,9 @@ public class SearchCommon {
 	 * </pre>
 	 *
 	 */
-	public ConcurrentHashMap<String, Object> searchCommon(Page page, @RequestParam(required = false) Map<String, Object> paramMap) {
+	public Map<String, Object> searchCommon(Page page, @RequestParam(required = false) Map<String, Object> paramMap) {
 
-		ConcurrentHashMap<String, Object> searchMap = new ConcurrentHashMap<>();
+		Map<String, Object> searchMap = new HashMap<>();
 
 		// 페이징 처리
 		Integer pageCnt = StringUtil.getInt(page.getPage(), 1);

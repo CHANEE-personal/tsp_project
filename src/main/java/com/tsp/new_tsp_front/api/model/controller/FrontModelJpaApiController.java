@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.rmi.ServerError;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -48,8 +49,8 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists/main")
-    public ConcurrentHashMap<String, Object> getMainModelList() throws Exception {
-        ConcurrentHashMap<String, Object> mainModelMap = new ConcurrentHashMap<>();
+    public Map<String, Object> getMainModelList() {
+        Map<String, Object> mainModelMap = new HashMap<>();
 
         // 전체 아이템 수
         mainModelMap.put("modelListTotalCnt", this.frontModelJpaApiService.getMainModelList().size());
@@ -76,13 +77,13 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists/{categoryCd}")
-    public ConcurrentHashMap<String, Object> getModelList(@PathVariable("categoryCd")
+    public Map<String, Object> getModelList(@PathVariable("categoryCd")
                                                           @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
                                                           @RequestParam(required = false) Map<String, Object> paramMap,
-                                                          Page page) throws Exception {
-        ConcurrentHashMap<String, Object> resultMap = new ConcurrentHashMap<>();
+                                                          Page page) {
+        Map<String, Object> resultMap = new HashMap<>();
         // 페이징 및 검색
-        ConcurrentHashMap<String, Object> modelMap = searchCommon.searchCommon(page, paramMap);
+        Map<String, Object> modelMap = searchCommon.searchCommon(page, paramMap);
         modelMap.put("categoryCd", categoryCd);
 
         // 리스트 수
@@ -117,7 +118,7 @@ public class FrontModelJpaApiController {
     @GetMapping(value = "/{categoryCd}/{idx}")
     public FrontModelDTO getModelInfo(@PathVariable("categoryCd")
                                       @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
-                                      @PathVariable("idx") Integer idx) throws Exception {
+                                      @PathVariable("idx") Integer idx) {
         return this.frontModelJpaApiService.getModelInfo(builder().categoryCd(categoryCd).idx(idx).build());
     }
 }
