@@ -26,7 +26,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @DataJpaTest
 @Transactional
@@ -91,7 +90,7 @@ class FrontPortFolioJpaRepositoryTest {
         portfolioMap.put("size", 3);
 
         // then
-        assertThat(frontPortFolioJpaRepository.getPortFolioList(portfolioMap).size()).isGreaterThan(0);
+        assertThat(frontPortFolioJpaRepository.getPortFolioList(portfolioMap)).isNotEmpty();
     }
 
     @Test

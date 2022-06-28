@@ -90,7 +90,7 @@ class FrontProductionJpaRepositoryTest {
         productionMap.put("searchKeyword", "하하");
 
         // then
-        assertThat(frontProductionJpaRepository.getProductionList(productionMap).size()).isGreaterThan(0);
+        assertThat(frontProductionJpaRepository.getProductionList(productionMap)).isNotEmpty();
     }
 
     @Test

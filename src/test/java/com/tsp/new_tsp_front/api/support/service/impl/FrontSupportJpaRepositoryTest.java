@@ -16,6 +16,10 @@ import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
 
+import static com.tsp.new_tsp_front.api.support.domain.FrontSupportEntity.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
+
 @DataJpaTest
 @Transactional
 @TestPropertySource(locations = "classpath:application-local.properties")
@@ -33,7 +37,7 @@ class FrontSupportJpaRepositoryTest {
     private FrontSupportJpaRepository mockFrontSupportJpaRepository;
 
     private void createSupportModel() {
-        frontSupportEntity = FrontSupportEntity.builder()
+        frontSupportEntity = builder()
                 .supportName("조찬희")
                 .supportMessage("조찬희")
                 .supportHeight(170)
@@ -52,7 +56,7 @@ class FrontSupportJpaRepositoryTest {
 
     @Test
     @DisplayName("모델 지원하기 테스트")
-    public void 모델지원하기테스트() {
-
+    void 모델지원하기테스트() {
+        frontSupportJpaRepository.insertSupportModel(frontSupportEntity);
     }
 }

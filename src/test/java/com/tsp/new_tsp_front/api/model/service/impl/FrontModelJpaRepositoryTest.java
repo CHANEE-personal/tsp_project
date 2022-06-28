@@ -94,7 +94,7 @@ class FrontModelJpaRepositoryTest {
         ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
         modelMap.put("categoryCd", 1);
 
-        assertThat(frontModelJpaRepository.getModelCount(modelMap)).isGreaterThan(0);
+        assertThat(frontModelJpaRepository.getModelCount(modelMap)).isPositive();
     }
 
     @Test
@@ -107,7 +107,7 @@ class FrontModelJpaRepositoryTest {
         modelMap.put("size", 3);
 
         // then
-        assertThat(frontModelJpaRepository.getModelList(modelMap).size()).isGreaterThan(0);
+        assertThat(frontModelJpaRepository.getModelList(modelMap)).isNotEmpty();
     }
 
     @Test
@@ -234,7 +234,7 @@ class FrontModelJpaRepositoryTest {
         Optional<FrontModelDTO> mainModelFirstInfo = frontModelJpaRepository.getMainModelList().stream().findFirst();
 
         // then
-        assertThat(mainModelList.size()).isGreaterThan(0);
+        assertThat(mainModelList).isNotEmpty();
         assertThat(mainModelFirstInfo.get().getCategoryCd()).isEqualTo(1);
         assertThat(mainModelFirstInfo.get().getModelMainYn()).isEqualTo("Y");
     }

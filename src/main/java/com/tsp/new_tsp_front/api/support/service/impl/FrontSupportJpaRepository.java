@@ -17,8 +17,6 @@ import javax.persistence.EntityManager;
 @RequiredArgsConstructor
 @Repository
 public class FrontSupportJpaRepository {
-
-	private final JPAQueryFactory queryFactory;
 	private final EntityManager em;
 
 	/**
@@ -37,7 +35,6 @@ public class FrontSupportJpaRepository {
 
 			return SupportMapper.INSTANCE.toDto(frontSupportEntity);
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new TspException(ApiExceptionType.ERROR_MODEL);
 		}
 	}
