@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity.*;
+import static java.lang.Math.ceil;
 
 
 @RestController
@@ -53,7 +54,7 @@ public class FrontPortFolioJpaApiController {
 		// 리스트 수
 		resultMap.put("pageSize", page.getSize());
 		// 전체 페이지 수
-		resultMap.put("perPageListCnt", Math.ceil((this.frontPortFolioJpaApiService.getPortFolioList(searchCommon.searchCommon(page, paramMap)).size()-1)/page.getSize()+1));
+		resultMap.put("perPageListCnt", ceil((this.frontPortFolioJpaApiService.getPortFolioList(searchCommon.searchCommon(page, paramMap)).size()-1)/page.getSize()+1));
 		// 전체 아이템 수
 		resultMap.put("portFolioListTotalCnt", this.frontPortFolioJpaApiService.getPortFolioList(searchCommon.searchCommon(page, paramMap)).size());
 		resultMap.put("portFolioList", this.frontPortFolioJpaApiService.getPortFolioList(searchCommon.searchCommon(page, paramMap)));

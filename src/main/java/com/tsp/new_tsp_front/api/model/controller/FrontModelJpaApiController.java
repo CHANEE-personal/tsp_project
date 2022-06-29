@@ -17,9 +17,9 @@ import org.springframework.web.client.HttpClientErrorException;
 import java.rmi.ServerError;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static com.tsp.new_tsp_front.api.model.domain.FrontModelEntity.*;
+import static java.lang.Math.ceil;
 
 @Validated
 @RestController
@@ -89,7 +89,7 @@ public class FrontModelJpaApiController {
         // 리스트 수
         resultMap.put("pageSize", page.getSize());
         // 전체 페이지 수
-        resultMap.put("perPageListCnt", Math.ceil((this.frontModelJpaApiService.getModelList(modelMap).size() - 1) / page.getSize() + 1));
+        resultMap.put("perPageListCnt", ceil((this.frontModelJpaApiService.getModelList(modelMap).size() - 1) / page.getSize() + 1));
         // 전체 아이템 수
         resultMap.put("modelListTotalCnt", this.frontModelJpaApiService.getModelCount(modelMap));
         resultMap.put("modelList", this.frontModelJpaApiService.getModelList(modelMap));

@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity.*;
+import static java.lang.Math.ceil;
 
 @RestController
 @RequiredArgsConstructor
@@ -52,7 +53,7 @@ public class FrontProductionJpaApiController {
 		// 리스트 수
 		resultMap.put("pageSize", page.getSize());
 		// 전체 페이지 수
-		resultMap.put("perPageListCnt", Math.ceil((this.frontProductionJpaApiService.getProductionList(searchCommon.searchCommon(page, paramMap)).size()-1)/page.getSize()+1));
+		resultMap.put("perPageListCnt", ceil((this.frontProductionJpaApiService.getProductionList(searchCommon.searchCommon(page, paramMap)).size()-1)/page.getSize()+1));
 		// 전체 아이템 수
 		resultMap.put("productionListTotalCnt", this.frontProductionJpaApiService.getProductionList(searchCommon.searchCommon(page, paramMap)).size());
 		resultMap.put("productionList", this.frontProductionJpaApiService.getProductionList(searchCommon.searchCommon(page, paramMap)));
