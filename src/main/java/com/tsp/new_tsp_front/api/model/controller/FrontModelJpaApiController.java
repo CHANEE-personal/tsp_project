@@ -27,7 +27,6 @@ import static java.lang.Math.ceil;
 @Api(tags = "모델관련 API")
 @RequestMapping("/api/model")
 public class FrontModelJpaApiController {
-
     private final FrontModelJpaApiService frontModelJpaApiService;
     private final SearchCommon searchCommon;
 

@@ -19,7 +19,6 @@ import static com.tsp.new_tsp_front.api.portfolio.domain.QFrontPortFolioEntity.f
 @Repository
 @RequiredArgsConstructor
 public class FrontPortFolioJpaRepository {
-
 	private final JPAQueryFactory queryFactory;
 
 	private BooleanExpression searchPortFolio(Map<String, Object> portfolioMap) {
@@ -47,7 +46,6 @@ public class FrontPortFolioJpaRepository {
 	 *
 	 */
 	public List<FrontPortFolioDTO> getPortFolioList(Map<String, Object> portFolioMap) {
-
 		try {
 			List<FrontPortFolioEntity> portFolioList = queryFactory
 					.selectFrom(frontPortFolioEntity)
@@ -76,7 +74,6 @@ public class FrontPortFolioJpaRepository {
 	 *
 	 */
 	public FrontPortFolioDTO getPortFolioInfo(FrontPortFolioEntity existFrontPortFolioEntity) {
-
 		try {
 			FrontPortFolioEntity getPortFolioInfo = queryFactory
 					.selectFrom(frontPortFolioEntity)

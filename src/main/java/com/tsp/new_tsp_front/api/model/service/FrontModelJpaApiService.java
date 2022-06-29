@@ -3,8 +3,6 @@ package com.tsp.new_tsp_front.api.model.service;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.service.impl.FrontModelJpaRepository;
-import com.tsp.new_tsp_front.exception.ApiExceptionType;
-import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +13,6 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class FrontModelJpaApiService {
-
 	private final FrontModelJpaRepository frontModelJpaRepository;
 
 	/**
@@ -29,11 +26,7 @@ public class FrontModelJpaApiService {
 	 *
 	 */
 	public int getModelCount(Map<String, Object> modelMap) {
-		try {
-			return frontModelJpaRepository.getModelCount(modelMap);
-		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST, e);
-		}
+		return frontModelJpaRepository.getModelCount(modelMap);
 	}
 
 	/**
@@ -48,11 +41,7 @@ public class FrontModelJpaApiService {
 	 */
 	@Transactional(readOnly = true)
 	public List<FrontModelDTO> getModelList(Map<String, Object> modelMap) {
-		try {
-			return frontModelJpaRepository.getModelList(modelMap);
-		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST, e);
-		}
+		return frontModelJpaRepository.getModelList(modelMap);
 	}
 
 	/**
@@ -67,11 +56,7 @@ public class FrontModelJpaApiService {
 	 */
 	@Transactional(readOnly = true)
 	public FrontModelDTO getModelInfo(FrontModelEntity frontModelEntity) {
-		try {
-			return this.frontModelJpaRepository.getModelInfo(frontModelEntity);
-		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL, e);
-		}
+		return this.frontModelJpaRepository.getModelInfo(frontModelEntity);
 	}
 
 	/**
@@ -86,10 +71,6 @@ public class FrontModelJpaApiService {
 	 */
 	@Transactional(readOnly = true)
 	public List<FrontModelDTO> getMainModelList() {
-		try {
-			return this.frontModelJpaRepository.getMainModelList();
-		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST, e);
-		}
+		return this.frontModelJpaRepository.getMainModelList();
 	}
 }

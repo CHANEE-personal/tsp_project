@@ -24,7 +24,6 @@ import static java.lang.Math.ceil;
 @Api(tags = "프로덕션관련 API")
 @RequestMapping("/api/production")
 public class FrontProductionJpaApiController {
-
 	private final FrontProductionJpaApiService frontProductionJpaApiService;
 	private final SearchCommon searchCommon;
 

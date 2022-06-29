@@ -3,8 +3,6 @@ package com.tsp.new_tsp_front.api.production.service;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 import com.tsp.new_tsp_front.api.production.service.impl.FrontProductionJpaRepository;
-import com.tsp.new_tsp_front.exception.ApiExceptionType;
-import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +13,6 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class FrontProductionJpaApiService {
-
 	private final FrontProductionJpaRepository frontProductionJpaRepository;
 
 	/**
@@ -30,11 +27,7 @@ public class FrontProductionJpaApiService {
 	 */
 	@Transactional(readOnly = true)
 	public List<FrontProductionDTO> getProductionList(Map<String, Object> productionMap) {
-		try {
-			return frontProductionJpaRepository.getProductionList(productionMap);
-		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_PRODUCTION_LIST, e);
-		}
+		return frontProductionJpaRepository.getProductionList(productionMap);
 	}
 
 	/**
@@ -49,10 +42,6 @@ public class FrontProductionJpaApiService {
 	 */
 	@Transactional(readOnly = true)
 	public FrontProductionDTO getProductionInfo(FrontProductionEntity frontProductionEntity) {
-		try {
-			return frontProductionJpaRepository.getProductionInfo(frontProductionEntity);
-		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_PRODUCTION, e);
-		}
+		return frontProductionJpaRepository.getProductionInfo(frontProductionEntity);
 	}
 }

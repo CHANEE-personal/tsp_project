@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class FrontSupportJpaApiService {
-
 	private final FrontSupportJpaRepository frontSupportJpaRepository;
 
 	/**
@@ -22,7 +21,7 @@ public class FrontSupportJpaApiService {
 	 * </pre>
 	 *
 	 */
-	public FrontSupportDTO insertSupportModel(FrontSupportEntity frontSupportEntity) throws Exception {
+	public FrontSupportDTO insertSupportModel(FrontSupportEntity frontSupportEntity) {
 		return this.frontSupportJpaRepository.insertSupportModel(frontSupportEntity);
 	}
 }

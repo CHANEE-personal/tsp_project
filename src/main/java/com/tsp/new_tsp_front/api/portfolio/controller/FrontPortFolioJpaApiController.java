@@ -25,7 +25,6 @@ import static java.lang.Math.ceil;
 @Api(tags = "포트폴리오관련 API")
 @RequestMapping("/api/portfolio")
 public class FrontPortFolioJpaApiController {
-
 	private final FrontPortFolioJpaApiService frontPortFolioJpaApiService;
 	private final SearchCommon searchCommon;
 

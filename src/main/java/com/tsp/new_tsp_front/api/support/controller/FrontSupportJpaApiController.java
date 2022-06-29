@@ -3,7 +3,6 @@ package com.tsp.new_tsp_front.api.support.controller;
 import com.tsp.new_tsp_front.api.support.domain.FrontSupportDTO;
 import com.tsp.new_tsp_front.api.support.domain.FrontSupportEntity;
 import com.tsp.new_tsp_front.api.support.service.FrontSupportJpaApiService;
-import com.tsp.new_tsp_front.common.SearchCommon;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -25,9 +24,7 @@ import java.util.Map;
 @Api(tags = "지원모델관련 API")
 @RequestMapping("/api/support")
 public class FrontSupportJpaApiController {
-
 	private final FrontSupportJpaApiService frontSupportJpaApiService;
-	private final SearchCommon searchCommon;
 
 	/**
 	 * <pre>
