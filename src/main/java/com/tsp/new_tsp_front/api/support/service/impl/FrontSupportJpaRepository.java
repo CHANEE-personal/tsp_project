@@ -1,6 +1,5 @@
 package com.tsp.new_tsp_front.api.support.service.impl;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tsp.new_tsp_front.api.support.domain.FrontSupportDTO;
 import com.tsp.new_tsp_front.api.support.domain.FrontSupportEntity;
 import com.tsp.new_tsp_front.api.support.mapper.SupportMapper;
@@ -35,7 +34,7 @@ public class FrontSupportJpaRepository {
 
 			return SupportMapper.INSTANCE.toDto(frontSupportEntity);
 		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.ERROR_MODEL);
+			throw new TspException(ApiExceptionType.ERROR_MODEL, e);
 		}
 	}
 }

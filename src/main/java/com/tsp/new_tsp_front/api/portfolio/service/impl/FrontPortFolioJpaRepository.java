@@ -61,7 +61,7 @@ public class FrontPortFolioJpaRepository {
 
 			return PortFolioMapper.INSTANCE.toDtoList(portFolioList);
 		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_PORTFOLIO_LIST);
+			throw new TspException(ApiExceptionType.NOT_FOUND_PORTFOLIO_LIST, e);
 		}
 	}
 
@@ -89,7 +89,7 @@ public class FrontPortFolioJpaRepository {
 
 			return PortFolioMapper.INSTANCE.toDto(getPortFolioInfo);
 		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_PORTFOLIO);
+			throw new TspException(ApiExceptionType.NOT_FOUND_PORTFOLIO, e);
 		}
 	}
 }

@@ -33,7 +33,7 @@ public class FrontPortFolioJpaApiService {
 		try {
 			return frontPortFolioJpaRepository.getPortFolioList(portFolioMap);
 		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_PORTFOLIO_LIST);
+			throw new TspException(ApiExceptionType.NOT_FOUND_PORTFOLIO_LIST, e);
 		}
 	}
 
@@ -52,7 +52,7 @@ public class FrontPortFolioJpaApiService {
 		try {
 			return frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
 		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_PORTFOLIO);
+			throw new TspException(ApiExceptionType.NOT_FOUND_PORTFOLIO, e);
 		}
 	}
 }

@@ -76,7 +76,7 @@ public class FrontModelJpaRepository {
 
             return ModelMapper.INSTANCE.toDtoList(modelList);
         } catch (Exception e) {
-            throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
+            throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST, e);
         }
     }
 
@@ -97,7 +97,7 @@ public class FrontModelJpaRepository {
                     .and(frontModelEntity.visible.eq("Y")))
                     .fetch().size();
         } catch (Exception e) {
-            throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
+            throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST, e);
         }
     }
 
@@ -127,7 +127,7 @@ public class FrontModelJpaRepository {
 
             return ModelMapper.INSTANCE.toDtoList(modelList);
         } catch (Exception e) {
-            throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
+            throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST, e);
         }
     }
 
@@ -155,7 +155,7 @@ public class FrontModelJpaRepository {
 
             return ModelMapper.INSTANCE.toDto(getModelInfo);
         } catch (Exception e) {
-            throw new TspException(ApiExceptionType.NOT_FOUND_MODEL);
+            throw new TspException(ApiExceptionType.NOT_FOUND_MODEL, e);
         }
     }
 }

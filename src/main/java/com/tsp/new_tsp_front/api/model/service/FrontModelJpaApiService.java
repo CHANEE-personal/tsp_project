@@ -32,7 +32,7 @@ public class FrontModelJpaApiService {
 		try {
 			return frontModelJpaRepository.getModelCount(modelMap);
 		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
+			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST, e);
 		}
 	}
 
@@ -51,7 +51,7 @@ public class FrontModelJpaApiService {
 		try {
 			return frontModelJpaRepository.getModelList(modelMap);
 		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST);
+			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST, e);
 		}
 	}
 
@@ -70,7 +70,7 @@ public class FrontModelJpaApiService {
 		try {
 			return this.frontModelJpaRepository.getModelInfo(frontModelEntity);
 		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL);
+			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL, e);
 		}
 	}
 
@@ -86,6 +86,10 @@ public class FrontModelJpaApiService {
 	 */
 	@Transactional(readOnly = true)
 	public List<FrontModelDTO> getMainModelList() {
-		return this.frontModelJpaRepository.getMainModelList();
+		try {
+			return this.frontModelJpaRepository.getMainModelList();
+		} catch (Exception e) {
+			throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST, e);
+		}
 	}
 }

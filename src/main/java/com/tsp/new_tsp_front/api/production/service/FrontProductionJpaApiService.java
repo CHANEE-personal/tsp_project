@@ -33,7 +33,7 @@ public class FrontProductionJpaApiService {
 		try {
 			return frontProductionJpaRepository.getProductionList(productionMap);
 		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_PRODUCTION_LIST);
+			throw new TspException(ApiExceptionType.NOT_FOUND_PRODUCTION_LIST, e);
 		}
 	}
 
@@ -52,7 +52,7 @@ public class FrontProductionJpaApiService {
 		try {
 			return frontProductionJpaRepository.getProductionInfo(frontProductionEntity);
 		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_PRODUCTION);
+			throw new TspException(ApiExceptionType.NOT_FOUND_PRODUCTION, e);
 		}
 	}
 }

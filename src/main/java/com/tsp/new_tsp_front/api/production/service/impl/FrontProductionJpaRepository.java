@@ -61,7 +61,7 @@ public class FrontProductionJpaRepository {
 
 			return ProductionMapper.INSTANCE.toDtoList(productionList);
 		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_PRODUCTION_LIST);
+			throw new TspException(ApiExceptionType.NOT_FOUND_PRODUCTION_LIST, e);
 		}
 	}
 
@@ -89,7 +89,7 @@ public class FrontProductionJpaRepository {
 
 			return ProductionMapper.INSTANCE.toDto(getProductionInfo);
 		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_PRODUCTION);
+			throw new TspException(ApiExceptionType.NOT_FOUND_PRODUCTION, e);
 		}
 	}
 }

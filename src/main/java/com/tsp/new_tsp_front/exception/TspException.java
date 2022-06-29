@@ -7,8 +7,8 @@ public class TspException extends RuntimeException{
 	@Getter
 	private final BaseExceptionType baseExceptionType;
 
-	public TspException(BaseExceptionType baseExceptionType) {
-		super(baseExceptionType.getErrorMessage());
+	public TspException(BaseExceptionType baseExceptionType, Throwable e) {
+		super(baseExceptionType.getErrorMessage(), e);
 		this.baseExceptionType = baseExceptionType;
 	}
 }
