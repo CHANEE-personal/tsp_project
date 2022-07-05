@@ -13,6 +13,8 @@ import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.GenerationType.*;
+
 @Entity
 @Getter
 @Setter
@@ -26,7 +28,7 @@ public class FrontProductionEntity extends NewCommonMappedClass {
 	private Integer rnum;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "idx")
 	private Integer idx;
 

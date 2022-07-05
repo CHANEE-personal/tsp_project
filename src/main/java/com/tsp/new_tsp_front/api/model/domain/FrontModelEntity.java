@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.*;
 
 @Entity
 @Getter
@@ -34,7 +35,7 @@ public class FrontModelEntity extends NewCommonMappedClass {
 	private Integer rnum;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "idx")
 	private Integer idx;
 
