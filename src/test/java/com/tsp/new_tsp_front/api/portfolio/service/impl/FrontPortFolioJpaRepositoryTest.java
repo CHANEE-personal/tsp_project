@@ -18,19 +18,22 @@ import org.springframework.test.context.TestPropertySource;
 import javax.transaction.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 import static com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity.*;
+import static com.tsp.new_tsp_front.api.portfolio.service.impl.PortFolioImageMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
 
 @DataJpaTest
 @Transactional
 @TestPropertySource(locations = "classpath:application-local.properties")
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@AutoConfigureTestDatabase(replace = NONE)
 @ExtendWith(MockitoExtension.class)
 @DisplayName("포트폴리오 Repository Test")
 class FrontPortFolioJpaRepositoryTest {
@@ -58,7 +61,7 @@ class FrontPortFolioJpaRepositoryTest {
                 .typeName("portfolio")
                 .build();
 
-        commonImageDTO = PortFolioImageMapperImpl.INSTANCE.toDto(commonImageEntity);
+        commonImageDTO = INSTANCE.toDto(commonImageEntity);
 
         commonImageEntityList.add(commonImageEntity);
 
@@ -70,7 +73,7 @@ class FrontPortFolioJpaRepositoryTest {
                 .hashTag("포트폴리오 Test")
                 .videoUrl("https://youtube.com")
                 .visible("Y")
-                .portfolioImage(PortFolioImageMapper.INSTANCE.toDtoList(commonImageEntityList))
+                .portfolioImage(INSTANCE.toDtoList(commonImageEntityList))
                 .build();
 
         frontPortFolioEntity = builder().idx(1).commonImageEntityList(commonImageEntityList).build();
@@ -85,7 +88,7 @@ class FrontPortFolioJpaRepositoryTest {
     @DisplayName("포트폴리오 조회 테스트")
     void 포트폴리오조회테스트() {
         // given
-        ConcurrentHashMap<String, Object> portfolioMap = new ConcurrentHashMap<>();
+        Map<String, Object> portfolioMap = new HashMap<>();
         portfolioMap.put("jpaStartPage", 1);
         portfolioMap.put("size", 3);
 
@@ -136,7 +139,7 @@ class FrontPortFolioJpaRepositoryTest {
     @DisplayName("포트폴리오 BDD 조회 테스트")
     void 포트폴리오BDD조회테스트() {
         // given
-        ConcurrentHashMap<String, Object> portfolioMap = new ConcurrentHashMap<>();
+        Map<String, Object> portfolioMap = new HashMap<>();
         portfolioMap.put("jpaStartPage", 1);
         portfolioMap.put("size", 3);
 

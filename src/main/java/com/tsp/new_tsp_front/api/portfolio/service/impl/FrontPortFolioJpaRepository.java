@@ -15,6 +15,8 @@ import java.util.Map;
 
 import static com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity.commonImageEntity;
 import static com.tsp.new_tsp_front.api.portfolio.domain.QFrontPortFolioEntity.frontPortFolioEntity;
+import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_PORTFOLIO;
+import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_PORTFOLIO_LIST;
 
 @Repository
 @RequiredArgsConstructor
@@ -45,7 +47,7 @@ public class FrontPortFolioJpaRepository {
 	 * </pre>
 	 *
 	 */
-	public List<FrontPortFolioDTO> getPortFolioList(Map<String, Object> portFolioMap) {
+	public List<FrontPortFolioDTO> getPortFolioList(Map<String, Object> portFolioMap) throws TspException {
 		try {
 			List<FrontPortFolioEntity> portFolioList = queryFactory
 					.selectFrom(frontPortFolioEntity)
@@ -55,11 +57,12 @@ public class FrontPortFolioJpaRepository {
 					.limit(StringUtil.getInt(portFolioMap.get("size"),0))
 					.fetch();
 
-			portFolioList.forEach(list -> portFolioList.get(portFolioList.indexOf(list)).setRnum(StringUtil.getInt(portFolioMap.get("startPage"),1)*(StringUtil.getInt(portFolioMap.get("size"),1))-(2-portFolioList.indexOf(list))));
+			portFolioList.forEach(list -> portFolioList.get(portFolioList.indexOf(list))
+					.setRnum(StringUtil.getInt(portFolioMap.get("startPage"),1)*(StringUtil.getInt(portFolioMap.get("size"),1))-(2-portFolioList.indexOf(list))));
 
 			return PortFolioMapper.INSTANCE.toDtoList(portFolioList);
 		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_PORTFOLIO_LIST, e);
+			throw new TspException(NOT_FOUND_PORTFOLIO_LIST, e);
 		}
 	}
 
@@ -73,7 +76,7 @@ public class FrontPortFolioJpaRepository {
 	 * </pre>
 	 *
 	 */
-	public FrontPortFolioDTO getPortFolioInfo(FrontPortFolioEntity existFrontPortFolioEntity) {
+	public FrontPortFolioDTO getPortFolioInfo(FrontPortFolioEntity existFrontPortFolioEntity) throws TspException {
 		try {
 			FrontPortFolioEntity getPortFolioInfo = queryFactory
 					.selectFrom(frontPortFolioEntity)
@@ -86,7 +89,7 @@ public class FrontPortFolioJpaRepository {
 
 			return PortFolioMapper.INSTANCE.toDto(getPortFolioInfo);
 		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_PORTFOLIO, e);
+			throw new TspException(NOT_FOUND_PORTFOLIO, e);
 		}
 	}
 }
