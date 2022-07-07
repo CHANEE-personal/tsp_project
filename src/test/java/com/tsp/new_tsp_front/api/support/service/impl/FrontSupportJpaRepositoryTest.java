@@ -2,7 +2,6 @@ package com.tsp.new_tsp_front.api.support.service.impl;
 
 import com.tsp.new_tsp_front.api.support.domain.FrontSupportDTO;
 import com.tsp.new_tsp_front.api.support.domain.FrontSupportEntity;
-import com.tsp.new_tsp_front.api.support.mapper.SupportMapperImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,13 +18,13 @@ import org.springframework.test.context.TestPropertySource;
 import javax.transaction.Transactional;
 
 import static com.tsp.new_tsp_front.api.support.domain.FrontSupportEntity.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static com.tsp.new_tsp_front.api.support.mapper.SupportMapper.INSTANCE;
+import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
 
 @DataJpaTest
 @Transactional
 @TestPropertySource(locations = "classpath:application-local.properties")
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@AutoConfigureTestDatabase(replace = NONE)
 @ExtendWith(MockitoExtension.class)
 @DisplayName("지원 모델 Repository Test")
 class FrontSupportJpaRepositoryTest {
@@ -48,7 +47,7 @@ class FrontSupportJpaRepositoryTest {
                 .supportInstagram("https://instagram.com")
                 .build();
 
-        frontSupportDTO = SupportMapperImpl.INSTANCE.toDto(frontSupportEntity);
+        frontSupportDTO = INSTANCE.toDto(frontSupportEntity);
     }
 
     @BeforeEach

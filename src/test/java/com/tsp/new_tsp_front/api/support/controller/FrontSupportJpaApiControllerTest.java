@@ -14,23 +14,23 @@ import org.springframework.context.event.EventListener;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-local.properties")
-@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
+@AutoConfigureTestDatabase(replace= NONE)
 class FrontSupportJpaApiControllerTest {
-
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -43,7 +43,7 @@ class FrontSupportJpaApiControllerTest {
 	@BeforeEach
 	@EventListener(ApplicationReadyEvent.class)
 	public void setup() {
-		this.mockMvc = MockMvcBuilders.webAppContextSetup(wac)
+		this.mockMvc = webAppContextSetup(wac)
 				.addFilters(new CharacterEncodingFilter("UTF-8", true))  // 필터 추가
 				.alwaysDo(print())
 				.build();

@@ -7,10 +7,14 @@ import com.tsp.new_tsp_front.exception.ApiExceptionType;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+
+import static com.tsp.new_tsp_front.api.support.mapper.SupportMapper.INSTANCE;
+import static com.tsp.new_tsp_front.exception.ApiExceptionType.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,14 +31,15 @@ public class FrontSupportJpaRepository {
 	 * 5. 작성일       : 2022. 01. 09.
 	 * </pre>
 	 */
+	@Modifying(clearAutomatically = true)
 	@Transactional
-	public FrontSupportDTO insertSupportModel(FrontSupportEntity frontSupportEntity) {
+	public FrontSupportDTO insertSupportModel(FrontSupportEntity frontSupportEntity) throws TspException {
 		try {
 			em.persist(frontSupportEntity);
 
-			return SupportMapper.INSTANCE.toDto(frontSupportEntity);
+			return INSTANCE.toDto(frontSupportEntity);
 		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.ERROR_MODEL, e);
+			throw new TspException(ERROR_MODEL, e);
 		}
 	}
 }
