@@ -6,7 +6,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.common.utils.StringUtil;
-import com.tsp.new_tsp_front.exception.ApiExceptionType;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +16,9 @@ import java.util.Map;
 
 import static com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity.commonImageEntity;
 import static com.tsp.new_tsp_front.api.model.domain.QFrontModelEntity.frontModelEntity;
+import static com.tsp.new_tsp_front.api.model.service.impl.ModelMapper.INSTANCE;
+import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_MODEL;
+import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_MODEL_LIST;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -57,7 +59,7 @@ public class FrontModelJpaRepository {
      * 5. 작성일       : 2022. 03. 27.
      * </pre>
      */
-    public List<FrontModelDTO> getMainModelList() {
+    public List<FrontModelDTO> getMainModelList() throws TspException {
 
         try {
             List<FrontModelEntity> modelList = queryFactory
@@ -74,9 +76,9 @@ public class FrontModelJpaRepository {
 
             modelList.forEach(list -> modelList.get(modelList.indexOf(list)).setRnum(modelList.indexOf(list)));
 
-            return ModelMapper.INSTANCE.toDtoList(modelList);
+            return INSTANCE.toDtoList(modelList);
         } catch (Exception e) {
-            throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST, e);
+            throw new TspException(NOT_FOUND_MODEL_LIST, e);
         }
     }
 
@@ -89,7 +91,7 @@ public class FrontModelJpaRepository {
      * 5. 작성일       : 2022. 03. 27.
      * </pre>
      */
-    public int getModelCount(Map<String, Object> modelMap) {
+    public int getModelCount(Map<String, Object> modelMap) throws TspException {
         try {
             return queryFactory
                     .selectFrom(frontModelEntity)
@@ -97,7 +99,7 @@ public class FrontModelJpaRepository {
                     .and(frontModelEntity.visible.eq("Y")))
                     .fetch().size();
         } catch (Exception e) {
-            throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST, e);
+            throw new TspException(NOT_FOUND_MODEL_LIST, e);
         }
     }
 
@@ -110,7 +112,7 @@ public class FrontModelJpaRepository {
      * 5. 작성일       : 2022. 01. 02.
      * </pre>
      */
-    public List<FrontModelDTO> getModelList(Map<String, Object> modelMap) {
+    public List<FrontModelDTO> getModelList(Map<String, Object> modelMap) throws TspException {
 
         try {
             List<FrontModelEntity> modelList = queryFactory
@@ -125,9 +127,9 @@ public class FrontModelJpaRepository {
 
             modelList.forEach(list -> modelList.get(modelList.indexOf(list)).setRnum(StringUtil.getInt(modelMap.get("startPage"),1)*(StringUtil.getInt(modelMap.get("size"),1))-(2-modelList.indexOf(list))));
 
-            return ModelMapper.INSTANCE.toDtoList(modelList);
+            return INSTANCE.toDtoList(modelList);
         } catch (Exception e) {
-            throw new TspException(ApiExceptionType.NOT_FOUND_MODEL_LIST, e);
+            throw new TspException(NOT_FOUND_MODEL_LIST, e);
         }
     }
 
@@ -140,7 +142,7 @@ public class FrontModelJpaRepository {
      * 5. 작성일       : 2022. 01. 09.
      * </pre>
      */
-    public FrontModelDTO getModelInfo(FrontModelEntity existFrontModelEntity) {
+    public FrontModelDTO getModelInfo(FrontModelEntity existFrontModelEntity) throws TspException {
 
         try {
             //모델 상세 조회
@@ -153,9 +155,9 @@ public class FrontModelJpaRepository {
                     .and(commonImageEntity.typeName.eq("model")))
                     .fetchOne();
 
-            return ModelMapper.INSTANCE.toDto(getModelInfo);
+            return INSTANCE.toDto(getModelInfo);
         } catch (Exception e) {
-            throw new TspException(ApiExceptionType.NOT_FOUND_MODEL, e);
+            throw new TspException(NOT_FOUND_MODEL, e);
         }
     }
 }
