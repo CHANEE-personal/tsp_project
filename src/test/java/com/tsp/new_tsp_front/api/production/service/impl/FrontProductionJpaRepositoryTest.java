@@ -23,17 +23,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity.*;
+import static com.tsp.new_tsp_front.api.production.service.impl.ProductionImageMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
 
 @DataJpaTest
 @Transactional
 @TestPropertySource(locations = "classpath:application-local.properties")
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@AutoConfigureTestDatabase(replace = NONE)
 @ExtendWith(MockitoExtension.class)
 @DisplayName("프로덕션 Repository Test")
 class FrontProductionJpaRepositoryTest {
@@ -60,7 +61,7 @@ class FrontProductionJpaRepositoryTest {
                 .typeName("production")
                 .build();
 
-        commonImageDTO = ProductionImageMapperImpl.INSTANCE.toDto(commonImageEntity);
+        commonImageDTO = INSTANCE.toDto(commonImageEntity);
 
         commonImageEntityList.add(commonImageEntity);
 
@@ -69,7 +70,7 @@ class FrontProductionJpaRepositoryTest {
                 .title("프로덕션 테스트")
                 .description("프로덕션 테스트")
                 .visible("Y")
-                .productionImage(ProductionImageMapper.INSTANCE.toDtoList(commonImageEntityList))
+                .productionImage(INSTANCE.toDtoList(commonImageEntityList))
                 .build();
 
         frontProductionEntity = builder().idx(1).commonImageEntityList(commonImageEntityList).build();
@@ -84,7 +85,6 @@ class FrontProductionJpaRepositoryTest {
     @Test
     @DisplayName("프로덕션 리스트 조회 테스트")
     void 프로덕션리스트조회테스트() {
-
         // given
         Map<String, Object> productionMap = new HashMap<>();
         productionMap.put("jpaStartPage", 1);
@@ -100,7 +100,7 @@ class FrontProductionJpaRepositoryTest {
     @DisplayName("프로덕션 BDD 조회 테스트")
     void 프로덕션BDD조회테스트() {
         // given
-        ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
+        Map<String, Object> productionMap = new HashMap<>();
         productionMap.put("jpaStartPage", 1);
         productionMap.put("size", 3);
 
@@ -130,7 +130,6 @@ class FrontProductionJpaRepositoryTest {
     @Test
     @DisplayName("프로덕션 상세 BDD 조회 테스트")
     void 프로덕션상세BDD조회테스트() {
-
         // given
 //        given(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity)).willReturn(frontProductionDTO);
         when(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity)).thenReturn(frontProductionDTO);

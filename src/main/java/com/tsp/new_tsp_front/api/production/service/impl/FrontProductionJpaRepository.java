@@ -5,7 +5,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 import com.tsp.new_tsp_front.common.utils.StringUtil;
-import com.tsp.new_tsp_front.exception.ApiExceptionType;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -15,11 +14,13 @@ import java.util.Map;
 
 import static com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity.commonImageEntity;
 import static com.tsp.new_tsp_front.api.production.domain.QFrontProductionEntity.frontProductionEntity;
+import static com.tsp.new_tsp_front.api.production.service.impl.ProductionMapper.INSTANCE;
+import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_PRODUCTION;
+import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_PRODUCTION_LIST;
 
 @Repository
 @RequiredArgsConstructor
 public class FrontProductionJpaRepository {
-
 	private final JPAQueryFactory queryFactory;
 
 	private BooleanExpression searchProduction(Map<String, Object> productionMap) {
@@ -46,8 +47,7 @@ public class FrontProductionJpaRepository {
 	 * </pre>
 	 *
 	 */
-	public List<FrontProductionDTO> getProductionList(Map<String, Object> productionMap) {
-
+	public List<FrontProductionDTO> getProductionList(Map<String, Object> productionMap) throws TspException {
 		try {
 			List<FrontProductionEntity> productionList = queryFactory
 					.selectFrom(frontProductionEntity)
@@ -57,11 +57,12 @@ public class FrontProductionJpaRepository {
 					.limit(StringUtil.getInt(productionMap.get("size"),0))
 					.fetch();
 
-			productionList.forEach(list -> productionList.get(productionList.indexOf(list)).setRnum(StringUtil.getInt(productionMap.get("startPage"),1)*(StringUtil.getInt(productionMap.get("size"),1))-(2-productionList.indexOf(list))));
+			productionList.forEach(list -> productionList.get(productionList.indexOf(list))
+					.setRnum(StringUtil.getInt(productionMap.get("startPage"),1)*(StringUtil.getInt(productionMap.get("size"),1))-(2-productionList.indexOf(list))));
 
-			return ProductionMapper.INSTANCE.toDtoList(productionList);
+			return INSTANCE.toDtoList(productionList);
 		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_PRODUCTION_LIST, e);
+			throw new TspException(NOT_FOUND_PRODUCTION_LIST, e);
 		}
 	}
 
@@ -75,7 +76,7 @@ public class FrontProductionJpaRepository {
 	 * </pre>
 	 *
 	 */
-	public FrontProductionDTO getProductionInfo(FrontProductionEntity existFrontProductionEntity) {
+	public FrontProductionDTO getProductionInfo(FrontProductionEntity existFrontProductionEntity) throws TspException {
 		try {
 			//프로덕션 상세 조회
 			FrontProductionEntity getProductionInfo = queryFactory
@@ -87,9 +88,9 @@ public class FrontProductionJpaRepository {
 							.and(commonImageEntity.typeName.eq("production")))
 					.fetchOne();
 
-			return ProductionMapper.INSTANCE.toDto(getProductionInfo);
+			return INSTANCE.toDto(getProductionInfo);
 		} catch (Exception e) {
-			throw new TspException(ApiExceptionType.NOT_FOUND_PRODUCTION, e);
+			throw new TspException(NOT_FOUND_PRODUCTION, e);
 		}
 	}
 }
