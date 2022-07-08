@@ -17,6 +17,7 @@ import java.util.Map;
 import static com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity.commonImageEntity;
 import static com.tsp.new_tsp_front.api.model.domain.QFrontModelEntity.frontModelEntity;
 import static com.tsp.new_tsp_front.api.model.service.impl.ModelMapper.INSTANCE;
+import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_MODEL;
 import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_MODEL_LIST;
 
@@ -24,13 +25,12 @@ import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_MODEL_L
 @RequiredArgsConstructor
 @Repository
 public class FrontModelJpaRepository {
-
     private final JPAQueryFactory queryFactory;
 
     private BooleanExpression searchModel(Map<String, Object> modelMap) {
         String searchType = StringUtil.getString(modelMap.get("searchType"), "");
         String searchKeyword = StringUtil.getString(modelMap.get("searchKeyword"), "");
-        Integer categoryCd = StringUtil.getInt(modelMap.get("categoryCd"), 0);
+        Integer categoryCd = getInt(modelMap.get("categoryCd"), 0);
 
         if ("0".equals(searchType)) {
             return frontModelEntity.modelKorName.contains(searchKeyword)
@@ -113,7 +113,6 @@ public class FrontModelJpaRepository {
      * </pre>
      */
     public List<FrontModelDTO> getModelList(Map<String, Object> modelMap) throws TspException {
-
         try {
             List<FrontModelEntity> modelList = queryFactory
                     .selectFrom(frontModelEntity)
@@ -121,11 +120,12 @@ public class FrontModelJpaRepository {
                     .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
                     .fetchJoin()
                     .where(searchModel(modelMap).and(frontModelEntity.visible.eq("Y")))
-                    .offset(StringUtil.getInt(modelMap.get("jpaStartPage"), 0))
-                    .limit(StringUtil.getInt(modelMap.get("size"), 0))
+                    .offset(getInt(modelMap.get("jpaStartPage"), 0))
+                    .limit(getInt(modelMap.get("size"), 0))
                     .fetch();
 
-            modelList.forEach(list -> modelList.get(modelList.indexOf(list)).setRnum(StringUtil.getInt(modelMap.get("startPage"),1)*(StringUtil.getInt(modelMap.get("size"),1))-(2-modelList.indexOf(list))));
+            modelList.forEach(list -> modelList.get(modelList.indexOf(list))
+                    .setRnum(getInt(modelMap.get("startPage"),1)*(getInt(modelMap.get("size"),1))-(2-modelList.indexOf(list))));
 
             return INSTANCE.toDtoList(modelList);
         } catch (Exception e) {
@@ -143,7 +143,6 @@ public class FrontModelJpaRepository {
      * </pre>
      */
     public FrontModelDTO getModelInfo(FrontModelEntity existFrontModelEntity) throws TspException {
-
         try {
             //모델 상세 조회
             FrontModelEntity getModelInfo = queryFactory

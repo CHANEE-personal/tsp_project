@@ -26,7 +26,6 @@ import static com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity.*;
 import static com.tsp.new_tsp_front.api.portfolio.service.impl.PortFolioImageMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
 

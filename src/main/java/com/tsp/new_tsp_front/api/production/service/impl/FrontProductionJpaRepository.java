@@ -15,6 +15,7 @@ import java.util.Map;
 import static com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity.commonImageEntity;
 import static com.tsp.new_tsp_front.api.production.domain.QFrontProductionEntity.frontProductionEntity;
 import static com.tsp.new_tsp_front.api.production.service.impl.ProductionMapper.INSTANCE;
+import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_PRODUCTION;
 import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_PRODUCTION_LIST;
 
@@ -28,8 +29,7 @@ public class FrontProductionJpaRepository {
 		String searchKeyword = StringUtil.getString(productionMap.get("searchKeyword"),"");
 
 		if ("0".equals(searchType)) {
-			return frontProductionEntity.title.contains(searchKeyword)
-					.or(frontProductionEntity.description.contains(searchKeyword));
+			return frontProductionEntity.title.contains(searchKeyword).or(frontProductionEntity.description.contains(searchKeyword));
 		} else if ("1".equals(searchType)) {
 			return frontProductionEntity.title.contains(searchKeyword);
 		} else {
@@ -53,12 +53,12 @@ public class FrontProductionJpaRepository {
 					.selectFrom(frontProductionEntity)
 					.where(searchProduction(productionMap))
 					.orderBy(frontProductionEntity.idx.desc())
-					.offset(StringUtil.getInt(productionMap.get("jpaStartPage"),0))
-					.limit(StringUtil.getInt(productionMap.get("size"),0))
+					.offset(getInt(productionMap.get("jpaStartPage"),0))
+					.limit(getInt(productionMap.get("size"),0))
 					.fetch();
 
 			productionList.forEach(list -> productionList.get(productionList.indexOf(list))
-					.setRnum(StringUtil.getInt(productionMap.get("startPage"),1)*(StringUtil.getInt(productionMap.get("size"),1))-(2-productionList.indexOf(list))));
+					.setRnum(getInt(productionMap.get("startPage"),1)*(getInt(productionMap.get("size"),1))-(2-productionList.indexOf(list))));
 
 			return INSTANCE.toDtoList(productionList);
 		} catch (Exception e) {

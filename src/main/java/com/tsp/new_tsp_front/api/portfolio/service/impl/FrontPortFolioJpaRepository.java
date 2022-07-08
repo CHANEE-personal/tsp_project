@@ -4,8 +4,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
-import com.tsp.new_tsp_front.common.utils.StringUtil;
-import com.tsp.new_tsp_front.exception.ApiExceptionType;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -15,6 +13,8 @@ import java.util.Map;
 
 import static com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity.commonImageEntity;
 import static com.tsp.new_tsp_front.api.portfolio.domain.QFrontPortFolioEntity.frontPortFolioEntity;
+import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
+import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
 import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_PORTFOLIO;
 import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_PORTFOLIO_LIST;
 
@@ -24,8 +24,8 @@ public class FrontPortFolioJpaRepository {
 	private final JPAQueryFactory queryFactory;
 
 	private BooleanExpression searchPortFolio(Map<String, Object> portfolioMap) {
-		String searchType = StringUtil.getString(portfolioMap.get("searchType"),"");
-		String searchKeyword = StringUtil.getString(portfolioMap.get("searchKeyword"),"");
+		String searchType = getString(portfolioMap.get("searchType"),"");
+		String searchKeyword = getString(portfolioMap.get("searchKeyword"),"");
 
 		if ("0".equals(searchType)) {
 			return frontPortFolioEntity.title.contains(searchKeyword)
@@ -53,12 +53,12 @@ public class FrontPortFolioJpaRepository {
 					.selectFrom(frontPortFolioEntity)
 					.where(searchPortFolio(portFolioMap))
 					.orderBy(frontPortFolioEntity.idx.desc())
-					.offset(StringUtil.getInt(portFolioMap.get("jpaStartPage"),0))
-					.limit(StringUtil.getInt(portFolioMap.get("size"),0))
+					.offset(getInt(portFolioMap.get("jpaStartPage"),0))
+					.limit(getInt(portFolioMap.get("size"),0))
 					.fetch();
 
 			portFolioList.forEach(list -> portFolioList.get(portFolioList.indexOf(list))
-					.setRnum(StringUtil.getInt(portFolioMap.get("startPage"),1)*(StringUtil.getInt(portFolioMap.get("size"),1))-(2-portFolioList.indexOf(list))));
+					.setRnum(getInt(portFolioMap.get("startPage"),1)*(getInt(portFolioMap.get("size"),1))-(2-portFolioList.indexOf(list))));
 
 			return PortFolioMapper.INSTANCE.toDtoList(portFolioList);
 		} catch (Exception e) {

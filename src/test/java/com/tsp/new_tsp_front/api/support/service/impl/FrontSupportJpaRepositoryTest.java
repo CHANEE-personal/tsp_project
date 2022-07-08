@@ -28,14 +28,11 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 @ExtendWith(MockitoExtension.class)
 @DisplayName("지원 모델 Repository Test")
 class FrontSupportJpaRepositoryTest {
-    private FrontSupportEntity frontSupportEntity;
-    private FrontSupportDTO frontSupportDTO;
+    FrontSupportEntity frontSupportEntity;
+    FrontSupportDTO frontSupportDTO;
 
     @Autowired
     private FrontSupportJpaRepository frontSupportJpaRepository;
-
-    @Mock
-    private FrontSupportJpaRepository mockFrontSupportJpaRepository;
 
     private void createSupportModel() {
         frontSupportEntity = builder()

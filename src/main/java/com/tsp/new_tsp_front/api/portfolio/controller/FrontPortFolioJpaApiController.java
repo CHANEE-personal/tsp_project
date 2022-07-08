@@ -72,7 +72,7 @@ public class FrontPortFolioJpaApiController {
 	 *
 	 */
 	@ApiOperation(value = "포트폴리오 상세 조회", notes = "포트폴리오를 상세 조회한다.")
-	@ApiResponses({
+	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "성공", response = Map.class),
 			@ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
 			@ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
