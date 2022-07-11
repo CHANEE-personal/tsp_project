@@ -9,22 +9,31 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 import static com.tsp.new_tsp_front.api.model.domain.FrontModelDTO.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
+@SpringBootTest
 @Transactional
-@ExtendWith(MockitoExtension.class)
+@AutoConfigureMockMvc
+@TestPropertySource(locations = "classpath:application.properties")
+@AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("모델 Service Test")
 class FrontModelJpaApiServiceTest {
-
     @Mock
     private FrontModelJpaRepository frontModelJpaRepository;
 
@@ -32,8 +41,8 @@ class FrontModelJpaApiServiceTest {
     private FrontModelJpaApiService frontModelJpaApiService;
 
     @Test
-    public void 모델리스트조회테스트() throws Exception {
-        ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
+    void 모델리스트조회테스트() {
+        Map<String, Object> modelMap = new HashMap<>();
         modelMap.put("categoryCd", "1");
         modelMap.put("jpaStartPage", 1);
         modelMap.put("size", 3);
@@ -47,13 +56,16 @@ class FrontModelJpaApiServiceTest {
         // 시니어
         returnModelList.add(builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").build());
 
+
         given(frontModelJpaRepository.getModelList(modelMap)).willReturn(returnModelList);
 
         // when
         List<FrontModelDTO> modelList = frontModelJpaApiService.getModelList(modelMap);
 
-        assertThat(modelList.size()).isGreaterThan(0);
-        assertThat(modelList.size()).isEqualTo(3);
+        assertAll(
+                () -> assertThat(modelList).isNotEmpty(),
+                () -> assertThat(modelList).hasSize(3)
+        );
 
         assertThat(modelList.get(0).getIdx()).isEqualTo(returnModelList.get(0).getIdx());
         assertThat(modelList.get(0).getCategoryCd()).isEqualTo(returnModelList.get(0).getIdx());
@@ -72,8 +84,8 @@ class FrontModelJpaApiServiceTest {
     }
 
     @Test
-    public void 모델배너리스트조회테스트() throws Exception {
-        ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
+    void 모델배너리스트조회테스트() {
+        Map<String, Object> modelMap = new HashMap<>();
         modelMap.put("categoryCd", "1");
 
         List<FrontModelDTO> returnModelList = new ArrayList<>();
@@ -90,8 +102,10 @@ class FrontModelJpaApiServiceTest {
         // when
         List<FrontModelDTO> mainModelList = frontModelJpaApiService.getMainModelList();
 
-        assertThat(mainModelList.size()).isGreaterThan(0);
-        assertThat(mainModelList.size()).isEqualTo(3);
+        assertAll(
+                () -> assertThat(mainModelList).isNotEmpty(),
+                () -> assertThat(mainModelList).hasSize(3)
+        );
 
         assertThat(mainModelList.get(0).getIdx()).isEqualTo(returnModelList.get(0).getIdx());
         assertThat(mainModelList.get(0).getCategoryCd()).isEqualTo(returnModelList.get(0).getIdx());
@@ -113,7 +127,7 @@ class FrontModelJpaApiServiceTest {
     }
 
     @Test
-    public void 모델상세조회테스트() throws Exception {
+    void 모델상세조회테스트() {
         // given
         FrontModelEntity frontModelEntity = FrontModelEntity.builder().idx(1).categoryCd(1).build();
         FrontModelDTO frontModelDTO = builder().idx(1).categoryCd(1).modelKorName("조찬희").modelEngName("chochanhee").build();
