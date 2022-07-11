@@ -2,9 +2,6 @@ package com.tsp.new_tsp_front.api.support.service.impl;
 
 import com.tsp.new_tsp_front.api.support.domain.FrontSupportDTO;
 import com.tsp.new_tsp_front.api.support.domain.FrontSupportEntity;
-import com.tsp.new_tsp_front.api.support.mapper.SupportMapper;
-import com.tsp.new_tsp_front.exception.ApiExceptionType;
-import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 
 import static com.tsp.new_tsp_front.api.support.mapper.SupportMapper.INSTANCE;
-import static com.tsp.new_tsp_front.exception.ApiExceptionType.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,13 +29,9 @@ public class FrontSupportJpaRepository {
 	 */
 	@Modifying(clearAutomatically = true)
 	@Transactional
-	public FrontSupportDTO insertSupportModel(FrontSupportEntity frontSupportEntity) throws TspException {
-		try {
-			em.persist(frontSupportEntity);
+	public FrontSupportDTO insertSupportModel(FrontSupportEntity frontSupportEntity) {
+		em.persist(frontSupportEntity);
 
-			return INSTANCE.toDto(frontSupportEntity);
-		} catch (Exception e) {
-			throw new TspException(ERROR_MODEL, e);
-		}
+		return INSTANCE.toDto(frontSupportEntity);
 	}
 }
