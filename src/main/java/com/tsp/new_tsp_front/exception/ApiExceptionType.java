@@ -21,8 +21,9 @@ public enum ApiExceptionType implements BaseExceptionType {
 	NOT_FOUND_PORTFOLIO_LIST("NOT_FOUND_PORTFOLIO_LIST", 200, "포트폴리오 리스트 없음"),
 
 	// Support 관련 Type
-	NOT_FOUND_SUPPORT("NOT_FOUND_SUPPORT", 200, "해당 포트폴리오 없음"),
-	NOT_FOUND_SUPPORT_LIST("NOT_FOUND_SUPPORT_LIST", 200, "포트폴리오 리스트 없음"),
+	ERROR_SUPPORT("ERROR_SUPPORT", 500, "지원모델 등록 에러"),
+	NOT_FOUND_SUPPORT("NOT_FOUND_SUPPORT", 200, "해당 지원모델 없음"),
+	NOT_FOUND_SUPPORT_LIST("NOT_FOUND_SUPPORT_LIST", 200, "지원모델 리스트 없음"),
 
 	// 서버 관련 TYPE
 	RUNTIME_EXCEPTION("SERVER_ERROR", 500, "서버에러"),

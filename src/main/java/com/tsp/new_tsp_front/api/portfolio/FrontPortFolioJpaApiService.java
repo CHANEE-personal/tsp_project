@@ -3,6 +3,7 @@ package com.tsp.new_tsp_front.api.portfolio;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
 import com.tsp.new_tsp_front.api.portfolio.service.impl.FrontPortFolioJpaRepository;
+import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,10 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
+import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_PORTFOLIO;
+import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_PORTFOLIO_LIST;
+
 @Service
 @RequiredArgsConstructor
 public class FrontPortFolioJpaApiService {
-
 	private final FrontPortFolioJpaRepository frontPortFolioJpaRepository;
 
 	/**
@@ -27,8 +30,12 @@ public class FrontPortFolioJpaApiService {
 	 *
 	 */
 	@Transactional(readOnly = true)
-	public List<FrontPortFolioDTO> getPortFolioList(Map<String, Object> portFolioMap) {
-		return frontPortFolioJpaRepository.getPortFolioList(portFolioMap);
+	public List<FrontPortFolioDTO> getPortFolioList(Map<String, Object> portFolioMap) throws TspException {
+		try {
+			return frontPortFolioJpaRepository.getPortFolioList(portFolioMap);
+		} catch (Exception e) {
+			throw new TspException(NOT_FOUND_PORTFOLIO_LIST, e);
+		}
 	}
 
 	/**
@@ -42,7 +49,11 @@ public class FrontPortFolioJpaApiService {
 	 *
 	 */
 	@Transactional(readOnly = true)
-	public FrontPortFolioDTO getPortFolioInfo(FrontPortFolioEntity frontPortFolioEntity) {
-		return frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
+	public FrontPortFolioDTO getPortFolioInfo(FrontPortFolioEntity frontPortFolioEntity) throws TspException {
+		try {
+			return frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
+		} catch (Exception e) {
+			throw new TspException(NOT_FOUND_PORTFOLIO, e);
+		}
 	}
 }
