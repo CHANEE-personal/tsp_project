@@ -2,8 +2,6 @@ package com.tsp.new_tsp_front.api.support.service.impl;
 
 import com.tsp.new_tsp_front.api.support.domain.FrontSupportDTO;
 import com.tsp.new_tsp_front.api.support.domain.FrontSupportEntity;
-import com.tsp.new_tsp_front.api.support.mapper.SupportMapper;
-import com.tsp.new_tsp_front.exception.ApiExceptionType;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

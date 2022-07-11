@@ -9,21 +9,30 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
+@SpringBootTest
 @Transactional
-@ExtendWith(MockitoExtension.class)
+@AutoConfigureMockMvc
+@TestPropertySource(locations = "classpath:application.properties")
+@AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("프로덕션 Service Test")
 class FrontProductionJpaApiServiceTest {
-
     @Mock
     private FrontProductionJpaRepository frontProductionJpaRepository;
 
@@ -31,9 +40,9 @@ class FrontProductionJpaApiServiceTest {
     private FrontProductionJpaApiService frontProductionJpaApiService;
 
     @Test
-    public void 프로덕션리스트조회테스트() throws Exception {
+    void 프로덕션리스트조회테스트() {
         // given
-        ConcurrentHashMap<String, Object> productionMap = new ConcurrentHashMap<>();
+        Map<String, Object> productionMap = new HashMap<>();
         productionMap.put("jpaStartPage", 1);
         productionMap.put("size", 3);
 
@@ -48,8 +57,10 @@ class FrontProductionJpaApiServiceTest {
         List<FrontProductionDTO> productionList = frontProductionJpaApiService.getProductionList(productionMap);
 
         // then
-        assertThat(productionList.size()).isGreaterThan(0);
-        assertThat(productionList.size()).isEqualTo(2);
+        assertAll(
+                () -> assertThat(productionList).isNotEmpty(),
+                () -> assertThat(productionList).hasSize(3)
+        );
 
         assertThat(productionList.get(0).getIdx()).isEqualTo(returnProductionList.get(0).getIdx());
         assertThat(productionList.get(0).getTitle()).isEqualTo(returnProductionList.get(0).getTitle());
@@ -58,7 +69,7 @@ class FrontProductionJpaApiServiceTest {
     }
 
     @Test
-    public void 프로덕션상세조회테스트() throws Exception {
+    void 프로덕션상세조회테스트() {
         // given
         FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(1).build();
         FrontProductionDTO frontProductionDTO = FrontProductionDTO.builder().idx(1).title("productionTest").description("productionTest").build();

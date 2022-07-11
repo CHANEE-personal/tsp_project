@@ -9,22 +9,31 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 import static com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
+@SpringBootTest
 @Transactional
-@ExtendWith(MockitoExtension.class)
+@AutoConfigureMockMvc
+@TestPropertySource(locations = "classpath:application.properties")
+@AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("포트폴리오 Service Test")
 class FrontPortFolioJpaApiServiceTest {
-
     @Mock
     private FrontPortFolioJpaRepository frontPortFolioJpaRepository;
 
@@ -32,9 +41,9 @@ class FrontPortFolioJpaApiServiceTest {
     private FrontPortFolioJpaApiService frontPortFolioJpaApiService;
 
     @Test
-    public void 포트폴리오리스트조회테스트() throws Exception {
+    void 포트폴리오리스트조회테스트() {
         // given
-        ConcurrentHashMap<String, Object> portfolioMap = new ConcurrentHashMap<>();
+        Map<String, Object> portfolioMap = new HashMap<>();
         portfolioMap.put("jpaStartPage", 1);
         portfolioMap.put("size", 3);
 
@@ -47,8 +56,10 @@ class FrontPortFolioJpaApiServiceTest {
         // when
         List<FrontPortFolioDTO> portfolioList = frontPortFolioJpaApiService.getPortFolioList(portfolioMap);
 
-        assertThat(portfolioList.size()).isGreaterThan(0);
-        assertThat(portfolioList.size()).isEqualTo(1);
+        assertAll(
+                () -> assertThat(portfolioList).isNotEmpty(),
+                () -> assertThat(portfolioList).hasSize(3)
+        );
 
         assertThat(portfolioList.get(0).getIdx()).isEqualTo(returnPortfolioList.get(0).getIdx());
         assertThat(portfolioList.get(0).getTitle()).isEqualTo(returnPortfolioList.get(0).getTitle());
@@ -59,7 +70,7 @@ class FrontPortFolioJpaApiServiceTest {
     }
 
     @Test
-    public void 포트폴리오상세조회테스트() throws Exception {
+    void 포트폴리오상세조회테스트() {
         // given
         FrontPortFolioEntity frontPortFolioEntity = FrontPortFolioEntity.builder().idx(1).build();
         FrontPortFolioDTO frontPortFolioDTO = builder().title("portfolioTest").description("portfolioTest").hashTag("portfolio").videoUrl("test").visible("Y").build();
