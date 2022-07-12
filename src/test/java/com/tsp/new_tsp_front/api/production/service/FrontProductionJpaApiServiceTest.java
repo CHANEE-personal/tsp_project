@@ -5,10 +5,8 @@ import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 import com.tsp.new_tsp_front.api.production.service.impl.FrontProductionJpaRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity.builder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
@@ -71,7 +70,7 @@ class FrontProductionJpaApiServiceTest {
     @Test
     void 프로덕션상세조회테스트() {
         // given
-        FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(1).build();
+        FrontProductionEntity frontProductionEntity = builder().idx(1).build();
         FrontProductionDTO frontProductionDTO = FrontProductionDTO.builder().idx(1).title("productionTest").description("productionTest").build();
         given(frontProductionJpaRepository.getProductionInfo(frontProductionEntity)).willReturn(frontProductionDTO);
 

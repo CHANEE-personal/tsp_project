@@ -5,10 +5,8 @@ import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
 import com.tsp.new_tsp_front.api.portfolio.service.impl.FrontPortFolioJpaRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO.*;
+import static com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
@@ -48,7 +46,7 @@ class FrontPortFolioJpaApiServiceTest {
         portfolioMap.put("size", 3);
 
         List<FrontPortFolioDTO> returnPortfolioList = new ArrayList<>();
-        returnPortfolioList.add(builder()
+        returnPortfolioList.add(FrontPortFolioDTO.builder()
                 .idx(1).title("portfolioTest").description("portfolioTest").hashTag("portfolio").videoUrl("test").visible("Y").build());
 
         given(frontPortFolioJpaRepository.getPortFolioList(portfolioMap)).willReturn(returnPortfolioList);
@@ -72,8 +70,8 @@ class FrontPortFolioJpaApiServiceTest {
     @Test
     void 포트폴리오상세조회테스트() {
         // given
-        FrontPortFolioEntity frontPortFolioEntity = FrontPortFolioEntity.builder().idx(1).build();
-        FrontPortFolioDTO frontPortFolioDTO = builder().title("portfolioTest").description("portfolioTest").hashTag("portfolio").videoUrl("test").visible("Y").build();
+        FrontPortFolioEntity frontPortFolioEntity = builder().idx(1).build();
+        FrontPortFolioDTO frontPortFolioDTO = FrontPortFolioDTO.builder().title("portfolioTest").description("portfolioTest").hashTag("portfolio").videoUrl("test").visible("Y").build();
         given(frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity)).willReturn(frontPortFolioDTO);
 
         // when

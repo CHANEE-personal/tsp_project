@@ -4,10 +4,8 @@ import com.tsp.new_tsp_front.api.support.domain.FrontSupportEntity;
 import com.tsp.new_tsp_front.api.support.service.impl.FrontSupportJpaRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +14,7 @@ import org.springframework.test.context.TestPropertySource;
 import javax.transaction.Transactional;
 
 import static com.tsp.new_tsp_front.api.support.domain.FrontSupportEntity.builder;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 
@@ -44,5 +43,11 @@ class FrontSupportJpaApiServiceTest {
                 .build();
 
         frontSupportJpaApiService.insertSupportModel(frontSupportEntity);
+
+        assertThat(frontSupportEntity.getSupportName()).isEqualTo("조찬희");
+        assertThat(frontSupportEntity.getSupportHeight()).isEqualTo(170);
+        assertThat(frontSupportEntity.getSupportMessage()).isEqualTo("조찬희");
+        assertThat(frontSupportEntity.getSupportPhone()).isEqualTo("010-9466-2702");
+        assertThat(frontSupportEntity.getSupportSize3()).isEqualTo("31-24-31");
     }
 }
