@@ -31,14 +31,9 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @TestPropertySource(locations = "classpath:application-local.properties")
 @AutoConfigureTestDatabase(replace= NONE)
 class FrontSupportJpaApiControllerTest {
-	@Autowired
-	private MockMvc mockMvc;
-
-	@Autowired
-	private ObjectMapper objectMapper;
-
-	@Autowired
-	private WebApplicationContext wac;
+	@Autowired private MockMvc mockMvc;
+	@Autowired private ObjectMapper objectMapper;
+	@Autowired private WebApplicationContext wac;
 
 	@BeforeEach
 	@EventListener(ApplicationReadyEvent.class)

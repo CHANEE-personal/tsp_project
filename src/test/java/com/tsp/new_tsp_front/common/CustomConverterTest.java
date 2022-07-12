@@ -21,13 +21,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestPropertySource(locations = "classpath:application.properties")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class CustomConverterTest {
-
-    @Autowired
-    private CustomConverter customConverter;
+    @Autowired private CustomConverter customConverter;
 
     @Test
     @DisplayName("convertToDataBaseColumnTest")
-    public void convertToDataBaseColumnTest() {
+    void convertToDataBaseColumnTest() {
         List<CareerJson> careerList = List.of(new CareerJson("title", "text"));
         assertThat(customConverter.convertToDatabaseColumn(careerList))
                 .isEqualTo("[{\"title\":\"title\",\"txt\":\"text\"}]");
@@ -35,7 +33,7 @@ class CustomConverterTest {
 
     @Test
     @DisplayName("convertToEntityAttributeTest")
-    public void convertToEntityAttributeTest() {
+    void convertToEntityAttributeTest() {
         String dbData = "[{\"title\":\"title\",\"txt\":\"txt\"}]";
         assertNotNull(customConverter.convertToEntityAttribute(dbData));
     }

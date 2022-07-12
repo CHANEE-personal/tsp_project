@@ -25,11 +25,8 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("지원모델 Service Test")
 class FrontSupportJpaApiServiceTest {
-    @Mock
-    private FrontSupportJpaRepository frontSupportJpaRepository;
-
-    @InjectMocks
-    private FrontSupportJpaApiService frontSupportJpaApiService;
+    @Mock private FrontSupportJpaRepository frontSupportJpaRepository;
+    @InjectMocks private FrontSupportJpaApiService frontSupportJpaApiService;
 
     @Test
     @DisplayName("모델 지원하기 테스트")

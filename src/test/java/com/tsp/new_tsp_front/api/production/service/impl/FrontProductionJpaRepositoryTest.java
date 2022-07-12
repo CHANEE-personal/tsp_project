@@ -27,7 +27,6 @@ import java.util.Map;
 import static com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity.*;
 import static com.tsp.new_tsp_front.api.production.service.impl.ProductionImageMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
 
@@ -42,13 +41,9 @@ class FrontProductionJpaRepositoryTest {
     private FrontProductionDTO frontProductionDTO;
     private CommonImageEntity commonImageEntity;
     private CommonImageDTO commonImageDTO;
-
     List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
-    @Autowired
-    private FrontProductionJpaRepository frontProductionJpaRepository;
-
-    @Mock
-    private FrontProductionJpaRepository mockFrontProductionJpaRepository;
+    @Autowired private FrontProductionJpaRepository frontProductionJpaRepository;
+    @Mock private FrontProductionJpaRepository mockFrontProductionJpaRepository;
 
     private void createProduction() {
         commonImageEntity = CommonImageEntity.builder()

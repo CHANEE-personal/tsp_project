@@ -40,14 +40,9 @@ class FrontPortFolioJpaRepositoryTest {
     private FrontPortFolioDTO frontPortFolioDTO;
     private CommonImageEntity commonImageEntity;
     private CommonImageDTO commonImageDTO;
-
     List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
-
-    @Autowired
-    FrontPortFolioJpaRepository frontPortFolioJpaRepository;
-
-    @Mock
-    FrontPortFolioJpaRepository mockFrontPortFolioJpaRepository;
+    @Autowired FrontPortFolioJpaRepository frontPortFolioJpaRepository;
+    @Mock FrontPortFolioJpaRepository mockFrontPortFolioJpaRepository;
 
     private void createPortfolio() {
         commonImageEntity = CommonImageEntity.builder()

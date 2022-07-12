@@ -30,9 +30,7 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 class FrontSupportJpaRepositoryTest {
     FrontSupportEntity frontSupportEntity;
     FrontSupportDTO frontSupportDTO;
-
-    @Autowired
-    private FrontSupportJpaRepository frontSupportJpaRepository;
+    @Autowired private FrontSupportJpaRepository frontSupportJpaRepository;
 
     private void createSupportModel() {
         frontSupportEntity = builder()

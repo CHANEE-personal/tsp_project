@@ -32,11 +32,8 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("포트폴리오 Service Test")
 class FrontPortFolioJpaApiServiceTest {
-    @Mock
-    private FrontPortFolioJpaRepository frontPortFolioJpaRepository;
-
-    @InjectMocks
-    private FrontPortFolioJpaApiService frontPortFolioJpaApiService;
+    @Mock private FrontPortFolioJpaRepository frontPortFolioJpaRepository;
+    @InjectMocks private FrontPortFolioJpaApiService frontPortFolioJpaApiService;
 
     @Test
     void 포트폴리오리스트조회테스트() {

@@ -37,19 +37,13 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 @DisplayName("모델 Repository Test")
 class FrontModelJpaRepositoryTest {
-
     private FrontModelEntity frontModelEntity;
     private FrontModelDTO frontModelDTO;
     private CommonImageEntity commonImageEntity;
     private CommonImageDTO commonImageDTO;
     List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
-
-
-    @Autowired
-    private FrontModelJpaRepository frontModelJpaRepository;
-
-    @Mock
-    private FrontModelJpaRepository mockFrontModelJpaRepository;
+    @Autowired private FrontModelJpaRepository frontModelJpaRepository;
+    @Mock private FrontModelJpaRepository mockFrontModelJpaRepository;
 
     private void createModel() {
         frontModelEntity = builder()

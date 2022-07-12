@@ -3,7 +3,6 @@ package com.tsp.new_tsp_front.configuration;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -20,12 +19,14 @@ import java.util.Collections;
 @EnableTransactionManagement
 @Configuration
 public class TransactionAspect {
-
     private static final String AOP_TRANSACTION_METHOD_NAME="*";
     private static final String AOP_TRANSACTION_EXPRESSION="execution(* com.tsp.new_tsp_front..*Repository.*(..))";
 
-    @Autowired
-    private PlatformTransactionManager transactionManager;
+    private final PlatformTransactionManager transactionManager;
+
+    public TransactionAspect(PlatformTransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
+    }
 
     @Bean
     public TransactionInterceptor transactionAdvice(){
