@@ -22,7 +22,7 @@ import java.util.Map;
 import static com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity.builder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 @SpringBootTest
@@ -47,10 +47,10 @@ class FrontProductionJpaApiServiceTest {
         returnProductionList.add(FrontProductionDTO.builder().idx(1).title("프로덕션테스트").description("프로덕션테스트").visible("Y").build());
         returnProductionList.add(FrontProductionDTO.builder().idx(2).title("productionTest").description("productionTest").visible("Y").build());
 
-        given(frontProductionJpaRepository.getProductionList(productionMap)).willReturn(returnProductionList);
+        List<FrontProductionDTO> productionList = frontProductionJpaApiService.getProductionList(productionMap);
 
         // when
-        List<FrontProductionDTO> productionList = frontProductionJpaApiService.getProductionList(productionMap);
+        when(frontProductionJpaRepository.getProductionList(productionMap)).thenReturn(returnProductionList);
 
         // then
         assertAll(
@@ -69,10 +69,10 @@ class FrontProductionJpaApiServiceTest {
         // given
         FrontProductionEntity frontProductionEntity = builder().idx(1).build();
         FrontProductionDTO frontProductionDTO = FrontProductionDTO.builder().idx(1).title("productionTest").description("productionTest").build();
-        given(frontProductionJpaRepository.getProductionInfo(frontProductionEntity)).willReturn(frontProductionDTO);
+        FrontProductionDTO productionInfo = frontProductionJpaApiService.getProductionInfo(frontProductionEntity);
 
         // when
-        FrontProductionDTO productionInfo = frontProductionJpaApiService.getProductionInfo(frontProductionEntity);
+        when(frontProductionJpaRepository.getProductionInfo(frontProductionEntity)).thenReturn(frontProductionDTO);
 
         // then
         assertThat(productionInfo.getIdx()).isEqualTo(frontProductionDTO.getIdx());

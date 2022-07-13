@@ -22,7 +22,7 @@ import java.util.Map;
 import static com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 @SpringBootTest
@@ -45,11 +45,10 @@ class FrontPortFolioJpaApiServiceTest {
         List<FrontPortFolioDTO> returnPortfolioList = new ArrayList<>();
         returnPortfolioList.add(FrontPortFolioDTO.builder()
                 .idx(1).title("portfolioTest").description("portfolioTest").hashTag("portfolio").videoUrl("test").visible("Y").build());
-
-        given(frontPortFolioJpaRepository.getPortFolioList(portfolioMap)).willReturn(returnPortfolioList);
+        List<FrontPortFolioDTO> portfolioList = frontPortFolioJpaApiService.getPortFolioList(portfolioMap);
 
         // when
-        List<FrontPortFolioDTO> portfolioList = frontPortFolioJpaApiService.getPortFolioList(portfolioMap);
+        when(frontPortFolioJpaRepository.getPortFolioList(portfolioMap)).thenReturn(returnPortfolioList);
 
         assertAll(
                 () -> assertThat(portfolioList).isNotEmpty(),
@@ -69,10 +68,10 @@ class FrontPortFolioJpaApiServiceTest {
         // given
         FrontPortFolioEntity frontPortFolioEntity = builder().idx(1).build();
         FrontPortFolioDTO frontPortFolioDTO = FrontPortFolioDTO.builder().title("portfolioTest").description("portfolioTest").hashTag("portfolio").videoUrl("test").visible("Y").build();
-        given(frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity)).willReturn(frontPortFolioDTO);
+        FrontPortFolioDTO portfolioInfo = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity);
 
         // when
-        FrontPortFolioDTO portfolioInfo = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity);
+        when(frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity)).thenReturn(frontPortFolioDTO);
 
         // then
         assertThat(portfolioInfo.getIdx()).isEqualTo(frontPortFolioDTO.getIdx());

@@ -22,7 +22,7 @@ import java.util.Map;
 import static com.tsp.new_tsp_front.api.model.domain.FrontModelDTO.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 @SpringBootTest
@@ -51,8 +51,7 @@ class FrontModelJpaApiServiceTest {
         // 시니어
         returnModelList.add(builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").build());
 
-
-        given(frontModelJpaRepository.getModelList(modelMap)).willReturn(returnModelList);
+        when(frontModelJpaRepository.getModelList(modelMap)).thenReturn(returnModelList);
 
         // when
         List<FrontModelDTO> modelList = frontModelJpaApiService.getModelList(modelMap);
@@ -92,7 +91,7 @@ class FrontModelJpaApiServiceTest {
         // 시니어
         returnModelList.add(builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").modelMainYn("Y").build());
 
-        given(frontModelJpaRepository.getMainModelList()).willReturn(returnModelList);
+        when(frontModelJpaRepository.getMainModelList()).thenReturn(returnModelList);
 
         // when
         List<FrontModelDTO> mainModelList = frontModelJpaApiService.getMainModelList();
@@ -126,10 +125,10 @@ class FrontModelJpaApiServiceTest {
         // given
         FrontModelEntity frontModelEntity = FrontModelEntity.builder().idx(1).categoryCd(1).build();
         FrontModelDTO frontModelDTO = builder().idx(1).categoryCd(1).modelKorName("조찬희").modelEngName("chochanhee").build();
-        given(frontModelJpaRepository.getModelInfo(frontModelEntity)).willReturn(frontModelDTO);
+        FrontModelDTO modelInfo = frontModelJpaApiService.getModelInfo(frontModelEntity);
 
         // when
-        FrontModelDTO modelInfo = frontModelJpaApiService.getModelInfo(frontModelEntity);
+        when(frontModelJpaRepository.getModelInfo(frontModelEntity)).thenReturn(frontModelDTO);
 
         // then
         assertThat(modelInfo.getIdx()).isEqualTo(frontModelDTO.getIdx());
