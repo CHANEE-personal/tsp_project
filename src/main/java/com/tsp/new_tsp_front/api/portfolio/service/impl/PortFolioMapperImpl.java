@@ -6,13 +6,12 @@ import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PortFolioMapperImpl implements PortFolioMapper {
+import static com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity.*;
 
+public class PortFolioMapperImpl implements PortFolioMapper {
     @Override
     public FrontPortFolioDTO toDto(FrontPortFolioEntity entity) {
-        if (entity == null) {
-            return null;
-        }
+        if (entity == null) return null;
 
         return FrontPortFolioDTO.builder()
                 .rnum(entity.getRnum())
@@ -33,12 +32,9 @@ public class PortFolioMapperImpl implements PortFolioMapper {
 
     @Override
     public FrontPortFolioEntity toEntity(FrontPortFolioDTO dto) {
+        if (dto == null) return null;
 
-        if (dto == null) {
-            return null;
-        }
-
-        return FrontPortFolioEntity.builder()
+        return builder()
                 .rnum(dto.getRnum())
                 .idx(dto.getIdx())
                 .categoryCd(dto.getCategoryCd())
@@ -56,10 +52,7 @@ public class PortFolioMapperImpl implements PortFolioMapper {
 
     @Override
     public List<FrontPortFolioDTO> toDtoList(List<FrontPortFolioEntity> entityList) {
-
-        if (entityList == null) {
-            return null;
-        }
+        if (entityList == null) return null;
 
         List<FrontPortFolioDTO> list = new ArrayList<>(entityList.size());
         for (FrontPortFolioEntity frontPortFolioEntity : entityList) {
@@ -71,10 +64,7 @@ public class PortFolioMapperImpl implements PortFolioMapper {
 
     @Override
     public List<FrontPortFolioEntity> toEntityList(List<FrontPortFolioDTO> dtoList) {
-
-        if (dtoList == null) {
-            return null;
-        }
+        if (dtoList == null) return null;
 
         List<FrontPortFolioEntity> list = new ArrayList<>(dtoList.size());
         for (FrontPortFolioDTO frontPortFolioDTO : dtoList) {

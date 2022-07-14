@@ -22,7 +22,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 @AllArgsConstructor
 @Table(name = "tsp_support")
 public class FrontSupportEntity extends NewCommonMappedClass {
-
     @Transient
     private Integer rnum;
 

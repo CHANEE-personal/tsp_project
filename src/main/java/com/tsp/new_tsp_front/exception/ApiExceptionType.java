@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum ApiExceptionType implements BaseExceptionType {
-
 	// Model 관련 Type
 	ERROR_MODEL("ERROR_MODEL", 500, "모델 등록 에러"),
 	NOT_FOUND_MODEL("NOT_FOUND_MODEL", 200, "해당 모델 없음"),

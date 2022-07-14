@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
+import static java.util.List.of;
+
 @Configuration
 @EnableCaching
 public class CacheConfiguration {
@@ -26,7 +28,7 @@ public class CacheConfiguration {
     @Bean
     public CacheManager cacheManager() {
         SimpleCacheManager cacheManager = new SimpleCacheManager();
-        cacheManager.setCaches(List.of(
+        cacheManager.setCaches(of(
                 new ConcurrentMapCache("model"),
                 new ConcurrentMapCache("production"),
                 new ConcurrentMapCache("portfolio")));

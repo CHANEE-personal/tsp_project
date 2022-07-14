@@ -13,7 +13,7 @@ import org.springframework.transaction.interceptor.RollbackRuleAttribute;
 import org.springframework.transaction.interceptor.RuleBasedTransactionAttribute;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
-import java.util.Collections;
+import static java.util.Collections.singletonList;
 
 @PropertySource("classpath:/application.properties")
 @EnableTransactionManagement
@@ -33,7 +33,7 @@ public class TransactionAspect {
         MatchAlwaysTransactionAttributeSource source = new MatchAlwaysTransactionAttributeSource();
         RuleBasedTransactionAttribute transactionAttribute = new RuleBasedTransactionAttribute();
         transactionAttribute.setName(AOP_TRANSACTION_METHOD_NAME);
-        transactionAttribute.setRollbackRules(Collections.singletonList(new RollbackRuleAttribute(Exception.class)));
+        transactionAttribute.setRollbackRules(singletonList(new RollbackRuleAttribute(Exception.class)));
         source.setTransactionAttribute(transactionAttribute);
 
         return new TransactionInterceptor(transactionManager, source);

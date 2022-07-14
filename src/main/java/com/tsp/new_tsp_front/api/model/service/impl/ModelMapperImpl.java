@@ -7,14 +7,14 @@ import org.mapstruct.Mapper;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.tsp.new_tsp_front.api.model.domain.FrontModelEntity.*;
+
+
 @Mapper
 public class ModelMapperImpl implements ModelMapper {
-
 	@Override
 	public FrontModelDTO toDto(FrontModelEntity entity) {
-		if (entity == null) {
-			return null;
-		}
+		if (entity == null) return null;
 
 		return FrontModelDTO.builder().idx(entity.getIdx())
 				.rnum(entity.getRnum())
@@ -37,17 +37,15 @@ public class ModelMapperImpl implements ModelMapper {
 				.createTime(entity.getCreateTime())
 				.updater(entity.getUpdater())
 				.updateTime(entity.getUpdateTime())
-				.modelImage(ModelImageMapperImpl.INSTANCE.toDtoList(entity.getCommonImageEntityList()))
+				.modelImage(ModelImageMapper.INSTANCE.toDtoList(entity.getCommonImageEntityList()))
 				.build();
 	}
 
 	@Override
 	public FrontModelEntity toEntity(FrontModelDTO dto) {
-		if(dto == null) {
-			return null;
-		}
+		if(dto == null) return null;
 
-		return FrontModelEntity.builder()
+		return builder()
 				.rnum(dto.getRnum())
 				.idx(dto.getIdx())
 				.categoryCd(dto.getCategoryCd())
@@ -74,9 +72,7 @@ public class ModelMapperImpl implements ModelMapper {
 
 	@Override
 	public List<FrontModelDTO> toDtoList(List<FrontModelEntity> entityList) {
-		if(entityList == null) {
-			return null;
-		}
+		if(entityList == null) return null;
 
 		List<FrontModelDTO> list = new ArrayList<>(entityList.size());
 		for(FrontModelEntity frontModelEntity : entityList) {
@@ -88,9 +84,7 @@ public class ModelMapperImpl implements ModelMapper {
 
 	@Override
 	public List<FrontModelEntity> toEntityList(List<FrontModelDTO> dtoList) {
-		if(dtoList == null) {
-			return null;
-		}
+		if(dtoList == null) return null;
 
 		List<FrontModelEntity> list = new ArrayList<>(dtoList.size());
 		for(FrontModelDTO frontModelDTO : dtoList) {

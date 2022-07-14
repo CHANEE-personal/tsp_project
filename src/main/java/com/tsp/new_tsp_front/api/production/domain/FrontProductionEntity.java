@@ -23,7 +23,6 @@ import static javax.persistence.GenerationType.*;
 @NoArgsConstructor
 @Table(name = "tsp_production")
 public class FrontProductionEntity extends NewCommonMappedClass {
-
 	@Transient
 	private Integer rnum;
 

@@ -1,13 +1,15 @@
 package com.tsp.new_tsp_front.common;
 
 import com.tsp.new_tsp_front.common.paging.Page;
-import com.tsp.new_tsp_front.common.utils.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
+import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
 
 @Slf4j
 @Component
@@ -28,15 +30,15 @@ public class SearchCommon {
 		Map<String, Object> searchMap = new HashMap<>();
 
 		// 페이징 처리
-		Integer pageCnt = StringUtil.getInt(page.getPage(), 1);
-		Integer pageSize = StringUtil.getInt(page.getSize(), 10);
+		Integer pageCnt = getInt(page.getPage(), 1);
+		Integer pageSize = getInt(page.getSize(), 10);
 		page.setPage(pageCnt);
 		page.setSize(pageSize);
 
 		// 검색 조건
-		searchMap.put("searchType", StringUtil.getString(paramMap.get("searchType"), ""));
-		searchMap.put("searchKeyword", StringUtil.getString(paramMap.get("searchKeyword"), ""));
-		searchMap.put("jpaStartPage", StringUtil.getInt(page.getStartPage(), 0));
+		searchMap.put("searchType", getString(paramMap.get("searchType"), ""));
+		searchMap.put("searchKeyword", getString(paramMap.get("searchKeyword"), ""));
+		searchMap.put("jpaStartPage", getInt(page.getStartPage(), 0));
 		searchMap.put("startPage", pageCnt);
 		searchMap.put("size", pageSize);
 

@@ -4,8 +4,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
-import com.tsp.new_tsp_front.common.utils.StringUtil;
-import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -16,8 +14,7 @@ import static com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity.commonI
 import static com.tsp.new_tsp_front.api.production.domain.QFrontProductionEntity.frontProductionEntity;
 import static com.tsp.new_tsp_front.api.production.service.impl.ProductionMapper.INSTANCE;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
-import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_PRODUCTION;
-import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_PRODUCTION_LIST;
+import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
 
 @Repository
 @RequiredArgsConstructor
@@ -25,8 +22,8 @@ public class FrontProductionJpaRepository {
 	private final JPAQueryFactory queryFactory;
 
 	private BooleanExpression searchProduction(Map<String, Object> productionMap) {
-		String searchType = StringUtil.getString(productionMap.get("searchType"),"");
-		String searchKeyword = StringUtil.getString(productionMap.get("searchKeyword"),"");
+		String searchType = getString(productionMap.get("searchType"),"");
+		String searchKeyword = getString(productionMap.get("searchKeyword"),"");
 
 		if ("0".equals(searchType)) {
 			return frontProductionEntity.title.contains(searchKeyword).or(frontProductionEntity.description.contains(searchKeyword));

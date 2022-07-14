@@ -12,7 +12,9 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.*;
 
 @Getter
 @Setter
@@ -22,9 +24,8 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NewCodeEntity extends NewCommonMappedClass {
-
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "idx")
 	Integer idx;
 
@@ -40,6 +41,6 @@ public class NewCodeEntity extends NewCommonMappedClass {
 	@Column(name = "cmm_type")
 	String cmmType;
 
-	@OneToMany(mappedBy = "newModelCodeJpaDTO", cascade = CascadeType.MERGE, fetch = LAZY)
+	@OneToMany(mappedBy = "newModelCodeJpaDTO", cascade = MERGE, fetch = LAZY)
 	private List<FrontModelEntity> frontModelEntityList = new ArrayList<>();
 }

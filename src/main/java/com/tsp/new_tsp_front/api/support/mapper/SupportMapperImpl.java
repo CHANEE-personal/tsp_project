@@ -6,13 +6,13 @@ import com.tsp.new_tsp_front.api.support.domain.FrontSupportEntity;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.tsp.new_tsp_front.api.support.domain.FrontSupportEntity.*;
+
 public class SupportMapperImpl implements SupportMapper {
 
 	@Override
 	public FrontSupportDTO toDto(FrontSupportEntity entity) {
-		if(entity == null) {
-			return null;
-		}
+		if(entity == null) return null;
 
 		return FrontSupportDTO.builder()
 				.rnum(entity.getRnum())
@@ -30,11 +30,9 @@ public class SupportMapperImpl implements SupportMapper {
 
 	@Override
 	public FrontSupportEntity toEntity(FrontSupportDTO dto) {
-		if(dto == null) {
-			return null;
-		}
+		if(dto == null) return null;
 
-		return FrontSupportEntity.builder()
+		return builder()
 				.rnum(dto.getRnum())
 				.idx(dto.getIdx())
 				.supportName(dto.getSupportName())
@@ -50,9 +48,7 @@ public class SupportMapperImpl implements SupportMapper {
 
 	@Override
 	public List<FrontSupportDTO> toDtoList(List<FrontSupportEntity> entityList) {
-		if(entityList == null) {
-			return null;
-		}
+		if(entityList == null) return null;
 
 		List<FrontSupportDTO> list = new ArrayList<>(entityList.size());
 		for(FrontSupportEntity frontSupportEntity : entityList) {
@@ -64,9 +60,7 @@ public class SupportMapperImpl implements SupportMapper {
 
 	@Override
 	public List<FrontSupportEntity> toEntityList(List<FrontSupportDTO> dtoList) {
-		if(dtoList == null) {
-			return null;
-		}
+		if(dtoList == null) return null;
 
 		List<FrontSupportEntity> list = new ArrayList<>(dtoList.size());
 		for(FrontSupportDTO frontSupportDTO : dtoList) {

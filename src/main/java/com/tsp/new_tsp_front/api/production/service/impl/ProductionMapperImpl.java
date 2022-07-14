@@ -1,19 +1,18 @@
 package com.tsp.new_tsp_front.api.production.service.impl;
 
-import com.tsp.new_tsp_front.api.model.service.impl.ModelImageMapperImpl;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity.*;
+
 public class ProductionMapperImpl implements ProductionMapper {
 
 	@Override
 	public FrontProductionDTO toDto(FrontProductionEntity entity) {
-		if(entity == null) {
-			return null;
-		}
+		if(entity == null) return null;
 
 		return FrontProductionDTO.builder()
 				.rnum(entity.getRnum())
@@ -31,11 +30,9 @@ public class ProductionMapperImpl implements ProductionMapper {
 
 	@Override
 	public FrontProductionEntity toEntity(FrontProductionDTO dto) {
-		if(dto == null) {
-			return null;
-		}
+		if(dto == null) return null;
 
-		return FrontProductionEntity.builder()
+		return builder()
 				.rnum(dto.getRnum())
 				.idx(dto.getIdx())
 				.title(dto.getTitle())
@@ -50,9 +47,7 @@ public class ProductionMapperImpl implements ProductionMapper {
 
 	@Override
 	public List<FrontProductionDTO> toDtoList(List<FrontProductionEntity> entityList) {
-		if(entityList == null) {
-			return null;
-		}
+		if(entityList == null) return null;
 
 		List<FrontProductionDTO> list = new ArrayList<>(entityList.size());
 		for(FrontProductionEntity frontProductionEntity : entityList) {
@@ -64,9 +59,7 @@ public class ProductionMapperImpl implements ProductionMapper {
 
 	@Override
 	public List<FrontProductionEntity> toEntityList(List<FrontProductionDTO> dtoList) {
-		if(dtoList == null) {
-			return null;
-		}
+		if(dtoList == null) return null;
 
 		List<FrontProductionEntity> list = new ArrayList<>(dtoList.size());
 		for(FrontProductionDTO frontProductionDTO : dtoList) {

@@ -30,7 +30,6 @@ import static javax.persistence.GenerationType.*;
 @NoArgsConstructor
 @Table(name = "tsp_model")
 public class FrontModelEntity extends NewCommonMappedClass {
-
 	@Transient
 	private Integer rnum;
 

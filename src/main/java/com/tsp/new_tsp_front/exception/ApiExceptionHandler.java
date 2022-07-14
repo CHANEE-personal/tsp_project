@@ -24,11 +24,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import static java.util.Arrays.stream;
+import static java.util.Locale.KOREA;
+import static org.springframework.context.i18n.LocaleContextHolder.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.OK;
+
 @RestControllerAdvice
 @Slf4j
 @RequiredArgsConstructor
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
-
 	private final MessageSource messageSource;
 
 	@Getter
@@ -54,9 +59,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	 * </pre>
 	 *
 	 */
-	@ExceptionHandler(TspException.class)
+	@ExceptionHandler(value = TspException.class)
 	public ResponseEntity<Error> exception(TspException tspException) {
-		return new ResponseEntity<>(Error.create(tspException.getBaseExceptionType()), HttpStatus.OK);
+		return new ResponseEntity<>(Error.create(tspException.getBaseExceptionType()), OK);
 	}
 
 	/**
@@ -69,9 +74,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	 * </pre>
 	 *
 	 */
-	@ExceptionHandler(ConstraintViolationException.class)
+	@ExceptionHandler(value = ConstraintViolationException.class)
 	protected ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException e, WebRequest request) {
-		return handleExceptionInternal(e, messageSource.getMessage("modelCategory.Range", new String[]{}, Locale.KOREA), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+		return handleExceptionInternal(e, messageSource.getMessage("modelCategory.Range", new String[]{}, KOREA), new HttpHeaders(), BAD_REQUEST, request);
 	}
 
 	/**
@@ -91,10 +96,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 		List<ObjectError> allErrors = ex.getBindingResult().getAllErrors();
 		for (ObjectError error : allErrors) {
-			String message = Arrays.stream(Objects.requireNonNull(error.getCodes()))
+			String message = stream(Objects.requireNonNull(error.getCodes()))
 					.map(c -> {
 						Object[] arguments = error.getArguments();
-						Locale locale = LocaleContextHolder.getLocale();
+						Locale locale = getLocale();
 						try {
 							return messageSource.getMessage(c, arguments, locale);
 						} catch (NoSuchMessageException e) {

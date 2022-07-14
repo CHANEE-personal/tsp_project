@@ -17,6 +17,7 @@ import static com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity.commonI
 import static com.tsp.new_tsp_front.api.model.domain.QFrontModelEntity.frontModelEntity;
 import static com.tsp.new_tsp_front.api.model.service.impl.ModelMapper.INSTANCE;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
+import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,8 +26,8 @@ public class FrontModelJpaRepository {
     private final JPAQueryFactory queryFactory;
 
     private BooleanExpression searchModel(Map<String, Object> modelMap) {
-        String searchType = StringUtil.getString(modelMap.get("searchType"), "");
-        String searchKeyword = StringUtil.getString(modelMap.get("searchKeyword"), "");
+        String searchType = getString(modelMap.get("searchType"), "");
+        String searchKeyword = getString(modelMap.get("searchKeyword"), "");
         Integer categoryCd = getInt(modelMap.get("categoryCd"), 0);
 
         if ("0".equals(searchType)) {

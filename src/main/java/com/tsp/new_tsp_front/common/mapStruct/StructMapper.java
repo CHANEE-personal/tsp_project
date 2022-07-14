@@ -3,7 +3,6 @@ package com.tsp.new_tsp_front.common.mapStruct;
 import java.util.List;
 
 public interface StructMapper<D, E> {
-
 	D toDto(E entity);
 
 	E toEntity(D dto);

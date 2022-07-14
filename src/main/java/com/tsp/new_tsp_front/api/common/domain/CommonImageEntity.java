@@ -19,7 +19,6 @@ import static javax.persistence.FetchType.LAZY;
 @AllArgsConstructor
 @Table(name = "tsp_image")
 public class CommonImageEntity implements Serializable {
-
 	@Transient
 	private Integer rnum;
 

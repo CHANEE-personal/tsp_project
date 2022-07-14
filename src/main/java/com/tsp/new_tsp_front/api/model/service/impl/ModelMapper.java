@@ -4,14 +4,14 @@ import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.common.mapStruct.StructMapper;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
+import static org.mapstruct.factory.Mappers.getMapper;
+
 @Mapper
 public interface ModelMapper extends StructMapper<FrontModelDTO, FrontModelEntity> {
-
-	ModelMapper INSTANCE = Mappers.getMapper(ModelMapper.class);
+	ModelMapper INSTANCE = getMapper(ModelMapper.class);
 
 	@Override
 	FrontModelDTO toDto(FrontModelEntity entity);

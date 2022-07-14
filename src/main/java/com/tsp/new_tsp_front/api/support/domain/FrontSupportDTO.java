@@ -13,6 +13,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
+import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
+
 @Getter
 @Setter
 @SuperBuilder
@@ -20,7 +22,6 @@ import java.util.Date;
 @AllArgsConstructor
 @ApiModel
 public class FrontSupportDTO extends NewCommonDTO {
-
     @ApiModelProperty(required = true, value = "rnum", hidden = true)
     Integer rnum;
 
@@ -49,7 +50,7 @@ public class FrontSupportDTO extends NewCommonDTO {
     private String visible;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+    @JsonFormat(shape = STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     @ApiModelProperty(value = "지원 시각", required = true)
     private Date supportTime;
 

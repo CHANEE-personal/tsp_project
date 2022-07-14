@@ -10,6 +10,8 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 @Entity
 @Getter
 @Setter
@@ -18,9 +20,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name = "tsp_model_image")
 public class FrontModelImageEntity {
-
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "idx")
 	private Integer idx;
 

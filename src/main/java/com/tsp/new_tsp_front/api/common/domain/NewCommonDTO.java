@@ -12,6 +12,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
+import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
+
 @Getter
 @Setter
 @SuperBuilder
@@ -19,7 +21,6 @@ import java.util.Date;
 @AllArgsConstructor
 @ApiModel
 public class NewCommonDTO {
-
 	@ApiModelProperty(required = true, value = "등록자", hidden = true)
 	private Integer creator;
 
@@ -30,12 +31,12 @@ public class NewCommonDTO {
 	private String adminName;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	@JsonFormat(shape = STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	@ApiModelProperty(required = true, value = "등록 일자", hidden = true)
 	private Date createTime;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	@JsonFormat(shape = STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	@ApiModelProperty(required = true, value = "수정 일자", hidden = true)
 	private Date updateTime;
 }

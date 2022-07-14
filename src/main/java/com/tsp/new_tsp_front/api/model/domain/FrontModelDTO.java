@@ -25,7 +25,6 @@ import java.util.List;
 @AllArgsConstructor
 @ApiModel
 public class FrontModelDTO extends NewCommonDTO {
-
 	@ApiModelProperty(required = true, value = "rnum", hidden = true)
 	private Integer rnum;
 
