@@ -33,7 +33,7 @@ public class PortFolioImageMapperImpl implements PortFolioImageMapper {
 
     @Override
     public CommonImageEntity toEntity(CommonImageDTO dto) {
-        if(dto == null) return null;
+        if (dto == null) return null;
 
         return builder()
                 .idx(dto.getIdx())
@@ -51,10 +51,10 @@ public class PortFolioImageMapperImpl implements PortFolioImageMapper {
 
     @Override
     public List<CommonImageDTO> toDtoList(List<CommonImageEntity> entityList) {
-        if(entityList == null) return null;
+        if (entityList == null) return null;
 
         List<CommonImageDTO> list = new ArrayList<>(entityList.size());
-        for(CommonImageEntity commonImageEntity : entityList) {
+        for (CommonImageEntity commonImageEntity : entityList) {
             list.add(toDto(commonImageEntity));
         }
 
@@ -63,10 +63,10 @@ public class PortFolioImageMapperImpl implements PortFolioImageMapper {
 
     @Override
     public List<CommonImageEntity> toEntityList(List<CommonImageDTO> dtoList) {
-        if(dtoList == null) return null;
+        if (dtoList == null) return null;
 
         List<CommonImageEntity> list = new ArrayList<>(dtoList.size());
-        for(CommonImageDTO commonImageDTO : dtoList) {
+        for (CommonImageDTO commonImageDTO : dtoList) {
             list.add(toEntity(commonImageDTO));
         }
 

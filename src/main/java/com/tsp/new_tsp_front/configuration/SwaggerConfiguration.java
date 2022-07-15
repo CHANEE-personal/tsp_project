@@ -24,68 +24,65 @@ import static springfox.documentation.spi.service.contexts.SecurityContext.*;
 @EnableSwagger2
 public class SwaggerConfiguration {
 
-	/**
-	 * <pre>
-	 * 1. MethodName : apiInfo
-	 * 2. ClassName  : SwaggerConfiguration.java
-	 * 3. Comment    : api Info
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2022. 01. 15.
-	 * </pre>
-	 *
-	 */
-	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder()
-				.title("Tsp Model")
-				.description("Tsp Model API")
-				.build();
-	}
+    /**
+     * <pre>
+     * 1. MethodName : apiInfo
+     * 2. ClassName  : SwaggerConfiguration.java
+     * 3. Comment    : api Info
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 01. 15.
+     * </pre>
+     */
+    private ApiInfo apiInfo() {
+        return new ApiInfoBuilder()
+                .title("Tsp Model")
+                .description("Tsp Model API")
+                .build();
+    }
 
-	/**
-	 * <pre>
-	 * 1. MethodName : commonApi
-	 * 2. ClassName  : SwaggerConfiguration.java
-	 * 3. Comment    : Api path and info config
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2022. 01. 15.
-	 * </pre>
-	 *
-	 */
-	@Bean
-	public Docket commonApi() {
-		return new Docket(SWAGGER_2)
-				.groupName("tsp")
-				.apiInfo(this.apiInfo())
-				.select()
-				.apis(basePackage("com.tsp.new_tsp_front.api"))
-				.paths(ant("/api/**"))
-				.build()
-				.securityContexts(of(securityContext()))
-				.securitySchemes(of(apikey()));
-	}
+    /**
+     * <pre>
+     * 1. MethodName : commonApi
+     * 2. ClassName  : SwaggerConfiguration.java
+     * 3. Comment    : Api path and info config
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 01. 15.
+     * </pre>
+     */
+    @Bean
+    public Docket commonApi() {
+        return new Docket(SWAGGER_2)
+                .groupName("tsp")
+                .apiInfo(this.apiInfo())
+                .select()
+                .apis(basePackage("com.tsp.new_tsp_front.api"))
+                .paths(ant("/api/**"))
+                .build()
+                .securityContexts(of(securityContext()))
+                .securitySchemes(of(apikey()));
+    }
 
-	/**
-	 * <pre>
-	 * 1. MethodName : apiKey
-	 * 2. ClassName  : SwaggerConfiguration.java
-	 * 3. Comment    : api key 설정
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2022. 01. 15.
-	 * </pre>
-	 *
-	 */
-	private ApiKey apikey() {
-		return new ApiKey("JWT", "Authorization", "header");
-	}
+    /**
+     * <pre>
+     * 1. MethodName : apiKey
+     * 2. ClassName  : SwaggerConfiguration.java
+     * 3. Comment    : api key 설정
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 01. 15.
+     * </pre>
+     */
+    private ApiKey apikey() {
+        return new ApiKey("JWT", "Authorization", "header");
+    }
 
-	private SecurityContext securityContext() {
-		return builder().securityReferences(defaultAuth()).forPaths(PathSelectors.any()).build();
-	}
+    private SecurityContext securityContext() {
+        return builder().securityReferences(defaultAuth()).forPaths(PathSelectors.any()).build();
+    }
 
-	List<SecurityReference> defaultAuth() {
-		AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
-		AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-		authorizationScopes[0] = authorizationScope;
-		return of(new SecurityReference("JWT", authorizationScopes));
-	}
+    List<SecurityReference> defaultAuth() {
+        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+        authorizationScopes[0] = authorizationScope;
+        return of(new SecurityReference("JWT", authorizationScopes));
+    }
 }

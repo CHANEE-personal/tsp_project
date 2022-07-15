@@ -5,7 +5,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
-import com.tsp.new_tsp_front.common.utils.StringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -64,10 +63,10 @@ public class FrontModelJpaRepository {
                 .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
                 .fetchJoin()
                 .where(frontModelEntity.modelMainYn.eq("Y")
-                .and(frontModelEntity.visible.eq("Y")
-                .and(commonImageEntity.typeName.eq("model")
-                .and(commonImageEntity.imageType.eq("main"))
-                .and(commonImageEntity.visible.eq("Y")))))
+                        .and(frontModelEntity.visible.eq("Y")
+                                .and(commonImageEntity.typeName.eq("model")
+                                        .and(commonImageEntity.imageType.eq("main"))
+                                        .and(commonImageEntity.visible.eq("Y")))))
                 .fetch();
 
         modelList.forEach(list -> modelList.get(modelList.indexOf(list)).setRnum(modelList.indexOf(list)));
@@ -88,7 +87,7 @@ public class FrontModelJpaRepository {
         return queryFactory
                 .selectFrom(frontModelEntity)
                 .where(searchModel(modelMap)
-                .and(frontModelEntity.visible.eq("Y")))
+                        .and(frontModelEntity.visible.eq("Y")))
                 .fetch().size();
     }
 
@@ -113,7 +112,7 @@ public class FrontModelJpaRepository {
                 .fetch();
 
         modelList.forEach(list -> modelList.get(modelList.indexOf(list))
-                .setRnum(getInt(modelMap.get("startPage"),1)*(getInt(modelMap.get("size"),1))-(2-modelList.indexOf(list))));
+                .setRnum(getInt(modelMap.get("startPage"), 1) * (getInt(modelMap.get("size"), 1)) - (2 - modelList.indexOf(list))));
 
         return INSTANCE.toDtoList(modelList);
     }
@@ -134,8 +133,8 @@ public class FrontModelJpaRepository {
                 .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
                 .fetchJoin()
                 .where(frontModelEntity.idx.eq(existFrontModelEntity.getIdx())
-                .and(frontModelEntity.visible.eq("Y"))
-                .and(commonImageEntity.typeName.eq("model")))
+                        .and(frontModelEntity.visible.eq("Y"))
+                        .and(commonImageEntity.typeName.eq("model")))
                 .fetchOne();
 
         return INSTANCE.toDto(getModelInfo);

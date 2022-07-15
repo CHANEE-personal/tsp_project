@@ -19,8 +19,8 @@ import static java.util.Collections.singletonList;
 @EnableTransactionManagement
 @Configuration
 public class TransactionAspect {
-    private static final String AOP_TRANSACTION_METHOD_NAME="*";
-    private static final String AOP_TRANSACTION_EXPRESSION="execution(* com.tsp.new_tsp_front..*Repository.*(..))";
+    private static final String AOP_TRANSACTION_METHOD_NAME = "*";
+    private static final String AOP_TRANSACTION_EXPRESSION = "execution(* com.tsp.new_tsp_front..*Repository.*(..))";
 
     private final PlatformTransactionManager transactionManager;
 
@@ -29,7 +29,7 @@ public class TransactionAspect {
     }
 
     @Bean
-    public TransactionInterceptor transactionAdvice(){
+    public TransactionInterceptor transactionAdvice() {
         MatchAlwaysTransactionAttributeSource source = new MatchAlwaysTransactionAttributeSource();
         RuleBasedTransactionAttribute transactionAttribute = new RuleBasedTransactionAttribute();
         transactionAttribute.setName(AOP_TRANSACTION_METHOD_NAME);
@@ -40,7 +40,7 @@ public class TransactionAspect {
     }
 
     @Bean
-    public Advisor transactionAdviceAdvisor(){
+    public Advisor transactionAdviceAdvisor() {
         AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
         pointcut.setExpression(AOP_TRANSACTION_EXPRESSION);
         return new DefaultPointcutAdvisor(pointcut, transactionAdvice());

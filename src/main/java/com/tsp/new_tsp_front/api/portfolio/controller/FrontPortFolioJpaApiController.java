@@ -26,61 +26,59 @@ import static org.springframework.web.client.HttpClientErrorException.*;
 @Api(tags = "포트폴리오관련 API")
 @RequestMapping("/api/portfolio")
 public class FrontPortFolioJpaApiController {
-	private final FrontPortFolioJpaApiService frontPortFolioJpaApiService;
-	private final SearchCommon searchCommon;
+    private final FrontPortFolioJpaApiService frontPortFolioJpaApiService;
+    private final SearchCommon searchCommon;
 
-	/**
-	 * <pre>
-	 * 1. MethodName : lists
-	 * 2. ClassName  : FrontPortFolioJpaApiController.java
-	 * 3. Comment    : 프론트 > 포트폴리오 조회
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2022. 01. 11.
-	 * </pre>
-	 *
-	 */
-	@ApiOperation(value = "포트폴리오 조회", notes = "포트폴리오를 조회한다.")
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "성공", response = Map.class),
-			@ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
-			@ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
-			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
-			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
-	})
-	@GetMapping(value = "/lists")
-	public Map<String, Object> getPortFolioList(@RequestParam(required = false) Map<String, Object> paramMap, Page page) {
-		Map<String, Object> resultMap = new HashMap<>();
+    /**
+     * <pre>
+     * 1. MethodName : lists
+     * 2. ClassName  : FrontPortFolioJpaApiController.java
+     * 3. Comment    : 프론트 > 포트폴리오 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 01. 11.
+     * </pre>
+     */
+    @ApiOperation(value = "포트폴리오 조회", notes = "포트폴리오를 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "성공", response = Map.class),
+            @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
+            @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
+            @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+            @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+    })
+    @GetMapping(value = "/lists")
+    public Map<String, Object> getPortFolioList(@RequestParam(required = false) Map<String, Object> paramMap, Page page) {
+        Map<String, Object> resultMap = new HashMap<>();
 
-		// 리스트 수
-		resultMap.put("pageSize", page.getSize());
-		// 전체 페이지 수
-		resultMap.put("perPageListCnt", ceil((this.frontPortFolioJpaApiService.getPortFolioList(searchCommon.searchCommon(page, paramMap)).size()-1)/page.getSize()+1));
-		// 전체 아이템 수
-		resultMap.put("portFolioListTotalCnt", this.frontPortFolioJpaApiService.getPortFolioList(searchCommon.searchCommon(page, paramMap)).size());
-		resultMap.put("portFolioList", this.frontPortFolioJpaApiService.getPortFolioList(searchCommon.searchCommon(page, paramMap)));
-		return resultMap;
-	}
+        // 리스트 수
+        resultMap.put("pageSize", page.getSize());
+        // 전체 페이지 수
+        resultMap.put("perPageListCnt", ceil((this.frontPortFolioJpaApiService.getPortFolioList(searchCommon.searchCommon(page, paramMap)).size() - 1) / page.getSize() + 1));
+        // 전체 아이템 수
+        resultMap.put("portFolioListTotalCnt", this.frontPortFolioJpaApiService.getPortFolioList(searchCommon.searchCommon(page, paramMap)).size());
+        resultMap.put("portFolioList", this.frontPortFolioJpaApiService.getPortFolioList(searchCommon.searchCommon(page, paramMap)));
+        return resultMap;
+    }
 
-	/**
-	 * <pre>
-	 * 1. MethodName : {idx}
-	 * 2. ClassName  : FrontPortFolioJpaApiController.java
-	 * 3. Comment    : 프론트 > 포트폴리오 상세 조회
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2022. 01. 11.
-	 * </pre>
-	 *
-	 */
-	@ApiOperation(value = "포트폴리오 상세 조회", notes = "포트폴리오를 상세 조회한다.")
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "성공", response = Map.class),
-			@ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
-			@ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
-			@ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
-			@ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
-	})
-	@GetMapping(value = "/{idx}")
-	public FrontPortFolioDTO getPortFolioInfo(@PathVariable("idx") Integer idx) {
-		return this.frontPortFolioJpaApiService.getPortFolioInfo(builder().idx(idx).build());
-	}
+    /**
+     * <pre>
+     * 1. MethodName : {idx}
+     * 2. ClassName  : FrontPortFolioJpaApiController.java
+     * 3. Comment    : 프론트 > 포트폴리오 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 01. 11.
+     * </pre>
+     */
+    @ApiOperation(value = "포트폴리오 상세 조회", notes = "포트폴리오를 상세 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "성공", response = Map.class),
+            @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
+            @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
+            @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+            @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+    })
+    @GetMapping(value = "/{idx}")
+    public FrontPortFolioDTO getPortFolioInfo(@PathVariable("idx") Integer idx) {
+        return this.frontPortFolioJpaApiService.getPortFolioInfo(builder().idx(idx).build());
+    }
 }

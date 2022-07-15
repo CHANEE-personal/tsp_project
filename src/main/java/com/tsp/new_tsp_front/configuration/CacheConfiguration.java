@@ -23,7 +23,6 @@ public class CacheConfiguration {
      * 4. 작성자       : CHO
      * 5. 작성일       : 2021. 02. 09.
      * </pre>
-     *
      */
     @Bean
     public CacheManager cacheManager() {

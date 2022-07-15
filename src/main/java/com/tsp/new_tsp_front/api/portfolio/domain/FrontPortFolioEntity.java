@@ -26,41 +26,42 @@ import static javax.persistence.GenerationType.*;
 @AllArgsConstructor
 @Table(name = "tsp_portfolio")
 public class FrontPortFolioEntity extends NewCommonMappedClass {
-	@Transient
-	private Integer rnum;
+    @Transient
+    private Integer rnum;
 
-	@Id @GeneratedValue(strategy = IDENTITY)
-	@Column(name = "idx")
-	private Integer idx;
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "idx")
+    private Integer idx;
 
-	@Column(name = "category_cd")
-	@NotEmpty(message = "포트폴리오 카테고리 선택은 필수입니다.")
-	private Integer categoryCd;
+    @Column(name = "category_cd")
+    @NotEmpty(message = "포트폴리오 카테고리 선택은 필수입니다.")
+    private Integer categoryCd;
 
-	@Column(name = "title")
-	@NotEmpty(message = "포트폴리오 제목 입력은 필수입니다.")
-	private String title;
+    @Column(name = "title")
+    @NotEmpty(message = "포트폴리오 제목 입력은 필수입니다.")
+    private String title;
 
-	@Column(name = "description")
-	@Lob
-	@NotEmpty(message = "포트폴리오 상세내용 입력은 필수입니다.")
-	private String description;
+    @Column(name = "description")
+    @Lob
+    @NotEmpty(message = "포트폴리오 상세내용 입력은 필수입니다.")
+    private String description;
 
-	@Column(name = "hash_tag")
-	@NotEmpty(message = "포트폴리오 해시태그 입력은 필수입니다.")
-	private String hashTag;
+    @Column(name = "hash_tag")
+    @NotEmpty(message = "포트폴리오 해시태그 입력은 필수입니다.")
+    private String hashTag;
 
-	@Column(name = "video_url")
-	@NotEmpty(message = "포트폴리오 비디오 URL 입력은 필수입니다.")
-	private String videoUrl;
+    @Column(name = "video_url")
+    @NotEmpty(message = "포트폴리오 비디오 URL 입력은 필수입니다.")
+    private String videoUrl;
 
-	@Column(name = "visible")
-	private String visible;
+    @Column(name = "visible")
+    private String visible;
 
-	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "category_cd", insertable = false, updatable = false)
-	private NewCodeEntity newPortFolioJpaDTO;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "category_cd", insertable = false, updatable = false)
+    private NewCodeEntity newPortFolioJpaDTO;
 
-	@OneToMany(mappedBy = "frontPortFolioEntity")
-	private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
+    @OneToMany(mappedBy = "frontPortFolioEntity")
+    private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 }

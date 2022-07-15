@@ -9,17 +9,17 @@ import java.util.List;
 import static org.mapstruct.factory.Mappers.getMapper;
 
 public interface SupportMapper extends StructMapper<FrontSupportDTO, FrontSupportEntity> {
-	SupportMapper INSTANCE = getMapper(SupportMapper.class);
+    SupportMapper INSTANCE = getMapper(SupportMapper.class);
 
-	@Override
-	FrontSupportDTO toDto(FrontSupportEntity entity);
+    @Override
+    FrontSupportDTO toDto(FrontSupportEntity entity);
 
-	@Override
-	FrontSupportEntity toEntity(FrontSupportDTO dto);
+    @Override
+    FrontSupportEntity toEntity(FrontSupportDTO dto);
 
-	@Override
-	List<FrontSupportDTO> toDtoList(List<FrontSupportEntity> entityList);
+    @Override
+    List<FrontSupportDTO> toDtoList(List<FrontSupportEntity> entityList);
 
-	@Override
-	List<FrontSupportEntity> toEntityList(List<FrontSupportDTO> dtoList);
+    @Override
+    List<FrontSupportEntity> toEntityList(List<FrontSupportDTO> dtoList);
 }

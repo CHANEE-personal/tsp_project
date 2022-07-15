@@ -66,7 +66,6 @@ public class FrontModelJpaApiController {
      * 4. 작성자       : CHO
      * 5. 작성일       : 2022. 01. 02.
      * </pre>
-     *
      */
     @ApiOperation(value = "모델 조회", notes = "모델을 조회한다.")
     @ApiResponses(value = {
@@ -78,9 +77,9 @@ public class FrontModelJpaApiController {
     })
     @GetMapping(value = "/lists/{categoryCd}")
     public Map<String, Object> getModelList(@PathVariable("categoryCd")
-                                                          @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
-                                                          @RequestParam(required = false) Map<String, Object> paramMap,
-                                                          Page page) {
+                                            @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
+                                            @RequestParam(required = false) Map<String, Object> paramMap,
+                                            Page page) {
         Map<String, Object> resultMap = new HashMap<>();
         // 페이징 및 검색
         Map<String, Object> modelMap = searchCommon.searchCommon(page, paramMap);
@@ -105,7 +104,6 @@ public class FrontModelJpaApiController {
      * 4. 작성자       : CHO
      * 5. 작성일       : 2022. 01. 09.
      * </pre>
-     *
      */
     @ApiOperation(value = "모델 상세 조회", notes = "모델을 상세 조회한다.")
     @ApiResponses(value = {

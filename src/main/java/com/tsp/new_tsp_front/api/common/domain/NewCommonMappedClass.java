@@ -22,23 +22,23 @@ import static javax.persistence.TemporalType.TIMESTAMP;
 @AllArgsConstructor
 @MappedSuperclass
 public abstract class NewCommonMappedClass {
-	@Column(name = "creator", updatable = false)
-	@ApiModelProperty(required = true, value = "등록자")
-	private Integer creator;
+    @Column(name = "creator", updatable = false)
+    @ApiModelProperty(required = true, value = "등록자")
+    private Integer creator;
 
-	@Column(name = "updater", insertable = false)
-	@ApiModelProperty(required = true, value = "수정자")
-	private Integer updater;
+    @Column(name = "updater", insertable = false)
+    @ApiModelProperty(required = true, value = "수정자")
+    private Integer updater;
 
-	@Column(name = "create_time", updatable = false)
-	@Temporal(value = TIMESTAMP)
-	@ApiModelProperty(required = true, value = "등록 일자")
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date createTime;
+    @Column(name = "create_time", updatable = false)
+    @Temporal(value = TIMESTAMP)
+    @ApiModelProperty(required = true, value = "등록 일자")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date createTime;
 
-	@Column(name = "update_time", insertable = false)
-	@Temporal(value = TIMESTAMP)
-	@ApiModelProperty(required = true, value = "수정 일자")
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date updateTime;
+    @Column(name = "update_time", insertable = false)
+    @Temporal(value = TIMESTAMP)
+    @ApiModelProperty(required = true, value = "수정 일자")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date updateTime;
 }

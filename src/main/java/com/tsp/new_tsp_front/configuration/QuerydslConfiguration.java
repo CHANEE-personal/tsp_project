@@ -13,12 +13,12 @@ import javax.persistence.PersistenceContext;
 @EnableJpaAuditing
 public class QuerydslConfiguration {
 
-	@PersistenceContext
-	@Qualifier(value = "entityManagerFactory")
-	private EntityManager em;
+    @PersistenceContext
+    @Qualifier(value = "entityManagerFactory")
+    private EntityManager em;
 
-	@Bean
-	public JPAQueryFactory jpaQueryFactory() {
-		return new JPAQueryFactory(em);
-	}
+    @Bean
+    public JPAQueryFactory jpaQueryFactory() {
+        return new JPAQueryFactory(em);
+    }
 }

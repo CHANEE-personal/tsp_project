@@ -21,23 +21,23 @@ import java.util.List;
 @AllArgsConstructor
 @ApiModel
 public class FrontProductionDTO extends NewCommonDTO {
-	@ApiModelProperty(required = true, value = "rnum", hidden = true)
-	Integer rnum;
+    @ApiModelProperty(required = true, value = "rnum", hidden = true)
+    Integer rnum;
 
-	@ApiModelProperty(required = true, value = "idx", hidden = true)
-	Integer idx;
+    @ApiModelProperty(required = true, value = "idx", hidden = true)
+    Integer idx;
 
-	@NotNull(message = "제목 입력은 필수입니다.")
-	@ApiModelProperty(required = true, value = "title")
-	String title;
+    @NotNull(message = "제목 입력은 필수입니다.")
+    @ApiModelProperty(required = true, value = "title")
+    String title;
 
-	@NotNull(message = "상세 내용 입력은 필수입니다.")
-	@ApiModelProperty(required = true, value = "description")
-	String description;
+    @NotNull(message = "상세 내용 입력은 필수입니다.")
+    @ApiModelProperty(required = true, value = "description")
+    String description;
 
-	@ApiModelProperty(required = true, value = "visible")
-	String visible;
+    @ApiModelProperty(required = true, value = "visible")
+    String visible;
 
-	@ApiModelProperty(required = true, value = "productionImageList", hidden = true)
-	private List<CommonImageDTO> productionImage = new ArrayList<>();
+    @ApiModelProperty(required = true, value = "productionImageList", hidden = true)
+    private List<CommonImageDTO> productionImage = new ArrayList<>();
 }

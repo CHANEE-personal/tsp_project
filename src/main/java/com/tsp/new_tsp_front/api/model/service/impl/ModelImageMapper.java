@@ -11,17 +11,17 @@ import static org.mapstruct.factory.Mappers.getMapper;
 
 @Mapper
 public interface ModelImageMapper extends StructMapper<CommonImageDTO, CommonImageEntity> {
-	ModelImageMapper INSTANCE = getMapper(ModelImageMapper.class);
+    ModelImageMapper INSTANCE = getMapper(ModelImageMapper.class);
 
-	@Override
-	CommonImageDTO toDto(CommonImageEntity entity);
+    @Override
+    CommonImageDTO toDto(CommonImageEntity entity);
 
-	@Override
-	CommonImageEntity toEntity(CommonImageDTO dto);
+    @Override
+    CommonImageEntity toEntity(CommonImageDTO dto);
 
-	@Override
-	List<CommonImageDTO> toDtoList(List<CommonImageEntity> entityList);
+    @Override
+    List<CommonImageDTO> toDtoList(List<CommonImageEntity> entityList);
 
-	@Override
-	List<CommonImageEntity> toEntityList(List<CommonImageDTO> dtoList);
+    @Override
+    List<CommonImageEntity> toEntityList(List<CommonImageDTO> dtoList);
 }

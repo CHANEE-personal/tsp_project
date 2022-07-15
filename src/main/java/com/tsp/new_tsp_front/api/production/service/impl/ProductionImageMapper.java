@@ -8,7 +8,7 @@ import java.util.List;
 
 import static org.mapstruct.factory.Mappers.getMapper;
 
-public interface ProductionImageMapper extends StructMapper<CommonImageDTO, CommonImageEntity>  {
+public interface ProductionImageMapper extends StructMapper<CommonImageDTO, CommonImageEntity> {
     ProductionImageMapper INSTANCE = getMapper(ProductionImageMapper.class);
 
     @Override

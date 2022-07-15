@@ -24,23 +24,23 @@ import static javax.persistence.GenerationType.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NewCodeEntity extends NewCommonMappedClass {
-	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "idx")
-	Integer idx;
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "idx")
+    Integer idx;
 
-	@Column(name = "category_cd")
-	Integer categoryCd;
+    @Column(name = "category_cd")
+    Integer categoryCd;
 
-	@Column(name = "category_nm")
-	String categoryNm;
+    @Column(name = "category_nm")
+    String categoryNm;
 
-	@Column(name = "visible")
-	String visible;
+    @Column(name = "visible")
+    String visible;
 
-	@Column(name = "cmm_type")
-	String cmmType;
+    @Column(name = "cmm_type")
+    String cmmType;
 
-	@OneToMany(mappedBy = "newModelCodeJpaDTO", cascade = MERGE, fetch = LAZY)
-	private List<FrontModelEntity> frontModelEntityList = new ArrayList<>();
+    @OneToMany(mappedBy = "newModelCodeJpaDTO", cascade = MERGE, fetch = LAZY)
+    private List<FrontModelEntity> frontModelEntityList = new ArrayList<>();
 }

@@ -12,23 +12,22 @@ import static com.tsp.new_tsp_front.exception.ApiExceptionType.ERROR_SUPPORT;
 @Service
 @RequiredArgsConstructor
 public class FrontSupportJpaApiService {
-	private final FrontSupportJpaRepository frontSupportJpaRepository;
+    private final FrontSupportJpaRepository frontSupportJpaRepository;
 
-	/**
-	 * <pre>
-	 * 1. MethodName : insertSupportModel
-	 * 2. ClassName  : FrontSupportJpaApiService.java
-	 * 3. Comment    : 모델 지원하기
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2022. 05. 07.
-	 * </pre>
-	 *
-	 */
-	public FrontSupportDTO insertSupportModel(FrontSupportEntity frontSupportEntity) throws TspException {
-		try {
-			return this.frontSupportJpaRepository.insertSupportModel(frontSupportEntity);
-		} catch (Exception e) {
-			throw new TspException(ERROR_SUPPORT, e);
-		}
-	}
+    /**
+     * <pre>
+     * 1. MethodName : insertSupportModel
+     * 2. ClassName  : FrontSupportJpaApiService.java
+     * 3. Comment    : 모델 지원하기
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 05. 07.
+     * </pre>
+     */
+    public FrontSupportDTO insertSupportModel(FrontSupportEntity frontSupportEntity) throws TspException {
+        try {
+            return this.frontSupportJpaRepository.insertSupportModel(frontSupportEntity);
+        } catch (Exception e) {
+            throw new TspException(ERROR_SUPPORT, e);
+        }
+    }
 }

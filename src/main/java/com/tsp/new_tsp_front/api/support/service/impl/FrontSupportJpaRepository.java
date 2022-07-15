@@ -16,22 +16,22 @@ import static com.tsp.new_tsp_front.api.support.mapper.SupportMapper.INSTANCE;
 @RequiredArgsConstructor
 @Repository
 public class FrontSupportJpaRepository {
-	private final EntityManager em;
+    private final EntityManager em;
 
-	/**
-	 * <pre>
-	 * 1. MethodName : insertSupportModel
-	 * 2. ClassName  : FrontSupportJpaRepository.java
-	 * 3. Comment    : 프론트 모델 지원하기
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2022. 01. 09.
-	 * </pre>
-	 */
-	@Modifying(clearAutomatically = true)
-	@Transactional
-	public FrontSupportDTO insertSupportModel(FrontSupportEntity frontSupportEntity) {
-		em.persist(frontSupportEntity);
+    /**
+     * <pre>
+     * 1. MethodName : insertSupportModel
+     * 2. ClassName  : FrontSupportJpaRepository.java
+     * 3. Comment    : 프론트 모델 지원하기
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 01. 09.
+     * </pre>
+     */
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    public FrontSupportDTO insertSupportModel(FrontSupportEntity frontSupportEntity) {
+        em.persist(frontSupportEntity);
 
-		return INSTANCE.toDto(frontSupportEntity);
-	}
+        return INSTANCE.toDto(frontSupportEntity);
+    }
 }

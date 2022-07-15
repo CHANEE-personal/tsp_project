@@ -11,17 +11,17 @@ import static org.mapstruct.factory.Mappers.getMapper;
 
 @Mapper
 public interface ModelMapper extends StructMapper<FrontModelDTO, FrontModelEntity> {
-	ModelMapper INSTANCE = getMapper(ModelMapper.class);
+    ModelMapper INSTANCE = getMapper(ModelMapper.class);
 
-	@Override
-	FrontModelDTO toDto(FrontModelEntity entity);
+    @Override
+    FrontModelDTO toDto(FrontModelEntity entity);
 
-	@Override
-	FrontModelEntity toEntity(FrontModelDTO dto);
+    @Override
+    FrontModelEntity toEntity(FrontModelDTO dto);
 
-	@Override
-	List<FrontModelDTO> toDtoList(List<FrontModelEntity> entityList);
+    @Override
+    List<FrontModelDTO> toDtoList(List<FrontModelEntity> entityList);
 
-	@Override
-	List<FrontModelEntity> toEntityList(List<FrontModelDTO> dtoList);
+    @Override
+    List<FrontModelEntity> toEntityList(List<FrontModelDTO> dtoList);
 }

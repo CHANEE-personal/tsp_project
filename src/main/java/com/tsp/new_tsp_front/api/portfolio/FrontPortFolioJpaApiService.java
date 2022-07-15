@@ -17,43 +17,41 @@ import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_PORTFOL
 @Service
 @RequiredArgsConstructor
 public class FrontPortFolioJpaApiService {
-	private final FrontPortFolioJpaRepository frontPortFolioJpaRepository;
+    private final FrontPortFolioJpaRepository frontPortFolioJpaRepository;
 
-	/**
-	 * <pre>
-	 * 1. MethodName : getPortFolio
-	 * 2. ClassName  : FrontPortFolioJpaApiService.java
-	 * 3. Comment    : 프론트 > 포트폴리오 리스트 조회
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2022. 01. 11.
-	 * </pre>
-	 *
-	 */
-	@Transactional(readOnly = true)
-	public List<FrontPortFolioDTO> getPortFolioList(Map<String, Object> portFolioMap) throws TspException {
-		try {
-			return frontPortFolioJpaRepository.getPortFolioList(portFolioMap);
-		} catch (Exception e) {
-			throw new TspException(NOT_FOUND_PORTFOLIO_LIST, e);
-		}
-	}
+    /**
+     * <pre>
+     * 1. MethodName : getPortFolio
+     * 2. ClassName  : FrontPortFolioJpaApiService.java
+     * 3. Comment    : 프론트 > 포트폴리오 리스트 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 01. 11.
+     * </pre>
+     */
+    @Transactional(readOnly = true)
+    public List<FrontPortFolioDTO> getPortFolioList(Map<String, Object> portFolioMap) throws TspException {
+        try {
+            return frontPortFolioJpaRepository.getPortFolioList(portFolioMap);
+        } catch (Exception e) {
+            throw new TspException(NOT_FOUND_PORTFOLIO_LIST, e);
+        }
+    }
 
-	/**
-	 * <pre>
-	 * 1. MethodName : getPortFolioInfo
-	 * 2. ClassName  : FrontPortFolioJpaApiService.java
-	 * 3. Comment    : 프론트 > 포트폴리오 상세 조회
-	 * 4. 작성자       : CHO
-	 * 5. 작성일       : 2022. 01. 12.
-	 * </pre>
-	 *
-	 */
-	@Transactional(readOnly = true)
-	public FrontPortFolioDTO getPortFolioInfo(FrontPortFolioEntity frontPortFolioEntity) throws TspException {
-		try {
-			return frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
-		} catch (Exception e) {
-			throw new TspException(NOT_FOUND_PORTFOLIO, e);
-		}
-	}
+    /**
+     * <pre>
+     * 1. MethodName : getPortFolioInfo
+     * 2. ClassName  : FrontPortFolioJpaApiService.java
+     * 3. Comment    : 프론트 > 포트폴리오 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 01. 12.
+     * </pre>
+     */
+    @Transactional(readOnly = true)
+    public FrontPortFolioDTO getPortFolioInfo(FrontPortFolioEntity frontPortFolioEntity) throws TspException {
+        try {
+            return frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
+        } catch (Exception e) {
+            throw new TspException(NOT_FOUND_PORTFOLIO, e);
+        }
+    }
 }

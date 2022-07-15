@@ -11,17 +11,17 @@ import static org.mapstruct.factory.Mappers.getMapper;
 
 @Mapper
 public interface PortFolioMapper extends StructMapper<FrontPortFolioDTO, FrontPortFolioEntity> {
-	PortFolioMapper INSTANCE = getMapper(PortFolioMapper.class);
+    PortFolioMapper INSTANCE = getMapper(PortFolioMapper.class);
 
-	@Override
-	FrontPortFolioDTO toDto(FrontPortFolioEntity entity);
+    @Override
+    FrontPortFolioDTO toDto(FrontPortFolioEntity entity);
 
-	@Override
-	FrontPortFolioEntity toEntity(FrontPortFolioDTO dto);
+    @Override
+    FrontPortFolioEntity toEntity(FrontPortFolioDTO dto);
 
-	@Override
-	List<FrontPortFolioDTO> toDtoList(List<FrontPortFolioEntity> entityList);
+    @Override
+    List<FrontPortFolioDTO> toDtoList(List<FrontPortFolioEntity> entityList);
 
-	@Override
-	List<FrontPortFolioEntity> toEntityList(List<FrontPortFolioDTO> dtoList);
+    @Override
+    List<FrontPortFolioEntity> toEntityList(List<FrontPortFolioDTO> dtoList);
 }
