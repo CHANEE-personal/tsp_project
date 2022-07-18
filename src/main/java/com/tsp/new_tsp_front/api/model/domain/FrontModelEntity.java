@@ -81,6 +81,7 @@ public class FrontModelEntity extends NewCommonMappedClass {
 
     @NotEmpty
     @Column(name = "visible")
+    @NotEmpty(message = "모델 노출 여부 선택은 필수입니다.")
     private String visible;
 
     @Column(name = "model_main_yn")

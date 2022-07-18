@@ -56,6 +56,7 @@ public class FrontPortFolioEntity extends NewCommonMappedClass {
     private String videoUrl;
 
     @Column(name = "visible")
+    @NotEmpty(message = "포트폴리오 노출 여부 선택은 필수입니다.")
     private String visible;
 
     @ManyToOne(fetch = LAZY)

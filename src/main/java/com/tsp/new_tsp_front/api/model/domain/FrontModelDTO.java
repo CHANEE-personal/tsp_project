@@ -56,13 +56,13 @@ public class FrontModelDTO extends NewCommonDTO {
     private String height;
 
     @NotNull(message = "모델 사이즈 입력은 필수입니다.")
-    @Pattern(regexp = "/^([0-9]{2})$/-?([0-9]{2})$/-?([0-9]{2})$/", message = "**-**-** 형식으로 입력바랍니다.")
+    @Pattern(regexp = "/^(\\d{2})$/-?(\\d{2})$/-?(\\d{2})$/", message = "**-**-** 형식으로 입력바랍니다.")
     @ApiModelProperty(required = true, value = "model 3size")
     private String size3;
 
     @ApiModelProperty(required = true, value = "model shoes")
     @NotNull(message = "모델 신발 사이즈 입력은 필수입니다.")
-    @Pattern(regexp = "[0-9]{3}", message = "숫자만 입력 가능합니다.")
+    @Pattern(regexp = "\\d{3}", message = "숫자만 입력 가능합니다.")
     @Range(min = 1, max = 4, message = "1자 이상 4자미만으로 작성해야 합니다.")
     private String shoes;
 

@@ -41,6 +41,7 @@ public class FrontProductionEntity extends NewCommonMappedClass {
     private String description;
 
     @Column(name = "visible")
+    @NotEmpty(message = "프로덕션 노출 여부 선택은 필수입니다.")
     private String visible;
 
     @OneToMany(mappedBy = "frontProductionEntity")

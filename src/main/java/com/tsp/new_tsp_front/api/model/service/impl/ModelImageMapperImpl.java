@@ -7,8 +7,6 @@ import org.mapstruct.Mapper;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tsp.new_tsp_front.api.common.domain.CommonImageEntity.builder;
-
 @Mapper
 public class ModelImageMapperImpl implements ModelImageMapper {
     @Override
@@ -34,7 +32,7 @@ public class ModelImageMapperImpl implements ModelImageMapper {
     public CommonImageEntity toEntity(CommonImageDTO dto) {
         if (dto == null) return null;
 
-        return builder()
+        return CommonImageEntity.builder()
                 .idx(dto.getIdx())
                 .typeIdx(dto.getTypeIdx())
                 .typeName(dto.getTypeName())

@@ -55,6 +55,7 @@ public class FrontSupportEntity extends NewCommonMappedClass {
     private String supportMessage;
 
     @Column(name = "visible")
+    @NotEmpty(message = "지원모델 노출 여부 선택은 필수입니다.")
     private String visible;
 
     @Column(name = "support_time")

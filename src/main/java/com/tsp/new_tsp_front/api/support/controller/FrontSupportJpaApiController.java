@@ -46,7 +46,7 @@ public class FrontSupportJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PostMapping
-    public FrontSupportDTO insertSupportModel(@RequestBody FrontSupportEntity frontSupportEntity) throws Exception {
+    public FrontSupportDTO insertSupportModel(@RequestBody FrontSupportEntity frontSupportEntity) {
         return this.frontSupportJpaApiService.insertSupportModel(frontSupportEntity);
     }
 }
