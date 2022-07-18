@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 28080
   error:
     include-stacktrace: never
     include-message: never
@@ -31,7 +31,8 @@ logging:
     org.hibernate.type: trace
     org.springframework: info
   pattern:
-    console: [%d{yyyy:MM:dd HH:mm:ss}] %-5level %logger{36}:%line - %msg%n
+    console: "%d{yyyy:MM:dd HH:mm:ss} %-5level %logger{36}:%line - %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
 
 image.uploadPath: /var/www/dist/upload/
 
