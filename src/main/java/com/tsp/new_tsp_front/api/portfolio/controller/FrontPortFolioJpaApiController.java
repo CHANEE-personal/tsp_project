@@ -78,7 +78,7 @@ public class FrontPortFolioJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/{idx}")
-    public FrontPortFolioDTO getPortFolioInfo(@PathVariable("idx") Integer idx) {
+    public FrontPortFolioDTO getPortFolioInfo(@PathVariable Integer idx) {
         return this.frontPortFolioJpaApiService.getPortFolioInfo(builder().idx(idx).build());
     }
 }

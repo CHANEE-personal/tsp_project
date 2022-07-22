@@ -78,7 +78,7 @@ public class FrontProductionJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/{idx}")
-    public FrontProductionDTO getProductionInfo(@PathVariable("idx") Integer idx) {
+    public FrontProductionDTO getProductionInfo(@PathVariable Integer idx) {
         return this.frontProductionJpaApiService.getProductionInfo(builder().idx(idx).build());
     }
 }

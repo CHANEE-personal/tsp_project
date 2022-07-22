@@ -76,10 +76,8 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists/{categoryCd}")
-    public Map<String, Object> getModelList(@PathVariable("categoryCd")
-                                            @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
-                                            @RequestParam(required = false) Map<String, Object> paramMap,
-                                            Page page) {
+    public Map<String, Object> getModelList(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
+                                            @RequestParam(required = false) Map<String, Object> paramMap, Page page) {
         Map<String, Object> resultMap = new HashMap<>();
         // 페이징 및 검색
         Map<String, Object> modelMap = searchCommon.searchCommon(page, paramMap);
@@ -114,9 +112,8 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/{categoryCd}/{idx}")
-    public FrontModelDTO getModelInfo(@PathVariable("categoryCd")
-                                      @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
-                                      @PathVariable("idx") Integer idx) {
+    public FrontModelDTO getModelInfo(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
+                                      @PathVariable Integer idx) {
         return this.frontModelJpaApiService.getModelInfo(builder().categoryCd(categoryCd).idx(idx).build());
     }
 }

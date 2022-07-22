@@ -40,7 +40,7 @@ public class FrontModelEntity extends NewCommonMappedClass {
 
     @Column(name = "category_cd")
     @Range(min = 1, max = 3, message = "모델 카테고리 값은 1~3 사이 값만 입력할 수 있습니다")
-    @NotNull(message = "모델 카테고리 선택은 필수입니다.")
+    @NotEmpty(message = "모델 카테고리 선택은 필수입니다.")
     private Integer categoryCd;
 
     @Column(name = "category_age")
@@ -79,7 +79,6 @@ public class FrontModelEntity extends NewCommonMappedClass {
     @NotEmpty(message = "모델 상세 내용 입력은 필수입니다.")
     private String modelDescription;
 
-    @NotEmpty
     @Column(name = "visible")
     @NotEmpty(message = "모델 노출 여부 선택은 필수입니다.")
     private String visible;
