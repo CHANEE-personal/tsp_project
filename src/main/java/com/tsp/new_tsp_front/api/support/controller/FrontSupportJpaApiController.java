@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 
+import javax.validation.Valid;
 import java.rmi.ServerError;
 import java.util.Map;
 
@@ -46,7 +47,7 @@ public class FrontSupportJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PostMapping
-    public FrontSupportDTO insertSupportModel(@RequestBody FrontSupportEntity frontSupportEntity) {
+    public FrontSupportDTO insertSupportModel(@Valid @RequestBody FrontSupportEntity frontSupportEntity) {
         return this.frontSupportJpaApiService.insertSupportModel(frontSupportEntity);
     }
 }

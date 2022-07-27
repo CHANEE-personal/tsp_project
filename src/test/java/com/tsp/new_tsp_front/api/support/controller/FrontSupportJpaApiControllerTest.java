@@ -2,16 +2,16 @@ package com.tsp.new_tsp_front.api.support.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tsp.new_tsp_front.api.support.domain.FrontSupportEntity;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.event.EventListener;
-import org.springframework.http.MediaType;
+import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +19,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -29,11 +31,13 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @Transactional
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-local.properties")
+@TestConstructor(autowireMode = ALL)
+@RequiredArgsConstructor
 @AutoConfigureTestDatabase(replace= NONE)
 class FrontSupportJpaApiControllerTest {
-	@Autowired private MockMvc mockMvc;
-	@Autowired private ObjectMapper objectMapper;
-	@Autowired private WebApplicationContext wac;
+	private MockMvc mockMvc;
+	private final ObjectMapper objectMapper;
+	private final WebApplicationContext wac;
 
 	@BeforeEach
 	@EventListener(ApplicationReadyEvent.class)
@@ -54,10 +58,11 @@ class FrontSupportJpaApiControllerTest {
 				.supportPhone("010-9466-2702")
 				.supportInstagram("https://instagram.com")
 				.supportSize3("31-24-31")
+				.visible("Y")
 				.build();
 
 		mockMvc.perform(post("/api/support")
-				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.contentType(APPLICATION_JSON_VALUE)
 				.content(objectMapper.writeValueAsString(frontSupportEntity)))
                 .andDo(print())
 				.andExpect(status().isOk())
@@ -66,6 +71,7 @@ class FrontSupportJpaApiControllerTest {
 				.andExpect(jsonPath("$.supportHeight").value(170))
 				.andExpect(jsonPath("$.supportPhone").value("010-9466-2702"))
 				.andExpect(jsonPath("$.supportInstagram").value("https://instagram.com"))
-				.andExpect(jsonPath("$.supportSize3").value("31-24-31"));
+				.andExpect(jsonPath("$.supportSize3").value("31-24-31"))
+				.andExpect(jsonPath("$.visible").value("Y"));
 	}
 }

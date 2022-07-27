@@ -4,6 +4,7 @@ import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.event.EventListener;
+import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
@@ -29,21 +31,25 @@ import static com.tsp.new_tsp_front.api.production.service.impl.ProductionImageM
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
+import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 
 @DataJpaTest
 @Transactional
 @TestPropertySource(locations = "classpath:application-local.properties")
+@TestConstructor(autowireMode = ALL)
+@RequiredArgsConstructor
 @AutoConfigureTestDatabase(replace = NONE)
 @ExtendWith(MockitoExtension.class)
 @DisplayName("프로덕션 Repository Test")
 class FrontProductionJpaRepositoryTest {
+    @Mock private FrontProductionJpaRepository mockFrontProductionJpaRepository;
+    private final FrontProductionJpaRepository frontProductionJpaRepository;
+
     private FrontProductionEntity frontProductionEntity;
     private FrontProductionDTO frontProductionDTO;
     private CommonImageEntity commonImageEntity;
     private CommonImageDTO commonImageDTO;
     List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
-    @Autowired private FrontProductionJpaRepository frontProductionJpaRepository;
-    @Mock private FrontProductionJpaRepository mockFrontProductionJpaRepository;
 
     private void createProduction() {
         commonImageEntity = CommonImageEntity.builder()

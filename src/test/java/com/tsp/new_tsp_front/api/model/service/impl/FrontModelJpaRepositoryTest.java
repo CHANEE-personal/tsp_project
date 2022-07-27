@@ -5,45 +5,50 @@ import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.exception.TspException;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.event.EventListener;
+import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.tsp.new_tsp_front.api.model.domain.FrontModelEntity.builder;
+import static com.tsp.new_tsp_front.api.model.service.impl.ModelMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
+import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
+import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 
 
 @DataJpaTest
 @Transactional
 @TestPropertySource(locations = "classpath:application-local.properties")
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@TestConstructor(autowireMode = ALL)
+@RequiredArgsConstructor
+@AutoConfigureTestDatabase(replace = NONE)
 @ExtendWith(MockitoExtension.class)
 @DisplayName("모델 Repository Test")
 class FrontModelJpaRepositoryTest {
+    @Mock private FrontModelJpaRepository mockFrontModelJpaRepository;
+    private final FrontModelJpaRepository frontModelJpaRepository;
+
     private FrontModelEntity frontModelEntity;
     private FrontModelDTO frontModelDTO;
     private CommonImageEntity commonImageEntity;
     private CommonImageDTO commonImageDTO;
     List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
-    @Autowired private FrontModelJpaRepository frontModelJpaRepository;
-    @Mock private FrontModelJpaRepository mockFrontModelJpaRepository;
 
     private void createModel() {
         frontModelEntity = builder()
@@ -63,7 +68,7 @@ class FrontModelJpaRepositoryTest {
                 .visible("Y")
                 .build();
 
-        frontModelDTO = ModelMapperImpl.INSTANCE.toDto(frontModelEntity);
+        frontModelDTO = INSTANCE.toDto(frontModelEntity);
 
         commonImageEntity = CommonImageEntity.builder()
                 .idx(1)
@@ -98,7 +103,7 @@ class FrontModelJpaRepositoryTest {
     @DisplayName("모델 리스트 조회 테스트")
     void 모델리스트조회테스트() {
         // given
-        ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
+        Map<String, Object> modelMap = new HashMap<>();
         modelMap.put("categoryCd", 1);
         modelMap.put("jpaStartPage", 1);
         modelMap.put("size", 3);
@@ -111,7 +116,7 @@ class FrontModelJpaRepositoryTest {
     @DisplayName("모델 리스트 조회 예외 테스트")
     void 모델리스트조회예외테스트() {
         // given
-        ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
+        Map<String, Object> modelMap = new HashMap<>();
         modelMap.put("categoryCd", -1);
 
         // then
@@ -147,7 +152,7 @@ class FrontModelJpaRepositoryTest {
     void 모델BDD조회테스트() {
         // 정상
         // given
-        ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
+        Map<String, Object> modelMap = new HashMap<>();
         modelMap.put("categoryCd", 1);
         modelMap.put("jpaStartPage", 1);
         modelMap.put("size", 3);
@@ -176,7 +181,6 @@ class FrontModelJpaRepositoryTest {
     @Test
     @DisplayName("모델 상세 BDD 조회 테스트")
     void 모델상세BDD조회테스트() {
-
         // given
         commonImageEntityList.add(commonImageEntity);
 
@@ -224,7 +228,6 @@ class FrontModelJpaRepositoryTest {
     @Test
     @DisplayName("모델 메인 배너 조회 테스트")
     void 모델메인배너리스트조회테스트() {
-
         // when
         List<FrontModelDTO> mainModelList = frontModelJpaRepository.getMainModelList();
 
