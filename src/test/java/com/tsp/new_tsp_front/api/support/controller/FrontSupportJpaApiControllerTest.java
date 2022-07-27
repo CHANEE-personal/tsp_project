@@ -23,8 +23,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @SpringBootTest
@@ -66,6 +65,7 @@ class FrontSupportJpaApiControllerTest {
 				.content(objectMapper.writeValueAsString(frontSupportEntity)))
                 .andDo(print())
 				.andExpect(status().isOk())
+				.andExpect(content().contentType("application/json;charset=utf-8"))
 				.andExpect(jsonPath("$.supportName").value("조찬희"))
 				.andExpect(jsonPath("$.supportMessage").value("조찬희"))
 				.andExpect(jsonPath("$.supportHeight").value(170))

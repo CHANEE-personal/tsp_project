@@ -20,8 +20,7 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @SpringBootTest
@@ -49,6 +48,7 @@ class FrontModelJpaApiControllerTest {
         mockMvc.perform(get("/api/model/lists/1").param("page", "1").param("size", "100"))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.modelList.length()", greaterThan(0)));
     }
 
@@ -67,6 +67,7 @@ class FrontModelJpaApiControllerTest {
         mockMvc.perform(get("/api/model/lists/main"))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.modelList.length()", greaterThan(0)));
     }
 
@@ -91,6 +92,7 @@ class FrontModelJpaApiControllerTest {
         mockMvc.perform(get("/api/model/1/-1"))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.code").value("NOT_FOUND_MODEL"))
                 .andExpect(jsonPath("$.message").value("해당 모델 없음"));
     }
@@ -117,6 +119,7 @@ class FrontModelJpaApiControllerTest {
         mockMvc.perform(get("/api/model/2/-1"))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.code").value("NOT_FOUND_MODEL"))
                 .andExpect(jsonPath("$.message").value("해당 모델 없음"));
     }
@@ -143,6 +146,7 @@ class FrontModelJpaApiControllerTest {
         mockMvc.perform(get("/api/model/3/-1"))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.code").value("NOT_FOUND_MODEL"))
                 .andExpect(jsonPath("$.message").value("해당 모델 없음"));
     }

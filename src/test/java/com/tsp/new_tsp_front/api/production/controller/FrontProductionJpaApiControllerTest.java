@@ -21,8 +21,7 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @SpringBootTest
@@ -50,6 +49,7 @@ class FrontProductionJpaApiControllerTest {
         mockMvc.perform(get("/api/production/lists").param("page", "1").param("size", "100"))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.productionList.length()", equalTo(55)));
     }
 
@@ -65,6 +65,7 @@ class FrontProductionJpaApiControllerTest {
         mockMvc.perform(get("/api/production/lists").queryParams(paramMap))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.productionList.length()", equalTo(1)));
     }
 
@@ -75,6 +76,7 @@ class FrontProductionJpaApiControllerTest {
         mockMvc.perform(get("/api/production/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.idx").value("1"))
                 .andExpect(jsonPath("$.title").value("프로덕션 테스트"))
                 .andExpect(jsonPath("$.description").value("프로덕션 테스트"));
@@ -83,6 +85,7 @@ class FrontProductionJpaApiControllerTest {
         mockMvc.perform(get("/api/production/-1"))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.code").value("NOT_FOUND_PRODUCTION"))
                 .andExpect(jsonPath("$.message").value("해당 프로덕션 없음"));
     }

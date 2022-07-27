@@ -23,8 +23,7 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @SpringBootTest
@@ -52,6 +51,7 @@ class FrontPortFolioJpaApiControllerTest {
         mockMvc.perform(get("/api/portfolio/lists").param("page", "1").param("size", "100"))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.portFolioList.length()", equalTo(2)));
     }
 
@@ -68,6 +68,7 @@ class FrontPortFolioJpaApiControllerTest {
         mockMvc.perform(get("/api/portfolio/lists").queryParams(paramMap))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.portFolioList.length()", equalTo(2)));
     }
 
@@ -77,6 +78,7 @@ class FrontPortFolioJpaApiControllerTest {
         mockMvc.perform(get("/api/portfolio/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.title").value("포트폴리오 테스트"))
                 .andExpect(jsonPath("$.description").value("포트폴리오 테스트"))
                 .andExpect(jsonPath("$.hashTag").value("TEST"))
@@ -86,6 +88,7 @@ class FrontPortFolioJpaApiControllerTest {
         mockMvc.perform(get("/api/portfolio/-1"))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.code").value("NOT_FOUND_PORTFOLIO"))
                 .andExpect(jsonPath("$.message").value("해당 포트폴리오 없음"));
     }
