@@ -33,6 +33,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @TestConstructor(autowireMode = ALL)
 @RequiredArgsConstructor
 @AutoConfigureTestDatabase(replace= NONE)
+@DisplayName("지원모델 Api Test")
 class FrontSupportJpaApiControllerTest {
 	private MockMvc mockMvc;
 	private final ObjectMapper objectMapper;

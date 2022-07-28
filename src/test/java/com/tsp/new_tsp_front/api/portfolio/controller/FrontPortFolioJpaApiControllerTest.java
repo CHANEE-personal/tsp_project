@@ -32,6 +32,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @TestConstructor(autowireMode = ALL)
 @RequiredArgsConstructor
 @AutoConfigureTestDatabase(replace= NONE)
+@DisplayName("포트폴리오 Api Test")
 class FrontPortFolioJpaApiControllerTest {
     private MockMvc mockMvc;
     private final WebApplicationContext wac;
