@@ -22,7 +22,8 @@ import java.util.Map;
 import static com.tsp.new_tsp_front.api.model.domain.FrontModelDTO.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 @SpringBootTest
@@ -135,5 +136,10 @@ class FrontModelJpaApiServiceTest {
         assertThat(modelInfo.getCategoryCd()).isEqualTo(frontModelDTO.getCategoryCd());
         assertThat(modelInfo.getModelKorName()).isEqualTo(frontModelDTO.getModelKorName());
         assertThat(modelInfo.getModelEngName()).isEqualTo(frontModelDTO.getModelEngName());
+
+        // verify
+        verify(frontModelJpaRepository, times(4)).getModelInfo(frontModelEntity);
+        verify(frontModelJpaRepository, atLeastOnce()).getModelInfo(frontModelEntity);
+        verifyNoMoreInteractions(frontModelJpaRepository);
     }
 }

@@ -21,7 +21,6 @@ import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static com.tsp.new_tsp_front.api.model.domain.FrontModelEntity.builder;
 import static com.tsp.new_tsp_front.api.model.service.impl.ModelMapper.INSTANCE;
@@ -93,7 +92,7 @@ class FrontModelJpaRepositoryTest {
     @DisplayName("모델 리스트 갯수 조회 테스트")
     void 모델리스트갯수조회테스트() {
         // 정상
-        ConcurrentHashMap<String, Object> modelMap = new ConcurrentHashMap<>();
+        Map<String, Object> modelMap = new HashMap<>();
         modelMap.put("categoryCd", 1);
 
         assertThat(frontModelJpaRepository.getModelCount(modelMap)).isPositive();
