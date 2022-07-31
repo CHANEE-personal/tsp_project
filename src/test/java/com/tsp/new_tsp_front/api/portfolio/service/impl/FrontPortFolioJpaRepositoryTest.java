@@ -123,6 +123,7 @@ class FrontPortFolioJpaRepositoryTest {
                     assertNotNull(frontPortFolioDTO.getVisible());
                 });
 
+        // then
         assertThat(frontPortFolioDTO.getPortfolioImage().get(0).getTypeName()).isEqualTo("portfolio");
         assertThat(frontPortFolioDTO.getPortfolioImage().get(0).getImageType()).isEqualTo("main");
         assertThat(frontPortFolioDTO.getPortfolioImage().get(0).getFileName()).isEqualTo("52d4fdc8-f109-408e-b243-85cc1be207c5.jpg");
@@ -153,6 +154,7 @@ class FrontPortFolioJpaRepositoryTest {
 //        given(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap)).willReturn(portfolioList);
         when(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap)).thenReturn(portfolioList);
 
+        // then
         assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getIdx()).isEqualTo(portfolioList.get(0).getIdx());
         assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getTitle()).isEqualTo(portfolioList.get(0).getTitle());
         assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getDescription()).isEqualTo(portfolioList.get(0).getDescription());
@@ -163,6 +165,7 @@ class FrontPortFolioJpaRepositoryTest {
         // verify
         verify(mockFrontPortFolioJpaRepository, times(6)).getPortFolioList(portfolioMap);
         verify(mockFrontPortFolioJpaRepository, atLeastOnce()).getPortFolioList(portfolioMap);
+        verifyNoMoreInteractions(mockFrontPortFolioJpaRepository);
     }
 
     @Test
@@ -190,5 +193,6 @@ class FrontPortFolioJpaRepositoryTest {
         // verify
         verify(mockFrontPortFolioJpaRepository, times(12)).getPortFolioInfo(frontPortFolioEntity);
         verify(mockFrontPortFolioJpaRepository, atLeastOnce()).getPortFolioInfo(frontPortFolioEntity);
+        verifyNoMoreInteractions(mockFrontPortFolioJpaRepository);
     }
 }

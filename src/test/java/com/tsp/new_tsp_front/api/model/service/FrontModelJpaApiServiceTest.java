@@ -56,6 +56,7 @@ class FrontModelJpaApiServiceTest {
         when(frontModelJpaRepository.getModelList(modelMap)).thenReturn(returnModelList);
         List<FrontModelDTO> modelList = frontModelJpaApiService.getModelList(modelMap);
 
+        // then
         assertAll(
                 () -> assertThat(modelList).isNotEmpty(),
                 () -> assertThat(modelList).hasSize(3)
@@ -96,11 +97,11 @@ class FrontModelJpaApiServiceTest {
         // 시니어
         returnModelList.add(builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").modelMainYn("Y").build());
 
-        when(frontModelJpaRepository.getMainModelList()).thenReturn(returnModelList);
-
         // when
+        when(frontModelJpaRepository.getMainModelList()).thenReturn(returnModelList);
         List<FrontModelDTO> mainModelList = frontModelJpaApiService.getMainModelList();
 
+        // then
         assertAll(
                 () -> assertThat(mainModelList).isNotEmpty(),
                 () -> assertThat(mainModelList).hasSize(3)
@@ -123,6 +124,11 @@ class FrontModelJpaApiServiceTest {
         assertThat(mainModelList.get(2).getModelKorName()).isEqualTo(returnModelList.get(2).getModelKorName());
         assertThat(mainModelList.get(2).getModelEngName()).isEqualTo(returnModelList.get(2).getModelEngName());
         assertThat(mainModelList.get(2).getModelMainYn()).isEqualTo(returnModelList.get(2).getModelMainYn());
+
+        // verify
+        verify(frontModelJpaRepository, times(1)).getMainModelList();
+        verify(frontModelJpaRepository, atLeastOnce()).getMainModelList();
+        verifyNoMoreInteractions(frontModelJpaRepository);
     }
 
     @Test

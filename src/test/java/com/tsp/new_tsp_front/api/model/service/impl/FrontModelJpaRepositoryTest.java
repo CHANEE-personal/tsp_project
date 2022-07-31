@@ -95,6 +95,7 @@ class FrontModelJpaRepositoryTest {
         Map<String, Object> modelMap = new HashMap<>();
         modelMap.put("categoryCd", 1);
 
+        // then
         assertThat(frontModelJpaRepository.getModelCount(modelMap)).isPositive();
     }
 
@@ -139,6 +140,8 @@ class FrontModelJpaRepositoryTest {
         FrontModelEntity womenFrontModelEntity = FrontModelEntity.builder().idx(143).build();
 
         FrontModelDTO womenModelDTO = frontModelJpaRepository.getModelInfo(womenFrontModelEntity);
+
+        // then
         assertThat(womenModelDTO.getIdx()).isEqualTo(143);
         assertThat(womenModelDTO.getModelKorFirstName()).isEqualTo("김");
         assertThat(womenModelDTO.getModelKorSecondName()).isEqualTo("예영");
@@ -175,6 +178,7 @@ class FrontModelJpaRepositoryTest {
         // verify
         verify(mockFrontModelJpaRepository, times(4)).getModelList(modelMap);
         verify(mockFrontModelJpaRepository, atLeastOnce()).getModelList(modelMap);
+        verifyNoMoreInteractions(mockFrontModelJpaRepository);
     }
 
     @Test
@@ -203,6 +207,7 @@ class FrontModelJpaRepositoryTest {
 //        given(mockFrontModelJpaRepository.getModelInfo(frontModelEntity)).willReturn(frontModelDTO);
         when(mockFrontModelJpaRepository.getModelInfo(frontModelEntity)).thenReturn(frontModelDTO);
 
+        // then
         assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getIdx()).isEqualTo(1);
         assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getCategoryCd()).isEqualTo(1);
         assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getCategoryAge()).isEqualTo("2");
@@ -222,6 +227,7 @@ class FrontModelJpaRepositoryTest {
         // verify
         verify(mockFrontModelJpaRepository, times(15)).getModelInfo(frontModelEntity);
         verify(mockFrontModelJpaRepository, atLeastOnce()).getModelInfo(frontModelEntity);
+        verifyNoMoreInteractions(mockFrontModelJpaRepository);
     }
 
     @Test

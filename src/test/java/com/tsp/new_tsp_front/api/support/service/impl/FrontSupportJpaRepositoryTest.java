@@ -20,6 +20,7 @@ import javax.transaction.Transactional;
 
 import static com.tsp.new_tsp_front.api.support.domain.FrontSupportEntity.*;
 import static com.tsp.new_tsp_front.api.support.mapper.SupportMapper.INSTANCE;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 
@@ -57,6 +58,6 @@ class FrontSupportJpaRepositoryTest {
     @Test
     @DisplayName("모델 지원하기 테스트")
     void 모델지원하기테스트() {
-        frontSupportJpaRepository.insertSupportModel(frontSupportEntity);
+        assertThat(frontSupportJpaRepository.insertSupportModel(frontSupportEntity)).isNotNull();
     }
 }

@@ -31,6 +31,7 @@ class FrontSupportJpaApiServiceTest {
     @Test
     @DisplayName("모델 지원하기 테스트")
     void 모델지원하기테스트() {
+        // given
         FrontSupportEntity frontSupportEntity = builder()
                 .supportName("조찬희")
                 .supportHeight(170)
@@ -41,6 +42,7 @@ class FrontSupportJpaApiServiceTest {
 
         frontSupportJpaApiService.insertSupportModel(frontSupportEntity);
 
+        // then
         assertThat(frontSupportEntity.getSupportName()).isEqualTo("조찬희");
         assertThat(frontSupportEntity.getSupportHeight()).isEqualTo(170);
         assertThat(frontSupportEntity.getSupportMessage()).isEqualTo("조찬희");

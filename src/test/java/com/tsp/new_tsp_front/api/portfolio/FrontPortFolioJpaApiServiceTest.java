@@ -51,6 +51,7 @@ class FrontPortFolioJpaApiServiceTest {
         when(frontPortFolioJpaRepository.getPortFolioList(portfolioMap)).thenReturn(returnPortfolioList);
         List<FrontPortFolioDTO> portfolioList = frontPortFolioJpaApiService.getPortFolioList(portfolioMap);
 
+        // then
         assertAll(
                 () -> assertThat(portfolioList).isNotEmpty(),
                 () -> assertThat(portfolioList).hasSize(1)
