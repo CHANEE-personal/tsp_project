@@ -22,7 +22,8 @@ import java.util.Map;
 import static com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 @SpringBootTest
@@ -45,14 +46,14 @@ class FrontPortFolioJpaApiServiceTest {
         List<FrontPortFolioDTO> returnPortfolioList = new ArrayList<>();
         returnPortfolioList.add(FrontPortFolioDTO.builder()
                 .idx(1).title("portfolioTest").description("portfolioTest").hashTag("portfolio").videoUrl("test").visible("Y").build());
-        List<FrontPortFolioDTO> portfolioList = frontPortFolioJpaApiService.getPortFolioList(portfolioMap);
 
         // when
         when(frontPortFolioJpaRepository.getPortFolioList(portfolioMap)).thenReturn(returnPortfolioList);
+        List<FrontPortFolioDTO> portfolioList = frontPortFolioJpaApiService.getPortFolioList(portfolioMap);
 
         assertAll(
                 () -> assertThat(portfolioList).isNotEmpty(),
-                () -> assertThat(portfolioList).hasSize(3)
+                () -> assertThat(portfolioList).hasSize(1)
         );
 
         assertThat(portfolioList.get(0).getIdx()).isEqualTo(returnPortfolioList.get(0).getIdx());
@@ -61,6 +62,11 @@ class FrontPortFolioJpaApiServiceTest {
         assertThat(portfolioList.get(0).getHashTag()).isEqualTo(returnPortfolioList.get(0).getHashTag());
         assertThat(portfolioList.get(0).getVideoUrl()).isEqualTo(returnPortfolioList.get(0).getVideoUrl());
         assertThat(portfolioList.get(0).getVisible()).isEqualTo(returnPortfolioList.get(0).getVisible());
+
+        // verify
+        verify(frontPortFolioJpaRepository, times(1)).getPortFolioList(portfolioMap);
+        verify(frontPortFolioJpaRepository, atLeastOnce()).getPortFolioList(portfolioMap);
+        verifyNoMoreInteractions(frontPortFolioJpaRepository);
     }
 
     @Test
@@ -68,10 +74,10 @@ class FrontPortFolioJpaApiServiceTest {
         // given
         FrontPortFolioEntity frontPortFolioEntity = builder().idx(1).build();
         FrontPortFolioDTO frontPortFolioDTO = FrontPortFolioDTO.builder().title("portfolioTest").description("portfolioTest").hashTag("portfolio").videoUrl("test").visible("Y").build();
-        FrontPortFolioDTO portfolioInfo = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity);
 
         // when
         when(frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity)).thenReturn(frontPortFolioDTO);
+        FrontPortFolioDTO portfolioInfo = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity);
 
         // then
         assertThat(portfolioInfo.getIdx()).isEqualTo(frontPortFolioDTO.getIdx());
@@ -80,5 +86,10 @@ class FrontPortFolioJpaApiServiceTest {
         assertThat(portfolioInfo.getHashTag()).isEqualTo(frontPortFolioDTO.getHashTag());
         assertThat(portfolioInfo.getVideoUrl()).isEqualTo(frontPortFolioDTO.getVideoUrl());
         assertThat(portfolioInfo.getVisible()).isEqualTo(frontPortFolioDTO.getVisible());
+
+        // verify
+        verify(frontPortFolioJpaRepository, times(1)).getPortFolioInfo(frontPortFolioEntity);
+        verify(frontPortFolioJpaRepository, atLeastOnce()).getPortFolioInfo(frontPortFolioEntity);
+        verifyNoMoreInteractions(frontPortFolioJpaRepository);
     }
 }

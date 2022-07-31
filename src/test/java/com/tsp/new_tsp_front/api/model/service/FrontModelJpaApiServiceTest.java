@@ -52,9 +52,8 @@ class FrontModelJpaApiServiceTest {
         // 시니어
         returnModelList.add(builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").build());
 
-        when(frontModelJpaRepository.getModelList(modelMap)).thenReturn(returnModelList);
-
         // when
+        when(frontModelJpaRepository.getModelList(modelMap)).thenReturn(returnModelList);
         List<FrontModelDTO> modelList = frontModelJpaApiService.getModelList(modelMap);
 
         assertAll(
@@ -76,6 +75,11 @@ class FrontModelJpaApiServiceTest {
         assertThat(modelList.get(2).getCategoryCd()).isEqualTo(returnModelList.get(2).getIdx());
         assertThat(modelList.get(2).getModelKorName()).isEqualTo(returnModelList.get(2).getModelKorName());
         assertThat(modelList.get(2).getModelEngName()).isEqualTo(returnModelList.get(2).getModelEngName());
+
+        // verify
+        verify(frontModelJpaRepository, times(1)).getModelList(modelMap);
+        verify(frontModelJpaRepository, atLeastOnce()).getModelList(modelMap);
+        verifyNoMoreInteractions(frontModelJpaRepository);
     }
 
     @Test
@@ -126,10 +130,10 @@ class FrontModelJpaApiServiceTest {
         // given
         FrontModelEntity frontModelEntity = FrontModelEntity.builder().idx(1).categoryCd(1).build();
         FrontModelDTO frontModelDTO = builder().idx(1).categoryCd(1).modelKorName("조찬희").modelEngName("chochanhee").build();
-        FrontModelDTO modelInfo = frontModelJpaApiService.getModelInfo(frontModelEntity);
 
         // when
         when(frontModelJpaRepository.getModelInfo(frontModelEntity)).thenReturn(frontModelDTO);
+        FrontModelDTO modelInfo = frontModelJpaApiService.getModelInfo(frontModelEntity);
 
         // then
         assertThat(modelInfo.getIdx()).isEqualTo(frontModelDTO.getIdx());
@@ -138,7 +142,7 @@ class FrontModelJpaApiServiceTest {
         assertThat(modelInfo.getModelEngName()).isEqualTo(frontModelDTO.getModelEngName());
 
         // verify
-        verify(frontModelJpaRepository, times(4)).getModelInfo(frontModelEntity);
+        verify(frontModelJpaRepository, times(1)).getModelInfo(frontModelEntity);
         verify(frontModelJpaRepository, atLeastOnce()).getModelInfo(frontModelEntity);
         verifyNoMoreInteractions(frontModelJpaRepository);
     }

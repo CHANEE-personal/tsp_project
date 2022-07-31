@@ -22,7 +22,8 @@ import java.util.Map;
 import static com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity.builder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 @SpringBootTest
@@ -47,21 +48,25 @@ class FrontProductionJpaApiServiceTest {
         returnProductionList.add(FrontProductionDTO.builder().idx(1).title("프로덕션테스트").description("프로덕션테스트").visible("Y").build());
         returnProductionList.add(FrontProductionDTO.builder().idx(2).title("productionTest").description("productionTest").visible("Y").build());
 
-        List<FrontProductionDTO> productionList = frontProductionJpaApiService.getProductionList(productionMap);
-
         // when
         when(frontProductionJpaRepository.getProductionList(productionMap)).thenReturn(returnProductionList);
+        List<FrontProductionDTO> productionList = frontProductionJpaApiService.getProductionList(productionMap);
 
         // then
         assertAll(
                 () -> assertThat(productionList).isNotEmpty(),
-                () -> assertThat(productionList).hasSize(3)
+                () -> assertThat(productionList).hasSize(2)
         );
 
         assertThat(productionList.get(0).getIdx()).isEqualTo(returnProductionList.get(0).getIdx());
         assertThat(productionList.get(0).getTitle()).isEqualTo(returnProductionList.get(0).getTitle());
         assertThat(productionList.get(0).getDescription()).isEqualTo(returnProductionList.get(0).getDescription());
         assertThat(productionList.get(0).getVisible()).isEqualTo(returnProductionList.get(0).getVisible());
+
+        // verify
+        verify(frontProductionJpaRepository, times(1)).getProductionList(productionMap);
+        verify(frontProductionJpaRepository, atLeastOnce()).getProductionList(productionMap);
+        verifyNoMoreInteractions(frontProductionJpaRepository);
     }
 
     @Test
@@ -69,16 +74,21 @@ class FrontProductionJpaApiServiceTest {
         // given
         FrontProductionEntity frontProductionEntity = builder().idx(1).build();
         FrontProductionDTO frontProductionDTO = FrontProductionDTO.builder().idx(1).title("productionTest").description("productionTest").build();
-        FrontProductionDTO productionInfo = frontProductionJpaApiService.getProductionInfo(frontProductionEntity);
 
         // when
         when(frontProductionJpaRepository.getProductionInfo(frontProductionEntity)).thenReturn(frontProductionDTO);
+        FrontProductionDTO productionInfo = frontProductionJpaApiService.getProductionInfo(frontProductionEntity);
 
         // then
         assertThat(productionInfo.getIdx()).isEqualTo(frontProductionDTO.getIdx());
         assertThat(productionInfo.getTitle()).isEqualTo(frontProductionDTO.getTitle());
         assertThat(productionInfo.getDescription()).isEqualTo(frontProductionDTO.getDescription());
         assertThat(productionInfo.getVisible()).isEqualTo(frontProductionDTO.getVisible());
+
+        // verify
+        verify(frontProductionJpaRepository, times(1)).getProductionInfo(frontProductionEntity);
+        verify(frontProductionJpaRepository, atLeastOnce()).getProductionInfo(frontProductionEntity);
+        verifyNoMoreInteractions(frontProductionJpaRepository);
     }
 
 }
