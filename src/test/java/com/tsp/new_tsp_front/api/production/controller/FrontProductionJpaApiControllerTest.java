@@ -40,6 +40,7 @@ class FrontProductionJpaApiControllerTest {
     public void setup() {
         this.mockMvc = webAppContextSetup(wac)
                 .addFilters(new CharacterEncodingFilter("UTF-8", true))  // 필터 추가
+                .alwaysExpect(status().isOk())
                 .alwaysDo(print())
                 .build();
     }

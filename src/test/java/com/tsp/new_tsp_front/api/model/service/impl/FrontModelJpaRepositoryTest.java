@@ -4,7 +4,6 @@ import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
-import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +24,6 @@ import java.util.*;
 import static com.tsp.new_tsp_front.api.model.domain.FrontModelEntity.builder;
 import static com.tsp.new_tsp_front.api.model.service.impl.ModelMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
@@ -112,18 +110,6 @@ class FrontModelJpaRepositoryTest {
 
         // then
         assertThat(frontModelJpaRepository.getModelList(modelMap)).isNotEmpty();
-    }
-
-    @Test
-    @DisplayName("모델 리스트 조회 예외 테스트")
-    void 모델리스트조회예외테스트() {
-        // given
-        Map<String, Object> modelMap = new HashMap<>();
-        modelMap.put("categoryCd", -1);
-
-        // then
-        assertThatThrownBy(() -> frontModelJpaRepository.getModelList(modelMap))
-                .isInstanceOf(TspException.class);
     }
 
     @Test
