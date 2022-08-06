@@ -63,7 +63,7 @@ public class FrontProductionJpaRepository {
     public List<FrontProductionDTO> getProductionList(Map<String, Object> productionMap) {
         List<FrontProductionEntity> productionList = queryFactory
                 .selectFrom(frontProductionEntity)
-                .where(searchProduction(productionMap))
+                .where(searchProduction(productionMap).and(frontProductionEntity.visible.eq("Y")))
                 .orderBy(frontProductionEntity.idx.desc())
                 .offset(getInt(productionMap.get("jpaStartPage"), 0))
                 .limit(getInt(productionMap.get("size"), 0))
