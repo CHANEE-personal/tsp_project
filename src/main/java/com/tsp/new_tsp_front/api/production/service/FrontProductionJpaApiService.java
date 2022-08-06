@@ -11,13 +11,29 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_PRODUCTION;
-import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_PRODUCTION_LIST;
+import static com.tsp.new_tsp_front.exception.ApiExceptionType.*;
 
 @Service
 @RequiredArgsConstructor
 public class FrontProductionJpaApiService {
     private final FrontProductionJpaRepository frontProductionJpaRepository;
+
+    /**
+     * <pre>
+     * 1. MethodName : getProductionCount
+     * 2. ClassName  : FrontProductionJpaApiService.java
+     * 3. Comment    : 프론트 > 프로덕션 리스트 갯수 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 01. 06.
+     * </pre>
+     */
+    public int getProductionCount(Map<String, Object> productionMap) throws TspException {
+        try {
+            return frontProductionJpaRepository.getProductionCount(productionMap);
+        } catch (Exception e) {
+            throw new TspException(NOT_FOUND_PRODUCTION_LIST, e);
+        }
+    }
 
     /**
      * <pre>

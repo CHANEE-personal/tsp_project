@@ -36,6 +36,23 @@ public class FrontProductionJpaRepository {
 
     /**
      * <pre>
+     * 1. MethodName : getProductionCount
+     * 2. ClassName  : FrontModelJpaRepository.java
+     * 3. Comment    : 프로덕션 리스트 갯수 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 01. 06.
+     * </pre>
+     */
+    public int getProductionCount(Map<String, Object> productionMap) {
+        return queryFactory
+                .selectFrom(frontProductionEntity)
+                .where(searchProduction(productionMap)
+                        .and(frontProductionEntity.visible.eq("Y")))
+                .fetch().size();
+    }
+
+    /**
+     * <pre>
      * 1. MethodName : getProductionList
      * 2. ClassName  : FrontProductionJpaRepository.java
      * 3. Comment    : 프로덕션 리스트 조회
