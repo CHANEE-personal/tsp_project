@@ -4,6 +4,7 @@ import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.service.impl.FrontModelJpaRepository;
 import com.tsp.new_tsp_front.exception.TspException;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -11,6 +12,7 @@ import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
@@ -29,16 +31,32 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
+import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application.properties")
+@TestConstructor(autowireMode = ALL)
+@RequiredArgsConstructor
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("모델 Service Test")
 class FrontModelJpaApiServiceTest {
+    private final FrontModelJpaApiService frontModelJpaApiService;
     @Mock private FrontModelJpaRepository frontModelJpaRepository;
-    @InjectMocks private FrontModelJpaApiService frontModelJpaApiService;
+    @InjectMocks private FrontModelJpaApiService mockFrontModelJpaApiService;
+
+    @Test
+    @DisplayName("모델 리스트 조회 예외 테스트")
+    void 모델리스트조회예외테스트() {
+        // given
+        Map<String, Object> modelMap = new HashMap<>();
+        modelMap.put("categoryCd", -1);
+
+        // then
+        assertThatThrownBy(() -> frontModelJpaApiService.getModelList(modelMap))
+                .isInstanceOf(TspException.class);
+    }
 
     @Test
     @DisplayName("모델리스트조회Mockito테스트")
@@ -59,7 +77,7 @@ class FrontModelJpaApiServiceTest {
 
         // when
         when(frontModelJpaRepository.getModelList(modelMap)).thenReturn(returnModelList);
-        List<FrontModelDTO> modelList = frontModelJpaApiService.getModelList(modelMap);
+        List<FrontModelDTO> modelList = mockFrontModelJpaApiService.getModelList(modelMap);
 
         // then
         assertAll(
@@ -107,7 +125,7 @@ class FrontModelJpaApiServiceTest {
 
         // when
         given(frontModelJpaRepository.getModelList(modelMap)).willReturn(returnModelList);
-        List<FrontModelDTO> modelList = frontModelJpaApiService.getModelList(modelMap);
+        List<FrontModelDTO> modelList = mockFrontModelJpaApiService.getModelList(modelMap);
 
         // then
         assertAll(
@@ -153,7 +171,7 @@ class FrontModelJpaApiServiceTest {
 
         // when
         when(frontModelJpaRepository.getMainModelList()).thenReturn(returnModelList);
-        List<FrontModelDTO> mainModelList = frontModelJpaApiService.getMainModelList();
+        List<FrontModelDTO> mainModelList = mockFrontModelJpaApiService.getMainModelList();
 
         // then
         assertAll(
@@ -202,7 +220,7 @@ class FrontModelJpaApiServiceTest {
 
         // when
         given(frontModelJpaRepository.getMainModelList()).willReturn(returnModelList);
-        List<FrontModelDTO> mainModelList = frontModelJpaApiService.getMainModelList();
+        List<FrontModelDTO> mainModelList = mockFrontModelJpaApiService.getMainModelList();
 
         // then
         assertAll(
@@ -243,7 +261,7 @@ class FrontModelJpaApiServiceTest {
 
         // when
         when(frontModelJpaRepository.getModelInfo(frontModelEntity)).thenReturn(frontModelDTO);
-        FrontModelDTO modelInfo = frontModelJpaApiService.getModelInfo(frontModelEntity);
+        FrontModelDTO modelInfo = mockFrontModelJpaApiService.getModelInfo(frontModelEntity);
 
         // then
         assertThat(modelInfo.getIdx()).isEqualTo(frontModelDTO.getIdx());
@@ -266,7 +284,7 @@ class FrontModelJpaApiServiceTest {
 
         // when
         given(frontModelJpaRepository.getModelInfo(frontModelEntity)).willReturn(frontModelDTO);
-        FrontModelDTO modelInfo = frontModelJpaApiService.getModelInfo(frontModelEntity);
+        FrontModelDTO modelInfo = mockFrontModelJpaApiService.getModelInfo(frontModelEntity);
 
         // then
         assertThat(modelInfo.getIdx()).isEqualTo(frontModelDTO.getIdx());
