@@ -26,6 +26,8 @@ import static com.tsp.new_tsp_front.api.model.domain.FrontModelEntity.builder;
 import static com.tsp.new_tsp_front.api.model.service.impl.ModelMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
@@ -150,8 +152,8 @@ class FrontModelJpaRepositoryTest {
     }
 
     @Test
-    @DisplayName("모델 BDD 조회 테스트")
-    void 모델BDD조회테스트() {
+    @DisplayName("모델 리스트 조회 Mockito 테스트")
+    void 모델리스트조회Mockito테스트() {
         // 정상
         // given
         Map<String, Object> modelMap = new HashMap<>();
@@ -166,7 +168,6 @@ class FrontModelJpaRepositoryTest {
         modelList.add(FrontModelDTO.builder().idx(3).categoryCd(1).modelKorName("조찬희").modelImage(commonImageDtoList).build());
 
         // when
-//        given(mockFrontModelJpaRepository.getModelList(modelMap)).willReturn(modelList);
         when(mockFrontModelJpaRepository.getModelList(modelMap)).thenReturn(modelList);
 
         // then
@@ -182,8 +183,39 @@ class FrontModelJpaRepositoryTest {
     }
 
     @Test
-    @DisplayName("모델 상세 BDD 조회 테스트")
-    void 모델상세BDD조회테스트() {
+    @DisplayName("모델 리스트 조회 BDD 테스트")
+    void 모델리스트조회BDD테스트() {
+        // 정상
+        // given
+        Map<String, Object> modelMap = new HashMap<>();
+        modelMap.put("categoryCd", 1);
+        modelMap.put("jpaStartPage", 1);
+        modelMap.put("size", 3);
+
+        List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
+        commonImageDtoList.add(commonImageDTO);
+
+        List<FrontModelDTO> modelList = new ArrayList<>();
+        modelList.add(FrontModelDTO.builder().idx(3).categoryCd(1).modelKorName("조찬희").modelImage(commonImageDtoList).build());
+
+        // when
+        given(mockFrontModelJpaRepository.getModelList(modelMap)).willReturn(modelList);
+
+        // then
+        assertThat(mockFrontModelJpaRepository.getModelList(modelMap).get(0).getIdx()).isEqualTo(modelList.get(0).getIdx());
+        assertThat(mockFrontModelJpaRepository.getModelList(modelMap).get(0).getCategoryCd()).isEqualTo(modelList.get(0).getCategoryCd());
+        assertThat(mockFrontModelJpaRepository.getModelList(modelMap).get(0).getModelKorName()).isEqualTo(modelList.get(0).getModelKorName());
+        assertThat(mockFrontModelJpaRepository.getModelList(modelMap).get(0).getModelImage().get(0).getFileName()).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
+
+        // verify
+        then(mockFrontModelJpaRepository).should(times(4)).getModelList(modelMap);
+        then(mockFrontModelJpaRepository).should(atLeastOnce()).getModelList(modelMap);
+        then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("모델 상세 조회 Mockito 테스트")
+    void 모델상세조회Mockito테스트() {
         // given
         commonImageEntityList.add(commonImageEntity);
 
@@ -204,7 +236,6 @@ class FrontModelJpaRepositoryTest {
                 .build();
 
         // when
-//        given(mockFrontModelJpaRepository.getModelInfo(frontModelEntity)).willReturn(frontModelDTO);
         when(mockFrontModelJpaRepository.getModelInfo(frontModelEntity)).thenReturn(frontModelDTO);
 
         // then
@@ -228,6 +259,54 @@ class FrontModelJpaRepositoryTest {
         verify(mockFrontModelJpaRepository, times(15)).getModelInfo(frontModelEntity);
         verify(mockFrontModelJpaRepository, atLeastOnce()).getModelInfo(frontModelEntity);
         verifyNoMoreInteractions(mockFrontModelJpaRepository);
+    }
+
+    @Test
+    @DisplayName("모델 상세 조회 BDD 테스트")
+    void 모델상세조회BDD테스트() {
+        // given
+        commonImageEntityList.add(commonImageEntity);
+
+        frontModelEntity = builder().idx(1).commonImageEntityList(commonImageEntityList).build();
+
+        frontModelDTO = FrontModelDTO.builder()
+                .idx(1)
+                .categoryCd(1)
+                .categoryAge("2")
+                .modelKorName("조찬희")
+                .modelEngName("CHOCHANHEE")
+                .modelDescription("chaneeCho")
+                .height("170")
+                .size3("34-24-34")
+                .shoes("270")
+                .visible("Y")
+                .modelImage(ModelImageMapper.INSTANCE.toDtoList(commonImageEntityList))
+                .build();
+
+        // when
+        given(mockFrontModelJpaRepository.getModelInfo(frontModelEntity)).willReturn(frontModelDTO);
+
+        // then
+        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getIdx()).isEqualTo(1);
+        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getCategoryCd()).isEqualTo(1);
+        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getCategoryAge()).isEqualTo("2");
+        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelKorName()).isEqualTo("조찬희");
+        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelEngName()).isEqualTo("CHOCHANHEE");
+        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelDescription()).isEqualTo("chaneeCho");
+        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getHeight()).isEqualTo("170");
+        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getSize3()).isEqualTo("34-24-34");
+        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getShoes()).isEqualTo("270");
+        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getVisible()).isEqualTo("Y");
+        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelImage().get(0).getFileName()).isEqualTo("test.jpg");
+        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelImage().get(0).getFileMask()).isEqualTo("test.jpg");
+        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelImage().get(0).getFilePath()).isEqualTo("/test/test.jpg");
+        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelImage().get(0).getImageType()).isEqualTo("main");
+        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelImage().get(0).getTypeName()).isEqualTo("model");
+
+        // verify
+        then(mockFrontModelJpaRepository).should(times(15)).getModelInfo(frontModelEntity);
+        then(mockFrontModelJpaRepository).should(atLeastOnce()).getModelInfo(frontModelEntity);
+        then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test

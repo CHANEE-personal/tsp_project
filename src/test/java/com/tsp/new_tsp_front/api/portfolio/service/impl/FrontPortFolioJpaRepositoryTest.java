@@ -27,6 +27,8 @@ import static com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity.*;
 import static com.tsp.new_tsp_front.api.portfolio.service.impl.PortFolioImageMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
@@ -96,6 +98,70 @@ class FrontPortFolioJpaRepositoryTest {
     }
 
     @Test
+    @DisplayName("포트폴리오 리스트 조회 Mockito 테스트")
+    void 포트폴리오리스트조회Mockito테스트() {
+        // given
+        Map<String, Object> portfolioMap = new HashMap<>();
+        portfolioMap.put("jpaStartPage", 1);
+        portfolioMap.put("size", 3);
+
+        List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
+        commonImageDtoList.add(commonImageDTO);
+
+        List<FrontPortFolioDTO> portfolioList = new ArrayList<>();
+        portfolioList.add(FrontPortFolioDTO.builder().idx(1).title("포트폴리오").description("포트폴리오")
+                .hashTag("#test").portfolioImage(commonImageDtoList).visible("Y").build());
+
+        // when
+        when(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap)).thenReturn(portfolioList);
+
+        // then
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getIdx()).isEqualTo(portfolioList.get(0).getIdx());
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getTitle()).isEqualTo(portfolioList.get(0).getTitle());
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getDescription()).isEqualTo(portfolioList.get(0).getDescription());
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getHashTag()).isEqualTo(portfolioList.get(0).getHashTag());
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getPortfolioImage().get(0).getFileName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getFileName());
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getPortfolioImage().get(0).getTypeName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getTypeName());
+
+        // verify
+        verify(mockFrontPortFolioJpaRepository, times(6)).getPortFolioList(portfolioMap);
+        verify(mockFrontPortFolioJpaRepository, atLeastOnce()).getPortFolioList(portfolioMap);
+        verifyNoMoreInteractions(mockFrontPortFolioJpaRepository);
+    }
+
+    @Test
+    @DisplayName("포트폴리오 리스트 조회 BDD 테스트")
+    void 포트폴리오리스트조회BDD테스트() {
+        // given
+        Map<String, Object> portfolioMap = new HashMap<>();
+        portfolioMap.put("jpaStartPage", 1);
+        portfolioMap.put("size", 3);
+
+        List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
+        commonImageDtoList.add(commonImageDTO);
+
+        List<FrontPortFolioDTO> portfolioList = new ArrayList<>();
+        portfolioList.add(FrontPortFolioDTO.builder().idx(1).title("포트폴리오").description("포트폴리오")
+                .hashTag("#test").portfolioImage(commonImageDtoList).visible("Y").build());
+
+        // when
+        given(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap)).willReturn(portfolioList);
+
+        // then
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getIdx()).isEqualTo(portfolioList.get(0).getIdx());
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getTitle()).isEqualTo(portfolioList.get(0).getTitle());
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getDescription()).isEqualTo(portfolioList.get(0).getDescription());
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getHashTag()).isEqualTo(portfolioList.get(0).getHashTag());
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getPortfolioImage().get(0).getFileName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getFileName());
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getPortfolioImage().get(0).getTypeName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getTypeName());
+
+        // verify
+        then(mockFrontPortFolioJpaRepository).should(times(6)).getPortFolioList(portfolioMap);
+        then(mockFrontPortFolioJpaRepository).should(atLeastOnce()).getPortFolioList(portfolioMap);
+        then(mockFrontPortFolioJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
     @DisplayName("포트폴리오 상세 조회 테스트")
     void 포트폴리오상세조회테스트() {
         frontPortFolioDTO = frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
@@ -136,44 +202,9 @@ class FrontPortFolioJpaRepositoryTest {
     }
 
     @Test
-    @DisplayName("포트폴리오 BDD 조회 테스트")
-    void 포트폴리오BDD조회테스트() {
-        // given
-        Map<String, Object> portfolioMap = new HashMap<>();
-        portfolioMap.put("jpaStartPage", 1);
-        portfolioMap.put("size", 3);
-
-        List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
-        commonImageDtoList.add(commonImageDTO);
-
-        List<FrontPortFolioDTO> portfolioList = new ArrayList<>();
-        portfolioList.add(FrontPortFolioDTO.builder().idx(1).title("포트폴리오").description("포트폴리오")
-                .hashTag("#test").portfolioImage(commonImageDtoList).visible("Y").build());
-
+    @DisplayName("포트폴리오 상세 조회 Mockito 테스트")
+    void 포트폴리오상세조회Mockito테스트() {
         // when
-//        given(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap)).willReturn(portfolioList);
-        when(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap)).thenReturn(portfolioList);
-
-        // then
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getIdx()).isEqualTo(portfolioList.get(0).getIdx());
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getTitle()).isEqualTo(portfolioList.get(0).getTitle());
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getDescription()).isEqualTo(portfolioList.get(0).getDescription());
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getHashTag()).isEqualTo(portfolioList.get(0).getHashTag());
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getPortfolioImage().get(0).getFileName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getFileName());
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getPortfolioImage().get(0).getTypeName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getTypeName());
-
-        // verify
-        verify(mockFrontPortFolioJpaRepository, times(6)).getPortFolioList(portfolioMap);
-        verify(mockFrontPortFolioJpaRepository, atLeastOnce()).getPortFolioList(portfolioMap);
-        verifyNoMoreInteractions(mockFrontPortFolioJpaRepository);
-    }
-
-    @Test
-    @DisplayName("포트폴리오 상세 BDD 조회 테스트")
-    void 포트폴리오상세BDD조회테스트() {
-
-        // when
-//        given(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity)).willReturn(frontPortFolioDTO);
         when(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity)).thenReturn(frontPortFolioDTO);
 
         // then
@@ -194,5 +225,31 @@ class FrontPortFolioJpaRepositoryTest {
         verify(mockFrontPortFolioJpaRepository, times(12)).getPortFolioInfo(frontPortFolioEntity);
         verify(mockFrontPortFolioJpaRepository, atLeastOnce()).getPortFolioInfo(frontPortFolioEntity);
         verifyNoMoreInteractions(mockFrontPortFolioJpaRepository);
+    }
+
+    @Test
+    @DisplayName("포트폴리오 상세 조회 BDD 테스트")
+    void 포트폴리오상세조회BDD테스트() {
+        // when
+        given(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity)).willReturn(frontPortFolioDTO);
+
+        // then
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getIdx()).isEqualTo(1);
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getTitle()).isEqualTo("포트폴리오 Test");
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getDescription()).isEqualTo("포트폴리오 Test");
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getCategoryCd()).isEqualTo(2);
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getHashTag()).isEqualTo("포트폴리오 Test");
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getVideoUrl()).isEqualTo("https://youtube.com");
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getVisible()).isEqualTo("Y");
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getFileName()).isEqualTo("test.jpg");
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getFileMask()).isEqualTo("test.jpg");
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getFilePath()).isEqualTo("/test/test.jpg");
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getImageType()).isEqualTo("main");
+        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getTypeName()).isEqualTo("portfolio");
+
+        // verify
+        then(mockFrontPortFolioJpaRepository).should(times(12)).getPortFolioInfo(frontPortFolioEntity);
+        then(mockFrontPortFolioJpaRepository).should(atLeastOnce()).getPortFolioInfo(frontPortFolioEntity);
+        then(mockFrontPortFolioJpaRepository).shouldHaveNoMoreInteractions();
     }
 }

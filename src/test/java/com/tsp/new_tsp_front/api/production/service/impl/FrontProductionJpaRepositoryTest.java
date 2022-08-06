@@ -28,6 +28,8 @@ import java.util.Map;
 import static com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity.*;
 import static com.tsp.new_tsp_front.api.production.service.impl.ProductionImageMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
@@ -97,8 +99,8 @@ class FrontProductionJpaRepositoryTest {
     }
 
     @Test
-    @DisplayName("프로덕션 BDD 조회 테스트")
-    void 프로덕션BDD조회테스트() {
+    @DisplayName("프로덕션 리스트 조회 Mockito 테스트")
+    void 프로덕션리스트조회Mockito테스트() {
         // given
         Map<String, Object> productionMap = new HashMap<>();
         productionMap.put("jpaStartPage", 1);
@@ -112,7 +114,6 @@ class FrontProductionJpaRepositoryTest {
                 .productionImage(commonImageDtoList).build());
 
         // when
-//        given(mockFrontProductionJpaRepository.getProductionList(productionMap)).willReturn(productionList);
         when(mockFrontProductionJpaRepository.getProductionList(productionMap)).thenReturn(productionList);
 
         // then
@@ -129,10 +130,40 @@ class FrontProductionJpaRepositoryTest {
     }
 
     @Test
-    @DisplayName("프로덕션 상세 BDD 조회 테스트")
-    void 프로덕션상세BDD조회테스트() {
+    @DisplayName("프로덕션 리스트 조회 BDD 테스트")
+    void 프로덕션리스트조회BDD테스트() {
         // given
-//        given(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity)).willReturn(frontProductionDTO);
+        Map<String, Object> productionMap = new HashMap<>();
+        productionMap.put("jpaStartPage", 1);
+        productionMap.put("size", 3);
+
+        List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
+        commonImageDtoList.add(commonImageDTO);
+
+        List<FrontProductionDTO> productionList = new ArrayList<>();
+        productionList.add(FrontProductionDTO.builder().idx(1).title("프로덕션").description("프로덕션").visible("Y")
+                .productionImage(commonImageDtoList).build());
+
+        // when
+        given(mockFrontProductionJpaRepository.getProductionList(productionMap)).willReturn(productionList);
+
+        // then
+        assertThat(mockFrontProductionJpaRepository.getProductionList(productionMap).get(0).getIdx()).isEqualTo(productionList.get(0).getIdx());
+        assertThat(mockFrontProductionJpaRepository.getProductionList(productionMap).get(0).getTitle()).isEqualTo(productionList.get(0).getTitle());
+        assertThat(mockFrontProductionJpaRepository.getProductionList(productionMap).get(0).getDescription()).isEqualTo(productionList.get(0).getDescription());
+        assertThat(mockFrontProductionJpaRepository.getProductionList(productionMap).get(0).getProductionImage().get(0).getFileName()).isEqualTo(productionList.get(0).getProductionImage().get(0).getFileName());
+        assertThat(mockFrontProductionJpaRepository.getProductionList(productionMap).get(0).getProductionImage().get(0).getTypeName()).isEqualTo(productionList.get(0).getProductionImage().get(0).getTypeName());
+
+        // verify
+        then(mockFrontProductionJpaRepository).should(times(5)).getProductionList(productionMap);
+        then(mockFrontProductionJpaRepository).should(atLeastOnce()).getProductionList(productionMap);
+        then(mockFrontProductionJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("프로덕션 상세 조회 Mockito 테스트")
+    void 프로덕션상세조회Mockito테스트() {
+        // given
         when(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity)).thenReturn(frontProductionDTO);
 
         // then
@@ -149,5 +180,27 @@ class FrontProductionJpaRepositoryTest {
         verify(mockFrontProductionJpaRepository, times(8)).getProductionInfo(frontProductionEntity);
         verify(mockFrontProductionJpaRepository, atLeastOnce()).getProductionInfo(frontProductionEntity);
         verifyNoMoreInteractions(mockFrontProductionJpaRepository);
+    }
+
+    @Test
+    @DisplayName("프로덕션 상세 조회 BDD 테스트")
+    void 프로덕션상세조회BDD테스트() {
+        // given
+        given(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity)).willReturn(frontProductionDTO);
+
+        // then
+        assertThat(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity).getIdx()).isEqualTo(1);
+        assertThat(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity).getTitle()).isEqualTo("프로덕션 테스트");
+        assertThat(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity).getDescription()).isEqualTo("프로덕션 테스트");
+        assertThat(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity).getVisible()).isEqualTo("Y");
+        assertThat(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity).getProductionImage().get(0).getFileName()).isEqualTo("test.jpg");
+        assertThat(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity).getProductionImage().get(0).getFileMask()).isEqualTo("test.jpg");
+        assertThat(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity).getProductionImage().get(0).getImageType()).isEqualTo("main");
+        assertThat(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity).getProductionImage().get(0).getTypeName()).isEqualTo("production");
+
+        // verify
+        then(mockFrontProductionJpaRepository).should(times(8)).getProductionInfo(frontProductionEntity);
+        then(mockFrontProductionJpaRepository).should(atLeastOnce()).getProductionInfo(frontProductionEntity);
+        then(mockFrontProductionJpaRepository).shouldHaveNoMoreInteractions();
     }
 }
