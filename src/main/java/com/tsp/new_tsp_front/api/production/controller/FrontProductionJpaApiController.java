@@ -54,7 +54,7 @@ public class FrontProductionJpaApiController {
         // 전체 페이지 수
         resultMap.put("perPageListCnt", ceil((this.frontProductionJpaApiService.getProductionList(searchCommon.searchCommon(page, paramMap)).size() - 1) / page.getSize() + 1));
         // 전체 아이템 수
-        resultMap.put("productionListTotalCnt", this.frontProductionJpaApiService.getProductionList(searchCommon.searchCommon(page, paramMap)).size());
+        resultMap.put("productionListTotalCnt", this.frontProductionJpaApiService.getProductionCount(searchCommon.searchCommon(page, paramMap)));
         resultMap.put("productionList", this.frontProductionJpaApiService.getProductionList(searchCommon.searchCommon(page, paramMap)));
 
         return resultMap;
