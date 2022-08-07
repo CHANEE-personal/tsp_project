@@ -24,12 +24,12 @@ import java.util.*;
 import static com.tsp.new_tsp_front.api.model.domain.FrontModelEntity.builder;
 import static com.tsp.new_tsp_front.api.model.service.impl.ModelMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
-
 
 @DataJpaTest
 @Transactional
@@ -307,5 +307,73 @@ class FrontModelJpaRepositoryTest {
         assertThat(mainModelList).isNotEmpty();
         assertThat(mainModelFirstInfo.get().getCategoryCd()).isEqualTo(1);
         assertThat(mainModelFirstInfo.get().getModelMainYn()).isEqualTo("Y");
+    }
+
+    @Test
+    @DisplayName("모델 메인 배너 조회 Mockito 테스트")
+    void 모델메인배너조회Mockito테스트() {
+        // given
+        List<FrontModelDTO> returnModelList = new ArrayList<>();
+
+        // 남성
+        returnModelList.add(FrontModelDTO.builder().idx(1).categoryCd(1).modelKorName("남성모델").modelEngName("menModel").modelMainYn("Y").build());
+        // 여성
+        returnModelList.add(FrontModelDTO.builder().idx(2).categoryCd(2).modelKorName("여성모델").modelEngName("womenModel").modelMainYn("Y").build());
+        // 시니어
+        returnModelList.add(FrontModelDTO.builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").modelMainYn("Y").build());
+
+        // when
+        when(mockFrontModelJpaRepository.getMainModelList()).thenReturn(returnModelList);
+        List<FrontModelDTO> modelList = mockFrontModelJpaRepository.getMainModelList();
+
+        // then
+        assertAll(
+                () -> assertThat(modelList).isNotEmpty(),
+                () -> assertThat(modelList).hasSize(3)
+        );
+
+        assertThat(modelList.get(0).getIdx()).isEqualTo(returnModelList.get(0).getIdx());
+        assertThat(modelList.get(0).getCategoryCd()).isEqualTo(returnModelList.get(0).getCategoryCd());
+        assertThat(modelList.get(0).getModelKorName()).isEqualTo(returnModelList.get(0).getModelKorName());
+        assertThat(modelList.get(0).getModelMainYn()).isEqualTo(returnModelList.get(0).getModelMainYn());
+
+        // verify
+        verify(mockFrontModelJpaRepository, times(1)).getMainModelList();
+        verify(mockFrontModelJpaRepository, atLeastOnce()).getMainModelList();
+        verifyNoMoreInteractions(mockFrontModelJpaRepository);
+    }
+
+    @Test
+    @DisplayName("모델 메인 배너 조회 BDD 테스트")
+    void 모델메인배너조회BDD테스트() {
+        // given
+        List<FrontModelDTO> returnModelList = new ArrayList<>();
+
+        // 남성
+        returnModelList.add(FrontModelDTO.builder().idx(1).categoryCd(1).modelKorName("남성모델").modelEngName("menModel").modelMainYn("Y").build());
+        // 여성
+        returnModelList.add(FrontModelDTO.builder().idx(2).categoryCd(2).modelKorName("여성모델").modelEngName("womenModel").modelMainYn("Y").build());
+        // 시니어
+        returnModelList.add(FrontModelDTO.builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").modelMainYn("Y").build());
+
+        // when
+        given(mockFrontModelJpaRepository.getMainModelList()).willReturn(returnModelList);
+        List<FrontModelDTO> modelList = mockFrontModelJpaRepository.getMainModelList();
+
+        // then
+        assertAll(
+                () -> assertThat(modelList).isNotEmpty(),
+                () -> assertThat(modelList).hasSize(3)
+        );
+
+        assertThat(modelList.get(0).getIdx()).isEqualTo(returnModelList.get(0).getIdx());
+        assertThat(modelList.get(0).getCategoryCd()).isEqualTo(returnModelList.get(0).getCategoryCd());
+        assertThat(modelList.get(0).getModelKorName()).isEqualTo(returnModelList.get(0).getModelKorName());
+        assertThat(modelList.get(0).getModelMainYn()).isEqualTo(returnModelList.get(0).getModelMainYn());
+
+        // verify
+        then(mockFrontModelJpaRepository).should(times(1)).getMainModelList();
+        then(mockFrontModelJpaRepository).should(atLeastOnce()).getMainModelList();
+        then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
     }
 }
