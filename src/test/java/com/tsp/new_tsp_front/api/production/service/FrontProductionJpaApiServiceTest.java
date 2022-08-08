@@ -5,6 +5,7 @@ import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 import com.tsp.new_tsp_front.api.production.service.impl.FrontProductionJpaRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -70,6 +71,9 @@ class FrontProductionJpaApiServiceTest {
         verify(frontProductionJpaRepository, times(1)).getProductionList(productionMap);
         verify(frontProductionJpaRepository, atLeastOnce()).getProductionList(productionMap);
         verifyNoMoreInteractions(frontProductionJpaRepository);
+
+        InOrder inOrder = inOrder(frontProductionJpaRepository);
+        inOrder.verify(frontProductionJpaRepository).getProductionList(productionMap);
     }
 
     @Test
@@ -127,6 +131,9 @@ class FrontProductionJpaApiServiceTest {
         verify(frontProductionJpaRepository, times(1)).getProductionInfo(frontProductionEntity);
         verify(frontProductionJpaRepository, atLeastOnce()).getProductionInfo(frontProductionEntity);
         verifyNoMoreInteractions(frontProductionJpaRepository);
+
+        InOrder inOrder = inOrder(frontProductionJpaRepository);
+        inOrder.verify(frontProductionJpaRepository).getProductionInfo(frontProductionEntity);
     }
 
     @Test

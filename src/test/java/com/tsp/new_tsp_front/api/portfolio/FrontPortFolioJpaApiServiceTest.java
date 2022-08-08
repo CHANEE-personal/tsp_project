@@ -5,6 +5,7 @@ import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
 import com.tsp.new_tsp_front.api.portfolio.service.impl.FrontPortFolioJpaRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -71,6 +72,9 @@ class FrontPortFolioJpaApiServiceTest {
         verify(frontPortFolioJpaRepository, times(1)).getPortFolioList(portfolioMap);
         verify(frontPortFolioJpaRepository, atLeastOnce()).getPortFolioList(portfolioMap);
         verifyNoMoreInteractions(frontPortFolioJpaRepository);
+
+        InOrder inOrder = inOrder(frontPortFolioJpaRepository);
+        inOrder.verify(frontPortFolioJpaRepository).getPortFolioList(portfolioMap);
     }
 
     @Test
@@ -131,6 +135,9 @@ class FrontPortFolioJpaApiServiceTest {
         verify(frontPortFolioJpaRepository, times(1)).getPortFolioInfo(frontPortFolioEntity);
         verify(frontPortFolioJpaRepository, atLeastOnce()).getPortFolioInfo(frontPortFolioEntity);
         verifyNoMoreInteractions(frontPortFolioJpaRepository);
+
+        InOrder inOrder = inOrder(frontPortFolioJpaRepository);
+        inOrder.verify(frontPortFolioJpaRepository).getPortFolioInfo(frontPortFolioEntity);
     }
 
     @Test

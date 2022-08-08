@@ -7,6 +7,7 @@ import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -104,6 +105,9 @@ class FrontModelJpaApiServiceTest {
         verify(frontModelJpaRepository, times(1)).getModelList(modelMap);
         verify(frontModelJpaRepository, atLeastOnce()).getModelList(modelMap);
         verifyNoMoreInteractions(frontModelJpaRepository);
+
+        InOrder inOrder = inOrder(frontModelJpaRepository);
+        inOrder.verify(frontModelJpaRepository).getModelList(modelMap);
     }
 
     @Test
@@ -201,6 +205,9 @@ class FrontModelJpaApiServiceTest {
         verify(frontModelJpaRepository, times(1)).getMainModelList();
         verify(frontModelJpaRepository, atLeastOnce()).getMainModelList();
         verifyNoMoreInteractions(frontModelJpaRepository);
+
+        InOrder inOrder = inOrder(frontModelJpaRepository);
+        inOrder.verify(frontModelJpaRepository).getMainModelList();
     }
 
     @Test
@@ -273,6 +280,9 @@ class FrontModelJpaApiServiceTest {
         verify(frontModelJpaRepository, times(1)).getModelInfo(frontModelEntity);
         verify(frontModelJpaRepository, atLeastOnce()).getModelInfo(frontModelEntity);
         verifyNoMoreInteractions(frontModelJpaRepository);
+
+        InOrder inOrder = inOrder(frontModelJpaRepository);
+        inOrder.verify(frontModelJpaRepository).getModelInfo(frontModelEntity);
     }
 
     @Test
