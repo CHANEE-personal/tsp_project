@@ -280,26 +280,27 @@ class FrontModelJpaRepositoryTest {
 
         // when
         given(mockFrontModelJpaRepository.getModelInfo(frontModelEntity)).willReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaRepository.getModelInfo(frontModelEntity);
 
         // then
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getIdx()).isEqualTo(1);
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getCategoryCd()).isEqualTo(1);
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getCategoryAge()).isEqualTo("2");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelKorName()).isEqualTo("조찬희");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelEngName()).isEqualTo("CHOCHANHEE");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelDescription()).isEqualTo("chaneeCho");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getHeight()).isEqualTo("170");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getSize3()).isEqualTo("34-24-34");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getShoes()).isEqualTo("270");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getVisible()).isEqualTo("Y");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelImage().get(0).getFileName()).isEqualTo("test.jpg");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelImage().get(0).getFileMask()).isEqualTo("test.jpg");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelImage().get(0).getFilePath()).isEqualTo("/test/test.jpg");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelImage().get(0).getImageType()).isEqualTo("main");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelImage().get(0).getTypeName()).isEqualTo("model");
+        assertThat(modelInfo.getIdx()).isEqualTo(1);
+        assertThat(modelInfo.getCategoryCd()).isEqualTo(1);
+        assertThat(modelInfo.getCategoryAge()).isEqualTo("2");
+        assertThat(modelInfo.getModelKorName()).isEqualTo("조찬희");
+        assertThat(modelInfo.getModelEngName()).isEqualTo("CHOCHANHEE");
+        assertThat(modelInfo.getModelDescription()).isEqualTo("chaneeCho");
+        assertThat(modelInfo.getHeight()).isEqualTo("170");
+        assertThat(modelInfo.getSize3()).isEqualTo("34-24-34");
+        assertThat(modelInfo.getShoes()).isEqualTo("270");
+        assertThat(modelInfo.getVisible()).isEqualTo("Y");
+        assertThat(modelInfo.getModelImage().get(0).getFileName()).isEqualTo("test.jpg");
+        assertThat(modelInfo.getModelImage().get(0).getFileMask()).isEqualTo("test.jpg");
+        assertThat(modelInfo.getModelImage().get(0).getFilePath()).isEqualTo("/test/test.jpg");
+        assertThat(modelInfo.getModelImage().get(0).getImageType()).isEqualTo("main");
+        assertThat(modelInfo.getModelImage().get(0).getTypeName()).isEqualTo("model");
 
         // verify
-        then(mockFrontModelJpaRepository).should(times(15)).getModelInfo(frontModelEntity);
+        then(mockFrontModelJpaRepository).should(times(1)).getModelInfo(frontModelEntity);
         then(mockFrontModelJpaRepository).should(atLeastOnce()).getModelInfo(frontModelEntity);
         then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
     }

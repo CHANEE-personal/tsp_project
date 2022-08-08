@@ -1,13 +1,11 @@
 package com.tsp.new_tsp_front.api.support.service.impl;
 
-import com.tsp.new_tsp_front.api.support.domain.FrontSupportDTO;
 import com.tsp.new_tsp_front.api.support.domain.FrontSupportEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -19,7 +17,6 @@ import org.springframework.test.context.TestPropertySource;
 import javax.transaction.Transactional;
 
 import static com.tsp.new_tsp_front.api.support.domain.FrontSupportEntity.*;
-import static com.tsp.new_tsp_front.api.support.mapper.SupportMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
@@ -45,8 +42,6 @@ class FrontSupportJpaRepositoryTest {
                 .supportSize3("31-24-31")
                 .supportInstagram("https://instagram.com")
                 .build();
-
-        FrontSupportDTO frontSupportDTO = INSTANCE.toDto(frontSupportEntity);
     }
 
     @BeforeEach

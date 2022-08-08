@@ -1,11 +1,9 @@
 package com.tsp.new_tsp_front.api.support.service;
 
 import com.tsp.new_tsp_front.api.support.domain.FrontSupportEntity;
-import com.tsp.new_tsp_front.api.support.service.impl.FrontSupportJpaRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +23,6 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("지원모델 Service Test")
 class FrontSupportJpaApiServiceTest {
-    @Mock private FrontSupportJpaRepository frontSupportJpaRepository;
     @InjectMocks private FrontSupportJpaApiService frontSupportJpaApiService;
 
     @Test

@@ -151,17 +151,18 @@ class FrontPortFolioJpaRepositoryTest {
 
         // when
         given(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap)).willReturn(portfolioList);
+        List<FrontPortFolioDTO> newPortfolioList = mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap);
 
         // then
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getIdx()).isEqualTo(portfolioList.get(0).getIdx());
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getTitle()).isEqualTo(portfolioList.get(0).getTitle());
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getDescription()).isEqualTo(portfolioList.get(0).getDescription());
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getHashTag()).isEqualTo(portfolioList.get(0).getHashTag());
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getPortfolioImage().get(0).getFileName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getFileName());
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap).get(0).getPortfolioImage().get(0).getTypeName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getTypeName());
+        assertThat(newPortfolioList.get(0).getIdx()).isEqualTo(portfolioList.get(0).getIdx());
+        assertThat(newPortfolioList.get(0).getTitle()).isEqualTo(portfolioList.get(0).getTitle());
+        assertThat(newPortfolioList.get(0).getDescription()).isEqualTo(portfolioList.get(0).getDescription());
+        assertThat(newPortfolioList.get(0).getHashTag()).isEqualTo(portfolioList.get(0).getHashTag());
+        assertThat(newPortfolioList.get(0).getPortfolioImage().get(0).getFileName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getFileName());
+        assertThat(newPortfolioList.get(0).getPortfolioImage().get(0).getTypeName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getTypeName());
 
         // verify
-        then(mockFrontPortFolioJpaRepository).should(times(6)).getPortFolioList(portfolioMap);
+        then(mockFrontPortFolioJpaRepository).should(times(1)).getPortFolioList(portfolioMap);
         then(mockFrontPortFolioJpaRepository).should(atLeastOnce()).getPortFolioList(portfolioMap);
         then(mockFrontPortFolioJpaRepository).shouldHaveNoMoreInteractions();
     }
@@ -241,23 +242,24 @@ class FrontPortFolioJpaRepositoryTest {
     void 포트폴리오상세조회BDD테스트() {
         // when
         given(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity)).willReturn(frontPortFolioDTO);
+        FrontPortFolioDTO portFolioInfo = mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
 
         // then
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getIdx()).isEqualTo(1);
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getTitle()).isEqualTo("포트폴리오 Test");
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getDescription()).isEqualTo("포트폴리오 Test");
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getCategoryCd()).isEqualTo(2);
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getHashTag()).isEqualTo("포트폴리오 Test");
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getVideoUrl()).isEqualTo("https://youtube.com");
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getVisible()).isEqualTo("Y");
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getFileName()).isEqualTo("test.jpg");
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getFileMask()).isEqualTo("test.jpg");
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getFilePath()).isEqualTo("/test/test.jpg");
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getImageType()).isEqualTo("main");
-        assertThat(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity).getPortfolioImage().get(0).getTypeName()).isEqualTo("portfolio");
+        assertThat(portFolioInfo.getIdx()).isEqualTo(1);
+        assertThat(portFolioInfo.getTitle()).isEqualTo("포트폴리오 Test");
+        assertThat(portFolioInfo.getDescription()).isEqualTo("포트폴리오 Test");
+        assertThat(portFolioInfo.getCategoryCd()).isEqualTo(2);
+        assertThat(portFolioInfo.getHashTag()).isEqualTo("포트폴리오 Test");
+        assertThat(portFolioInfo.getVideoUrl()).isEqualTo("https://youtube.com");
+        assertThat(portFolioInfo.getVisible()).isEqualTo("Y");
+        assertThat(portFolioInfo.getPortfolioImage().get(0).getFileName()).isEqualTo("test.jpg");
+        assertThat(portFolioInfo.getPortfolioImage().get(0).getFileMask()).isEqualTo("test.jpg");
+        assertThat(portFolioInfo.getPortfolioImage().get(0).getFilePath()).isEqualTo("/test/test.jpg");
+        assertThat(portFolioInfo.getPortfolioImage().get(0).getImageType()).isEqualTo("main");
+        assertThat(portFolioInfo.getPortfolioImage().get(0).getTypeName()).isEqualTo("portfolio");
 
         // verify
-        then(mockFrontPortFolioJpaRepository).should(times(12)).getPortFolioInfo(frontPortFolioEntity);
+        then(mockFrontPortFolioJpaRepository).should(times(1)).getPortFolioInfo(frontPortFolioEntity);
         then(mockFrontPortFolioJpaRepository).should(atLeastOnce()).getPortFolioInfo(frontPortFolioEntity);
         then(mockFrontPortFolioJpaRepository).shouldHaveNoMoreInteractions();
     }
