@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -115,18 +116,22 @@ class FrontProductionJpaRepositoryTest {
 
         // when
         when(mockFrontProductionJpaRepository.getProductionList(productionMap)).thenReturn(productionList);
+        List<FrontProductionDTO> newProductionList = mockFrontProductionJpaRepository.getProductionList(productionMap);
 
         // then
-        assertThat(mockFrontProductionJpaRepository.getProductionList(productionMap).get(0).getIdx()).isEqualTo(productionList.get(0).getIdx());
-        assertThat(mockFrontProductionJpaRepository.getProductionList(productionMap).get(0).getTitle()).isEqualTo(productionList.get(0).getTitle());
-        assertThat(mockFrontProductionJpaRepository.getProductionList(productionMap).get(0).getDescription()).isEqualTo(productionList.get(0).getDescription());
-        assertThat(mockFrontProductionJpaRepository.getProductionList(productionMap).get(0).getProductionImage().get(0).getFileName()).isEqualTo(productionList.get(0).getProductionImage().get(0).getFileName());
-        assertThat(mockFrontProductionJpaRepository.getProductionList(productionMap).get(0).getProductionImage().get(0).getTypeName()).isEqualTo(productionList.get(0).getProductionImage().get(0).getTypeName());
+        assertThat(newProductionList.get(0).getIdx()).isEqualTo(productionList.get(0).getIdx());
+        assertThat(newProductionList.get(0).getTitle()).isEqualTo(productionList.get(0).getTitle());
+        assertThat(newProductionList.get(0).getDescription()).isEqualTo(productionList.get(0).getDescription());
+        assertThat(newProductionList.get(0).getProductionImage().get(0).getFileName()).isEqualTo(productionList.get(0).getProductionImage().get(0).getFileName());
+        assertThat(newProductionList.get(0).getProductionImage().get(0).getTypeName()).isEqualTo(productionList.get(0).getProductionImage().get(0).getTypeName());
 
         // verify
-        verify(mockFrontProductionJpaRepository, times(5)).getProductionList(productionMap);
+        verify(mockFrontProductionJpaRepository, times(1)).getProductionList(productionMap);
         verify(mockFrontProductionJpaRepository, atLeastOnce()).getProductionList(productionMap);
         verifyNoMoreInteractions(mockFrontProductionJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontProductionJpaRepository);
+        inOrder.verify(mockFrontProductionJpaRepository).getProductionList(productionMap);
     }
 
     @Test
@@ -165,21 +170,25 @@ class FrontProductionJpaRepositoryTest {
     void 프로덕션상세조회Mockito테스트() {
         // given
         when(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity)).thenReturn(frontProductionDTO);
+        FrontProductionDTO productionInfo = mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity);
 
         // then
-        assertThat(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity).getIdx()).isEqualTo(1);
-        assertThat(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity).getTitle()).isEqualTo("프로덕션 테스트");
-        assertThat(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity).getDescription()).isEqualTo("프로덕션 테스트");
-        assertThat(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity).getVisible()).isEqualTo("Y");
-        assertThat(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity).getProductionImage().get(0).getFileName()).isEqualTo("test.jpg");
-        assertThat(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity).getProductionImage().get(0).getFileMask()).isEqualTo("test.jpg");
-        assertThat(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity).getProductionImage().get(0).getImageType()).isEqualTo("main");
-        assertThat(mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity).getProductionImage().get(0).getTypeName()).isEqualTo("production");
+        assertThat(productionInfo.getIdx()).isEqualTo(1);
+        assertThat(productionInfo.getTitle()).isEqualTo("프로덕션 테스트");
+        assertThat(productionInfo.getDescription()).isEqualTo("프로덕션 테스트");
+        assertThat(productionInfo.getVisible()).isEqualTo("Y");
+        assertThat(productionInfo.getProductionImage().get(0).getFileName()).isEqualTo("test.jpg");
+        assertThat(productionInfo.getProductionImage().get(0).getFileMask()).isEqualTo("test.jpg");
+        assertThat(productionInfo.getProductionImage().get(0).getImageType()).isEqualTo("main");
+        assertThat(productionInfo.getProductionImage().get(0).getTypeName()).isEqualTo("production");
 
         // verify
-        verify(mockFrontProductionJpaRepository, times(8)).getProductionInfo(frontProductionEntity);
+        verify(mockFrontProductionJpaRepository, times(1)).getProductionInfo(frontProductionEntity);
         verify(mockFrontProductionJpaRepository, atLeastOnce()).getProductionInfo(frontProductionEntity);
         verifyNoMoreInteractions(mockFrontProductionJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontProductionJpaRepository);
+        inOrder.verify(mockFrontProductionJpaRepository).getProductionInfo(frontProductionEntity);
     }
 
     @Test

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -155,17 +156,21 @@ class FrontModelJpaRepositoryTest {
 
         // when
         when(mockFrontModelJpaRepository.getModelList(modelMap)).thenReturn(modelList);
+        List<FrontModelDTO> newModelList = mockFrontModelJpaRepository.getModelList(modelMap);
 
         // then
-        assertThat(mockFrontModelJpaRepository.getModelList(modelMap).get(0).getIdx()).isEqualTo(modelList.get(0).getIdx());
-        assertThat(mockFrontModelJpaRepository.getModelList(modelMap).get(0).getCategoryCd()).isEqualTo(modelList.get(0).getCategoryCd());
-        assertThat(mockFrontModelJpaRepository.getModelList(modelMap).get(0).getModelKorName()).isEqualTo(modelList.get(0).getModelKorName());
-        assertThat(mockFrontModelJpaRepository.getModelList(modelMap).get(0).getModelImage().get(0).getFileName()).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
+        assertThat(newModelList.get(0).getIdx()).isEqualTo(modelList.get(0).getIdx());
+        assertThat(newModelList.get(0).getCategoryCd()).isEqualTo(modelList.get(0).getCategoryCd());
+        assertThat(newModelList.get(0).getModelKorName()).isEqualTo(modelList.get(0).getModelKorName());
+        assertThat(newModelList.get(0).getModelImage().get(0).getFileName()).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
 
         // verify
-        verify(mockFrontModelJpaRepository, times(4)).getModelList(modelMap);
+        verify(mockFrontModelJpaRepository, times(1)).getModelList(modelMap);
         verify(mockFrontModelJpaRepository, atLeastOnce()).getModelList(modelMap);
         verifyNoMoreInteractions(mockFrontModelJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontModelJpaRepository);
+        inOrder.verify(mockFrontModelJpaRepository).getModelList(modelMap);
     }
 
     @Test
@@ -223,28 +228,32 @@ class FrontModelJpaRepositoryTest {
 
         // when
         when(mockFrontModelJpaRepository.getModelInfo(frontModelEntity)).thenReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaRepository.getModelInfo(frontModelEntity);
 
         // then
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getIdx()).isEqualTo(1);
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getCategoryCd()).isEqualTo(1);
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getCategoryAge()).isEqualTo("2");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelKorName()).isEqualTo("조찬희");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelEngName()).isEqualTo("CHOCHANHEE");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelDescription()).isEqualTo("chaneeCho");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getHeight()).isEqualTo("170");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getSize3()).isEqualTo("34-24-34");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getShoes()).isEqualTo("270");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getVisible()).isEqualTo("Y");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelImage().get(0).getFileName()).isEqualTo("test.jpg");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelImage().get(0).getFileMask()).isEqualTo("test.jpg");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelImage().get(0).getFilePath()).isEqualTo("/test/test.jpg");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelImage().get(0).getImageType()).isEqualTo("main");
-        assertThat(mockFrontModelJpaRepository.getModelInfo(frontModelEntity).getModelImage().get(0).getTypeName()).isEqualTo("model");
+        assertThat(modelInfo.getIdx()).isEqualTo(1);
+        assertThat(modelInfo.getCategoryCd()).isEqualTo(1);
+        assertThat(modelInfo.getCategoryAge()).isEqualTo("2");
+        assertThat(modelInfo.getModelKorName()).isEqualTo("조찬희");
+        assertThat(modelInfo.getModelEngName()).isEqualTo("CHOCHANHEE");
+        assertThat(modelInfo.getModelDescription()).isEqualTo("chaneeCho");
+        assertThat(modelInfo.getHeight()).isEqualTo("170");
+        assertThat(modelInfo.getSize3()).isEqualTo("34-24-34");
+        assertThat(modelInfo.getShoes()).isEqualTo("270");
+        assertThat(modelInfo.getVisible()).isEqualTo("Y");
+        assertThat(modelInfo.getModelImage().get(0).getFileName()).isEqualTo("test.jpg");
+        assertThat(modelInfo.getModelImage().get(0).getFileMask()).isEqualTo("test.jpg");
+        assertThat(modelInfo.getModelImage().get(0).getFilePath()).isEqualTo("/test/test.jpg");
+        assertThat(modelInfo.getModelImage().get(0).getImageType()).isEqualTo("main");
+        assertThat(modelInfo.getModelImage().get(0).getTypeName()).isEqualTo("model");
 
         // verify
-        verify(mockFrontModelJpaRepository, times(15)).getModelInfo(frontModelEntity);
+        verify(mockFrontModelJpaRepository, times(1)).getModelInfo(frontModelEntity);
         verify(mockFrontModelJpaRepository, atLeastOnce()).getModelInfo(frontModelEntity);
         verifyNoMoreInteractions(mockFrontModelJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontModelJpaRepository);
+        inOrder.verify(mockFrontModelJpaRepository).getModelInfo(frontModelEntity);
     }
 
     @Test
@@ -341,6 +350,9 @@ class FrontModelJpaRepositoryTest {
         verify(mockFrontModelJpaRepository, times(1)).getMainModelList();
         verify(mockFrontModelJpaRepository, atLeastOnce()).getMainModelList();
         verifyNoMoreInteractions(mockFrontModelJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontModelJpaRepository);
+        inOrder.verify(mockFrontModelJpaRepository).getMainModelList();
     }
 
     @Test
