@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.api.model.domain.FrontModelDTO.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
@@ -70,11 +69,11 @@ class FrontModelJpaApiServiceTest {
         List<FrontModelDTO> returnModelList = new ArrayList<>();
 
         // 남성
-        returnModelList.add(builder().idx(1).categoryCd(1).modelKorName("남성모델").modelEngName("menModel").build());
+        returnModelList.add(FrontModelDTO.builder().idx(1).categoryCd(1).modelKorName("남성모델").modelEngName("menModel").build());
         // 여성
-        returnModelList.add(builder().idx(2).categoryCd(2).modelKorName("여성모델").modelEngName("womenModel").build());
+        returnModelList.add(FrontModelDTO.builder().idx(2).categoryCd(2).modelKorName("여성모델").modelEngName("womenModel").build());
         // 시니어
-        returnModelList.add(builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").build());
+        returnModelList.add(FrontModelDTO.builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").build());
 
         // when
         when(frontModelJpaRepository.getModelList(modelMap)).thenReturn(returnModelList);
@@ -121,11 +120,11 @@ class FrontModelJpaApiServiceTest {
         List<FrontModelDTO> returnModelList = new ArrayList<>();
 
         // 남성
-        returnModelList.add(builder().idx(1).categoryCd(1).modelKorName("남성모델").modelEngName("menModel").build());
+        returnModelList.add(FrontModelDTO.builder().idx(1).categoryCd(1).modelKorName("남성모델").modelEngName("menModel").build());
         // 여성
-        returnModelList.add(builder().idx(2).categoryCd(2).modelKorName("여성모델").modelEngName("womenModel").build());
+        returnModelList.add(FrontModelDTO.builder().idx(2).categoryCd(2).modelKorName("여성모델").modelEngName("womenModel").build());
         // 시니어
-        returnModelList.add(builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").build());
+        returnModelList.add(FrontModelDTO.builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").build());
 
         // when
         given(frontModelJpaRepository.getModelList(modelMap)).willReturn(returnModelList);
@@ -167,11 +166,11 @@ class FrontModelJpaApiServiceTest {
         List<FrontModelDTO> returnModelList = new ArrayList<>();
 
         // 남성
-        returnModelList.add(builder().idx(1).categoryCd(1).modelKorName("남성모델").modelEngName("menModel").modelMainYn("Y").build());
+        returnModelList.add(FrontModelDTO.builder().idx(1).categoryCd(1).modelKorName("남성모델").modelEngName("menModel").modelMainYn("Y").build());
         // 여성
-        returnModelList.add(builder().idx(2).categoryCd(2).modelKorName("여성모델").modelEngName("womenModel").modelMainYn("Y").build());
+        returnModelList.add(FrontModelDTO.builder().idx(2).categoryCd(2).modelKorName("여성모델").modelEngName("womenModel").modelMainYn("Y").build());
         // 시니어
-        returnModelList.add(builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").modelMainYn("Y").build());
+        returnModelList.add(FrontModelDTO.builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").modelMainYn("Y").build());
 
         // when
         when(frontModelJpaRepository.getMainModelList()).thenReturn(returnModelList);
@@ -219,11 +218,11 @@ class FrontModelJpaApiServiceTest {
         List<FrontModelDTO> returnModelList = new ArrayList<>();
 
         // 남성
-        returnModelList.add(builder().idx(1).categoryCd(1).modelKorName("남성모델").modelEngName("menModel").modelMainYn("Y").build());
+        returnModelList.add(FrontModelDTO.builder().idx(1).categoryCd(1).modelKorName("남성모델").modelEngName("menModel").modelMainYn("Y").build());
         // 여성
-        returnModelList.add(builder().idx(2).categoryCd(2).modelKorName("여성모델").modelEngName("womenModel").modelMainYn("Y").build());
+        returnModelList.add(FrontModelDTO.builder().idx(2).categoryCd(2).modelKorName("여성모델").modelEngName("womenModel").modelMainYn("Y").build());
         // 시니어
-        returnModelList.add(builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").modelMainYn("Y").build());
+        returnModelList.add(FrontModelDTO.builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").modelMainYn("Y").build());
 
         // when
         given(frontModelJpaRepository.getMainModelList()).willReturn(returnModelList);
@@ -264,7 +263,7 @@ class FrontModelJpaApiServiceTest {
     void 모델상세조회Mockito테스트() {
         // given
         FrontModelEntity frontModelEntity = FrontModelEntity.builder().idx(1).categoryCd(1).build();
-        FrontModelDTO frontModelDTO = builder().idx(1).categoryCd(1).modelKorName("조찬희").modelEngName("chochanhee").build();
+        FrontModelDTO frontModelDTO = FrontModelDTO.builder().idx(1).categoryCd(1).modelKorName("조찬희").modelEngName("chochanhee").build();
 
         // when
         when(frontModelJpaRepository.getModelInfo(frontModelEntity)).thenReturn(frontModelDTO);
@@ -290,7 +289,7 @@ class FrontModelJpaApiServiceTest {
     void 모델상세조회BDD테스트() {
         // given
         FrontModelEntity frontModelEntity = FrontModelEntity.builder().idx(1).categoryCd(1).build();
-        FrontModelDTO frontModelDTO = builder().idx(1).categoryCd(1).modelKorName("조찬희").modelEngName("chochanhee").build();
+        FrontModelDTO frontModelDTO = FrontModelDTO.builder().idx(1).categoryCd(1).modelKorName("조찬희").modelEngName("chochanhee").build();
 
         // when
         given(frontModelJpaRepository.getModelInfo(frontModelEntity)).willReturn(frontModelDTO);

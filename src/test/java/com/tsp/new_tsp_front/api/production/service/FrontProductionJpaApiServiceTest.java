@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity.builder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
@@ -114,7 +113,7 @@ class FrontProductionJpaApiServiceTest {
     @DisplayName("프로덕션상세조회Mockito테스트")
     void 프로덕션상세조회Mockito테스트() {
         // given
-        FrontProductionEntity frontProductionEntity = builder().idx(1).build();
+        FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(1).build();
         FrontProductionDTO frontProductionDTO = FrontProductionDTO.builder().idx(1).title("productionTest").description("productionTest").build();
 
         // when
@@ -140,7 +139,7 @@ class FrontProductionJpaApiServiceTest {
     @DisplayName("프로덕션상세조회BDD테스트")
     void 프로덕션상세조회BDD테스트() {
         // given
-        FrontProductionEntity frontProductionEntity = builder().idx(1).build();
+        FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(1).build();
         FrontProductionDTO frontProductionDTO = FrontProductionDTO.builder().idx(1).title("productionTest").description("productionTest").build();
 
         // when

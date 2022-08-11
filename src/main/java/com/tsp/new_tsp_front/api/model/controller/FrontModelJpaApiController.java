@@ -1,6 +1,7 @@
 package com.tsp.new_tsp_front.api.model.controller;
 
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
+import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.service.FrontModelJpaApiService;
 import com.tsp.new_tsp_front.common.SearchCommon;
 import com.tsp.new_tsp_front.common.paging.Page;
@@ -18,7 +19,6 @@ import java.rmi.ServerError;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.api.model.domain.FrontModelEntity.*;
 import static java.lang.Math.ceil;
 import static org.springframework.web.client.HttpClientErrorException.*;
 
@@ -114,6 +114,6 @@ public class FrontModelJpaApiController {
     @GetMapping(value = "/{categoryCd}/{idx}")
     public FrontModelDTO getModelInfo(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
                                       @PathVariable Integer idx) {
-        return this.frontModelJpaApiService.getModelInfo(builder().categoryCd(categoryCd).idx(idx).build());
+        return this.frontModelJpaApiService.getModelInfo(FrontModelEntity.builder().categoryCd(categoryCd).idx(idx).build());
     }
 }

@@ -18,7 +18,6 @@ import static java.util.List.of;
 import static springfox.documentation.builders.PathSelectors.*;
 import static springfox.documentation.builders.RequestHandlerSelectors.*;
 import static springfox.documentation.spi.DocumentationType.SWAGGER_2;
-import static springfox.documentation.spi.service.contexts.SecurityContext.*;
 
 @Configuration
 @EnableSwagger2
@@ -76,7 +75,7 @@ public class SwaggerConfiguration {
     }
 
     private SecurityContext securityContext() {
-        return builder().securityReferences(defaultAuth()).forPaths(PathSelectors.any()).build();
+        return SecurityContext.builder().securityReferences(defaultAuth()).forPaths(PathSelectors.any()).build();
     }
 
     List<SecurityReference> defaultAuth() {

@@ -7,9 +7,6 @@ import org.mapstruct.Mapper;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tsp.new_tsp_front.api.model.domain.FrontModelEntity.*;
-
-
 @Mapper
 public class ModelMapperImpl implements ModelMapper {
     @Override
@@ -45,7 +42,7 @@ public class ModelMapperImpl implements ModelMapper {
     public FrontModelEntity toEntity(FrontModelDTO dto) {
         if (dto == null) return null;
 
-        return builder()
+        return FrontModelEntity.builder()
                 .rnum(dto.getRnum())
                 .idx(dto.getIdx())
                 .categoryCd(dto.getCategoryCd())

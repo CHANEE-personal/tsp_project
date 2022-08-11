@@ -6,8 +6,6 @@ import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity.*;
-
 public class PortFolioMapperImpl implements PortFolioMapper {
     @Override
     public FrontPortFolioDTO toDto(FrontPortFolioEntity entity) {
@@ -34,7 +32,7 @@ public class PortFolioMapperImpl implements PortFolioMapper {
     public FrontPortFolioEntity toEntity(FrontPortFolioDTO dto) {
         if (dto == null) return null;
 
-        return builder()
+        return FrontPortFolioEntity.builder()
                 .rnum(dto.getRnum())
                 .idx(dto.getIdx())
                 .categoryCd(dto.getCategoryCd())

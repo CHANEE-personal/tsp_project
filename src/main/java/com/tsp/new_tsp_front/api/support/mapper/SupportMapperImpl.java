@@ -6,8 +6,6 @@ import com.tsp.new_tsp_front.api.support.domain.FrontSupportEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tsp.new_tsp_front.api.support.domain.FrontSupportEntity.*;
-
 public class SupportMapperImpl implements SupportMapper {
 
     @Override
@@ -32,7 +30,7 @@ public class SupportMapperImpl implements SupportMapper {
     public FrontSupportEntity toEntity(FrontSupportDTO dto) {
         if (dto == null) return null;
 
-        return builder()
+        return FrontSupportEntity.builder()
                 .rnum(dto.getRnum())
                 .idx(dto.getIdx())
                 .supportName(dto.getSupportName())

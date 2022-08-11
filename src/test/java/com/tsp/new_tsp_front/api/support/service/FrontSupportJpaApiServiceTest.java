@@ -11,10 +11,8 @@ import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
 
-import static com.tsp.new_tsp_front.api.support.domain.FrontSupportEntity.builder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
-
 
 @SpringBootTest
 @Transactional
@@ -29,7 +27,7 @@ class FrontSupportJpaApiServiceTest {
     @DisplayName("모델 지원하기 테스트")
     void 모델지원하기테스트() {
         // given
-        FrontSupportEntity frontSupportEntity = builder()
+        FrontSupportEntity frontSupportEntity = FrontSupportEntity.builder()
                 .supportName("조찬희")
                 .supportHeight(170)
                 .supportMessage("조찬희")

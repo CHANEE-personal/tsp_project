@@ -6,8 +6,6 @@ import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity.*;
-
 public class ProductionMapperImpl implements ProductionMapper {
 
     @Override
@@ -32,7 +30,7 @@ public class ProductionMapperImpl implements ProductionMapper {
     public FrontProductionEntity toEntity(FrontProductionDTO dto) {
         if (dto == null) return null;
 
-        return builder()
+        return FrontProductionEntity.builder()
                 .rnum(dto.getRnum())
                 .idx(dto.getIdx())
                 .title(dto.getTitle())

@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity.*;
 import static com.tsp.new_tsp_front.api.portfolio.service.impl.PortFolioImageMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -78,7 +77,7 @@ class FrontPortFolioJpaRepositoryTest {
                 .portfolioImage(INSTANCE.toDtoList(commonImageEntityList))
                 .build();
 
-        frontPortFolioEntity = builder().idx(1).commonImageEntityList(commonImageEntityList).build();
+        frontPortFolioEntity = FrontPortFolioEntity.builder().idx(1).commonImageEntityList(commonImageEntityList).build();
     }
 
     @BeforeEach

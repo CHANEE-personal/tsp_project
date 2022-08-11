@@ -51,7 +51,7 @@ class FrontModelJpaRepositoryTest {
     List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 
     private void createModel() {
-        frontModelEntity = builder()
+        frontModelEntity = FrontModelEntity.builder()
                 .categoryCd(1)
                 .categoryAge("2")
                 .modelKorFirstName("조")
@@ -210,7 +210,7 @@ class FrontModelJpaRepositoryTest {
         // given
         commonImageEntityList.add(commonImageEntity);
 
-        frontModelEntity = builder().idx(1).commonImageEntityList(commonImageEntityList).build();
+        frontModelEntity = FrontModelEntity.builder().idx(1).commonImageEntityList(commonImageEntityList).build();
 
         frontModelDTO = FrontModelDTO.builder()
                 .idx(1)
@@ -262,7 +262,7 @@ class FrontModelJpaRepositoryTest {
         // given
         commonImageEntityList.add(commonImageEntity);
 
-        frontModelEntity = builder().idx(1).commonImageEntityList(commonImageEntityList).build();
+        frontModelEntity = FrontModelEntity.builder().idx(1).commonImageEntityList(commonImageEntityList).build();
 
         frontModelDTO = FrontModelDTO.builder()
                 .idx(1)

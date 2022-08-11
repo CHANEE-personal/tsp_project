@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity.*;
 import static com.tsp.new_tsp_front.api.production.service.impl.ProductionImageMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -76,7 +75,7 @@ class FrontProductionJpaRepositoryTest {
                 .productionImage(INSTANCE.toDtoList(commonImageEntityList))
                 .build();
 
-        frontProductionEntity = builder().idx(1).commonImageEntityList(commonImageEntityList).build();
+        frontProductionEntity = FrontProductionEntity.builder().idx(1).commonImageEntityList(commonImageEntityList).build();
     }
 
     @BeforeEach

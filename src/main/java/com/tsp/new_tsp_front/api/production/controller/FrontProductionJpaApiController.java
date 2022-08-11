@@ -1,6 +1,7 @@
 package com.tsp.new_tsp_front.api.production.controller;
 
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
+import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 import com.tsp.new_tsp_front.api.production.service.FrontProductionJpaApiService;
 import com.tsp.new_tsp_front.common.SearchCommon;
 import com.tsp.new_tsp_front.common.paging.Page;
@@ -16,7 +17,6 @@ import java.rmi.ServerError;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity.*;
 import static java.lang.Math.ceil;
 import static org.springframework.web.client.HttpClientErrorException.*;
 
@@ -30,7 +30,7 @@ public class FrontProductionJpaApiController {
 
     /**
      * <pre>
-     * 1. MethodName : lists/{categoryCd}
+     * 1. MethodName : lists
      * 2. ClassName  : FrontProductionJpaApiController.java
      * 3. Comment    : 프론트 > 프로덕션 조회
      * 4. 작성자       : CHO
@@ -79,6 +79,6 @@ public class FrontProductionJpaApiController {
     })
     @GetMapping(value = "/{idx}")
     public FrontProductionDTO getProductionInfo(@PathVariable Integer idx) {
-        return this.frontProductionJpaApiService.getProductionInfo(builder().idx(idx).build());
+        return this.frontProductionJpaApiService.getProductionInfo(FrontProductionEntity.builder().idx(idx).build());
     }
 }

@@ -6,8 +6,6 @@ import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tsp.new_tsp_front.api.common.domain.CommonImageEntity.*;
-
 public class ProductionImageMapperImpl implements ProductionImageMapper {
     @Override
     public CommonImageDTO toDto(CommonImageEntity entity) {
@@ -32,7 +30,7 @@ public class ProductionImageMapperImpl implements ProductionImageMapper {
     public CommonImageEntity toEntity(CommonImageDTO dto) {
         if (dto == null) return null;
 
-        return builder()
+        return CommonImageEntity.builder()
                 .idx(dto.getIdx())
                 .typeIdx(dto.getTypeIdx())
                 .typeName(dto.getTypeName())

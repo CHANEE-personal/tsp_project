@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
@@ -116,7 +115,7 @@ class FrontPortFolioJpaApiServiceTest {
     @DisplayName("포트폴리오상세조회Mockito테스트")
     void 포트폴리오상세조회Mockito테스트() {
         // given
-        FrontPortFolioEntity frontPortFolioEntity = builder().idx(1).build();
+        FrontPortFolioEntity frontPortFolioEntity = FrontPortFolioEntity.builder().idx(1).build();
         FrontPortFolioDTO frontPortFolioDTO = FrontPortFolioDTO.builder().title("portfolioTest").description("portfolioTest").hashTag("portfolio").videoUrl("test").visible("Y").build();
 
         // when
@@ -144,7 +143,7 @@ class FrontPortFolioJpaApiServiceTest {
     @DisplayName("포트폴리오상세조회BDD테스트")
     void 포트폴리오상세조회BDD테스트() {
         // given
-        FrontPortFolioEntity frontPortFolioEntity = builder().idx(1).build();
+        FrontPortFolioEntity frontPortFolioEntity = FrontPortFolioEntity.builder().idx(1).build();
         FrontPortFolioDTO frontPortFolioDTO = FrontPortFolioDTO.builder().title("portfolioTest").description("portfolioTest").hashTag("portfolio").videoUrl("test").visible("Y").build();
 
         // when

@@ -2,6 +2,7 @@ package com.tsp.new_tsp_front.api.portfolio.controller;
 
 import com.tsp.new_tsp_front.api.portfolio.FrontPortFolioJpaApiService;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO;
+import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
 import com.tsp.new_tsp_front.common.SearchCommon;
 import com.tsp.new_tsp_front.common.paging.Page;
 import io.swagger.annotations.Api;
@@ -16,10 +17,8 @@ import java.rmi.ServerError;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity.*;
 import static java.lang.Math.ceil;
 import static org.springframework.web.client.HttpClientErrorException.*;
-
 
 @RestController
 @RequiredArgsConstructor
@@ -79,6 +78,6 @@ public class FrontPortFolioJpaApiController {
     })
     @GetMapping(value = "/{idx}")
     public FrontPortFolioDTO getPortFolioInfo(@PathVariable Integer idx) {
-        return this.frontPortFolioJpaApiService.getPortFolioInfo(builder().idx(idx).build());
+        return this.frontPortFolioJpaApiService.getPortFolioInfo(FrontPortFolioEntity.builder().idx(idx).build());
     }
 }

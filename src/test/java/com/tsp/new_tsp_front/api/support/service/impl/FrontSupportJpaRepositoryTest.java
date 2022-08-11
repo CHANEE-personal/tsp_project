@@ -16,7 +16,6 @@ import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
 
-import static com.tsp.new_tsp_front.api.support.domain.FrontSupportEntity.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
@@ -34,7 +33,7 @@ class FrontSupportJpaRepositoryTest {
     private FrontSupportEntity frontSupportEntity;
 
     private void createSupportModel() {
-        frontSupportEntity = builder()
+        frontSupportEntity = FrontSupportEntity.builder()
                 .supportName("조찬희")
                 .supportMessage("조찬희")
                 .supportHeight(170)
