@@ -5,14 +5,14 @@ import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.service.impl.FrontModelJpaRepository;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_MODEL;
-import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_MODEL_LIST;
+import static com.tsp.new_tsp_front.exception.ApiExceptionType.*;
 
 @Service
 @RequiredArgsConstructor
@@ -87,6 +87,43 @@ public class FrontModelJpaApiService {
             return this.frontModelJpaRepository.getMainModelList();
         } catch (Exception e) {
             throw new TspException(NOT_FOUND_MODEL_LIST, e);
+        }
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : favoriteModelCount
+     * 2. ClassName  : FrontModelJpaApiService.java
+     * 3. Comment    : 프론트 > 메인 모델 좋아요 갯수 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 03. 27.
+     * </pre>
+     */
+    @Transactional(readOnly = true)
+    public Integer favoriteModelCount(Integer idx) throws TspException {
+        try {
+            return this.frontModelJpaRepository.favoriteModelCount(idx);
+        } catch (Exception e) {
+            throw new TspException(NOT_FOUND_MODEL, e);
+        }
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : favoriteModel
+     * 2. ClassName  : FrontModelJpaApiService.java
+     * 3. Comment    : 프론트 > 메인 모델 좋아요
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 03. 27.
+     * </pre>
+     */
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    public Long favoriteModel(FrontModelEntity frontModelEntity) throws TspException {
+        try {
+            return this.frontModelJpaRepository.favoriteModel(frontModelEntity);
+        } catch (Exception e) {
+            throw new TspException(ERROR_MODEL, e);
         }
     }
 }

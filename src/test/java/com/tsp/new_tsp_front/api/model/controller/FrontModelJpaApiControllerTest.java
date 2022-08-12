@@ -15,8 +15,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -151,5 +153,14 @@ class FrontModelJpaApiControllerTest {
                 .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.code").value("NOT_FOUND_MODEL"))
                 .andExpect(jsonPath("$.message").value("해당 모델 없음"));
+    }
+
+    @Test
+    @DisplayName("모델 좋아요 테스트")
+    void 모델좋아요테스트() throws Exception {
+        mockMvc.perform(put("/api/model/1/156/like"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(getString(1)));
     }
 }

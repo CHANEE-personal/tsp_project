@@ -9,11 +9,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,7 @@ import static javax.persistence.GenerationType.*;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
+@DynamicUpdate
 @Table(name = "tsp_model")
 public class FrontModelEntity extends NewCommonMappedClass {
     @Transient
@@ -39,13 +42,13 @@ public class FrontModelEntity extends NewCommonMappedClass {
 
     @Column(name = "category_cd")
     @Range(min = 1, max = 3, message = "모델 카테고리 값은 1~3 사이 값만 입력할 수 있습니다")
-    @NotEmpty(message = "모델 카테고리 선택은 필수입니다.")
+    @NotNull(message = "모델 카테고리 선택은 필수입니다.")
     private Integer categoryCd;
 
     @Column(name = "category_age")
     @Range(min = 2, max = 6, message = "모델 연령대 값은 2~6 사이 값만 입력할 수 있습니다")
-    @NotEmpty(message = "모델 연령대 선택은 필수입니다.")
-    private String categoryAge;
+    @NotNull(message = "모델 연령대 선택은 필수입니다.")
+    private Integer categoryAge;
 
     @Column(name = "model_kor_name")
     @NotEmpty(message = "모델 국문 이름 입력은 필수입니다.")
@@ -56,22 +59,21 @@ public class FrontModelEntity extends NewCommonMappedClass {
     private String modelEngName;
 
     @Column(name = "height")
-    @Range(min = 1, max = 4, message = "1자 이상 4자미만으로 작성해야 합니다.")
-    @Pattern(regexp = "\\\\d{1,3}", message = "숫자만 입력 가능합니다.")
-    @NotEmpty(message = "모델 키 입력은 필수입니다.")
-    private String height;
+//    @Range(min = 1, max = 4, message = "1자 이상 4자미만으로 작성해야 합니다.")
+    @Digits(integer = 3, fraction = 0)
+    @NotNull(message = "모델 키 입력은 필수입니다.")
+    private Integer height;
 
     @Column(name = "size3")
-    @Range(min = 1, max = 4, message = "1자 이상 4자미만으로 작성해야 합니다.")
-    @Pattern(regexp = "/^([0-9]{2})$/-?([0-9]{2})$/-?([0-9]{2})$/", message = "**-**-** 형식으로 입력바랍니다.")
+//    @Pattern(regexp = "/^([0-9]{2})$/-?([0-9]{2})$/-?([0-9]{2})$/", message = "**-**-** 형식으로 입력바랍니다.")
     @NotEmpty(message = "모델 사이즈 입력은 필수입니다.")
     private String size3;
 
     @Column(name = "shoes")
-    @Range(min = 1, max = 4, message = "1자 이상 4자미만으로 작성해야 합니다.")
-    @Pattern(regexp = "\\\\d{1,3}", message = "숫자만 입력 가능합니다.")
-    @NotEmpty(message = "모델 발 사이즈 입력은 필수입니다.")
-    private String shoes;
+//    @Range(min = 1, max = 4, message = "1자 이상 4자미만으로 작성해야 합니다.")
+    @Digits(integer = 3, fraction = 0)
+    @NotNull(message = "모델 발 사이즈 입력은 필수입니다.")
+    private Integer shoes;
 
     @Column(name = "model_description")
     @Lob
@@ -101,6 +103,9 @@ public class FrontModelEntity extends NewCommonMappedClass {
     @Column(name = "model_kor_second_name")
     @NotEmpty(message = "모델 국문 두번째 이름 입력은 필수입니다.")
     private String modelKorSecondName;
+
+    @Column(name = "favorite_count")
+    private int modelFavoriteCount;
 
     @Column(name = "career_list")
     @Convert(converter = CustomConverter.class)

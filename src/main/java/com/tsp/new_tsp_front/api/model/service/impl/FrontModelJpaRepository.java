@@ -5,10 +5,12 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
+import com.tsp.new_tsp_front.api.model.domain.QFrontModelEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Map;
 
@@ -17,12 +19,14 @@ import static com.tsp.new_tsp_front.api.model.domain.QFrontModelEntity.frontMode
 import static com.tsp.new_tsp_front.api.model.service.impl.ModelMapper.INSTANCE;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
+import static java.util.Objects.requireNonNull;
 
 @Slf4j
 @RequiredArgsConstructor
 @Repository
 public class FrontModelJpaRepository {
     private final JPAQueryFactory queryFactory;
+    private final EntityManager em;
 
     private BooleanExpression searchModel(Map<String, Object> modelMap) {
         String searchType = getString(modelMap.get("searchType"), "");
@@ -138,5 +142,38 @@ public class FrontModelJpaRepository {
                 .fetchOne();
 
         return INSTANCE.toDto(getModelInfo);
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : favoriteModelCount
+     * 2. ClassName  : FrontModelJpaRepository.java
+     * 3. Comment    : 프론트 모델 좋아요 갯수 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 01. 09.
+     * </pre>
+     */
+    public Integer favoriteModelCount(Integer idx) {
+        return requireNonNull(queryFactory
+                .selectFrom(frontModelEntity)
+                .where(frontModelEntity.idx.eq(idx)).fetchOne()).getModelFavoriteCount();
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : favoriteModel
+     * 2. ClassName  : FrontModelJpaRepository.java
+     * 3. Comment    : 프론트 모델 좋아요
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 01. 09.
+     * </pre>
+     */
+    public Long favoriteModel(FrontModelEntity existFrontModelEntity) {
+        return queryFactory
+            .update(frontModelEntity)
+            //add , minus , multiple 다 가능하다.
+            .set(frontModelEntity.modelFavoriteCount, frontModelEntity.modelFavoriteCount.add(1))
+            .where(frontModelEntity.idx.eq(existFrontModelEntity.getIdx()))
+            .execute();
     }
 }

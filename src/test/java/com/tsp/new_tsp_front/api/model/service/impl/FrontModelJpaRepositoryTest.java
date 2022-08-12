@@ -19,10 +19,10 @@ import org.springframework.context.event.EventListener;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.*;
 
-import static com.tsp.new_tsp_front.api.model.domain.FrontModelEntity.builder;
 import static com.tsp.new_tsp_front.api.model.service.impl.ModelMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -50,10 +50,12 @@ class FrontModelJpaRepositoryTest {
     private CommonImageDTO commonImageDTO;
     List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 
+    private final EntityManager em;
+
     private void createModel() {
         frontModelEntity = FrontModelEntity.builder()
                 .categoryCd(1)
-                .categoryAge("2")
+                .categoryAge(2)
                 .modelKorFirstName("조")
                 .modelKorSecondName("찬희")
                 .modelKorName("조찬희")
@@ -62,9 +64,10 @@ class FrontModelJpaRepositoryTest {
                 .modelEngName("CHOCHANHEE")
                 .modelDescription("chaneeCho")
                 .modelMainYn("Y")
-                .height("170")
+                .height(170)
                 .size3("34-24-34")
-                .shoes("270")
+                .shoes(270)
+                .modelFavoriteCount(1)
                 .visible("Y")
                 .build();
 
@@ -215,13 +218,13 @@ class FrontModelJpaRepositoryTest {
         frontModelDTO = FrontModelDTO.builder()
                 .idx(1)
                 .categoryCd(1)
-                .categoryAge("2")
+                .categoryAge(2)
                 .modelKorName("조찬희")
                 .modelEngName("CHOCHANHEE")
                 .modelDescription("chaneeCho")
-                .height("170")
+                .height(170)
                 .size3("34-24-34")
-                .shoes("270")
+                .shoes(270)
                 .visible("Y")
                 .modelImage(ModelImageMapper.INSTANCE.toDtoList(commonImageEntityList))
                 .build();
@@ -233,13 +236,13 @@ class FrontModelJpaRepositoryTest {
         // then
         assertThat(modelInfo.getIdx()).isEqualTo(1);
         assertThat(modelInfo.getCategoryCd()).isEqualTo(1);
-        assertThat(modelInfo.getCategoryAge()).isEqualTo("2");
+        assertThat(modelInfo.getCategoryAge()).isEqualTo(2);
         assertThat(modelInfo.getModelKorName()).isEqualTo("조찬희");
         assertThat(modelInfo.getModelEngName()).isEqualTo("CHOCHANHEE");
         assertThat(modelInfo.getModelDescription()).isEqualTo("chaneeCho");
-        assertThat(modelInfo.getHeight()).isEqualTo("170");
+        assertThat(modelInfo.getHeight()).isEqualTo(170);
         assertThat(modelInfo.getSize3()).isEqualTo("34-24-34");
-        assertThat(modelInfo.getShoes()).isEqualTo("270");
+        assertThat(modelInfo.getShoes()).isEqualTo(270);
         assertThat(modelInfo.getVisible()).isEqualTo("Y");
         assertThat(modelInfo.getModelImage().get(0).getFileName()).isEqualTo("test.jpg");
         assertThat(modelInfo.getModelImage().get(0).getFileMask()).isEqualTo("test.jpg");
@@ -267,13 +270,13 @@ class FrontModelJpaRepositoryTest {
         frontModelDTO = FrontModelDTO.builder()
                 .idx(1)
                 .categoryCd(1)
-                .categoryAge("2")
+                .categoryAge(2)
                 .modelKorName("조찬희")
                 .modelEngName("CHOCHANHEE")
                 .modelDescription("chaneeCho")
-                .height("170")
+                .height(170)
                 .size3("34-24-34")
-                .shoes("270")
+                .shoes(270)
                 .visible("Y")
                 .modelImage(ModelImageMapper.INSTANCE.toDtoList(commonImageEntityList))
                 .build();
@@ -285,13 +288,13 @@ class FrontModelJpaRepositoryTest {
         // then
         assertThat(modelInfo.getIdx()).isEqualTo(1);
         assertThat(modelInfo.getCategoryCd()).isEqualTo(1);
-        assertThat(modelInfo.getCategoryAge()).isEqualTo("2");
+        assertThat(modelInfo.getCategoryAge()).isEqualTo(2);
         assertThat(modelInfo.getModelKorName()).isEqualTo("조찬희");
         assertThat(modelInfo.getModelEngName()).isEqualTo("CHOCHANHEE");
         assertThat(modelInfo.getModelDescription()).isEqualTo("chaneeCho");
-        assertThat(modelInfo.getHeight()).isEqualTo("170");
+        assertThat(modelInfo.getHeight()).isEqualTo(170);
         assertThat(modelInfo.getSize3()).isEqualTo("34-24-34");
-        assertThat(modelInfo.getShoes()).isEqualTo("270");
+        assertThat(modelInfo.getShoes()).isEqualTo(270);
         assertThat(modelInfo.getVisible()).isEqualTo("Y");
         assertThat(modelInfo.getModelImage().get(0).getFileName()).isEqualTo("test.jpg");
         assertThat(modelInfo.getModelImage().get(0).getFileMask()).isEqualTo("test.jpg");
@@ -387,6 +390,90 @@ class FrontModelJpaRepositoryTest {
         // verify
         then(mockFrontModelJpaRepository).should(times(1)).getMainModelList();
         then(mockFrontModelJpaRepository).should(atLeastOnce()).getMainModelList();
+        then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("모델 좋아요 갯수 조회 Mockito 테스트")
+    void 모델좋아요갯수조회Mockito테스트() {
+        // given
+        em.persist(frontModelEntity);
+        frontModelDTO = INSTANCE.toDto(frontModelEntity);
+
+        // when
+        when(mockFrontModelJpaRepository.getModelInfo(frontModelEntity)).thenReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaRepository.getModelInfo(frontModelEntity);
+
+        // then
+        assertThat(modelInfo.getModelFavoriteCount()).isEqualTo(frontModelEntity.getModelFavoriteCount());
+
+        // verify
+        verify(mockFrontModelJpaRepository, times(1)).getModelInfo(frontModelEntity);
+        verify(mockFrontModelJpaRepository, atLeastOnce()).getModelInfo(frontModelEntity);
+        verifyNoMoreInteractions(mockFrontModelJpaRepository);
+    }
+
+    @Test
+    @DisplayName("모델 좋아요 갯수 조회 BDD 테스트")
+    void 모델좋아요갯수조회BDD테스트() {
+        // given
+        em.persist(frontModelEntity);
+        frontModelDTO = INSTANCE.toDto(frontModelEntity);
+
+        // when
+        given(mockFrontModelJpaRepository.getModelInfo(frontModelEntity)).willReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaRepository.getModelInfo(frontModelEntity);
+
+        // then
+        assertThat(modelInfo.getModelFavoriteCount()).isEqualTo(frontModelEntity.getModelFavoriteCount());
+
+        // verify
+        then(mockFrontModelJpaRepository).should(times(1)).getModelInfo(frontModelEntity);
+        then(mockFrontModelJpaRepository).should(atLeastOnce()).getModelInfo(frontModelEntity);
+        then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("모델 좋아요 Mockito 테스트")
+    void 모델좋아요Mockito테스트() {
+        // given
+        em.persist(frontModelEntity);
+        frontModelDTO = INSTANCE.toDto(frontModelEntity);
+
+        Long favoriteCount = frontModelJpaRepository.favoriteModel(frontModelEntity);
+
+        // when
+        when(mockFrontModelJpaRepository.favoriteModel(frontModelEntity)).thenReturn(favoriteCount);
+        Long newFavoriteCount = mockFrontModelJpaRepository.favoriteModel(frontModelEntity);
+
+        // then
+        assertThat(newFavoriteCount).isEqualTo(favoriteCount);
+
+        // verify
+        verify(mockFrontModelJpaRepository, times(1)).favoriteModel(frontModelEntity);
+        verify(mockFrontModelJpaRepository, atLeastOnce()).favoriteModel(frontModelEntity);
+        verifyNoMoreInteractions(mockFrontModelJpaRepository);
+    }
+
+    @Test
+    @DisplayName("모델 좋아요 BDD 테스트")
+    void 모델좋아요BDD테스트() {
+        // given
+        em.persist(frontModelEntity);
+        frontModelDTO = INSTANCE.toDto(frontModelEntity);
+
+        Long favoriteCount = frontModelJpaRepository.favoriteModel(frontModelEntity);
+
+        // when
+        given(mockFrontModelJpaRepository.favoriteModel(frontModelEntity)).willReturn(favoriteCount);
+        Long newFavoriteCount = mockFrontModelJpaRepository.favoriteModel(frontModelEntity);
+
+        // then
+        assertThat(newFavoriteCount).isEqualTo(favoriteCount);
+
+        // verify
+        then(mockFrontModelJpaRepository).should(times(1)).favoriteModel(frontModelEntity);
+        then(mockFrontModelJpaRepository).should(atLeastOnce()).favoriteModel(frontModelEntity);
         then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
     }
 }
