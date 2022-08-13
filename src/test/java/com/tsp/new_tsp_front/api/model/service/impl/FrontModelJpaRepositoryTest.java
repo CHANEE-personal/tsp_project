@@ -440,11 +440,11 @@ class FrontModelJpaRepositoryTest {
         em.persist(frontModelEntity);
         frontModelDTO = INSTANCE.toDto(frontModelEntity);
 
-        Long favoriteCount = frontModelJpaRepository.favoriteModel(frontModelEntity);
+        Integer favoriteCount = frontModelJpaRepository.favoriteModel(frontModelEntity);
 
         // when
         when(mockFrontModelJpaRepository.favoriteModel(frontModelEntity)).thenReturn(favoriteCount);
-        Long newFavoriteCount = mockFrontModelJpaRepository.favoriteModel(frontModelEntity);
+        Integer newFavoriteCount = mockFrontModelJpaRepository.favoriteModel(frontModelEntity);
 
         // then
         assertThat(newFavoriteCount).isEqualTo(favoriteCount);
@@ -462,11 +462,11 @@ class FrontModelJpaRepositoryTest {
         em.persist(frontModelEntity);
         frontModelDTO = INSTANCE.toDto(frontModelEntity);
 
-        Long favoriteCount = frontModelJpaRepository.favoriteModel(frontModelEntity);
+        Integer favoriteCount = frontModelJpaRepository.favoriteModel(frontModelEntity);
 
         // when
         given(mockFrontModelJpaRepository.favoriteModel(frontModelEntity)).willReturn(favoriteCount);
-        Long newFavoriteCount = mockFrontModelJpaRepository.favoriteModel(frontModelEntity);
+        Integer newFavoriteCount = mockFrontModelJpaRepository.favoriteModel(frontModelEntity);
 
         // then
         assertThat(newFavoriteCount).isEqualTo(favoriteCount);

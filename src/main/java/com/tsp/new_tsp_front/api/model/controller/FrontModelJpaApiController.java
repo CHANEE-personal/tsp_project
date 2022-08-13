@@ -135,8 +135,8 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PutMapping(value = "/{categoryCd}/{idx}/like")
-    public Long favoriteModel(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
-                                       @PathVariable Integer idx) {
+    public Integer favoriteModel(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
+                                 @PathVariable Integer idx) {
         return this.frontModelJpaApiService.favoriteModel(FrontModelEntity.builder().categoryCd(categoryCd).idx(idx).build());
     }
 }

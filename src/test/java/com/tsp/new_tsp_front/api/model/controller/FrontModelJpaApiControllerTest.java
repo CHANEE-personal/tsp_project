@@ -12,6 +12,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
@@ -156,11 +157,13 @@ class FrontModelJpaApiControllerTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("모델 좋아요 테스트")
     void 모델좋아요테스트() throws Exception {
         mockMvc.perform(put("/api/model/1/156/like"))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(content().string(getString(1)));
     }
 }

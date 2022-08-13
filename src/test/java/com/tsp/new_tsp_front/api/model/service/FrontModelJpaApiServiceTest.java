@@ -365,11 +365,11 @@ class FrontModelJpaApiServiceTest {
         // given
         em.persist(frontModelEntity);
 
-        Long favoriteCount = frontModelJpaApiService.favoriteModel(frontModelEntity);
+        Integer favoriteCount = frontModelJpaApiService.favoriteModel(frontModelEntity);
 
         // when
         when(mockFrontModelJpaApiService.favoriteModel(frontModelEntity)).thenReturn(favoriteCount);
-        Long newFavoriteCount = mockFrontModelJpaApiService.favoriteModel(frontModelEntity);
+        Integer newFavoriteCount = mockFrontModelJpaApiService.favoriteModel(frontModelEntity);
 
         // then
         assertThat(newFavoriteCount).isEqualTo(favoriteCount);
@@ -390,11 +390,11 @@ class FrontModelJpaApiServiceTest {
         em.persist(frontModelEntity);
         frontModelDTO = INSTANCE.toDto(frontModelEntity);
 
-        Long favoriteCount = frontModelJpaApiService.favoriteModel(frontModelEntity);
+        Integer favoriteCount = frontModelJpaApiService.favoriteModel(frontModelEntity);
 
         // when
         given(mockFrontModelJpaApiService.favoriteModel(frontModelEntity)).willReturn(favoriteCount);
-        Long newFavoriteCount = mockFrontModelJpaApiService.favoriteModel(frontModelEntity);
+        Integer newFavoriteCount = mockFrontModelJpaApiService.favoriteModel(frontModelEntity);
 
         // then
         assertThat(newFavoriteCount).isEqualTo(favoriteCount);

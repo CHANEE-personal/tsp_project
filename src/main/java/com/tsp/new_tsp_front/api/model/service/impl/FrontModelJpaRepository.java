@@ -5,7 +5,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
-import com.tsp.new_tsp_front.api.model.domain.QFrontModelEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -168,12 +167,17 @@ public class FrontModelJpaRepository {
      * 5. 작성일       : 2022. 01. 09.
      * </pre>
      */
-    public Long favoriteModel(FrontModelEntity existFrontModelEntity) {
-        return queryFactory
-            .update(frontModelEntity)
-            //add , minus , multiple 다 가능하다.
-            .set(frontModelEntity.modelFavoriteCount, frontModelEntity.modelFavoriteCount.add(1))
-            .where(frontModelEntity.idx.eq(existFrontModelEntity.getIdx()))
-            .execute();
+    public Integer favoriteModel(FrontModelEntity existFrontModelEntity) {
+        queryFactory
+                .update(frontModelEntity)
+                //add , minus , multiple 다 가능하다.
+                .set(frontModelEntity.modelFavoriteCount, frontModelEntity.modelFavoriteCount.add(1))
+                .where(frontModelEntity.idx.eq(existFrontModelEntity.getIdx()))
+                .execute();
+
+        em.flush();
+        em.clear();
+
+        return favoriteModelCount(existFrontModelEntity.getIdx());
     }
 }

@@ -119,7 +119,7 @@ public class FrontModelJpaApiService {
      */
     @Modifying(clearAutomatically = true)
     @Transactional
-    public Long favoriteModel(FrontModelEntity frontModelEntity) throws TspException {
+    public Integer favoriteModel(FrontModelEntity frontModelEntity) throws TspException {
         try {
             return this.frontModelJpaRepository.favoriteModel(frontModelEntity);
         } catch (Exception e) {
