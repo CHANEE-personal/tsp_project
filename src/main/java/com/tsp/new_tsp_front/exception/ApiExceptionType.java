@@ -9,6 +9,9 @@ public enum ApiExceptionType implements BaseExceptionType {
     NOT_FOUND_MODEL("NOT_FOUND_MODEL", 200, "해당 모델 없음"),
     NOT_FOUND_MODEL_LIST("NOT_FOUND_MODEL_LIST", 200, "모델 리스트 없음"),
 
+    // Model 좋아요 관련 Type
+    ERROR_MODEL_LIKE("ERROR_MODEL_LIKE", 500, "모델 좋아요 에러"),
+
     // Production 관련 Type
     ERROR_PRODUCTION("ERROR_PRODUCTION", 500, "프로덕션 등록 에러"),
     NOT_FOUND_PRODUCTION("NOT_FOUND_PRODUCTION", 200, "해당 프로덕션 없음"),

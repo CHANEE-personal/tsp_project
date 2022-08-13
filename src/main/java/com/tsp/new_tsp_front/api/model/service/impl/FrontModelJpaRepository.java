@@ -130,6 +130,8 @@ public class FrontModelJpaRepository {
      * </pre>
      */
     public FrontModelDTO getModelInfo(FrontModelEntity existFrontModelEntity) {
+        updateModelViewCount(existFrontModelEntity);
+
         //모델 상세 조회
         FrontModelEntity getModelInfo = queryFactory
                 .selectFrom(frontModelEntity)
@@ -141,6 +143,45 @@ public class FrontModelJpaRepository {
                 .fetchOne();
 
         return INSTANCE.toDto(getModelInfo);
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : viewModelCount
+     * 2. ClassName  : FrontModelJpaRepository.java
+     * 3. Comment    : 프론트 모델 조회 수
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 01. 09.
+     * </pre>
+     */
+    public Integer viewModelCount(Integer idx) {
+        return requireNonNull(queryFactory
+                .selectFrom(frontModelEntity)
+                .where(frontModelEntity.idx.eq(idx)).fetchOne()).getModelViewCount();
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : updateModelViewCount
+     * 2. ClassName  : FrontModelJpaRepository.java
+     * 3. Comment    : 프론트 모델 조회 수 증가
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 01. 09.
+     * </pre>
+     */
+    public Integer updateModelViewCount(FrontModelEntity existFrontModelEntity) {
+        // 모델 조회 수 증가
+        queryFactory
+                .update(frontModelEntity)
+                //add , minus , multiple 다 가능하다.
+                .set(frontModelEntity.modelViewCount, frontModelEntity.modelViewCount.add(1))
+                .where(frontModelEntity.idx.eq(existFrontModelEntity.getIdx()))
+                .execute();
+
+        em.flush();
+        em.clear();
+
+        return viewModelCount(existFrontModelEntity.getIdx());
     }
 
     /**

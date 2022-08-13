@@ -11,6 +11,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class FrontPortFolioEntity extends NewCommonMappedClass {
     private Integer idx;
 
     @Column(name = "category_cd")
-    @NotEmpty(message = "포트폴리오 카테고리 선택은 필수입니다.")
+    @NotNull(message = "포트폴리오 카테고리 선택은 필수입니다.")
     private Integer categoryCd;
 
     @Column(name = "title")
@@ -54,6 +55,9 @@ public class FrontPortFolioEntity extends NewCommonMappedClass {
     @Column(name = "video_url")
     @NotEmpty(message = "포트폴리오 비디오 URL 입력은 필수입니다.")
     private String videoUrl;
+
+    @Column(name = "view_count")
+    private Integer viewCount;
 
     @Column(name = "visible")
     @NotEmpty(message = "포트폴리오 노출 여부 선택은 필수입니다.")

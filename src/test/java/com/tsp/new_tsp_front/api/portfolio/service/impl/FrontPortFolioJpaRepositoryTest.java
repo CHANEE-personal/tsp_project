@@ -17,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.api.portfolio.service.impl.PortFolioImageMapper.INSTANCE;
+import static com.tsp.new_tsp_front.api.portfolio.service.impl.PortFolioMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
@@ -51,6 +52,8 @@ class FrontPortFolioJpaRepositoryTest {
     private CommonImageDTO commonImageDTO;
     List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 
+    private final EntityManager em;
+
     private void createPortfolio() {
         commonImageEntity = CommonImageEntity.builder()
                 .idx(1)
@@ -62,22 +65,22 @@ class FrontPortFolioJpaRepositoryTest {
                 .typeName("portfolio")
                 .build();
 
-        commonImageDTO = INSTANCE.toDto(commonImageEntity);
+        commonImageDTO = PortFolioImageMapper.INSTANCE.toDto(commonImageEntity);
 
         commonImageEntityList.add(commonImageEntity);
 
-        frontPortFolioDTO = FrontPortFolioDTO.builder()
-                .idx(1)
+        frontPortFolioEntity = FrontPortFolioEntity.builder()
                 .title("포트폴리오 Test")
                 .description("포트폴리오 Test")
                 .categoryCd(2)
                 .hashTag("포트폴리오 Test")
+                .viewCount(1)
                 .videoUrl("https://youtube.com")
                 .visible("Y")
-                .portfolioImage(INSTANCE.toDtoList(commonImageEntityList))
+                .commonImageEntityList(commonImageEntityList)
                 .build();
 
-        frontPortFolioEntity = FrontPortFolioEntity.builder().idx(1).commonImageEntityList(commonImageEntityList).build();
+        frontPortFolioDTO = INSTANCE.toDto(frontPortFolioEntity);
     }
 
     @BeforeEach
@@ -172,8 +175,7 @@ class FrontPortFolioJpaRepositoryTest {
         frontPortFolioDTO = frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
 
         // then
-        assertAll(() -> assertThat(frontPortFolioDTO.getIdx()).isEqualTo(1),
-                () -> {
+        assertAll(() -> {
                     assertThat(frontPortFolioDTO.getTitle()).isEqualTo("포트폴리오 테스트");
                     assertNotNull(frontPortFolioDTO.getTitle());
                 },
@@ -214,7 +216,6 @@ class FrontPortFolioJpaRepositoryTest {
         FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
 
         // then
-        assertThat(portfolioInfo.getIdx()).isEqualTo(1);
         assertThat(portfolioInfo.getTitle()).isEqualTo("포트폴리오 Test");
         assertThat(portfolioInfo.getDescription()).isEqualTo("포트폴리오 Test");
         assertThat(portfolioInfo.getCategoryCd()).isEqualTo(2);
@@ -244,7 +245,6 @@ class FrontPortFolioJpaRepositoryTest {
         FrontPortFolioDTO portFolioInfo = mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
 
         // then
-        assertThat(portFolioInfo.getIdx()).isEqualTo(1);
         assertThat(portFolioInfo.getTitle()).isEqualTo("포트폴리오 Test");
         assertThat(portFolioInfo.getDescription()).isEqualTo("포트폴리오 Test");
         assertThat(portFolioInfo.getCategoryCd()).isEqualTo(2);
@@ -260,6 +260,53 @@ class FrontPortFolioJpaRepositoryTest {
         // verify
         then(mockFrontPortFolioJpaRepository).should(times(1)).getPortFolioInfo(frontPortFolioEntity);
         then(mockFrontPortFolioJpaRepository).should(atLeastOnce()).getPortFolioInfo(frontPortFolioEntity);
+        then(mockFrontPortFolioJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("프로덕션 조회 수 Mockito 테스트")
+    void 프로덕션조회수Mockito테스트() {
+        // given
+        em.persist(frontPortFolioEntity);
+        frontPortFolioDTO = PortFolioMapper.INSTANCE.toDto(frontPortFolioEntity);
+
+        Integer viewCount = frontPortFolioJpaRepository.updatePortfolioViewCount(frontPortFolioEntity);
+
+        // when
+        when(mockFrontPortFolioJpaRepository.updatePortfolioViewCount(frontPortFolioEntity)).thenReturn(viewCount);
+        Integer newViewCount = mockFrontPortFolioJpaRepository.updatePortfolioViewCount(frontPortFolioEntity);
+
+        // then
+        assertThat(newViewCount).isEqualTo(viewCount);
+
+        // verify
+        verify(mockFrontPortFolioJpaRepository, times(1)).updatePortfolioViewCount(frontPortFolioEntity);
+        verify(mockFrontPortFolioJpaRepository, atLeastOnce()).updatePortfolioViewCount(frontPortFolioEntity);
+        verifyNoMoreInteractions(mockFrontPortFolioJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontPortFolioJpaRepository);
+        inOrder.verify(mockFrontPortFolioJpaRepository).updatePortfolioViewCount(frontPortFolioEntity);
+    }
+
+    @Test
+    @DisplayName("프로덕션 조회 수 BDD 테스트")
+    void 프로덕션조회수BDD테스트() {
+        // given
+        em.persist(frontPortFolioEntity);
+        frontPortFolioDTO = PortFolioMapper.INSTANCE.toDto(frontPortFolioEntity);
+
+        Integer viewCount = frontPortFolioJpaRepository.updatePortfolioViewCount(frontPortFolioEntity);
+
+        // when
+        when(mockFrontPortFolioJpaRepository.updatePortfolioViewCount(frontPortFolioEntity)).thenReturn(viewCount);
+        Integer newViewCount = mockFrontPortFolioJpaRepository.updatePortfolioViewCount(frontPortFolioEntity);
+
+        // then
+        assertThat(newViewCount).isEqualTo(viewCount);
+
+        // verify
+        then(mockFrontPortFolioJpaRepository).should(times(1)).updatePortfolioViewCount(frontPortFolioEntity);
+        then(mockFrontPortFolioJpaRepository).should(atLeastOnce()).updatePortfolioViewCount(frontPortFolioEntity);
         then(mockFrontPortFolioJpaRepository).shouldHaveNoMoreInteractions();
     }
 }

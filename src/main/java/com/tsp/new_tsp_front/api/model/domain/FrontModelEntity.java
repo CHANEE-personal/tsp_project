@@ -105,7 +105,10 @@ public class FrontModelEntity extends NewCommonMappedClass {
     private String modelKorSecondName;
 
     @Column(name = "favorite_count")
-    private int modelFavoriteCount;
+    private Integer modelFavoriteCount;
+
+    @Column(name = "view_count")
+    private Integer modelViewCount;
 
     @Column(name = "career_list")
     @Convert(converter = CustomConverter.class)
