@@ -7,6 +7,7 @@ import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Map;
 
@@ -15,11 +16,13 @@ import static com.tsp.new_tsp_front.api.production.domain.QFrontProductionEntity
 import static com.tsp.new_tsp_front.api.production.service.impl.ProductionMapper.INSTANCE;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
+import static java.util.Objects.requireNonNull;
 
 @Repository
 @RequiredArgsConstructor
 public class FrontProductionJpaRepository {
     private final JPAQueryFactory queryFactory;
+    private final EntityManager em;
 
     private BooleanExpression searchProduction(Map<String, Object> productionMap) {
         String searchType = getString(productionMap.get("searchType"), "");
@@ -85,6 +88,9 @@ public class FrontProductionJpaRepository {
      * </pre>
      */
     public FrontProductionDTO getProductionInfo(FrontProductionEntity existFrontProductionEntity) {
+        // 프로덕션 조회 수 증가
+        updateProductionViewCount(existFrontProductionEntity);
+
         //프로덕션 상세 조회
         FrontProductionEntity getProductionInfo = queryFactory
                 .selectFrom(frontProductionEntity)
@@ -96,5 +102,44 @@ public class FrontProductionJpaRepository {
                 .fetchOne();
 
         return INSTANCE.toDto(getProductionInfo);
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : viewProductionCount
+     * 2. ClassName  : FrontProductionJpaRepository.java
+     * 3. Comment    : 프론트 프로덕션 조회 수
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 01. 12.
+     * </pre>
+     */
+    public Integer viewProductionCount(Integer idx) {
+        return requireNonNull(queryFactory
+                .selectFrom(frontProductionEntity)
+                .where(frontProductionEntity.idx.eq(idx)).fetchOne()).getViewCount();
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : updateProductionViewCount
+     * 2. ClassName  : FrontModelJpaRepository.java
+     * 3. Comment    : 프론트 모델 조회 수 증가
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 01. 09.
+     * </pre>
+     */
+    public Integer updateProductionViewCount(FrontProductionEntity existFrontProductionEntity) {
+        // 모델 조회 수 증가
+        queryFactory
+                .update(frontProductionEntity)
+                //add , minus , multiple 다 가능하다.
+                .set(frontProductionEntity.viewCount, frontProductionEntity.viewCount.add(1))
+                .where(frontProductionEntity.idx.eq(existFrontProductionEntity.getIdx()))
+                .execute();
+
+        em.flush();
+        em.clear();
+
+        return viewProductionCount(existFrontProductionEntity.getIdx());
     }
 }

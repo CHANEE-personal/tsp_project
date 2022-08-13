@@ -19,6 +19,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.api.production.service.impl.ProductionImageMapper.INSTANCE;
+import static com.tsp.new_tsp_front.api.production.service.impl.ProductionMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -52,6 +53,8 @@ class FrontProductionJpaRepositoryTest {
     private CommonImageDTO commonImageDTO;
     List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 
+    private final EntityManager em;
+
     private void createProduction() {
         commonImageEntity = CommonImageEntity.builder()
                 .idx(1)
@@ -63,19 +66,29 @@ class FrontProductionJpaRepositoryTest {
                 .typeName("production")
                 .build();
 
-        commonImageDTO = INSTANCE.toDto(commonImageEntity);
+        commonImageDTO = ProductionImageMapper.INSTANCE.toDto(commonImageEntity);
 
         commonImageEntityList.add(commonImageEntity);
 
-        frontProductionDTO = FrontProductionDTO.builder()
-                .idx(1)
+        frontProductionEntity = FrontProductionEntity.builder()
                 .title("프로덕션 테스트")
                 .description("프로덕션 테스트")
                 .visible("Y")
-                .productionImage(INSTANCE.toDtoList(commonImageEntityList))
+                .viewCount(1)
+                .commonImageEntityList(commonImageEntityList)
                 .build();
 
-        frontProductionEntity = FrontProductionEntity.builder().idx(1).commonImageEntityList(commonImageEntityList).build();
+        frontProductionDTO = INSTANCE.toDto(frontProductionEntity);
+
+//        frontProductionDTO = FrontProductionDTO.builder()
+//                .idx(1)
+//                .title("프로덕션 테스트")
+//                .description("프로덕션 테스트")
+//                .visible("Y")
+//                .viewCount(1)
+//                .productionImage(INSTANCE.toDtoList(commonImageEntityList))
+//                .build();
+
     }
 
     @BeforeEach
@@ -89,13 +102,13 @@ class FrontProductionJpaRepositoryTest {
     void 프로덕션리스트조회테스트() {
         // given
         Map<String, Object> productionMap = new HashMap<>();
-        productionMap.put("jpaStartPage", 1);
+        productionMap.put("jpaStartPage", 0);
         productionMap.put("size", 3);
         productionMap.put("searchType", 0);
         productionMap.put("searchKeyword", "하하");
 
-        // then
         assertThat(frontProductionJpaRepository.getProductionList(productionMap)).isNotEmpty();
+        // then
     }
 
     @Test
@@ -173,7 +186,6 @@ class FrontProductionJpaRepositoryTest {
         FrontProductionDTO productionInfo = mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity);
 
         // then
-        assertThat(productionInfo.getIdx()).isEqualTo(1);
         assertThat(productionInfo.getTitle()).isEqualTo("프로덕션 테스트");
         assertThat(productionInfo.getDescription()).isEqualTo("프로덕션 테스트");
         assertThat(productionInfo.getVisible()).isEqualTo("Y");
@@ -199,7 +211,6 @@ class FrontProductionJpaRepositoryTest {
         FrontProductionDTO productionInfo = mockFrontProductionJpaRepository.getProductionInfo(frontProductionEntity);
 
         // then
-        assertThat(productionInfo.getIdx()).isEqualTo(1);
         assertThat(productionInfo.getTitle()).isEqualTo("프로덕션 테스트");
         assertThat(productionInfo.getDescription()).isEqualTo("프로덕션 테스트");
         assertThat(productionInfo.getVisible()).isEqualTo("Y");
@@ -211,6 +222,53 @@ class FrontProductionJpaRepositoryTest {
         // verify
         then(mockFrontProductionJpaRepository).should(times(1)).getProductionInfo(frontProductionEntity);
         then(mockFrontProductionJpaRepository).should(atLeastOnce()).getProductionInfo(frontProductionEntity);
+        then(mockFrontProductionJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("프로덕션 조회 수 Mockito 테스트")
+    void 프로덕션조회수Mockito테스트() {
+        // given
+        em.persist(frontProductionEntity);
+        frontProductionDTO = INSTANCE.toDto(frontProductionEntity);
+
+        Integer viewCount = frontProductionJpaRepository.updateProductionViewCount(frontProductionEntity);
+
+        // when
+        when(mockFrontProductionJpaRepository.updateProductionViewCount(frontProductionEntity)).thenReturn(viewCount);
+        Integer newViewCount = mockFrontProductionJpaRepository.updateProductionViewCount(frontProductionEntity);
+
+        // then
+        assertThat(newViewCount).isEqualTo(viewCount);
+
+        // verify
+        verify(mockFrontProductionJpaRepository, times(1)).updateProductionViewCount(frontProductionEntity);
+        verify(mockFrontProductionJpaRepository, atLeastOnce()).updateProductionViewCount(frontProductionEntity);
+        verifyNoMoreInteractions(mockFrontProductionJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontProductionJpaRepository);
+        inOrder.verify(mockFrontProductionJpaRepository).updateProductionViewCount(frontProductionEntity);
+    }
+
+    @Test
+    @DisplayName("프로덕션 조회 수 BDD 테스트")
+    void 프로덕션조회수BDD테스트() {
+        // given
+        em.persist(frontProductionEntity);
+        frontProductionDTO = INSTANCE.toDto(frontProductionEntity);
+
+        Integer viewCount = frontProductionJpaRepository.updateProductionViewCount(frontProductionEntity);
+
+        // when
+        given(mockFrontProductionJpaRepository.updateProductionViewCount(frontProductionEntity)).willReturn(viewCount);
+        Integer newViewCount = mockFrontProductionJpaRepository.updateProductionViewCount(frontProductionEntity);
+
+        // then
+        assertThat(newViewCount).isEqualTo(viewCount);
+
+        // verify
+        then(mockFrontProductionJpaRepository).should(times(1)).updateProductionViewCount(frontProductionEntity);
+        then(mockFrontProductionJpaRepository).should(atLeastOnce()).updateProductionViewCount(frontProductionEntity);
         then(mockFrontProductionJpaRepository).shouldHaveNoMoreInteractions();
     }
 }
