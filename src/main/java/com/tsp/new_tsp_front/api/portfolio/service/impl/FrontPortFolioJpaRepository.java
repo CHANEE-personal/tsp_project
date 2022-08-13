@@ -7,6 +7,7 @@ import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Map;
 
@@ -15,11 +16,13 @@ import static com.tsp.new_tsp_front.api.portfolio.domain.QFrontPortFolioEntity.f
 import static com.tsp.new_tsp_front.api.portfolio.service.impl.PortFolioMapper.INSTANCE;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
+import static java.util.Objects.requireNonNull;
 
 @Repository
 @RequiredArgsConstructor
 public class FrontPortFolioJpaRepository {
     private final JPAQueryFactory queryFactory;
+    private final EntityManager em;
 
     private BooleanExpression searchPortFolio(Map<String, Object> portfolioMap) {
         String searchType = getString(portfolioMap.get("searchType"), "");
@@ -79,5 +82,44 @@ public class FrontPortFolioJpaRepository {
                 .fetchOne();
 
         return INSTANCE.toDto(getPortFolioInfo);
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : viewPortfolioCount
+     * 2. ClassName  : FrontPortFolioJpaRepository.java
+     * 3. Comment    : 프론트 포트폴리오 조회 수
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 01. 12.
+     * </pre>
+     */
+    public Integer viewPortfolioCount(Integer idx) {
+        return requireNonNull(queryFactory
+                .selectFrom(frontPortFolioEntity)
+                .where(frontPortFolioEntity.idx.eq(idx)).fetchOne()).getViewCount();
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : updatePortfolioViewCount
+     * 2. ClassName  : FrontPortFolioJpaRepository.java
+     * 3. Comment    : 프론트 포트폴리오 조회 수 증가
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 01. 12.
+     * </pre>
+     */
+    public Integer updatePortfolioViewCount(FrontPortFolioEntity existFrontPortFolioEntity) {
+        // 모델 조회 수 증가
+        queryFactory
+                .update(frontPortFolioEntity)
+                //add , minus , multiple 다 가능하다.
+                .set(frontPortFolioEntity.viewCount, frontPortFolioEntity.viewCount.add(1))
+                .where(frontPortFolioEntity.idx.eq(existFrontPortFolioEntity.getIdx()))
+                .execute();
+
+        em.flush();
+        em.clear();
+
+        return viewPortfolioCount(existFrontPortFolioEntity.getIdx());
     }
 }
