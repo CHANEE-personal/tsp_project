@@ -10,12 +10,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.validator.constraints.Range;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Convert;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +25,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel
+@DynamicUpdate
 public class FrontModelDTO extends NewCommonDTO {
     @ApiModelProperty(required = true, value = "rnum", hidden = true)
     private Integer rnum;
@@ -36,7 +37,7 @@ public class FrontModelDTO extends NewCommonDTO {
     private Integer categoryCd;
 
     @ApiModelProperty(required = true, value = "category age")
-    private String categoryAge;
+    private Integer categoryAge;
 
     @NotEmpty(message = "모델 국문 이름 입력은 필수입니다.")
     @ApiModelProperty(required = true, value = "men Kor Name")
@@ -51,21 +52,21 @@ public class FrontModelDTO extends NewCommonDTO {
     private String modelDescription;
 
     @ApiModelProperty(required = true, value = "model height")
-    @NotEmpty(message = "모델 키 입력은 필수입니다.")
-    @Pattern(regexp = "\\\\d{1,3}", message = "숫자만 입력 가능합니다.")
-    @Range(min = 1, max = 4, message = "1자 이상 4자미만으로 작성해야 합니다.")
-    private String height;
+    @NotNull(message = "모델 키 입력은 필수입니다.")
+    @Digits(integer = 3, fraction = 0)
+//    @Range(min = 1, max = 4, message = "1자 이상 4자미만으로 작성해야 합니다.")
+    private Integer height;
 
     @NotEmpty(message = "모델 사이즈 입력은 필수입니다.")
-    @Pattern(regexp = "/^(\\d{2})$/-?(\\d{2})$/-?(\\d{2})$/", message = "**-**-** 형식으로 입력바랍니다.")
+//    @Pattern(regexp = "/^(\\d{2})$/-?(\\d{2})$/-?(\\d{2})$/", message = "**-**-** 형식으로 입력바랍니다.")
     @ApiModelProperty(required = true, value = "model 3size")
     private String size3;
 
     @ApiModelProperty(required = true, value = "model shoes")
-    @NotEmpty(message = "모델 신발 사이즈 입력은 필수입니다.")
-    @Pattern(regexp = "\\d{3}", message = "숫자만 입력 가능합니다.")
-    @Range(min = 1, max = 4, message = "1자 이상 4자미만으로 작성해야 합니다.")
-    private String shoes;
+    @NotNull(message = "모델 신발 사이즈 입력은 필수입니다.")
+    @Digits(integer = 3, fraction = 0)
+//    @Range(min = 1, max = 4, message = "1자 이상 4자미만으로 작성해야 합니다.")
+    private Integer shoes;
 
     @ApiModelProperty(required = true, value = "visible")
     private String visible;
@@ -85,8 +86,11 @@ public class FrontModelDTO extends NewCommonDTO {
     @ApiModelProperty(required = true, value = "model kor second name")
     private String modelKorSecondName;
 
+    @ApiModelProperty(value = "model favorite count")
+    private Integer modelFavoriteCount;
+
     @Convert(converter = CustomConverter.class)
-    @ApiModelProperty(required = false, value = "model career")
+    @ApiModelProperty(value = "model career")
     private ArrayList<CareerJson> careerList;
 
     @ApiModelProperty(required = true, value = "modelImageList", hidden = true)

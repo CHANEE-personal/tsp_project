@@ -96,7 +96,7 @@ public class FrontModelJpaApiController {
 
     /**
      * <pre>
-     * 1. MethodName : lists/{categoryCd}/{idx}
+     * 1. MethodName : {categoryCd}/{idx}
      * 2. ClassName  : FrontModelJpaApiController.java
      * 3. Comment    : 프론트 > 모델 상세 조회
      * 4. 작성자       : CHO
@@ -115,5 +115,28 @@ public class FrontModelJpaApiController {
     public FrontModelDTO getModelInfo(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
                                       @PathVariable Integer idx) {
         return this.frontModelJpaApiService.getModelInfo(FrontModelEntity.builder().categoryCd(categoryCd).idx(idx).build());
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : {categoryCd}/{idx}/like
+     * 2. ClassName  : FrontModelJpaApiController.java
+     * 3. Comment    : 프론트 > 모델 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 01. 09.
+     * </pre>
+     */
+    @ApiOperation(value = "모델 좋아요 처리", notes = "모델을 좋아요 처리한다.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "성공", response = Map.class),
+            @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
+            @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
+            @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+            @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+    })
+    @PutMapping(value = "/{categoryCd}/{idx}/like")
+    public Integer favoriteModel(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
+                                 @PathVariable Integer idx) {
+        return this.frontModelJpaApiService.favoriteModel(FrontModelEntity.builder().categoryCd(categoryCd).idx(idx).build());
     }
 }
