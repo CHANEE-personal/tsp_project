@@ -23,31 +23,34 @@ import java.util.List;
 @ApiModel
 public class FrontPortFolioDTO extends NewCommonDTO {
     @ApiModelProperty(required = true, value = "rnum", hidden = true)
-    Integer rnum;
+    private Integer rnum;
 
     @ApiModelProperty(required = true, value = "idx", hidden = true)
-    Integer idx;
+    private Integer idx;
 
     @NotEmpty(message = "제목은 필수입니다.")
     @ApiModelProperty(required = true, value = "title")
-    String title;
+    private String title;
 
     @ApiModelProperty(required = true, value = "hashTag")
-    String hashTag;
+    private String hashTag;
 
     @NotEmpty(message = "카테고리 선택은 필수입니다.")
     @ApiModelProperty(required = true, value = "categoryCd")
-    Integer categoryCd;
+    private Integer categoryCd;
 
     @ApiModelProperty(required = true, value = "videoUrl")
-    String videoUrl;
+    private String videoUrl;
 
     @NotEmpty(message = "상세 내용 입력은 필수입니다.")
     @ApiModelProperty(required = true, value = "description")
-    String description;
+    private String description;
+
+    @ApiModelProperty(value = "viewCount")
+    private Integer viewCount;
 
     @ApiModelProperty(required = true, value = "visible")
-    String visible;
+    private String visible;
 
     @ApiModelProperty(required = true, value = "portfolioImageList", hidden = true)
     private List<CommonImageDTO> portfolioImage = new ArrayList<>();

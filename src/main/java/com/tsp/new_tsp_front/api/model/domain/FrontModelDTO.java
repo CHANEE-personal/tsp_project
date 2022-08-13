@@ -89,6 +89,9 @@ public class FrontModelDTO extends NewCommonDTO {
     @ApiModelProperty(value = "model favorite count")
     private Integer modelFavoriteCount;
 
+    @ApiModelProperty(value = "model view count")
+    private Integer modelViewCount;
+
     @Convert(converter = CustomConverter.class)
     @ApiModelProperty(value = "model career")
     private ArrayList<CareerJson> careerList;

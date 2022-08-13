@@ -22,21 +22,24 @@ import java.util.List;
 @ApiModel
 public class FrontProductionDTO extends NewCommonDTO {
     @ApiModelProperty(required = true, value = "rnum", hidden = true)
-    Integer rnum;
+    private Integer rnum;
 
     @ApiModelProperty(required = true, value = "idx", hidden = true)
-    Integer idx;
+    private Integer idx;
 
     @NotEmpty(message = "제목 입력은 필수입니다.")
     @ApiModelProperty(required = true, value = "title")
-    String title;
+    private String title;
 
     @NotEmpty(message = "상세 내용 입력은 필수입니다.")
     @ApiModelProperty(required = true, value = "description")
-    String description;
+    private String description;
+
+    @ApiModelProperty(value = "viewCount")
+    private Integer viewCount;
 
     @ApiModelProperty(required = true, value = "visible")
-    String visible;
+    private String visible;
 
     @ApiModelProperty(required = true, value = "productionImageList", hidden = true)
     private List<CommonImageDTO> productionImage = new ArrayList<>();

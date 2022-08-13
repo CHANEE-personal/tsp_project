@@ -55,6 +55,9 @@ public class FrontPortFolioEntity extends NewCommonMappedClass {
     @NotEmpty(message = "포트폴리오 비디오 URL 입력은 필수입니다.")
     private String videoUrl;
 
+    @Column(name = "view_count")
+    private Integer viewCount;
+
     @Column(name = "visible")
     @NotEmpty(message = "포트폴리오 노출 여부 선택은 필수입니다.")
     private String visible;

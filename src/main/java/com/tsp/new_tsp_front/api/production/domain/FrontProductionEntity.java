@@ -40,6 +40,9 @@ public class FrontProductionEntity extends NewCommonMappedClass {
     @NotEmpty(message = "프로덕션 상세내용 입력은 필수입니다.")
     private String description;
 
+    @Column(name = "view_count")
+    private Integer viewCount;
+
     @Column(name = "visible")
     @NotEmpty(message = "프로덕션 노출 여부 선택은 필수입니다.")
     private String visible;
