@@ -68,6 +68,7 @@ class FrontModelJpaRepositoryTest {
                 .size3("34-24-34")
                 .shoes(270)
                 .modelFavoriteCount(1)
+                .modelViewCount(1)
                 .visible("Y")
                 .build();
 
@@ -194,15 +195,16 @@ class FrontModelJpaRepositoryTest {
 
         // when
         given(mockFrontModelJpaRepository.getModelList(modelMap)).willReturn(modelList);
+        List<FrontModelDTO> newModelList = mockFrontModelJpaRepository.getModelList(modelMap);
 
         // then
-        assertThat(mockFrontModelJpaRepository.getModelList(modelMap).get(0).getIdx()).isEqualTo(modelList.get(0).getIdx());
-        assertThat(mockFrontModelJpaRepository.getModelList(modelMap).get(0).getCategoryCd()).isEqualTo(modelList.get(0).getCategoryCd());
-        assertThat(mockFrontModelJpaRepository.getModelList(modelMap).get(0).getModelKorName()).isEqualTo(modelList.get(0).getModelKorName());
-        assertThat(mockFrontModelJpaRepository.getModelList(modelMap).get(0).getModelImage().get(0).getFileName()).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
+        assertThat(newModelList.get(0).getIdx()).isEqualTo(modelList.get(0).getIdx());
+        assertThat(newModelList.get(0).getCategoryCd()).isEqualTo(modelList.get(0).getCategoryCd());
+        assertThat(newModelList.get(0).getModelKorName()).isEqualTo(modelList.get(0).getModelKorName());
+        assertThat(newModelList.get(0).getModelImage().get(0).getFileName()).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
 
         // verify
-        then(mockFrontModelJpaRepository).should(times(4)).getModelList(modelMap);
+        then(mockFrontModelJpaRepository).should(times(1)).getModelList(modelMap);
         then(mockFrontModelJpaRepository).should(atLeastOnce()).getModelList(modelMap);
         then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
     }
@@ -434,6 +436,53 @@ class FrontModelJpaRepositoryTest {
     }
 
     @Test
+    @DisplayName("모델 조회 수 Mockito 테스트")
+    void 모델조회수Mockito테스트() {
+        // given
+        em.persist(frontModelEntity);
+        frontModelDTO = INSTANCE.toDto(frontModelEntity);
+
+        Integer viewCount = frontModelJpaRepository.updateModelViewCount(frontModelEntity);
+
+        // when
+        when(mockFrontModelJpaRepository.updateModelViewCount(frontModelEntity)).thenReturn(viewCount);
+        Integer newViewCount = mockFrontModelJpaRepository.updateModelViewCount(frontModelEntity);
+
+        // then
+        assertThat(newViewCount).isEqualTo(viewCount);
+
+        // verify
+        verify(mockFrontModelJpaRepository, times(1)).updateModelViewCount(frontModelEntity);
+        verify(mockFrontModelJpaRepository, atLeastOnce()).updateModelViewCount(frontModelEntity);
+        verifyNoMoreInteractions(mockFrontModelJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontModelJpaRepository);
+        inOrder.verify(mockFrontModelJpaRepository).updateModelViewCount(frontModelEntity);
+    }
+
+    @Test
+    @DisplayName("모델 조회 수 BDD 테스트")
+    void 모델조회수BDD테스트() {
+        // given
+        em.persist(frontModelEntity);
+        frontModelDTO = INSTANCE.toDto(frontModelEntity);
+
+        Integer viewCount = frontModelJpaRepository.updateModelViewCount(frontModelEntity);
+
+        // when
+        given(mockFrontModelJpaRepository.updateModelViewCount(frontModelEntity)).willReturn(viewCount);
+        Integer newViewCount = mockFrontModelJpaRepository.updateModelViewCount(frontModelEntity);
+
+        // then
+        assertThat(newViewCount).isEqualTo(viewCount);
+
+        // verify
+        then(mockFrontModelJpaRepository).should(times(1)).updateModelViewCount(frontModelEntity);
+        then(mockFrontModelJpaRepository).should(atLeastOnce()).updateModelViewCount(frontModelEntity);
+        then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
     @DisplayName("모델 좋아요 Mockito 테스트")
     void 모델좋아요Mockito테스트() {
         // given
@@ -453,6 +502,9 @@ class FrontModelJpaRepositoryTest {
         verify(mockFrontModelJpaRepository, times(1)).favoriteModel(frontModelEntity);
         verify(mockFrontModelJpaRepository, atLeastOnce()).favoriteModel(frontModelEntity);
         verifyNoMoreInteractions(mockFrontModelJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontModelJpaRepository);
+        inOrder.verify(mockFrontModelJpaRepository).favoriteModel(frontModelEntity);
     }
 
     @Test

@@ -123,7 +123,7 @@ public class FrontModelJpaApiService {
         try {
             return this.frontModelJpaRepository.favoriteModel(frontModelEntity);
         } catch (Exception e) {
-            throw new TspException(ERROR_MODEL, e);
+            throw new TspException(ERROR_MODEL_LIKE, e);
         }
     }
 }
