@@ -39,7 +39,7 @@ public class FrontProductionJpaApiController {
      */
     @ApiOperation(value = "프로덕션 조회", notes = "프로덕션을 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "성공", response = Map.class),
+            @ApiResponse(code = 200, message = "프로덕션 조회 성공", response = Map.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -71,7 +71,7 @@ public class FrontProductionJpaApiController {
      */
     @ApiOperation(value = "프로덕션 상세 조회", notes = "프로덕션을 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "성공", response = Map.class),
+            @ApiResponse(code = 200, message = "프로덕션 상세 조회 성공", response = Map.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
