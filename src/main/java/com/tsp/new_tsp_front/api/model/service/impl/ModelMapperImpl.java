@@ -2,6 +2,7 @@ package com.tsp.new_tsp_front.api.model.service.impl;
 
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
+import com.tsp.new_tsp_front.api.model.service.impl.Agency.AgencyMapper;
 import org.mapstruct.Mapper;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class ModelMapperImpl implements ModelMapper {
         return FrontModelDTO.builder().idx(entity.getIdx())
                 .rnum(entity.getRnum())
                 .categoryCd(entity.getCategoryCd())
+                .agencyIdx(entity.getAgencyIdx())
                 .modelKorName(entity.getModelKorName())
                 .modelEngName(entity.getModelEngName())
                 .modelDescription(entity.getModelDescription())
@@ -36,6 +38,7 @@ public class ModelMapperImpl implements ModelMapper {
                 .createTime(entity.getCreateTime())
                 .updater(entity.getUpdater())
                 .updateTime(entity.getUpdateTime())
+                .modelAgency(AgencyMapper.INSTANCE.toDto(entity.getFrontAgencyEntity()))
                 .modelImage(ModelImageMapper.INSTANCE.toDtoList(entity.getCommonImageEntityList()))
                 .build();
     }
@@ -48,6 +51,8 @@ public class ModelMapperImpl implements ModelMapper {
                 .rnum(dto.getRnum())
                 .idx(dto.getIdx())
                 .categoryCd(dto.getCategoryCd())
+                .agencyIdx(dto.getAgencyIdx())
+                .frontAgencyEntity(AgencyMapper.INSTANCE.toEntity(dto.getModelAgency()))
                 .modelKorName(dto.getModelKorName())
                 .modelEngName(dto.getModelEngName())
                 .modelDescription(dto.getModelDescription())

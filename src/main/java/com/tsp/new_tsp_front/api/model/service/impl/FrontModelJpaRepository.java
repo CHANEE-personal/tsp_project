@@ -15,6 +15,7 @@ import java.util.Map;
 
 import static com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity.commonImageEntity;
 import static com.tsp.new_tsp_front.api.model.domain.QFrontModelEntity.frontModelEntity;
+import static com.tsp.new_tsp_front.api.model.domain.agency.QFrontAgencyEntity.*;
 import static com.tsp.new_tsp_front.api.model.service.impl.ModelMapper.INSTANCE;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
@@ -130,11 +131,13 @@ public class FrontModelJpaRepository {
      * </pre>
      */
     public FrontModelDTO getModelInfo(FrontModelEntity existFrontModelEntity) {
+        // 모델 조회 수 증가
         updateModelViewCount(existFrontModelEntity);
 
         //모델 상세 조회
         FrontModelEntity getModelInfo = queryFactory
                 .selectFrom(frontModelEntity)
+                .innerJoin(frontModelEntity.frontAgencyEntity, frontAgencyEntity)
                 .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
                 .fetchJoin()
                 .where(frontModelEntity.idx.eq(existFrontModelEntity.getIdx())

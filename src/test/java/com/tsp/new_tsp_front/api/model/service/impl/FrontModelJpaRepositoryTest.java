@@ -4,6 +4,9 @@ import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
+import com.tsp.new_tsp_front.api.model.domain.agency.FrontAgencyDTO;
+import com.tsp.new_tsp_front.api.model.domain.agency.FrontAgencyEntity;
+import com.tsp.new_tsp_front.api.model.service.impl.Agency.AgencyMapper;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -46,6 +49,8 @@ class FrontModelJpaRepositoryTest {
 
     private FrontModelEntity frontModelEntity;
     private FrontModelDTO frontModelDTO;
+    private FrontAgencyEntity frontAgencyEntity;
+    private FrontAgencyDTO frontAgencyDTO;
     private CommonImageEntity commonImageEntity;
     private CommonImageDTO commonImageDTO;
     List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
@@ -53,9 +58,17 @@ class FrontModelJpaRepositoryTest {
     private final EntityManager em;
 
     private void createModel() {
+        frontAgencyEntity = FrontAgencyEntity.builder()
+                .agencyName("agency")
+                .agencyDescription("agency")
+                .visible("Y")
+                .build();
+        frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
+
         frontModelEntity = FrontModelEntity.builder()
                 .categoryCd(1)
                 .categoryAge(2)
+                .agencyIdx(frontAgencyEntity.getIdx())
                 .modelKorFirstName("조")
                 .modelKorSecondName("찬희")
                 .modelKorName("조찬희")
@@ -84,7 +97,7 @@ class FrontModelJpaRepositoryTest {
                 .typeName("model")
                 .build();
 
-        commonImageDTO = ModelImageMapperImpl.INSTANCE.toDto(commonImageEntity);
+        commonImageDTO = ModelImageMapper.INSTANCE.toDto(commonImageEntity);
     }
 
     @BeforeEach
@@ -121,7 +134,7 @@ class FrontModelJpaRepositoryTest {
     @DisplayName("모델 상세 조회 테스트")
     void 모델상세조회테스트() {
         // given
-        FrontModelEntity menFrontModelEntity = FrontModelEntity.builder().idx(156).build();
+        FrontModelEntity menFrontModelEntity = FrontModelEntity.builder().idx(156).agencyIdx(1).build();
 
         FrontModelDTO menModelDTO = frontModelJpaRepository.getModelInfo(menFrontModelEntity);
         assertThat(menModelDTO.getIdx()).isEqualTo(156);
@@ -129,8 +142,11 @@ class FrontModelJpaRepositoryTest {
         assertThat(menModelDTO.getModelKorSecondName()).isEqualTo("선우");
         assertThat(menModelDTO.getModelFirstName()).isEqualTo("Joo");
         assertThat(menModelDTO.getModelSecondName()).isEqualTo("seon woo");
+        assertThat(menModelDTO.getAgencyIdx()).isEqualTo(1);
+        assertThat(menModelDTO.getModelAgency().getAgencyName()).isEqualTo("agency");
+        assertThat(menModelDTO.getModelAgency().getAgencyDescription()).isEqualTo("agency");
 
-        FrontModelEntity womenFrontModelEntity = FrontModelEntity.builder().idx(143).build();
+        FrontModelEntity womenFrontModelEntity = FrontModelEntity.builder().idx(143).agencyIdx(1).build();
 
         FrontModelDTO womenModelDTO = frontModelJpaRepository.getModelInfo(womenFrontModelEntity);
 
@@ -140,6 +156,9 @@ class FrontModelJpaRepositoryTest {
         assertThat(womenModelDTO.getModelKorSecondName()).isEqualTo("예영");
         assertThat(womenModelDTO.getModelFirstName()).isEqualTo("kim");
         assertThat(womenModelDTO.getModelSecondName()).isEqualTo("ye yeong");
+        assertThat(womenModelDTO.getAgencyIdx()).isEqualTo(1);
+        assertThat(womenModelDTO.getModelAgency().getAgencyName()).isEqualTo("agency");
+        assertThat(womenModelDTO.getModelAgency().getAgencyDescription()).isEqualTo("agency");
     }
 
     @Test
@@ -228,6 +247,7 @@ class FrontModelJpaRepositoryTest {
                 .size3("34-24-34")
                 .shoes(270)
                 .visible("Y")
+                .modelAgency(AgencyMapper.INSTANCE.toDto(frontAgencyEntity))
                 .modelImage(ModelImageMapper.INSTANCE.toDtoList(commonImageEntityList))
                 .build();
 
@@ -246,6 +266,8 @@ class FrontModelJpaRepositoryTest {
         assertThat(modelInfo.getSize3()).isEqualTo("34-24-34");
         assertThat(modelInfo.getShoes()).isEqualTo(270);
         assertThat(modelInfo.getVisible()).isEqualTo("Y");
+        assertThat(modelInfo.getModelAgency().getAgencyName()).isEqualTo("agency");
+        assertThat(modelInfo.getModelAgency().getAgencyDescription()).isEqualTo("agency");
         assertThat(modelInfo.getModelImage().get(0).getFileName()).isEqualTo("test.jpg");
         assertThat(modelInfo.getModelImage().get(0).getFileMask()).isEqualTo("test.jpg");
         assertThat(modelInfo.getModelImage().get(0).getFilePath()).isEqualTo("/test/test.jpg");
@@ -280,6 +302,7 @@ class FrontModelJpaRepositoryTest {
                 .size3("34-24-34")
                 .shoes(270)
                 .visible("Y")
+                .modelAgency(AgencyMapper.INSTANCE.toDto(frontAgencyEntity))
                 .modelImage(ModelImageMapper.INSTANCE.toDtoList(commonImageEntityList))
                 .build();
 
@@ -298,6 +321,8 @@ class FrontModelJpaRepositoryTest {
         assertThat(modelInfo.getSize3()).isEqualTo("34-24-34");
         assertThat(modelInfo.getShoes()).isEqualTo(270);
         assertThat(modelInfo.getVisible()).isEqualTo("Y");
+        assertThat(modelInfo.getModelAgency().getAgencyName()).isEqualTo("agency");
+        assertThat(modelInfo.getModelAgency().getAgencyDescription()).isEqualTo("agency");
         assertThat(modelInfo.getModelImage().get(0).getFileName()).isEqualTo("test.jpg");
         assertThat(modelInfo.getModelImage().get(0).getFileMask()).isEqualTo("test.jpg");
         assertThat(modelInfo.getModelImage().get(0).getFilePath()).isEqualTo("/test/test.jpg");
