@@ -2,6 +2,7 @@ package com.tsp.new_tsp_front.api.model.service.impl;
 
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
+import com.tsp.new_tsp_front.api.model.service.impl.Agency.AgencyMapper;
 import org.mapstruct.Mapper;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class ModelMapperImpl implements ModelMapper {
                 .createTime(entity.getCreateTime())
                 .updater(entity.getUpdater())
                 .updateTime(entity.getUpdateTime())
+                .modelAgency(AgencyMapper.INSTANCE.toDto(entity.getFrontAgencyEntity()))
                 .modelImage(ModelImageMapper.INSTANCE.toDtoList(entity.getCommonImageEntityList()))
                 .build();
     }

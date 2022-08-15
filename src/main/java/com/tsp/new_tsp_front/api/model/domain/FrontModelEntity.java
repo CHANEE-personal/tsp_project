@@ -3,6 +3,7 @@ package com.tsp.new_tsp_front.api.model.domain;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCodeEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonMappedClass;
+import com.tsp.new_tsp_front.api.model.domain.agency.FrontAgencyEntity;
 import com.tsp.new_tsp_front.common.CustomConverter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +21,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.*;
 
@@ -121,4 +123,7 @@ public class FrontModelEntity extends NewCommonMappedClass {
     @OneToMany(mappedBy = "frontModelEntity")
     private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 
+    @OneToOne(fetch = LAZY, cascade = ALL)
+    @JoinColumn(name = "agency_idx", referencedColumnName = "idx", insertable = false, updatable = false)
+    private FrontAgencyEntity frontAgencyEntity;
 }

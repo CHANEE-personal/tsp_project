@@ -2,6 +2,7 @@ package com.tsp.new_tsp_front.api.model.domain;
 
 import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonDTO;
+import com.tsp.new_tsp_front.api.model.domain.agency.FrontAgencyDTO;
 import com.tsp.new_tsp_front.common.CustomConverter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -98,4 +99,7 @@ public class FrontModelDTO extends NewCommonDTO {
 
     @ApiModelProperty(required = true, value = "modelImageList", hidden = true)
     private List<CommonImageDTO> modelImage = new ArrayList<>();
+
+    @ApiModelProperty(value = "modelAgency", hidden = true)
+    private FrontAgencyDTO modelAgency;
 }
