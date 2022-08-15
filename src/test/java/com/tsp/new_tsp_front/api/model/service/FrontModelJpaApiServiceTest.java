@@ -4,7 +4,10 @@ import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
-import com.tsp.new_tsp_front.api.model.service.impl.ModelImageMapperImpl;
+import com.tsp.new_tsp_front.api.model.domain.agency.FrontAgencyDTO;
+import com.tsp.new_tsp_front.api.model.domain.agency.FrontAgencyEntity;
+import com.tsp.new_tsp_front.api.model.service.impl.Agency.AgencyMapper;
+import com.tsp.new_tsp_front.api.model.service.impl.ModelImageMapper;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,15 +56,25 @@ class FrontModelJpaApiServiceTest {
 
     private FrontModelEntity frontModelEntity;
     private FrontModelDTO frontModelDTO;
+    private FrontAgencyEntity frontAgencyEntity;
+    private FrontAgencyDTO frontAgencyDTO;
     private CommonImageEntity commonImageEntity;
     private CommonImageDTO commonImageDTO;
 
     private final EntityManager em;
 
     private void createModel() {
+        frontAgencyEntity = FrontAgencyEntity.builder()
+                .agencyName("agency")
+                .agencyDescription("agency")
+                .visible("Y")
+                .build();
+        frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
+
         frontModelEntity = FrontModelEntity.builder()
                 .categoryCd(1)
                 .categoryAge(2)
+                .agencyIdx(frontAgencyEntity.getIdx())
                 .modelKorFirstName("조")
                 .modelKorSecondName("찬희")
                 .modelKorName("조찬희")
@@ -89,7 +102,7 @@ class FrontModelJpaApiServiceTest {
                 .typeName("model")
                 .build();
 
-        commonImageDTO = ModelImageMapperImpl.INSTANCE.toDto(commonImageEntity);
+        commonImageDTO = ModelImageMapper.INSTANCE.toDto(commonImageEntity);
     }
 
     @BeforeEach
@@ -314,8 +327,21 @@ class FrontModelJpaApiServiceTest {
     @DisplayName("모델상세조회Mockito테스트")
     void 모델상세조회Mockito테스트() {
         // given
-        FrontModelEntity frontModelEntity = FrontModelEntity.builder().idx(1).categoryCd(1).build();
-        FrontModelDTO frontModelDTO = FrontModelDTO.builder().idx(1).categoryCd(1).modelKorName("조찬희").modelEngName("chochanhee").build();
+        FrontModelEntity frontModelEntity = FrontModelEntity.builder().idx(1).categoryCd(1).agencyIdx(1).build();
+        frontModelDTO = FrontModelDTO.builder()
+                .idx(1)
+                .categoryCd(1)
+                .categoryAge(2)
+                .agencyIdx(1)
+                .modelKorName("조찬희")
+                .modelEngName("CHOCHANHEE")
+                .modelDescription("chaneeCho")
+                .height(170)
+                .size3("34-24-34")
+                .shoes(270)
+                .visible("Y")
+                .modelAgency(AgencyMapper.INSTANCE.toDto(frontAgencyEntity))
+                .build();
 
         // when
         when(mockFrontModelJpaApiService.getModelInfo(frontModelEntity)).thenReturn(frontModelDTO);
@@ -323,6 +349,9 @@ class FrontModelJpaApiServiceTest {
 
         // then
         assertThat(modelInfo.getIdx()).isEqualTo(frontModelDTO.getIdx());
+        assertThat(modelInfo.getAgencyIdx()).isEqualTo(1);
+        assertThat(modelInfo.getModelAgency().getAgencyName()).isEqualTo("agency");
+        assertThat(modelInfo.getModelAgency().getAgencyDescription()).isEqualTo("agency");
         assertThat(modelInfo.getCategoryCd()).isEqualTo(frontModelDTO.getCategoryCd());
         assertThat(modelInfo.getModelKorName()).isEqualTo(frontModelDTO.getModelKorName());
         assertThat(modelInfo.getModelEngName()).isEqualTo(frontModelDTO.getModelEngName());
@@ -341,7 +370,20 @@ class FrontModelJpaApiServiceTest {
     void 모델상세조회BDD테스트() {
         // given
         FrontModelEntity frontModelEntity = FrontModelEntity.builder().idx(1).categoryCd(1).build();
-        FrontModelDTO frontModelDTO = FrontModelDTO.builder().idx(1).categoryCd(1).modelKorName("조찬희").modelEngName("chochanhee").build();
+        frontModelDTO = FrontModelDTO.builder()
+                .idx(1)
+                .categoryCd(1)
+                .categoryAge(2)
+                .agencyIdx(1)
+                .modelKorName("조찬희")
+                .modelEngName("CHOCHANHEE")
+                .modelDescription("chaneeCho")
+                .height(170)
+                .size3("34-24-34")
+                .shoes(270)
+                .visible("Y")
+                .modelAgency(AgencyMapper.INSTANCE.toDto(frontAgencyEntity))
+                .build();
 
         // when
         given(mockFrontModelJpaApiService.getModelInfo(frontModelEntity)).willReturn(frontModelDTO);
@@ -349,6 +391,9 @@ class FrontModelJpaApiServiceTest {
 
         // then
         assertThat(modelInfo.getIdx()).isEqualTo(frontModelDTO.getIdx());
+        assertThat(modelInfo.getAgencyIdx()).isEqualTo(1);
+        assertThat(modelInfo.getModelAgency().getAgencyName()).isEqualTo("agency");
+        assertThat(modelInfo.getModelAgency().getAgencyDescription()).isEqualTo("agency");
         assertThat(modelInfo.getCategoryCd()).isEqualTo(frontModelDTO.getCategoryCd());
         assertThat(modelInfo.getModelKorName()).isEqualTo(frontModelDTO.getModelKorName());
         assertThat(modelInfo.getModelEngName()).isEqualTo(frontModelDTO.getModelEngName());

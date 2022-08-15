@@ -93,6 +93,9 @@ public class FrontModelDTO extends NewCommonDTO {
     @ApiModelProperty(value = "model view count")
     private Integer modelViewCount;
 
+    @ApiModelProperty(value = "소속사 idx((ex)1")
+    private Integer agencyIdx;
+
     @Convert(converter = CustomConverter.class)
     @ApiModelProperty(value = "model career")
     private ArrayList<CareerJson> careerList;
@@ -100,6 +103,6 @@ public class FrontModelDTO extends NewCommonDTO {
     @ApiModelProperty(required = true, value = "modelImageList", hidden = true)
     private List<CommonImageDTO> modelImage = new ArrayList<>();
 
-    @ApiModelProperty(value = "modelAgency", hidden = true)
+    @ApiModelProperty(required = true, value = "modelAgency", hidden = true)
     private FrontAgencyDTO modelAgency;
 }

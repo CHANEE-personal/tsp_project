@@ -113,7 +113,7 @@ public class FrontModelJpaApiController {
     })
     @GetMapping(value = "/{categoryCd}/{idx}")
     public FrontModelDTO getModelInfo(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
-                                      @PathVariable Integer idx) {
+                                            @PathVariable Integer idx) {
         return this.frontModelJpaApiService.getModelInfo(FrontModelEntity.builder().categoryCd(categoryCd).idx(idx).build());
     }
 

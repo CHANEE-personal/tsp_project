@@ -52,6 +52,9 @@ public class FrontModelEntity extends NewCommonMappedClass {
     @NotNull(message = "모델 연령대 선택은 필수입니다.")
     private Integer categoryAge;
 
+    @Column(name = "agency_idx")
+    private Integer agencyIdx;
+
     @Column(name = "model_kor_name")
     @NotEmpty(message = "모델 국문 이름 입력은 필수입니다.")
     private String modelKorName;
