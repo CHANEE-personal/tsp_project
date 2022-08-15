@@ -108,6 +108,7 @@ public class FrontModelJpaRepository {
         List<FrontModelEntity> modelList = queryFactory
                 .selectFrom(frontModelEntity)
                 .orderBy(frontModelEntity.idx.desc())
+                .innerJoin(frontModelEntity.frontAgencyEntity, frontAgencyEntity)
                 .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
                 .fetchJoin()
                 .where(searchModel(modelMap).and(frontModelEntity.visible.eq("Y")))

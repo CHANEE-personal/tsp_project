@@ -63,6 +63,7 @@ class FrontModelJpaRepositoryTest {
                 .agencyDescription("agency")
                 .visible("Y")
                 .build();
+
         frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
 
         frontModelEntity = FrontModelEntity.builder()
@@ -81,6 +82,7 @@ class FrontModelJpaRepositoryTest {
                 .size3("34-24-34")
                 .shoes(270)
                 .modelFavoriteCount(1)
+                .frontAgencyEntity(frontAgencyEntity)
                 .modelViewCount(1)
                 .visible("Y")
                 .build();
@@ -175,7 +177,8 @@ class FrontModelJpaRepositoryTest {
         commonImageDtoList.add(commonImageDTO);
 
         List<FrontModelDTO> modelList = new ArrayList<>();
-        modelList.add(FrontModelDTO.builder().idx(3).categoryCd(1).modelKorName("조찬희").modelImage(commonImageDtoList).build());
+        modelList.add(FrontModelDTO.builder().idx(3).categoryCd(1).modelKorName("테스트모델1").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
+        modelList.add(FrontModelDTO.builder().idx(4).categoryCd(2).modelKorName("테스트모델2").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
 
         // when
         when(mockFrontModelJpaRepository.getModelList(modelMap)).thenReturn(modelList);
@@ -185,6 +188,8 @@ class FrontModelJpaRepositoryTest {
         assertThat(newModelList.get(0).getIdx()).isEqualTo(modelList.get(0).getIdx());
         assertThat(newModelList.get(0).getCategoryCd()).isEqualTo(modelList.get(0).getCategoryCd());
         assertThat(newModelList.get(0).getModelKorName()).isEqualTo(modelList.get(0).getModelKorName());
+        assertThat(newModelList.get(0).getModelAgency().getAgencyName()).isEqualTo(modelList.get(0).getModelAgency().getAgencyName());
+        assertThat(newModelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(modelList.get(0).getModelAgency().getAgencyDescription());
         assertThat(newModelList.get(0).getModelImage().get(0).getFileName()).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
 
         // verify
@@ -210,7 +215,8 @@ class FrontModelJpaRepositoryTest {
         commonImageDtoList.add(commonImageDTO);
 
         List<FrontModelDTO> modelList = new ArrayList<>();
-        modelList.add(FrontModelDTO.builder().idx(3).categoryCd(1).modelKorName("조찬희").modelImage(commonImageDtoList).build());
+        modelList.add(FrontModelDTO.builder().idx(3).categoryCd(1).modelKorName("테스트모델1").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
+        modelList.add(FrontModelDTO.builder().idx(4).categoryCd(2).modelKorName("테스트모델2").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
 
         // when
         given(mockFrontModelJpaRepository.getModelList(modelMap)).willReturn(modelList);
@@ -220,6 +226,8 @@ class FrontModelJpaRepositoryTest {
         assertThat(newModelList.get(0).getIdx()).isEqualTo(modelList.get(0).getIdx());
         assertThat(newModelList.get(0).getCategoryCd()).isEqualTo(modelList.get(0).getCategoryCd());
         assertThat(newModelList.get(0).getModelKorName()).isEqualTo(modelList.get(0).getModelKorName());
+        assertThat(newModelList.get(0).getModelAgency().getAgencyName()).isEqualTo(modelList.get(0).getModelAgency().getAgencyName());
+        assertThat(newModelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(modelList.get(0).getModelAgency().getAgencyDescription());
         assertThat(newModelList.get(0).getModelImage().get(0).getFileName()).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
 
         // verify

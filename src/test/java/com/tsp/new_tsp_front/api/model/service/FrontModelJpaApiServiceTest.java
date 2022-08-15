@@ -69,6 +69,7 @@ class FrontModelJpaApiServiceTest {
                 .agencyDescription("agency")
                 .visible("Y")
                 .build();
+
         frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
 
         frontModelEntity = FrontModelEntity.builder()
@@ -134,11 +135,11 @@ class FrontModelJpaApiServiceTest {
         List<FrontModelDTO> returnModelList = new ArrayList<>();
 
         // 남성
-        returnModelList.add(FrontModelDTO.builder().idx(1).categoryCd(1).modelKorName("남성모델").modelEngName("menModel").build());
+        returnModelList.add(FrontModelDTO.builder().idx(1).categoryCd(1).modelKorName("남성모델").modelAgency(frontAgencyDTO).modelEngName("menModel").build());
         // 여성
-        returnModelList.add(FrontModelDTO.builder().idx(2).categoryCd(2).modelKorName("여성모델").modelEngName("womenModel").build());
+        returnModelList.add(FrontModelDTO.builder().idx(2).categoryCd(2).modelKorName("여성모델").modelAgency(frontAgencyDTO).modelEngName("womenModel").build());
         // 시니어
-        returnModelList.add(FrontModelDTO.builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").build());
+        returnModelList.add(FrontModelDTO.builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelAgency(frontAgencyDTO).modelEngName("seniorModel").build());
 
         // when
         when(mockFrontModelJpaApiService.getModelList(modelMap)).thenReturn(returnModelList);
@@ -154,16 +155,22 @@ class FrontModelJpaApiServiceTest {
         assertThat(modelList.get(0).getCategoryCd()).isEqualTo(returnModelList.get(0).getIdx());
         assertThat(modelList.get(0).getModelKorName()).isEqualTo(returnModelList.get(0).getModelKorName());
         assertThat(modelList.get(0).getModelEngName()).isEqualTo(returnModelList.get(0).getModelEngName());
+        assertThat(modelList.get(0).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyName());
+        assertThat(modelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyDescription());
 
         assertThat(modelList.get(1).getIdx()).isEqualTo(returnModelList.get(1).getIdx());
         assertThat(modelList.get(1).getCategoryCd()).isEqualTo(returnModelList.get(1).getIdx());
         assertThat(modelList.get(1).getModelKorName()).isEqualTo(returnModelList.get(1).getModelKorName());
         assertThat(modelList.get(1).getModelEngName()).isEqualTo(returnModelList.get(1).getModelEngName());
+        assertThat(modelList.get(1).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyName());
+        assertThat(modelList.get(1).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyDescription());
 
         assertThat(modelList.get(2).getIdx()).isEqualTo(returnModelList.get(2).getIdx());
         assertThat(modelList.get(2).getCategoryCd()).isEqualTo(returnModelList.get(2).getIdx());
         assertThat(modelList.get(2).getModelKorName()).isEqualTo(returnModelList.get(2).getModelKorName());
         assertThat(modelList.get(2).getModelEngName()).isEqualTo(returnModelList.get(2).getModelEngName());
+        assertThat(modelList.get(2).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyName());
+        assertThat(modelList.get(2).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyDescription());
 
         // verify
         verify(mockFrontModelJpaApiService, times(1)).getModelList(modelMap);
@@ -185,11 +192,11 @@ class FrontModelJpaApiServiceTest {
         List<FrontModelDTO> returnModelList = new ArrayList<>();
 
         // 남성
-        returnModelList.add(FrontModelDTO.builder().idx(1).categoryCd(1).modelKorName("남성모델").modelEngName("menModel").build());
+        returnModelList.add(FrontModelDTO.builder().idx(1).categoryCd(1).modelKorName("남성모델").modelAgency(frontAgencyDTO).modelEngName("menModel").build());
         // 여성
-        returnModelList.add(FrontModelDTO.builder().idx(2).categoryCd(2).modelKorName("여성모델").modelEngName("womenModel").build());
+        returnModelList.add(FrontModelDTO.builder().idx(2).categoryCd(2).modelKorName("여성모델").modelAgency(frontAgencyDTO).modelEngName("womenModel").build());
         // 시니어
-        returnModelList.add(FrontModelDTO.builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").build());
+        returnModelList.add(FrontModelDTO.builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelAgency(frontAgencyDTO).modelEngName("seniorModel").build());
 
         // when
         given(mockFrontModelJpaApiService.getModelList(modelMap)).willReturn(returnModelList);
@@ -205,16 +212,22 @@ class FrontModelJpaApiServiceTest {
         assertThat(modelList.get(0).getCategoryCd()).isEqualTo(returnModelList.get(0).getIdx());
         assertThat(modelList.get(0).getModelKorName()).isEqualTo(returnModelList.get(0).getModelKorName());
         assertThat(modelList.get(0).getModelEngName()).isEqualTo(returnModelList.get(0).getModelEngName());
+        assertThat(modelList.get(0).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyName());
+        assertThat(modelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyDescription());
 
         assertThat(modelList.get(1).getIdx()).isEqualTo(returnModelList.get(1).getIdx());
         assertThat(modelList.get(1).getCategoryCd()).isEqualTo(returnModelList.get(1).getIdx());
         assertThat(modelList.get(1).getModelKorName()).isEqualTo(returnModelList.get(1).getModelKorName());
         assertThat(modelList.get(1).getModelEngName()).isEqualTo(returnModelList.get(1).getModelEngName());
+        assertThat(modelList.get(1).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyName());
+        assertThat(modelList.get(1).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyDescription());
 
         assertThat(modelList.get(2).getIdx()).isEqualTo(returnModelList.get(2).getIdx());
         assertThat(modelList.get(2).getCategoryCd()).isEqualTo(returnModelList.get(2).getIdx());
         assertThat(modelList.get(2).getModelKorName()).isEqualTo(returnModelList.get(2).getModelKorName());
         assertThat(modelList.get(2).getModelEngName()).isEqualTo(returnModelList.get(2).getModelEngName());
+        assertThat(modelList.get(2).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyName());
+        assertThat(modelList.get(2).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyDescription());
 
         // verify
         then(mockFrontModelJpaApiService).should(times(1)).getModelList(modelMap);
