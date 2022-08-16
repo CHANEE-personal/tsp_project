@@ -39,7 +39,11 @@ public enum ApiExceptionType implements BaseExceptionType {
     // 공통 코드 관련 TYPE
     ERROR_COMMON("ERROR_COMMON", 500, "공통 코드 등록 에러"),
     NOT_FOUND_COMMON("NOT_FOUND_COMMON", 200, "해당 공통코드 없음"),
-    NOT_FOUND_COMMON_LIST("NOT_FOUND_COMMON_LIST", 200, "공통 코드 리스트 없음");
+    NOT_FOUND_COMMON_LIST("NOT_FOUND_COMMON_LIST", 200, "공통 코드 리스트 없음"),
+
+    // 공지사항 관련 TYPE
+    NOT_FOUND_NOTICE_LIST("NOT_FOUND_NOTICE_LIST", 200, "공지사항 리스트 없음"),
+    NOT_FOUND_NOTICE("NOT_FOUND_NOTICE", 200, "해당 공지사항 없음");
 
     private final String errorCode;
     private final int httpStatus;
