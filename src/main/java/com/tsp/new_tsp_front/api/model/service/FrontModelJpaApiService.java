@@ -63,7 +63,7 @@ public class FrontModelJpaApiService {
      * 5. 작성일       : 2022. 01. 09.
      * </pre>
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public FrontModelDTO getModelInfo(FrontModelEntity frontModelEntity) throws TspException {
         try {
             return this.frontModelJpaRepository.getModelInfo(frontModelEntity);
