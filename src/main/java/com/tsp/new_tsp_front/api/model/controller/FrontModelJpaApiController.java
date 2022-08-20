@@ -86,7 +86,7 @@ public class FrontModelJpaApiController {
         // 리스트 수
         resultMap.put("pageSize", page.getSize());
         // 전체 페이지 수
-        resultMap.put("perPageListCnt", ceil((this.frontModelJpaApiService.getModelList(modelMap).size() - 1) / page.getSize() + 1));
+        resultMap.put("perPageListCnt", ceil((double) this.frontModelJpaApiService.getModelCount(modelMap) / page.getSize()));
         // 전체 아이템 수
         resultMap.put("modelListTotalCnt", this.frontModelJpaApiService.getModelCount(modelMap));
         resultMap.put("modelList", this.frontModelJpaApiService.getModelList(modelMap));

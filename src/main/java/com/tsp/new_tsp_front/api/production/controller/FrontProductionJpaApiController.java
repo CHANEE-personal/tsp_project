@@ -48,14 +48,15 @@ public class FrontProductionJpaApiController {
     @GetMapping(value = "/lists")
     public Map<String, Object> getProductionList(@RequestParam(required = false) Map<String, Object> paramMap, Page page) {
         Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> productionMap = searchCommon.searchCommon(page, paramMap);
 
         // 리스트 수
         resultMap.put("pageSize", page.getSize());
         // 전체 페이지 수
-        resultMap.put("perPageListCnt", ceil((this.frontProductionJpaApiService.getProductionList(searchCommon.searchCommon(page, paramMap)).size() - 1) / page.getSize() + 1));
+        resultMap.put("perPageListCnt", ceil((double)this.frontProductionJpaApiService.getProductionCount(productionMap) / page.getSize()));
         // 전체 아이템 수
-        resultMap.put("productionListTotalCnt", this.frontProductionJpaApiService.getProductionCount(searchCommon.searchCommon(page, paramMap)));
-        resultMap.put("productionList", this.frontProductionJpaApiService.getProductionList(searchCommon.searchCommon(page, paramMap)));
+        resultMap.put("productionListTotalCnt", this.frontProductionJpaApiService.getProductionCount(productionMap));
+        resultMap.put("productionList", this.frontProductionJpaApiService.getProductionList(productionMap));
 
         return resultMap;
     }
