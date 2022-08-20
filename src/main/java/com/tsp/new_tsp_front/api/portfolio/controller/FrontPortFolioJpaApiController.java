@@ -48,14 +48,15 @@ public class FrontPortFolioJpaApiController {
     @GetMapping(value = "/lists")
     public Map<String, Object> getPortFolioList(@RequestParam(required = false) Map<String, Object> paramMap, Page page) {
         Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> portfolioMap = searchCommon.searchCommon(page, paramMap);
 
         // 리스트 수
         resultMap.put("pageSize", page.getSize());
         // 전체 페이지 수
-        resultMap.put("perPageListCnt", ceil((this.frontPortFolioJpaApiService.getPortFolioList(searchCommon.searchCommon(page, paramMap)).size() - 1) / page.getSize() + 1));
+        resultMap.put("perPageListCnt", ceil((double) this.frontPortFolioJpaApiService.getPortfolioCount(portfolioMap) / page.getSize()));
         // 전체 아이템 수
-        resultMap.put("portFolioListTotalCnt", this.frontPortFolioJpaApiService.getPortFolioList(searchCommon.searchCommon(page, paramMap)).size());
-        resultMap.put("portFolioList", this.frontPortFolioJpaApiService.getPortFolioList(searchCommon.searchCommon(page, paramMap)));
+        resultMap.put("portFolioListTotalCnt", this.frontPortFolioJpaApiService.getPortFolioList(portfolioMap).size());
+        resultMap.put("portFolioList", this.frontPortFolioJpaApiService.getPortFolioList(portfolioMap));
         return resultMap;
     }
 

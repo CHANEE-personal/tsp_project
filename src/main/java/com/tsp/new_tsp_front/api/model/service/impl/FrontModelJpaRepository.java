@@ -67,10 +67,10 @@ public class FrontModelJpaRepository {
                 .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
                 .fetchJoin()
                 .where(frontModelEntity.modelMainYn.eq("Y")
-                        .and(frontModelEntity.visible.eq("Y")
-                                .and(commonImageEntity.typeName.eq("model")
-                                        .and(commonImageEntity.imageType.eq("main"))
-                                        .and(commonImageEntity.visible.eq("Y")))))
+                .and(frontModelEntity.visible.eq("Y")
+                .and(commonImageEntity.typeName.eq("model")
+                .and(commonImageEntity.imageType.eq("main"))
+                .and(commonImageEntity.visible.eq("Y")))))
                 .fetch();
 
         modelList.forEach(list -> modelList.get(modelList.indexOf(list)).setRnum(modelList.indexOf(list)));

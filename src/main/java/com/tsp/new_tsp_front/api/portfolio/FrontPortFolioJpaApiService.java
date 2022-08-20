@@ -11,13 +11,29 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_PORTFOLIO;
-import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_PORTFOLIO_LIST;
+import static com.tsp.new_tsp_front.exception.ApiExceptionType.*;
 
 @Service
 @RequiredArgsConstructor
 public class FrontPortFolioJpaApiService {
     private final FrontPortFolioJpaRepository frontPortFolioJpaRepository;
+
+    /**
+     * <pre>
+     * 1. MethodName : getPortfolioCount
+     * 2. ClassName  : FrontPortFolioJpaApiService.java
+     * 3. Comment    : 프론트 > 포트폴리오 리스트 갯수 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 01. 11.
+     * </pre>
+     */
+    public int getPortfolioCount(Map<String, Object> portfolioMap) throws TspException {
+        try {
+            return frontPortFolioJpaRepository.getPortfolioCount(portfolioMap);
+        } catch (Exception e) {
+            throw new TspException(NOT_FOUND_PORTFOLIO_LIST, e);
+        }
+    }
 
     /**
      * <pre>
