@@ -46,7 +46,7 @@ public class FrontPortFolioJpaApiService {
      * 5. 작성일       : 2022. 01. 12.
      * </pre>
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public FrontPortFolioDTO getPortFolioInfo(FrontPortFolioEntity frontPortFolioEntity) throws TspException {
         try {
             return frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);

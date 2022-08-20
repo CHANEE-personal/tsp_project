@@ -62,7 +62,7 @@ public class FrontProductionJpaApiService {
      * 5. 작성일       : 2022. 01. 11.
      * </pre>
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public FrontProductionDTO getProductionInfo(FrontProductionEntity frontProductionEntity) throws TspException {
         try {
             return frontProductionJpaRepository.getProductionInfo(frontProductionEntity);
