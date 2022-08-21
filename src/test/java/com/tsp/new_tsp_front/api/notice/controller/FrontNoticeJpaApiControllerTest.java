@@ -58,7 +58,7 @@ class FrontNoticeJpaApiControllerTest {
 
     @Test
     @DisplayName("공지사항 검색 조회 테스트")
-    void 프로덕션검색조회테스트() throws Exception {
+    void 공지사항검색조회테스트() throws Exception {
         LinkedMultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
         paramMap.add("jpaStartPage", "1");
         paramMap.add("size", "3");

@@ -49,8 +49,8 @@ class FrontNoticeJpaRepositoryTest {
 
     private void createNotice() {
         frontNoticeEntity = FrontNoticeEntity.builder()
-                .title("프로덕션 테스트")
-                .description("프로덕션 테스트")
+                .title("공지사항 테스트")
+                .description("공지사항 테스트")
                 .visible("Y")
                 .viewCount(1)
                 .build();

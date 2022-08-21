@@ -41,6 +41,6 @@ public class FrontNoticeEntity extends NewCommonMappedClass {
     private Integer viewCount;
 
     @Column(name = "visible")
-    @NotEmpty(message = "프로덕션 노출 여부 선택은 필수입니다.")
+    @NotEmpty(message = "공지사항 노출 여부 선택은 필수입니다.")
     private String visible;
 }
