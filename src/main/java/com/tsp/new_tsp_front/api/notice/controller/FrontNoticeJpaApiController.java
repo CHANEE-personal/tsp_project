@@ -47,14 +47,15 @@ public class FrontNoticeJpaApiController {
     @GetMapping(value = "/lists")
     public Map<String, Object> findNoticesList(@RequestParam(required = false) Map<String, Object> paramMap, Page page) {
         Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> noticeMap = searchCommon.searchCommon(page, paramMap);
 
         // 리스트 수
         resultMap.put("pageSize", page.getSize());
         // 전체 페이지 수
-        resultMap.put("perPageListCnt", ceil((this.frontNoticeJpaService.findNoticesList(searchCommon.searchCommon(page, paramMap)).size() - 1) / page.getSize() + 1));
+        resultMap.put("perPageListCnt", ceil((double)this.frontNoticeJpaService.findNoticeCount(noticeMap) / page.getSize()));
         // 전체 아이템 수
-        resultMap.put("noticeListTotalCnt", this.frontNoticeJpaService.findNoticesList(searchCommon.searchCommon(page, paramMap)));
-        resultMap.put("noticeList", this.frontNoticeJpaService.findNoticesList(searchCommon.searchCommon(page, paramMap)));
+        resultMap.put("noticeListTotalCnt", this.frontNoticeJpaService.findNoticesList(noticeMap));
+        resultMap.put("noticeList", this.frontNoticeJpaService.findNoticesList(noticeMap));
 
         return resultMap;
     }
