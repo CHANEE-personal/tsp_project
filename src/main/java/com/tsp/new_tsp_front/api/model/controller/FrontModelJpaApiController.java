@@ -33,7 +33,7 @@ public class FrontModelJpaApiController {
 
     /**
      * <pre>
-     * 1. MethodName : lists/main/{categoryCd}/{idx}
+     * 1. MethodName : getMainModelList
      * 2. ClassName  : FrontModelJpaApiController.java
      * 3. Comment    : 프론트 > 메인 모델 상세 조회
      * 4. 작성자       : CHO
@@ -60,7 +60,7 @@ public class FrontModelJpaApiController {
 
     /**
      * <pre>
-     * 1. MethodName : lists/{categoryCd}
+     * 1. MethodName : getModelList
      * 2. ClassName  : FrontModelJpaApiController.java
      * 3. Comment    : 프론트 > 모델 조회
      * 4. 작성자       : CHO
@@ -96,7 +96,7 @@ public class FrontModelJpaApiController {
 
     /**
      * <pre>
-     * 1. MethodName : {categoryCd}/{idx}
+     * 1. MethodName : getModelInfo
      * 2. ClassName  : FrontModelJpaApiController.java
      * 3. Comment    : 프론트 > 모델 상세 조회
      * 4. 작성자       : CHO
@@ -119,7 +119,7 @@ public class FrontModelJpaApiController {
 
     /**
      * <pre>
-     * 1. MethodName : {categoryCd}/{idx}/like
+     * 1. MethodName : favoriteModel
      * 2. ClassName  : FrontModelJpaApiController.java
      * 3. Comment    : 프론트 > 모델 상세 조회
      * 4. 작성자       : CHO

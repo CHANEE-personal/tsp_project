@@ -30,7 +30,7 @@ public class FrontPortFolioJpaApiController {
 
     /**
      * <pre>
-     * 1. MethodName : lists
+     * 1. MethodName : getPortFolioList
      * 2. ClassName  : FrontPortFolioJpaApiController.java
      * 3. Comment    : 프론트 > 포트폴리오 조회
      * 4. 작성자       : CHO
@@ -62,7 +62,7 @@ public class FrontPortFolioJpaApiController {
 
     /**
      * <pre>
-     * 1. MethodName : {idx}
+     * 1. MethodName : getPortFolioInfo
      * 2. ClassName  : FrontPortFolioJpaApiController.java
      * 3. Comment    : 프론트 > 포트폴리오 상세 조회
      * 4. 작성자       : CHO

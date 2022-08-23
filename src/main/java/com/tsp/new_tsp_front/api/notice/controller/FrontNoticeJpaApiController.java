@@ -29,7 +29,7 @@ public class FrontNoticeJpaApiController {
 
     /**
      * <pre>
-     * 1. MethodName : lists
+     * 1. MethodName : findNoticesList
      * 2. ClassName  : FrontNoticeJpaApiController.java
      * 3. Comment    : 프론트 > 공지사항 조회
      * 4. 작성자       : CHO
@@ -62,7 +62,7 @@ public class FrontNoticeJpaApiController {
 
     /**
      * <pre>
-     * 1. MethodName : {idx}
+     * 1. MethodName : findOneNotice
      * 2. ClassName  : FrontNoticeJpaApiController.java
      * 3. Comment    : 프론트 > 공지사항 상세 조회
      * 4. 작성자       : CHO

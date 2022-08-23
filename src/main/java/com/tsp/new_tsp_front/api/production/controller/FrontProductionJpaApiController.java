@@ -30,7 +30,7 @@ public class FrontProductionJpaApiController {
 
     /**
      * <pre>
-     * 1. MethodName : lists
+     * 1. MethodName : getProductionList
      * 2. ClassName  : FrontProductionJpaApiController.java
      * 3. Comment    : 프론트 > 프로덕션 조회
      * 4. 작성자       : CHO
@@ -63,7 +63,7 @@ public class FrontProductionJpaApiController {
 
     /**
      * <pre>
-     * 1. MethodName : {idx}
+     * 1. MethodName : getProductionInfo
      * 2. ClassName  : FrontProductionJpaApiController.java
      * 3. Comment    : 프론트 > 프로덕션 상세 조회
      * 4. 작성자       : CHO

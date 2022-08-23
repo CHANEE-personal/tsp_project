@@ -26,6 +26,7 @@ public class FrontNoticeJpaService {
      * 5. 작성일       : 2022. 08. 16.
      * </pre>
      */
+    @Transactional(readOnly = true)
     public int findNoticeCount(Map<String, Object> noticeMap) throws TspException {
         try {
             return frontNoticeJpaRepository.findNoticeCount(noticeMap);
