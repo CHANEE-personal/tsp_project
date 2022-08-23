@@ -43,7 +43,11 @@ public enum ApiExceptionType implements BaseExceptionType {
 
     // 공지사항 관련 TYPE
     NOT_FOUND_NOTICE_LIST("NOT_FOUND_NOTICE_LIST", 200, "공지사항 리스트 없음"),
-    NOT_FOUND_NOTICE("NOT_FOUND_NOTICE", 200, "해당 공지사항 없음");
+    NOT_FOUND_NOTICE("NOT_FOUND_NOTICE", 200, "해당 공지사항 없음"),
+
+    // FAQ 관련 TYPE
+    NOT_FOUND_FAQ_LIST("NOT_FOUND_FAQ_LIST", 200, "FAQ 리스트 없음"),
+    NOT_FOUND_FAQ("NOT_FOUND_FAQ", 200, "해당 FAQ 없음");
 
     private final String errorCode;
     private final int httpStatus;
