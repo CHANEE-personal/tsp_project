@@ -12,12 +12,15 @@ import org.springframework.context.event.EventListener;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -91,5 +94,16 @@ class FrontAgencyJpaApiControllerTest {
                 .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.code").value("NOT_FOUND_AGENCY"))
                 .andExpect(jsonPath("$.message").value("해당 Agency 없음"));
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Agency 좋아요 테스트")
+    void Agency좋아요테스트() throws Exception {
+        mockMvc.perform(put("/api/agency/1/1/like"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
+                .andExpect(content().string(getString(1)));
     }
 }

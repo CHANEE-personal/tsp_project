@@ -81,4 +81,26 @@ public class FrontAgencyJpaApiController {
     public FrontAgencyDTO findOneAgency(@PathVariable Integer idx) {
         return this.frontAgencyJpaService.findOneAgency(FrontAgencyEntity.builder().idx(idx).build());
     }
+
+    /**
+     * <pre>
+     * 1. MethodName : favoriteAgency
+     * 2. ClassName  : FrontAgencyJpaApiController.java
+     * 3. Comment    : 프론트 > Agency 좋아요 처리
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 08. 24.
+     * </pre>
+     */
+    @ApiOperation(value = "Agency 좋아요 처리", notes = "Agency를 좋아요 처리한다.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Agency 좋아요 성공", response = Map.class),
+            @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
+            @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
+            @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+            @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+    })
+    @PutMapping(value = "/{idx}/like")
+    public Integer favoriteAgency(@PathVariable Integer idx) {
+        return this.frontAgencyJpaService.favoriteAgency(FrontAgencyEntity.builder().idx(idx).build());
+    }
 }
