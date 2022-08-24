@@ -1,12 +1,12 @@
 package com.tsp.new_tsp_front.api.model.service;
 
+import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyDTO;
+import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
+import com.tsp.new_tsp_front.api.agency.service.impl.AgencyMapper;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
-import com.tsp.new_tsp_front.api.model.domain.agency.FrontAgencyDTO;
-import com.tsp.new_tsp_front.api.model.domain.agency.FrontAgencyEntity;
-import com.tsp.new_tsp_front.api.model.service.impl.Agency.AgencyMapper;
 import com.tsp.new_tsp_front.api.model.service.impl.ModelImageMapper;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;

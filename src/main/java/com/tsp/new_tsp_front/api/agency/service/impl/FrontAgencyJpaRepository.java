@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Map;
 
@@ -15,12 +16,14 @@ import static com.tsp.new_tsp_front.api.agency.domain.QFrontAgencyEntity.frontAg
 import static com.tsp.new_tsp_front.api.agency.service.impl.AgencyMapper.INSTANCE;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
+import static java.util.Objects.requireNonNull;
 
 @Slf4j
 @RequiredArgsConstructor
 @Repository
 public class FrontAgencyJpaRepository {
     private final JPAQueryFactory queryFactory;
+    private final EntityManager em;
 
     private BooleanExpression searchAgency(Map<String, Object> faqMap) {
         String searchType = getString(faqMap.get("searchType"), "");
@@ -91,5 +94,43 @@ public class FrontAgencyJpaRepository {
                 .fetchOne();
 
         return INSTANCE.toDto(findOneAgency);
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : favoriteAgencyCount
+     * 2. ClassName  : FrontAgencyJpaRepository.java
+     * 3. Comment    : 프론트 Agency 좋아요 갯수 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 08. 24.
+     * </pre>
+     */
+    public Integer favoriteAgencyCount(Integer idx) {
+        return requireNonNull(queryFactory
+                .selectFrom(frontAgencyEntity)
+                .where(frontAgencyEntity.idx.eq(idx)).fetchOne()).getFavoriteCount();
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : favoriteAgency
+     * 2. ClassName  : FrontAgencyJpaRepository.java
+     * 3. Comment    : 프론트 Agency 좋아요
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 08. 24.
+     * </pre>
+     */
+    public Integer favoriteAgency(FrontAgencyEntity existFrontAgencyEntity) {
+        queryFactory
+                .update(frontAgencyEntity)
+                //add , minus , multiple 다 가능하다.
+                .set(frontAgencyEntity.favoriteCount, frontAgencyEntity.favoriteCount.add(1))
+                .where(frontAgencyEntity.idx.eq(existFrontAgencyEntity.getIdx()))
+                .execute();
+
+        em.flush();
+        em.clear();
+
+        return favoriteAgencyCount(existFrontAgencyEntity.getIdx());
     }
 }
