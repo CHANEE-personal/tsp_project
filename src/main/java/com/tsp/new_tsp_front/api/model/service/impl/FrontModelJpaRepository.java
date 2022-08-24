@@ -13,9 +13,9 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Map;
 
+import static com.tsp.new_tsp_front.api.agency.domain.QFrontAgencyEntity.frontAgencyEntity;
 import static com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity.commonImageEntity;
 import static com.tsp.new_tsp_front.api.model.domain.QFrontModelEntity.frontModelEntity;
-import static com.tsp.new_tsp_front.api.model.domain.agency.QFrontAgencyEntity.*;
 import static com.tsp.new_tsp_front.api.model.service.impl.ModelMapper.INSTANCE;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;

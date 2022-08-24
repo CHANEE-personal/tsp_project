@@ -1,7 +1,8 @@
-package com.tsp.new_tsp_front.api.model.service.impl.Agency;
+package com.tsp.new_tsp_front.api.agency.service.impl;
 
-import com.tsp.new_tsp_front.api.model.domain.agency.FrontAgencyDTO;
-import com.tsp.new_tsp_front.api.model.domain.agency.FrontAgencyEntity;
+
+import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyDTO;
+import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
 
 import java.util.ArrayList;
 import java.util.List;

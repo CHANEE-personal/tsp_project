@@ -1,4 +1,4 @@
-package com.tsp.new_tsp_front.api.model.domain.agency;
+package com.tsp.new_tsp_front.api.agency.domain;
 
 import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonDTO;

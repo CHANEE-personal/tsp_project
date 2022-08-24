@@ -1,7 +1,7 @@
 package com.tsp.new_tsp_front.api.common.domain;
 
+import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
-import com.tsp.new_tsp_front.api.model.domain.agency.FrontAgencyEntity;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 import io.swagger.annotations.ApiModelProperty;
