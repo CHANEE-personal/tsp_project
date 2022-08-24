@@ -43,6 +43,9 @@ public class FrontAgencyEntity extends NewCommonMappedClass {
     @NotEmpty(message = "소속사 상세내용 입력은 필수입니다.")
     private String agencyDescription;
 
+    @Column(name = "favorite_count")
+    private Integer favoriteCount;
+
     @Column(name = "visible")
     @NotEmpty(message = "소속사 노출 여부 선택은 필수입니다.")
     private String visible;
