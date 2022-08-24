@@ -1,8 +1,8 @@
 package com.tsp.new_tsp_front.api.model.service.impl;
 
+import com.tsp.new_tsp_front.api.agency.service.impl.AgencyMapper;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
-import com.tsp.new_tsp_front.api.model.service.impl.Agency.AgencyMapper;
 import org.mapstruct.Mapper;
 
 import java.util.ArrayList;

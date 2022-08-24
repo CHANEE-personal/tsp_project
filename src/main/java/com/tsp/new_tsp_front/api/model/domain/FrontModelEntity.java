@@ -1,9 +1,9 @@
 package com.tsp.new_tsp_front.api.model.domain;
 
+import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCodeEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonMappedClass;
-import com.tsp.new_tsp_front.api.model.domain.agency.FrontAgencyEntity;
 import com.tsp.new_tsp_front.common.CustomConverter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
