@@ -17,6 +17,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ class FrontAgencyJpaRepositoryTest {
     private final FrontAgencyJpaRepository frontAgencyJpaRepository;
     private FrontAgencyEntity frontAgencyEntity;
     private FrontAgencyDTO frontAgencyDTO;
+    private final EntityManager em;
 
     private void createAgency() {
         frontAgencyEntity = FrontAgencyEntity.builder()
@@ -190,6 +192,92 @@ class FrontAgencyJpaRepositoryTest {
         // verify
         then(mockFrontAgencyJpaRepository).should(times(1)).findOneAgency(frontAgencyEntity);
         then(mockFrontAgencyJpaRepository).should(atLeastOnce()).findOneAgency(frontAgencyEntity);
+        then(mockFrontAgencyJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("Agency 좋아요 갯수 조회 Mockito 테스트")
+    void Agency좋아요갯수조회Mockito테스트() {
+        // given
+        em.persist(frontAgencyEntity);
+        frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
+
+        // when
+        when(mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity)).thenReturn(frontAgencyDTO);
+        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity);
+
+        // then
+        assertThat(agencyInfo.getFavoriteCount()).isEqualTo(frontAgencyEntity.getFavoriteCount());
+
+        // verify
+        verify(mockFrontAgencyJpaRepository, times(1)).findOneAgency(frontAgencyEntity);
+        verify(mockFrontAgencyJpaRepository, atLeastOnce()).findOneAgency(frontAgencyEntity);
+        verifyNoMoreInteractions(mockFrontAgencyJpaRepository);
+    }
+
+    @Test
+    @DisplayName("모델 좋아요 갯수 조회 BDD 테스트")
+    void 모델좋아요갯수조회BDD테스트() {
+        em.persist(frontAgencyEntity);
+        frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
+
+        // when
+        given(mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity)).willReturn(frontAgencyDTO);
+        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity);
+
+        // then
+        assertThat(agencyInfo.getFavoriteCount()).isEqualTo(frontAgencyEntity.getFavoriteCount());
+
+        // verify
+        then(mockFrontAgencyJpaRepository).should(times(1)).findOneAgency(frontAgencyEntity);
+        then(mockFrontAgencyJpaRepository).should(atLeastOnce()).findOneAgency(frontAgencyEntity);
+        then(mockFrontAgencyJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("모델 좋아요 Mockito 테스트")
+    void 모델좋아요Mockito테스트() {
+        // given
+        em.persist(frontAgencyEntity);
+        frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
+
+        Integer favoriteCount = frontAgencyJpaRepository.favoriteAgency(frontAgencyEntity);
+
+        // when
+        when(mockFrontAgencyJpaRepository.favoriteAgency(frontAgencyEntity)).thenReturn(favoriteCount);
+        Integer newFavoriteCount = mockFrontAgencyJpaRepository.favoriteAgencyCount(frontAgencyEntity.getIdx());
+
+        // then
+        assertThat(newFavoriteCount).isEqualTo(favoriteCount);
+
+        // verify
+        verify(mockFrontAgencyJpaRepository, times(1)).favoriteAgency(frontAgencyEntity);
+        verify(mockFrontAgencyJpaRepository, atLeastOnce()).favoriteAgency(frontAgencyEntity);
+        verifyNoMoreInteractions(mockFrontAgencyJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontAgencyJpaRepository);
+        inOrder.verify(mockFrontAgencyJpaRepository).favoriteAgency(frontAgencyEntity);
+    }
+
+    @Test
+    @DisplayName("모델 좋아요 BDD 테스트")
+    void 모델좋아요BDD테스트() {
+        // given
+        em.persist(frontAgencyEntity);
+        frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
+
+        Integer favoriteCount = frontAgencyJpaRepository.favoriteAgency(frontAgencyEntity);
+
+        // when
+        given(mockFrontAgencyJpaRepository.favoriteAgency(frontAgencyEntity)).willReturn(favoriteCount);
+        Integer newFavoriteCount = mockFrontAgencyJpaRepository.favoriteAgencyCount(frontAgencyEntity.getIdx());
+
+        // then
+        assertThat(newFavoriteCount).isEqualTo(favoriteCount);
+
+        // verify
+        then(mockFrontAgencyJpaRepository).should(times(1)).favoriteAgency(frontAgencyEntity);
+        then(mockFrontAgencyJpaRepository).should(atLeastOnce()).favoriteAgency(frontAgencyEntity);
         then(mockFrontAgencyJpaRepository).shouldHaveNoMoreInteractions();
     }
 }

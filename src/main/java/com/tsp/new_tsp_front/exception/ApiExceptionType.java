@@ -49,9 +49,11 @@ public enum ApiExceptionType implements BaseExceptionType {
     NOT_FOUND_FAQ_LIST("NOT_FOUND_FAQ_LIST", 200, "FAQ 리스트 없음"),
     NOT_FOUND_FAQ("NOT_FOUND_FAQ", 200, "해당 FAQ 없음"),
 
-    // Agenct 관련 TYPE
+    // Agency 관련 TYPE
     NOT_FOUND_AGENCY_LIST("NOT_FOUND_AGENCY_LIST", 200, "Agency 리스트 없음"),
-    NOT_FOUND_AGENCY("NOT_FOUND_AGENCY", 200, "해당 Agency 없음");
+    NOT_FOUND_AGENCY("NOT_FOUND_AGENCY", 200, "해당 Agency 없음"),
+    // Agency 좋아요 관련 Type
+    ERROR_AGENCY_LIKE("ERROR_AGENCY_LIKE", 500, "Agency 좋아요 에러");
 
     private final String errorCode;
     private final int httpStatus;
