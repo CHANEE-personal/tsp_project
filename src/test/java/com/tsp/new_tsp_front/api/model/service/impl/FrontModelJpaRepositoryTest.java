@@ -82,6 +82,7 @@ class FrontModelJpaRepositoryTest {
                 .size3("34-24-34")
                 .shoes(270)
                 .modelFavoriteCount(1)
+                .newYn("N")
                 .frontAgencyEntity(frontAgencyEntity)
                 .modelViewCount(1)
                 .visible("Y")
@@ -559,6 +560,81 @@ class FrontModelJpaRepositoryTest {
         // verify
         then(mockFrontModelJpaRepository).should(times(1)).favoriteModel(frontModelEntity);
         then(mockFrontModelJpaRepository).should(atLeastOnce()).favoriteModel(frontModelEntity);
+        then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("새로운 모델 리스트 조회 Mockito 테스트")
+    void 새로운모델리스트조회Mockito테스트() {
+        // 정상
+        // given
+        Map<String, Object> newModelMap = new HashMap<>();
+        newModelMap.put("categoryCd", 1);
+        newModelMap.put("jpaStartPage", 1);
+        newModelMap.put("size", 3);
+
+        List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
+        commonImageDtoList.add(commonImageDTO);
+
+        List<FrontModelDTO> modelList = new ArrayList<>();
+        modelList.add(FrontModelDTO.builder().idx(3).categoryCd(1).modelKorName("테스트모델1").newYn("Y").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
+        modelList.add(FrontModelDTO.builder().idx(4).categoryCd(2).modelKorName("테스트모델2").newYn("Y").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
+
+        // when
+        when(mockFrontModelJpaRepository.getNewModelList(newModelMap)).thenReturn(modelList);
+        List<FrontModelDTO> newModelList = mockFrontModelJpaRepository.getNewModelList(newModelMap);
+
+        // then
+        assertThat(newModelList.get(0).getIdx()).isEqualTo(modelList.get(0).getIdx());
+        assertThat(newModelList.get(0).getCategoryCd()).isEqualTo(modelList.get(0).getCategoryCd());
+        assertThat(newModelList.get(0).getModelKorName()).isEqualTo(modelList.get(0).getModelKorName());
+        assertThat(newModelList.get(0).getNewYn()).isEqualTo(modelList.get(0).getNewYn());
+        assertThat(newModelList.get(0).getModelAgency().getAgencyName()).isEqualTo(modelList.get(0).getModelAgency().getAgencyName());
+        assertThat(newModelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(modelList.get(0).getModelAgency().getAgencyDescription());
+        assertThat(newModelList.get(0).getModelImage().get(0).getFileName()).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
+
+        // verify
+        verify(mockFrontModelJpaRepository, times(1)).getNewModelList(newModelMap);
+        verify(mockFrontModelJpaRepository, atLeastOnce()).getNewModelList(newModelMap);
+        verifyNoMoreInteractions(mockFrontModelJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontModelJpaRepository);
+        inOrder.verify(mockFrontModelJpaRepository).getNewModelList(newModelMap);
+    }
+
+    @Test
+    @DisplayName("새로운모델 리스트 조회 BDD 테스트")
+    void 새로운모델리스트조회BDD테스트() {
+        // 정상
+        // given
+        Map<String, Object> newModelMap = new HashMap<>();
+        newModelMap.put("categoryCd", 1);
+        newModelMap.put("jpaStartPage", 1);
+        newModelMap.put("size", 3);
+
+        List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
+        commonImageDtoList.add(commonImageDTO);
+
+        List<FrontModelDTO> modelList = new ArrayList<>();
+        modelList.add(FrontModelDTO.builder().idx(3).categoryCd(1).modelKorName("테스트모델1").newYn("Y").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
+        modelList.add(FrontModelDTO.builder().idx(4).categoryCd(2).modelKorName("테스트모델2").newYn("Y").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
+
+        // when
+        given(mockFrontModelJpaRepository.getNewModelList(newModelMap)).willReturn(modelList);
+        List<FrontModelDTO> newModelList = mockFrontModelJpaRepository.getNewModelList(newModelMap);
+
+        // then
+        assertThat(newModelList.get(0).getIdx()).isEqualTo(modelList.get(0).getIdx());
+        assertThat(newModelList.get(0).getCategoryCd()).isEqualTo(modelList.get(0).getCategoryCd());
+        assertThat(newModelList.get(0).getModelKorName()).isEqualTo(modelList.get(0).getModelKorName());
+        assertThat(newModelList.get(0).getNewYn()).isEqualTo(modelList.get(0).getNewYn());
+        assertThat(newModelList.get(0).getModelAgency().getAgencyName()).isEqualTo(modelList.get(0).getModelAgency().getAgencyName());
+        assertThat(newModelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(modelList.get(0).getModelAgency().getAgencyDescription());
+        assertThat(newModelList.get(0).getModelImage().get(0).getFileName()).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
+
+        // verify
+        then(mockFrontModelJpaRepository).should(times(1)).getNewModelList(newModelMap);
+        then(mockFrontModelJpaRepository).should(atLeastOnce()).getNewModelList(newModelMap);
         then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
     }
 }

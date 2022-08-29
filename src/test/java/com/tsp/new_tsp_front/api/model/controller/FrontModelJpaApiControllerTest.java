@@ -166,4 +166,14 @@ class FrontModelJpaApiControllerTest {
                 .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(content().string(getString(1)));
     }
+
+    @Test
+    @DisplayName("새로운 모델 조회 테스트")
+    void 새로운모델조회() throws Exception {
+        mockMvc.perform(get("/api/model/lists/new/1").param("page", "1").param("size", "100"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
+                .andExpect(jsonPath("$.newModelList.length()", greaterThan(0)));
+    }
 }

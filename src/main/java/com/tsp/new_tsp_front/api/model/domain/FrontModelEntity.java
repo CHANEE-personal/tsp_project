@@ -115,6 +115,10 @@ public class FrontModelEntity extends NewCommonMappedClass {
     @Column(name = "view_count")
     private Integer modelViewCount;
 
+    @Column(name = "new_yn")
+    @NotEmpty(message = "새로운 모델 선택은 필수입니다.")
+    private String newYn;
+
     @Column(name = "career_list")
     @Convert(converter = CustomConverter.class)
     private ArrayList<CareerJson> careerList;

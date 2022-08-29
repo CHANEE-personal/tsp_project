@@ -225,4 +225,51 @@ public class FrontModelJpaRepository {
 
         return favoriteModelCount(existFrontModelEntity.getIdx());
     }
+
+    /**
+     * <pre>
+     * 1. MethodName : getNewModelCount
+     * 2. ClassName  : FrontModelJpaRepository.java
+     * 3. Comment    : 프론트 새로운 모델 리스트 갯수 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 08. 29.
+     * </pre>
+     */
+    public int getNewModelCount(Map<String, Object> modelMap) {
+        return queryFactory
+                .selectFrom(frontModelEntity)
+                .where(searchModel(modelMap)
+                        .and(frontModelEntity.visible.eq("Y"))
+                        .and(frontModelEntity.newYn.eq("Y")))
+                .fetch().size();
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : getNewModelList
+     * 2. ClassName  : FrontModelJpaRepository.java
+     * 3. Comment    : 프론트 새로운 모델 리스트 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 08. 29.
+     * </pre>
+     */
+    public List<FrontModelDTO> getNewModelList(Map<String, Object> modelMap) {
+        List<FrontModelEntity> newModelList = queryFactory
+                .selectFrom(frontModelEntity)
+                .orderBy(frontModelEntity.idx.desc())
+                .innerJoin(frontModelEntity.frontAgencyEntity, frontAgencyEntity)
+                .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
+                .fetchJoin()
+                .where(searchModel(modelMap)
+                        .and(frontModelEntity.visible.eq("Y"))
+                        .and(frontModelEntity.newYn.eq("Y")))
+                .offset(getInt(modelMap.get("jpaStartPage"), 0))
+                .limit(getInt(modelMap.get("size"), 0))
+                .fetch();
+
+        newModelList.forEach(list -> newModelList.get(newModelList.indexOf(list))
+                .setRnum(getInt(modelMap.get("startPage"), 1) * (getInt(modelMap.get("size"), 1)) - (2 - newModelList.indexOf(list))));
+
+        return INSTANCE.toDtoList(newModelList);
+    }
 }
