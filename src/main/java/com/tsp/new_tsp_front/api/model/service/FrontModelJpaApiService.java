@@ -126,4 +126,39 @@ public class FrontModelJpaApiService {
             throw new TspException(ERROR_MODEL_LIKE, e);
         }
     }
+
+    /**
+     * <pre>
+     * 1. MethodName : getNewModelCount
+     * 2. ClassName  : FrontModelJpaApiService.java
+     * 3. Comment    : 프론트 > 새로운 모델 리스트 갯수 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 08. 29.
+     * </pre>
+     */
+    public int getNewModelCount(Map<String, Object> newModelMap) throws TspException {
+        try {
+            return frontModelJpaRepository.getNewModelCount(newModelMap);
+        } catch (Exception e) {
+            throw new TspException(NOT_FOUND_MODEL_LIST, e);
+        }
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : getNewModelList
+     * 2. ClassName  : FrontModelJpaApiService.java
+     * 3. Comment    : 프론트 > 새로운 모델 리스트 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 08. 29.
+     * </pre>
+     */
+    @Transactional(readOnly = true)
+    public List<FrontModelDTO> getNewModelList(Map<String, Object> newModelMap) throws TspException {
+        try {
+            return frontModelJpaRepository.getNewModelList(newModelMap);
+        } catch (Exception e) {
+            throw new TspException(NOT_FOUND_MODEL_LIST, e);
+        }
+    }
 }
