@@ -93,6 +93,9 @@ public class FrontModelDTO extends NewCommonDTO {
     @ApiModelProperty(value = "model view count")
     private Integer modelViewCount;
 
+    @ApiModelProperty(required = true, value = "새로운 모델 여부((ex)Y,N")
+    private String newYn;
+
     @ApiModelProperty(value = "소속사 idx((ex)1")
     private Integer agencyIdx;
 
