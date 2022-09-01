@@ -30,7 +30,8 @@ public class CacheConfiguration {
         cacheManager.setCaches(of(
                 new ConcurrentMapCache("model"),
                 new ConcurrentMapCache("production"),
-                new ConcurrentMapCache("portfolio")));
+                new ConcurrentMapCache("portfolio"),
+                new ConcurrentMapCache("schedule")));
         return cacheManager;
     }
 }
