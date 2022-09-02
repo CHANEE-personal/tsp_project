@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.tsp.new_tsp_front.api.model.domain.schedule.QFrontScheduleEntity.*;
+import static com.tsp.new_tsp_front.api.model.schedule.service.impl.FrontScheduleMapper.INSTANCE;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 
 @Slf4j
@@ -19,7 +20,6 @@ import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 @Repository
 public class FrontScheduleJpaRepository {
     private final JPAQueryFactory queryFactory;
-    private final EntityManager em;
 
     /**
      * <pre>
@@ -55,6 +55,6 @@ public class FrontScheduleJpaRepository {
         scheduleList.forEach(list -> scheduleList.get(scheduleList.indexOf(list))
                 .setRnum(getInt(scheduleMap.get("startPage"), 1) * (getInt(scheduleMap.get("size"), 1)) - (2 - scheduleList.indexOf(list))));
 
-        return FrontScheduleMapper.INSTANCE.toDtoList(scheduleList);
+        return INSTANCE.toDtoList(scheduleList);
     }
 }
