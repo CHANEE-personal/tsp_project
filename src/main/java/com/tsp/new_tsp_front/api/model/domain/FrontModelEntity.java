@@ -4,6 +4,7 @@ import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCodeEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonMappedClass;
+import com.tsp.new_tsp_front.api.model.domain.schedule.FrontScheduleEntity;
 import com.tsp.new_tsp_front.common.CustomConverter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -133,4 +134,7 @@ public class FrontModelEntity extends NewCommonMappedClass {
     @OneToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn(name = "agency_idx", referencedColumnName = "idx", insertable = false, updatable = false)
     private FrontAgencyEntity frontAgencyEntity;
+
+    @OneToMany(mappedBy = "frontModelEntity")
+    private List<FrontScheduleEntity> modelScheduleList = new ArrayList<>();
 }
