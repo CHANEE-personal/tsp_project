@@ -1,16 +1,21 @@
 package com.tsp.new_tsp_front.api.model.schedule.service.impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
+import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.domain.schedule.FrontScheduleDTO;
 import com.tsp.new_tsp_front.api.model.domain.schedule.FrontScheduleEntity;
+import com.tsp.new_tsp_front.api.model.service.impl.ModelMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+import static com.tsp.new_tsp_front.api.model.domain.QFrontModelEntity.*;
 import static com.tsp.new_tsp_front.api.model.domain.schedule.QFrontScheduleEntity.*;
 import static com.tsp.new_tsp_front.api.model.schedule.service.impl.FrontScheduleMapper.INSTANCE;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
@@ -56,5 +61,33 @@ public class FrontScheduleJpaRepository {
                 .setRnum(getInt(scheduleMap.get("startPage"), 1) * (getInt(scheduleMap.get("size"), 1)) - (2 - scheduleList.indexOf(list))));
 
         return INSTANCE.toDtoList(scheduleList);
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : findModelScheduleList
+     * 2. ClassName  : FrontScheduleJpaRepository.java
+     * 3. Comment    : 모델 스케줄 리스트 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 03.
+     * </pre>
+     */
+    public List<FrontModelDTO> findModelScheduleList(Map<String, Object> scheduleMap) {
+        LocalDateTime start = LocalDate.now().minusDays(LocalDate.now().getDayOfMonth()-1).atStartOfDay();
+        LocalDateTime end = LocalDate.now().minusDays(LocalDate.now().getDayOfMonth()).plusMonths(1).atStartOfDay();
+
+        List<FrontModelEntity> findModelScheduleList = queryFactory
+                .selectFrom(frontModelEntity)
+                .leftJoin(frontModelEntity.modelScheduleList, frontScheduleEntity)
+                .fetchJoin()
+                .where(frontScheduleEntity.visible.eq("Y")
+                        .and(frontModelEntity.visible.eq("Y"))
+                        .and(frontScheduleEntity.modelScheduleTime.between(start, end)))
+                .fetch();
+
+        findModelScheduleList.forEach(list -> findModelScheduleList.get(findModelScheduleList.indexOf(list))
+                .setRnum(getInt(scheduleMap.get("startPage"), 1) * (getInt(scheduleMap.get("size"), 1)) - (2 - findModelScheduleList.indexOf(list))));
+
+        return ModelMapper.INSTANCE.toDtoList(findModelScheduleList);
     }
 }
