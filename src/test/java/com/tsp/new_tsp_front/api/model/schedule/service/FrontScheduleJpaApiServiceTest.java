@@ -14,6 +14,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,7 +45,7 @@ class FrontScheduleJpaApiServiceTest {
 
         List<FrontScheduleDTO> scheduleList = new ArrayList<>();
         scheduleList.add(FrontScheduleDTO.builder().idx(1).modelIdx(1)
-                .modelSchedule("스케줄 테스트").modelScheduleTime(new Date()).build());
+                .modelSchedule("스케줄 테스트").modelScheduleTime(LocalDateTime.now()).build());
 
         // when
         when(mockFrontScheduleJpaApiService.findScheduleList(scheduleMap)).thenReturn(scheduleList);
@@ -75,7 +76,7 @@ class FrontScheduleJpaApiServiceTest {
 
         List<FrontScheduleDTO> scheduleList = new ArrayList<>();
         scheduleList.add(FrontScheduleDTO.builder().idx(1).modelIdx(1)
-                .modelSchedule("스케줄 테스트").modelScheduleTime(new Date()).build());
+                .modelSchedule("스케줄 테스트").modelScheduleTime(LocalDateTime.now()).build());
 
         // when
         given(mockFrontScheduleJpaApiService.findScheduleList(scheduleMap)).willReturn(scheduleList);
