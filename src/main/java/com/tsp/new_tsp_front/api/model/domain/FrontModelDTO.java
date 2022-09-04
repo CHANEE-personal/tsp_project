@@ -3,6 +3,7 @@ package com.tsp.new_tsp_front.api.model.domain;
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyDTO;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonDTO;
+import com.tsp.new_tsp_front.api.model.domain.schedule.FrontScheduleDTO;
 import com.tsp.new_tsp_front.common.CustomConverter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -108,4 +109,7 @@ public class FrontModelDTO extends NewCommonDTO {
 
     @ApiModelProperty(required = true, value = "modelAgency", hidden = true)
     private FrontAgencyDTO modelAgency;
+
+    @ApiModelProperty(value = "modelScheduleList", hidden = true)
+    private List<FrontScheduleDTO> modelScheduleList = new ArrayList<>();
 }
