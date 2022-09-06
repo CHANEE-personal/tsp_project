@@ -14,10 +14,15 @@ import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import javax.transaction.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
@@ -53,7 +58,14 @@ class FrontScheduleJpaApiControllerTest {
     @Test
     @DisplayName("모델 스케줄 조회 테스트")
     void 모델스케줄조회테스트() throws Exception {
-        mockMvc.perform(get("/api/schedule/lists").param("page", "1").param("size", "100"))
+        LinkedMultiValueMap<String, String> scheduleMap = new LinkedMultiValueMap<>();
+        scheduleMap.add("jpaStartPage", "1");
+        scheduleMap.add("size", "3");
+
+        mockMvc.perform(get("/api/schedule/lists")
+                .queryParams(scheduleMap)
+                .queryParam("searchStartTime", LocalDateTime.of(LocalDateTime.now().getYear(), LocalDate.now().getMonth(), 1, 0, 0, 0, 0).format(DateTimeFormatter.ofPattern("yyyyMMdd")))
+                .queryParam("searchEndTime", LocalDateTime.of(LocalDateTime.now().getYear(), LocalDate.now().getMonth(), 30, 23, 59, 59).format(DateTimeFormatter.ofPattern("yyyyMMdd"))))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))

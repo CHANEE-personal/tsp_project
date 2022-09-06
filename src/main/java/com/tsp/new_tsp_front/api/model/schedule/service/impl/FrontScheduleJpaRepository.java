@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_front.api.model.schedule.service.impl;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
@@ -19,12 +21,36 @@ import static com.tsp.new_tsp_front.api.model.domain.QFrontModelEntity.*;
 import static com.tsp.new_tsp_front.api.model.domain.schedule.QFrontScheduleEntity.*;
 import static com.tsp.new_tsp_front.api.model.schedule.service.impl.FrontScheduleMapper.INSTANCE;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
+import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
 
 @Slf4j
 @RequiredArgsConstructor
 @Repository
 public class FrontScheduleJpaRepository {
     private final JPAQueryFactory queryFactory;
+
+    private BooleanExpression searchModelSchedule(Map<String, Object> scheduleMap) {
+        String searchKeyword = getString(scheduleMap.get("searchKeyword"), "");
+        LocalDateTime searchStartTime = (LocalDateTime) scheduleMap.get("searchStartTime");
+        LocalDateTime searchEndTime = (LocalDateTime) scheduleMap.get("searchEndTime");
+
+        if (searchStartTime != null && searchEndTime != null) {
+            searchStartTime = (LocalDateTime) scheduleMap.get("searchStartTime");
+            searchEndTime = (LocalDateTime) scheduleMap.get("searchEndTime");
+        } else {
+            searchStartTime = LocalDate.now().minusDays(LocalDate.now().getDayOfMonth()-1).atStartOfDay();
+            searchEndTime = LocalDateTime.of(LocalDate.now().minusDays(LocalDate.now().getDayOfMonth()).plusMonths(1), LocalTime.of(23,59,59));
+        }
+
+        if (!"".equals(searchKeyword)) {
+            return frontModelEntity.modelKorName.contains(searchKeyword)
+                    .or(frontModelEntity.modelEngName.contains(searchKeyword)
+                            .or(frontModelEntity.modelDescription.contains(searchKeyword)))
+                    .or(frontScheduleEntity.modelSchedule.contains(searchKeyword));
+        } else {
+            return frontScheduleEntity.modelScheduleTime.between(searchStartTime, searchEndTime);
+        }
+    }
 
     /**
      * <pre>
@@ -35,8 +61,10 @@ public class FrontScheduleJpaRepository {
      * 5. 작성일       : 2022. 09. 01.
      * </pre>
      */
-    public Integer findScheduleCount() {
-        return queryFactory.selectFrom(frontScheduleEntity).fetch().size();
+    public Integer findScheduleCount(Map<String, Object> scheduleMap) {
+        return queryFactory.selectFrom(frontScheduleEntity)
+                .where(searchModelSchedule(scheduleMap))
+                .fetch().size();
     }
 
     /**
@@ -73,16 +101,13 @@ public class FrontScheduleJpaRepository {
      * </pre>
      */
     public List<FrontModelDTO> findModelScheduleList(Map<String, Object> scheduleMap) {
-        LocalDateTime start = LocalDate.now().minusDays(LocalDate.now().getDayOfMonth()-1).atStartOfDay();
-        LocalDateTime end = LocalDate.now().minusDays(LocalDate.now().getDayOfMonth()).plusMonths(1).atStartOfDay();
-
         List<FrontModelEntity> findModelScheduleList = queryFactory
                 .selectFrom(frontModelEntity)
                 .leftJoin(frontModelEntity.modelScheduleList, frontScheduleEntity)
                 .fetchJoin()
-                .where(frontScheduleEntity.visible.eq("Y")
-                        .and(frontModelEntity.visible.eq("Y"))
-                        .and(frontScheduleEntity.modelScheduleTime.between(start, end)))
+                .where(searchModelSchedule(scheduleMap)
+                        .and(frontScheduleEntity.visible.eq("Y"))
+                        .and(frontModelEntity.visible.eq("Y")))
                 .fetch();
 
         findModelScheduleList.forEach(list -> findModelScheduleList.get(findModelScheduleList.indexOf(list))

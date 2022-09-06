@@ -28,9 +28,9 @@ public class FrontScheduleJpaApiService {
      * 5. 작성일       : 2022. 09. 01.
      * </pre>
      */
-    public Integer findScheduleCount() throws TspException {
+    public Integer findScheduleCount(Map<String, Object> scheduleMap) throws TspException {
         try {
-            return frontScheduleJpaRepository.findScheduleCount();
+            return frontScheduleJpaRepository.findScheduleCount(scheduleMap);
         } catch (Exception e) {
             throw new TspException(NOT_FOUND_MODEL_SCHEDULE_LIST, e);
         }
