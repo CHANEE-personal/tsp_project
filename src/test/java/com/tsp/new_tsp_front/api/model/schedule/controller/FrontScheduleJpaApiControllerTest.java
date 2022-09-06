@@ -21,9 +21,9 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import javax.transaction.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static java.time.LocalDateTime.*;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
@@ -64,8 +64,8 @@ class FrontScheduleJpaApiControllerTest {
 
         mockMvc.perform(get("/api/schedule/lists")
                 .queryParams(scheduleMap)
-                .queryParam("searchStartTime", LocalDateTime.of(LocalDateTime.now().getYear(), LocalDate.now().getMonth(), 1, 0, 0, 0, 0).format(DateTimeFormatter.ofPattern("yyyyMMdd")))
-                .queryParam("searchEndTime", LocalDateTime.of(LocalDateTime.now().getYear(), LocalDate.now().getMonth(), 30, 23, 59, 59).format(DateTimeFormatter.ofPattern("yyyyMMdd"))))
+                .queryParam("searchStartTime", of(now().getYear(), LocalDate.now().getMonth(), 1, 0, 0, 0, 0).format(DateTimeFormatter.ofPattern("yyyyMMdd")))
+                .queryParam("searchEndTime", of(now().getYear(), LocalDate.now().getMonth(), 30, 23, 59, 59).format(DateTimeFormatter.ofPattern("yyyyMMdd"))))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
