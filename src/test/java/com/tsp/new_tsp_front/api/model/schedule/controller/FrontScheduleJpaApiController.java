@@ -48,17 +48,25 @@ public class FrontScheduleJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists")
-    public Map<String, Object> findScheduleList(@RequestParam(required = false) Map<String, Object> paramMap, Page page) {
+    public Map<String, Object> findScheduleList(@RequestParam(required = false) Map<String, Object> paramMap,
+                                                @RequestParam(value = "searchStartTime", required = false) String searchStartTime,
+                                                @RequestParam(value = "searchEndTime", required = false) String searchEndTime,
+                                                Page page) {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> scheduleMap = searchCommon.searchCommon(page, paramMap);
+
+        if (searchStartTime != null && searchEndTime != null) {
+            scheduleMap.put("searchStart", searchStartTime);
+            scheduleMap.put("searchEnd", searchEndTime);
+        }
 
         // 리스트 수
         resultMap.put("pageSize", page.getSize());
         // 전체 페이지 수
-        resultMap.put("perPageListCnt", ceil((double)this.frontScheduleJpaApiService.findScheduleCount() / page.getSize()));
+        resultMap.put("perPageListCnt", ceil((double)this.frontScheduleJpaApiService.findScheduleCount(scheduleMap) / page.getSize()));
         // 전체 아이템 수
-        resultMap.put("scheduleListTotalCnt", this.frontScheduleJpaApiService.findScheduleList(scheduleMap));
-        resultMap.put("scheduleList", this.frontScheduleJpaApiService.findScheduleList(scheduleMap));
+        resultMap.put("scheduleListTotalCnt", this.frontScheduleJpaApiService.findModelScheduleList(scheduleMap));
+        resultMap.put("scheduleList", this.frontScheduleJpaApiService.findModelScheduleList(scheduleMap));
 
         return resultMap;
     }
