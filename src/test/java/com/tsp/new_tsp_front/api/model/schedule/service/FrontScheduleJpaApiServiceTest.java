@@ -14,9 +14,12 @@ import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static java.time.LocalDateTime.now;
+import static java.time.LocalDateTime.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -34,6 +37,38 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @DisplayName("모델 스케줄 Service Test")
 class FrontScheduleJpaApiServiceTest {
     @Mock private FrontScheduleJpaApiService mockFrontScheduleJpaApiService;
+    private final FrontScheduleJpaApiService frontScheduleJpaApiService;
+
+    @Test
+    @DisplayName("모델 스케줄 리스트 조회 테스트")
+    void 모델스케줄리스트조회테스트() {
+        // given
+        Map<String, Object> scheduleMap = new HashMap<>();
+        scheduleMap.put("searchKeyword", "김예영");
+        scheduleMap.put("jpaStartPage", 0);
+        scheduleMap.put("size", 100);
+
+        // then
+        assertThat(frontScheduleJpaApiService.findModelScheduleList(scheduleMap)).isNotEmpty();
+
+        Map<String, Object> lastMonthScheduleMap = new HashMap<>();
+        lastMonthScheduleMap.put("searchStartTime", of(now().getYear(), LocalDate.now().minusMonths(1).getMonth(), 1, 0, 0, 0, 0));
+        lastMonthScheduleMap.put("searchEndTime", of(now().getYear(), LocalDate.now().minusMonths(1).getMonth(), 30, 23, 59, 59));
+        lastMonthScheduleMap.put("jpaStartPage", 0);
+        lastMonthScheduleMap.put("size", 100);
+
+        // then
+        assertThat(frontScheduleJpaApiService.findModelScheduleList(lastMonthScheduleMap)).isEmpty();
+
+        Map<String, Object> currentScheduleMap = new HashMap<>();
+        currentScheduleMap.put("searchStartTime", of(now().getYear(), LocalDate.now().getMonth(), 1, 0, 0, 0, 0));
+        currentScheduleMap.put("searchEndTime", of(now().getYear(), LocalDate.now().getMonth(), 30, 23, 59, 59));
+        currentScheduleMap.put("jpaStartPage", 0);
+        currentScheduleMap.put("size", 100);
+
+        // then
+        assertThat(frontScheduleJpaApiService.findModelScheduleList(currentScheduleMap)).isNotEmpty();
+    }
 
     @Test
     @DisplayName("모델 스케줄 Mockito 조회 테스트")

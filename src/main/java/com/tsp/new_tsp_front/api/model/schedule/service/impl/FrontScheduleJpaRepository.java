@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -22,6 +21,8 @@ import static com.tsp.new_tsp_front.api.model.domain.schedule.QFrontScheduleEnti
 import static com.tsp.new_tsp_front.api.model.schedule.service.impl.FrontScheduleMapper.INSTANCE;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
+import static java.time.LocalDate.now;
+import static java.time.LocalDateTime.of;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,8 +39,8 @@ public class FrontScheduleJpaRepository {
             searchStartTime = (LocalDateTime) scheduleMap.get("searchStartTime");
             searchEndTime = (LocalDateTime) scheduleMap.get("searchEndTime");
         } else {
-            searchStartTime = LocalDate.now().minusDays(LocalDate.now().getDayOfMonth()-1).atStartOfDay();
-            searchEndTime = LocalDateTime.of(LocalDate.now().minusDays(LocalDate.now().getDayOfMonth()).plusMonths(1), LocalTime.of(23,59,59));
+            searchStartTime = now().minusDays(now().getDayOfMonth()-1).atStartOfDay();
+            searchEndTime = of(now().minusDays(now().getDayOfMonth()).plusMonths(1), LocalTime.of(23,59,59));
         }
 
         if (!"".equals(searchKeyword)) {
