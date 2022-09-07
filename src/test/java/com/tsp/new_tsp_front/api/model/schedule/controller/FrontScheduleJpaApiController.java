@@ -56,8 +56,8 @@ public class FrontScheduleJpaApiController {
         Map<String, Object> scheduleMap = searchCommon.searchCommon(page, paramMap);
 
         if (searchStartTime != null && searchEndTime != null) {
-            scheduleMap.put("searchStart", searchStartTime);
-            scheduleMap.put("searchEnd", searchEndTime);
+            scheduleMap.put("searchStartTime", searchStartTime);
+            scheduleMap.put("searchEndTime", searchEndTime);
         }
 
         // 리스트 수

@@ -18,7 +18,6 @@ import org.springframework.test.context.TestPropertySource;
 import javax.transaction.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static java.time.LocalDateTime.now;
@@ -84,7 +83,7 @@ class FrontScheduleJpaRepositoryTest {
 
         List<FrontScheduleDTO> scheduleList = new ArrayList<>();
         scheduleList.add(FrontScheduleDTO.builder().idx(1).modelIdx(1)
-                .modelSchedule("스케줄 테스트").modelScheduleTime(LocalDateTime.now()).build());
+                .modelSchedule("스케줄 테스트").modelScheduleTime(now()).build());
 
         // when
         when(mockFrontScheduleJpaRepository.findScheduleList(scheduleMap)).thenReturn(scheduleList);
@@ -115,7 +114,7 @@ class FrontScheduleJpaRepositoryTest {
 
         List<FrontScheduleDTO> scheduleList = new ArrayList<>();
         scheduleList.add(FrontScheduleDTO.builder().idx(1).modelIdx(1)
-                .modelSchedule("스케줄 테스트").modelScheduleTime(LocalDateTime.now()).build());
+                .modelSchedule("스케줄 테스트").modelScheduleTime(now()).build());
 
         // when
         given(mockFrontScheduleJpaRepository.findScheduleList(scheduleMap)).willReturn(scheduleList);
@@ -143,9 +142,9 @@ class FrontScheduleJpaRepositoryTest {
 
         List<FrontScheduleDTO> scheduleList = new ArrayList<>();
         scheduleList.add(FrontScheduleDTO.builder().modelIdx(1)
-                .modelSchedule("스케줄 테스트").modelScheduleTime(LocalDateTime.now()).build());
+                .modelSchedule("스케줄 테스트").modelScheduleTime(now()).build());
         scheduleList.add(FrontScheduleDTO.builder().modelIdx(1)
-                .modelSchedule("스케줄 테스트 두번째").modelScheduleTime(LocalDateTime.now()).build());
+                .modelSchedule("스케줄 테스트 두번째").modelScheduleTime(now()).build());
 
         List<FrontModelDTO> modelScheduleList = new ArrayList<>();
         modelScheduleList.add(FrontModelDTO.builder().idx(1).categoryCd(1).modelKorName("조찬희")
@@ -179,9 +178,9 @@ class FrontScheduleJpaRepositoryTest {
 
         List<FrontScheduleDTO> scheduleList = new ArrayList<>();
         scheduleList.add(FrontScheduleDTO.builder().modelIdx(1)
-                .modelSchedule("스케줄 테스트").modelScheduleTime(LocalDateTime.now()).build());
+                .modelSchedule("스케줄 테스트").modelScheduleTime(now()).build());
         scheduleList.add(FrontScheduleDTO.builder().modelIdx(1)
-                .modelSchedule("스케줄 테스트 두번째").modelScheduleTime(LocalDateTime.now()).build());
+                .modelSchedule("스케줄 테스트 두번째").modelScheduleTime(now()).build());
 
         List<FrontModelDTO> modelScheduleList = new ArrayList<>();
         modelScheduleList.add(FrontModelDTO.builder().idx(1).categoryCd(1).modelKorName("조찬희")
