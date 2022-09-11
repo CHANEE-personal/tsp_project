@@ -4,6 +4,7 @@ import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCodeEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonMappedClass;
+import com.tsp.new_tsp_front.api.model.domain.negotiation.FrontNegotiationEntity;
 import com.tsp.new_tsp_front.api.model.domain.schedule.FrontScheduleEntity;
 import com.tsp.new_tsp_front.common.CustomConverter;
 import lombok.AllArgsConstructor;
@@ -137,4 +138,7 @@ public class FrontModelEntity extends NewCommonMappedClass {
 
     @OneToMany(mappedBy = "frontModelEntity")
     private List<FrontScheduleEntity> modelScheduleList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "frontModelEntity")
+    private List<FrontNegotiationEntity> modelNegotiationList = new ArrayList<>();
 }

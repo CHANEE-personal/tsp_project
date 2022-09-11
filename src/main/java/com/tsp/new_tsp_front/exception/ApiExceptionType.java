@@ -56,7 +56,14 @@ public enum ApiExceptionType implements BaseExceptionType {
     ERROR_AGENCY_LIKE("ERROR_AGENCY_LIKE", 500, "Agency 좋아요 에러"),
 
     // 모델 스케줄 관련 TYPE
-    NOT_FOUND_MODEL_SCHEDULE_LIST("NOT_FOUND_MODEL_SCHEDULE_LIST", 200, "모델 스케줄 리스트 없음");
+    NOT_FOUND_MODEL_SCHEDULE_LIST("NOT_FOUND_MODEL_SCHEDULE_LIST", 200, "모델 스케줄 리스트 없음"),
+
+    // 모델 섭외 관련 Type
+    ERROR_MODEL_NEGOTIATION("ERROR_MODEL_NEGOTIATION", 500, "모델섭외 등록 에러"),
+    ERROR_UPDATE_MODEL_NEGOTIATION("ERROR_UPDATE_MODEL_NEGOTIATION", 500, "모델섭외 수정 에러"),
+    ERROR_DELETE_MODEL_NEGOTIATION("ERROR_DELETE_MODEL_NEGOTIATION", 500, "모델섭외 삭제 에러"),
+    NOT_FOUND_MODEL_NEGOTIATION("NOT_FOUND_MODEL_NEGOTIATION", 200, "모델섭외 없음"),
+    NOT_FOUND_MODEL_NEGOTIATION_LIST("NOT_FOUND_MODEL_NEGOTIATION_LIST", 200, "모델섭외 리스트 없음");
 
     private final String errorCode;
     private final int httpStatus;
