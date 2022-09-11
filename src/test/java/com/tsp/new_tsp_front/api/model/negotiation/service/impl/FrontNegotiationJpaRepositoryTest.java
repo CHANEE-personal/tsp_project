@@ -51,7 +51,7 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @RequiredArgsConstructor
 @AutoConfigureTestDatabase(replace = NONE)
 @ExtendWith(MockitoExtension.class)
-@DisplayName("모델 스케줄 Repository Test")
+@DisplayName("모델 섭외 Repository Test")
 class FrontNegotiationJpaRepositoryTest {
     @Mock
     private FrontNegotiationJpaRepository mockFrontNegotiationJpaRepository;
@@ -306,8 +306,8 @@ class FrontNegotiationJpaRepositoryTest {
     }
 
     @Test
-    @DisplayName("모델스케줄수정BDD테스트")
-    void 모델스케줄수정BDD테스트() {
+    @DisplayName("모델섭외수정BDD테스트")
+    void 모델섭외수정BDD테스트() {
         // given
         Integer idx = frontNegotiationJpaRepository.insertModelNegotiation(frontNegotiationEntity).getIdx();
 

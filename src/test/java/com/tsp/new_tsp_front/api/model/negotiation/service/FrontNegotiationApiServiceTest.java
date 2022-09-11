@@ -305,8 +305,8 @@ class FrontNegotiationApiServiceTest {
     }
 
     @Test
-    @DisplayName("모델스케줄수정BDD테스트")
-    void 모델스케줄수정BDD테스트() {
+    @DisplayName("모델섭외수정BDD테스트")
+    void 모델섭외수정BDD테스트() {
         // given
         Integer idx = frontNegotiationJpaApiService.insertModelNegotiation(frontNegotiationEntity).getIdx();
 
