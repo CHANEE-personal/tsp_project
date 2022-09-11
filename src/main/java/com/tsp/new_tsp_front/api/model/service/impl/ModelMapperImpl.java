@@ -3,6 +3,7 @@ package com.tsp.new_tsp_front.api.model.service.impl;
 import com.tsp.new_tsp_front.api.agency.service.impl.AgencyMapper;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
+import com.tsp.new_tsp_front.api.model.negotiation.service.impl.FrontNegotiationMapper;
 import com.tsp.new_tsp_front.api.model.schedule.service.impl.FrontScheduleMapper;
 import org.mapstruct.Mapper;
 
@@ -43,6 +44,7 @@ public class ModelMapperImpl implements ModelMapper {
                 .modelAgency(AgencyMapper.INSTANCE.toDto(entity.getFrontAgencyEntity()))
                 .modelImage(ModelImageMapper.INSTANCE.toDtoList(entity.getCommonImageEntityList()))
                 .modelScheduleList(FrontScheduleMapper.INSTANCE.toDtoList(entity.getModelScheduleList()))
+                .modelNegotiationList(FrontNegotiationMapper.INSTANCE.toDtoList(entity.getModelNegotiationList()))
                 .build();
     }
 
