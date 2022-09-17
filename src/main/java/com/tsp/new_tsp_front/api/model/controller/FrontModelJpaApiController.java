@@ -119,9 +119,55 @@ public class FrontModelJpaApiController {
 
     /**
      * <pre>
+     * 1. MethodName : getPrevModelEdit
+     * 2. ClassName  : FrontModelJpaController.java
+     * 3. Comment    : 이전 모델 상세
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 17.
+     * </pre>
+     */
+    @ApiOperation(value = "이전 모델 상세 조회", notes = "이전 모델을 상세 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "이전 모델 상세조회 성공", response = Map.class),
+            @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
+            @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
+            @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+            @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+    })
+    @GetMapping("/{categoryCd}/{idx}/prev")
+    public FrontModelDTO getPrevModelEdit(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
+                                          @PathVariable Integer idx) {
+        return this.frontModelJpaApiService.findPrevOneModel(FrontModelEntity.builder().idx(idx).categoryCd(categoryCd).build());
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : getNextModelEdit
+     * 2. ClassName  : FrontModelJpaController.java
+     * 3. Comment    : 다음 모델 상세
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 17.
+     * </pre>
+     */
+    @ApiOperation(value = "다음 모델 상세 조회", notes = "다음 모델을 상세 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "다음 모델 상세조회 성공", response = Map.class),
+            @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
+            @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
+            @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+            @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+    })
+    @GetMapping("/{categoryCd}/{idx}/next")
+    public FrontModelDTO getNextModelEdit(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
+                                          @PathVariable Integer idx) {
+        return this.frontModelJpaApiService.findNextOneModel(FrontModelEntity.builder().idx(idx).categoryCd(categoryCd).build());
+    }
+
+    /**
+     * <pre>
      * 1. MethodName : favoriteModel
      * 2. ClassName  : FrontModelJpaApiController.java
-     * 3. Comment    : 프론트 > 모델 상세 조회
+     * 3. Comment    : 프론트 > 모델 좋아요 처리
      * 4. 작성자       : CHO
      * 5. 작성일       : 2022. 01. 09.
      * </pre>

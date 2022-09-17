@@ -157,6 +157,28 @@ class FrontModelJpaApiControllerTest {
     }
 
     @Test
+    @DisplayName("이전 모델 상세 조회 테스트")
+    void 이전모델상세조회Api테스트() throws Exception {
+        mockMvc.perform(get("/api/model/2/145/prev"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
+                .andExpect(jsonPath("$.idx").value("144"))
+                .andExpect(jsonPath("$.categoryCd").value("2"));
+    }
+
+    @Test
+    @DisplayName("다음 모델 상세 조회 테스트")
+    void 다음모델상세조회Api테스트() throws Exception {
+        mockMvc.perform(get("/api/model/2/145/next"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
+                .andExpect(jsonPath("$.idx").value("147"))
+                .andExpect(jsonPath("$.categoryCd").value("2"));
+    }
+
+    @Test
     @Transactional
     @DisplayName("모델 좋아요 테스트")
     void 모델좋아요테스트() throws Exception {
