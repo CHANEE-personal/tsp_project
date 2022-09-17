@@ -345,6 +345,107 @@ class FrontModelJpaRepositoryTest {
     }
 
     @Test
+    @DisplayName("이전 or 다음 모델 상세 조회 테스트")
+    void 이전or다음모델상세조회테스트() {
+        // given
+        frontModelEntity = FrontModelEntity.builder().idx(145).categoryCd(2).build();
+
+        // when
+        frontModelDTO = frontModelJpaRepository.getModelInfo(frontModelEntity);
+
+        // 이전 모델
+        assertThat(frontModelJpaRepository.findPrevOneModel(frontModelEntity).getIdx()).isEqualTo(144);
+        // 다음 모델
+        assertThat(frontModelJpaRepository.findNextOneModel(frontModelEntity).getIdx()).isEqualTo(147);
+    }
+
+    @Test
+    @DisplayName("이전 모델 상세 조회 Mockito 테스트")
+    void 이전모델상세조회Mockito테스트() {
+        // given
+        frontModelEntity = FrontModelEntity.builder().idx(145).categoryCd(2).build();
+        // when
+        frontModelDTO = frontModelJpaRepository.findPrevOneModel(frontModelEntity);
+
+        when(mockFrontModelJpaRepository.findPrevOneModel(frontModelEntity)).thenReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaRepository.findPrevOneModel(frontModelEntity);
+
+        // then
+        assertThat(modelInfo.getIdx()).isEqualTo(144);
+
+        // verify
+        verify(mockFrontModelJpaRepository, times(1)).findPrevOneModel(frontModelEntity);
+        verify(mockFrontModelJpaRepository, atLeastOnce()).findPrevOneModel(frontModelEntity);
+        verifyNoMoreInteractions(mockFrontModelJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontModelJpaRepository);
+        inOrder.verify(mockFrontModelJpaRepository).findPrevOneModel(frontModelEntity);
+    }
+
+    @Test
+    @DisplayName("이전 모델 상세 조회 BDD 테스트")
+    void 이전모델상세조회BDD테스트() {
+        // given
+        frontModelEntity = FrontModelEntity.builder().idx(145).categoryCd(2).build();
+        // when
+        frontModelDTO = frontModelJpaRepository.findPrevOneModel(frontModelEntity);
+
+        given(mockFrontModelJpaRepository.findPrevOneModel(frontModelEntity)).willReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaRepository.findPrevOneModel(frontModelEntity);
+
+        // then
+        assertThat(modelInfo.getIdx()).isEqualTo(144);
+
+        // verify
+        then(mockFrontModelJpaRepository).should(times(1)).findPrevOneModel(frontModelEntity);
+        then(mockFrontModelJpaRepository).should(atLeastOnce()).findPrevOneModel(frontModelEntity);
+        then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("다음 모델 상세 조회 Mockito 테스트")
+    void 다음모델상세조회Mockito테스트() {
+        // given
+        frontModelEntity = FrontModelEntity.builder().idx(145).categoryCd(2).build();
+        // when
+        frontModelDTO = frontModelJpaRepository.findNextOneModel(frontModelEntity);
+
+        when(mockFrontModelJpaRepository.findNextOneModel(frontModelEntity)).thenReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaRepository.findNextOneModel(frontModelEntity);
+
+        // then
+        assertThat(modelInfo.getIdx()).isEqualTo(147);
+
+        // verify
+        verify(mockFrontModelJpaRepository, times(1)).findNextOneModel(frontModelEntity);
+        verify(mockFrontModelJpaRepository, atLeastOnce()).findNextOneModel(frontModelEntity);
+        verifyNoMoreInteractions(mockFrontModelJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontModelJpaRepository);
+        inOrder.verify(mockFrontModelJpaRepository).findNextOneModel(frontModelEntity);
+    }
+
+    @Test
+    @DisplayName("다음 모델 상세 조회 BDD 테스트")
+    void 다음모델상세조회BDD테스트() {
+        // given
+        frontModelEntity = FrontModelEntity.builder().idx(145).categoryCd(2).build();
+        // when
+        frontModelDTO = frontModelJpaRepository.findNextOneModel(frontModelEntity);
+
+        given(mockFrontModelJpaRepository.findNextOneModel(frontModelEntity)).willReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaRepository.findNextOneModel(frontModelEntity);
+
+        // then
+        assertThat(modelInfo.getIdx()).isEqualTo(147);
+
+        // verify
+        then(mockFrontModelJpaRepository).should(times(1)).findNextOneModel(frontModelEntity);
+        then(mockFrontModelJpaRepository).should(atLeastOnce()).findNextOneModel(frontModelEntity);
+        then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
     @DisplayName("모델 메인 배너 조회 테스트")
     void 모델메인배너리스트조회테스트() {
         // when

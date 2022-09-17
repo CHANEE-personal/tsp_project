@@ -70,4 +70,40 @@ public class FrontNoticeJpaService {
             throw new TspException(NOT_FOUND_NOTICE, e);
         }
     }
+
+    /**
+     * <pre>
+     * 1. MethodName : findPrevOneNotice
+     * 2. ClassName  : FrontNoticeJpaService.java
+     * 3. Comment    : 프론트 > 이전 공지사항 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 17.
+     * </pre>
+     */
+    @Transactional(readOnly = true)
+    public FrontNoticeDTO findPrevOneNotice(FrontNoticeEntity frontNoticeEntity) throws TspException {
+        try {
+            return this.frontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity);
+        } catch (Exception e) {
+            throw new TspException(NOT_FOUND_NOTICE, e);
+        }
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : findNextOneNotice
+     * 2. ClassName  : FrontNoticeJpaService.java
+     * 3. Comment    : 프론트 > 다음 공지사항 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 17.
+     * </pre>
+     */
+    @Transactional(readOnly = true)
+    public FrontNoticeDTO findNextOneNotice(FrontNoticeEntity frontNoticeEntity) throws TspException {
+        try {
+            return this.frontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity);
+        } catch (Exception e) {
+            throw new TspException(NOT_FOUND_NOTICE, e);
+        }
+    }
 }

@@ -74,6 +74,42 @@ public class FrontModelJpaApiService {
 
     /**
      * <pre>
+     * 1. MethodName : findPrevOneModel
+     * 2. ClassName  : FrontModelJpaServiceImpl.java
+     * 3. Comment    : 이전 모델 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 17.
+     * </pre>
+     */
+    @Transactional(readOnly = true)
+    public FrontModelDTO findPrevOneModel(FrontModelEntity frontModelEntity) throws TspException {
+        try {
+            return frontModelJpaRepository.findPrevOneModel(frontModelEntity);
+        } catch (Exception e) {
+            throw new TspException(NOT_FOUND_MODEL, e);
+        }
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : findPrevOneModel
+     * 2. ClassName  : FrontModelJpaServiceImpl.java
+     * 3. Comment    : 다음 모델 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 17.
+     * </pre>
+     */
+    @Transactional(readOnly = true)
+    public FrontModelDTO findNextOneModel(FrontModelEntity frontModelEntity) throws TspException {
+        try {
+            return frontModelJpaRepository.findNextOneModel(frontModelEntity);
+        } catch (Exception e) {
+            throw new TspException(NOT_FOUND_MODEL, e);
+        }
+    }
+
+    /**
+     * <pre>
      * 1. MethodName : getMainModelList
      * 2. ClassName  : FrontModelJpaApiService.java
      * 3. Comment    : 프론트 > 메인 모델 리스트 조회

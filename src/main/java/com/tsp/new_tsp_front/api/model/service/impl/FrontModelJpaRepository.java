@@ -151,6 +151,50 @@ public class FrontModelJpaRepository {
 
     /**
      * <pre>
+     * 1. MethodName : findPrevOneModel
+     * 2. ClassName  : FrontModelJpaRepository.java
+     * 3. Comment    : 이전 모델 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 17.
+     * </pre>
+     */
+    public FrontModelDTO findPrevOneModel(FrontModelEntity existFrontModelEntity) {
+        // 이전 모델 조회
+        FrontModelEntity findPrevOneModel = queryFactory
+                .selectFrom(frontModelEntity)
+                .orderBy(frontModelEntity.idx.desc())
+                .where(frontModelEntity.idx.lt(existFrontModelEntity.getIdx())
+                        .and(frontModelEntity.categoryCd.eq(existFrontModelEntity.getCategoryCd()))
+                        .and(frontModelEntity.visible.eq("Y")))
+                .fetchFirst();
+
+        return INSTANCE.toDto(findPrevOneModel);
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : findNextOneModel
+     * 2. ClassName  : FrontModelJpaRepository.java
+     * 3. Comment    : 다음 모델 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 17.
+     * </pre>
+     */
+    public FrontModelDTO findNextOneModel(FrontModelEntity existFrontModelEntity) {
+        // 다음 모델 조회
+        FrontModelEntity findNextOneModel = queryFactory
+                .selectFrom(frontModelEntity)
+                .orderBy(frontModelEntity.idx.asc())
+                .where(frontModelEntity.idx.gt(existFrontModelEntity.getIdx())
+                        .and(frontModelEntity.categoryCd.eq(existFrontModelEntity.getCategoryCd()))
+                        .and(frontModelEntity.visible.eq("Y")))
+                .fetchFirst();
+
+        return INSTANCE.toDto(findNextOneModel);
+    }
+
+    /**
+     * <pre>
      * 1. MethodName : viewModelCount
      * 2. ClassName  : FrontModelJpaRepository.java
      * 3. Comment    : 프론트 모델 조회 수

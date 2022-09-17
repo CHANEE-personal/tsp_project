@@ -97,6 +97,26 @@ class FrontAgencyJpaApiControllerTest {
     }
 
     @Test
+    @DisplayName("이전 Agency 상세 조회 테스트")
+    void 이전Agency상세조회Api테스트() throws Exception {
+        mockMvc.perform(get("/api/agency/2/prev"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
+                .andExpect(jsonPath("$.idx").value("1"));
+    }
+
+    @Test
+    @DisplayName("다음 Agency 상세 조회 테스트")
+    void 다음Agency상세조회Api테스트() throws Exception {
+        mockMvc.perform(get("/api/agency/2/next"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
+                .andExpect(jsonPath("$.idx").value("3"));
+    }
+
+    @Test
     @Transactional
     @DisplayName("Agency 좋아요 테스트")
     void Agency좋아요테스트() throws Exception {

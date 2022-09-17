@@ -92,4 +92,24 @@ class FrontNoticeJpaApiControllerTest {
                 .andExpect(jsonPath("$.code").value("NOT_FOUND_NOTICE"))
                 .andExpect(jsonPath("$.message").value("해당 공지사항 없음"));
     }
+
+    @Test
+    @DisplayName("이전 공지사항 상세 조회 테스트")
+    void 이전공지사항상세조회Api테스트() throws Exception {
+        mockMvc.perform(get("/api/notice/2/prev"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
+                .andExpect(jsonPath("$.idx").value("1"));
+    }
+
+    @Test
+    @DisplayName("다음 공지사항 상세 조회 테스트")
+    void 다음공지사항상세조회Api테스트() throws Exception {
+        mockMvc.perform(get("/api/notice/2/next"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
+                .andExpect(jsonPath("$.idx").value("3"));
+    }
 }

@@ -226,6 +226,111 @@ class FrontProductionJpaRepositoryTest {
     }
 
     @Test
+    @DisplayName("이전 or 다음 프로덕션 상세 조회 테스트")
+    void 이전or다음프로덕션상세조회테스트() {
+        // given
+        frontProductionEntity = FrontProductionEntity.builder().idx(118).build();
+
+        // when
+        frontProductionDTO = frontProductionJpaRepository.getProductionInfo(frontProductionEntity);
+
+        // 이전 프로덕션
+        assertThat(frontProductionJpaRepository.findPrevOneProduction(frontProductionEntity).getIdx()).isEqualTo(117);
+        // 다음 프로덕션
+        assertThat(frontProductionJpaRepository.findNextOneProduction(frontProductionEntity).getIdx()).isEqualTo(119);
+    }
+
+    @Test
+    @DisplayName("이전 프로덕션 상세 조회 Mockito 테스트")
+    void 이전프로덕션상세조회Mockito테스트() {
+        // given
+        frontProductionEntity = FrontProductionEntity.builder().idx(118).build();
+
+        // when
+        frontProductionDTO = frontProductionJpaRepository.findPrevOneProduction(frontProductionEntity);
+
+        when(mockFrontProductionJpaRepository.findPrevOneProduction(frontProductionEntity)).thenReturn(frontProductionDTO);
+        FrontProductionDTO productionInfo = mockFrontProductionJpaRepository.findPrevOneProduction(frontProductionEntity);
+
+        // then
+        assertThat(productionInfo.getIdx()).isEqualTo(117);
+
+        // verify
+        verify(mockFrontProductionJpaRepository, times(1)).findPrevOneProduction(frontProductionEntity);
+        verify(mockFrontProductionJpaRepository, atLeastOnce()).findPrevOneProduction(frontProductionEntity);
+        verifyNoMoreInteractions(mockFrontProductionJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontProductionJpaRepository);
+        inOrder.verify(mockFrontProductionJpaRepository).findPrevOneProduction(frontProductionEntity);
+    }
+
+    @Test
+    @DisplayName("이전 프로덕션 상세 조회 BDD 테스트")
+    void 이전프로덕션상세조회BDD테스트() {
+        // given
+        frontProductionEntity = FrontProductionEntity.builder().idx(118).build();
+
+        // when
+        frontProductionDTO = frontProductionJpaRepository.findPrevOneProduction(frontProductionEntity);
+
+        given(mockFrontProductionJpaRepository.findPrevOneProduction(frontProductionEntity)).willReturn(frontProductionDTO);
+        FrontProductionDTO productionInfo = mockFrontProductionJpaRepository.findPrevOneProduction(frontProductionEntity);
+
+        // then
+        assertThat(productionInfo.getIdx()).isEqualTo(117);
+
+        // verify
+        then(mockFrontProductionJpaRepository).should(times(1)).findPrevOneProduction(frontProductionEntity);
+        then(mockFrontProductionJpaRepository).should(atLeastOnce()).findPrevOneProduction(frontProductionEntity);
+        then(mockFrontProductionJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("다음 프로덕션 상세 조회 Mockito 테스트")
+    void 다음프로덕션상세조회Mockito테스트() {
+        // given
+        frontProductionEntity = FrontProductionEntity.builder().idx(118).build();
+
+        // when
+        frontProductionDTO = frontProductionJpaRepository.findNextOneProduction(frontProductionEntity);
+
+        when(mockFrontProductionJpaRepository.findNextOneProduction(frontProductionEntity)).thenReturn(frontProductionDTO);
+        FrontProductionDTO productionInfo = mockFrontProductionJpaRepository.findNextOneProduction(frontProductionEntity);
+
+        // then
+        assertThat(productionInfo.getIdx()).isEqualTo(119);
+
+        // verify
+        verify(mockFrontProductionJpaRepository, times(1)).findNextOneProduction(frontProductionEntity);
+        verify(mockFrontProductionJpaRepository, atLeastOnce()).findNextOneProduction(frontProductionEntity);
+        verifyNoMoreInteractions(mockFrontProductionJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontProductionJpaRepository);
+        inOrder.verify(mockFrontProductionJpaRepository).findNextOneProduction(frontProductionEntity);
+    }
+
+    @Test
+    @DisplayName("다음 프로덕션 상세 조회 BDD 테스트")
+    void 다음프로덕션상세조회BDD테스트() {
+        // given
+        frontProductionEntity = FrontProductionEntity.builder().idx(118).build();
+
+        // when
+        frontProductionDTO = frontProductionJpaRepository.findNextOneProduction(frontProductionEntity);
+
+        given(mockFrontProductionJpaRepository.findNextOneProduction(frontProductionEntity)).willReturn(frontProductionDTO);
+        FrontProductionDTO productionInfo = mockFrontProductionJpaRepository.findNextOneProduction(frontProductionEntity);
+
+        // then
+        assertThat(productionInfo.getIdx()).isEqualTo(119);
+
+        // verify
+        then(mockFrontProductionJpaRepository).should(times(1)).findNextOneProduction(frontProductionEntity);
+        then(mockFrontProductionJpaRepository).should(atLeastOnce()).findNextOneProduction(frontProductionEntity);
+        then(mockFrontProductionJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
     @DisplayName("프로덕션 조회 수 Mockito 테스트")
     void 프로덕션조회수Mockito테스트() {
         // given

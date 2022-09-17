@@ -92,4 +92,24 @@ class FrontFaqJpaApiControllerTest {
                 .andExpect(jsonPath("$.code").value("NOT_FOUND_FAQ"))
                 .andExpect(jsonPath("$.message").value("해당 FAQ 없음"));
     }
+
+    @Test
+    @DisplayName("이전 FAQ 상세 조회 테스트")
+    void 이전FAQ상세조회Api테스트() throws Exception {
+        mockMvc.perform(get("/api/faq/2/prev"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
+                .andExpect(jsonPath("$.idx").value("1"));
+    }
+
+    @Test
+    @DisplayName("다음 FAQ 상세 조회 테스트")
+    void 다음FAQ상세조회Api테스트() throws Exception {
+        mockMvc.perform(get("/api/faq/2/next"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
+                .andExpect(jsonPath("$.idx").value("3"));
+    }
 }
