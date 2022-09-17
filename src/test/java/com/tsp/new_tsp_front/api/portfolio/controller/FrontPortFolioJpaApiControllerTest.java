@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -93,5 +92,25 @@ class FrontPortFolioJpaApiControllerTest {
                 .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.code").value("NOT_FOUND_PORTFOLIO"))
                 .andExpect(jsonPath("$.message").value("해당 포트폴리오 없음"));
+    }
+
+    @Test
+    @DisplayName("이전 포트폴리오 상세 조회 테스트")
+    void 이전포트폴리오상세조회Api테스트() throws Exception {
+        mockMvc.perform(get("/api/portfolio/2/prev"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
+                .andExpect(jsonPath("$.idx").value("1"));
+    }
+
+    @Test
+    @DisplayName("다음 포트폴리오 상세 조회 테스트")
+    void 다음포트폴리오상세조회Api테스트() throws Exception {
+        mockMvc.perform(get("/api/portfolio/2/next"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
+                .andExpect(jsonPath("$.idx").value("3"));
     }
 }
