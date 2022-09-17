@@ -193,4 +193,109 @@ class FrontNoticeJpaRepositoryTest {
         then(mockFrontNoticeJpaRepository).should(atLeastOnce()).findOneNotice(frontNoticeEntity);
         then(mockFrontNoticeJpaRepository).shouldHaveNoMoreInteractions();
     }
+
+    @Test
+    @DisplayName("이전 or 다음 공지사항 상세 조회 테스트")
+    void 이전or다음공지사항상세조회테스트() {
+        // given
+        frontNoticeEntity = FrontNoticeEntity.builder().idx(2).build();
+
+        // when
+        frontNoticeDTO = frontNoticeJpaRepository.findOneNotice(frontNoticeEntity);
+
+        // 이전 프로덕션
+        assertThat(frontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity).getIdx()).isEqualTo(1);
+        // 다음 프로덕션
+        assertThat(frontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity).getIdx()).isEqualTo(3);
+    }
+
+    @Test
+    @DisplayName("이전 공지사항 상세 조회 Mockito 테스트")
+    void 이전공지사항상세조회Mockito테스트() {
+        // given
+        frontNoticeEntity = FrontNoticeEntity.builder().idx(2).build();
+
+        // when
+        frontNoticeDTO = frontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity);
+
+        when(mockFrontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity)).thenReturn(frontNoticeDTO);
+        FrontNoticeDTO noticeInfo = mockFrontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity);
+
+        // then
+        assertThat(noticeInfo.getIdx()).isEqualTo(1);
+
+        // verify
+        verify(mockFrontNoticeJpaRepository, times(1)).findPrevOneNotice(frontNoticeEntity);
+        verify(mockFrontNoticeJpaRepository, atLeastOnce()).findPrevOneNotice(frontNoticeEntity);
+        verifyNoMoreInteractions(mockFrontNoticeJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontNoticeJpaRepository);
+        inOrder.verify(mockFrontNoticeJpaRepository).findPrevOneNotice(frontNoticeEntity);
+    }
+
+    @Test
+    @DisplayName("이전 공지사항 상세 조회 BDD 테스트")
+    void 이전공지사항상세조회BDD테스트() {
+        // given
+        frontNoticeEntity = FrontNoticeEntity.builder().idx(2).build();
+
+        // when
+        frontNoticeDTO = frontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity);
+
+        given(mockFrontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity)).willReturn(frontNoticeDTO);
+        FrontNoticeDTO noticeInfo = mockFrontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity);
+
+        // then
+        assertThat(noticeInfo.getIdx()).isEqualTo(1);
+
+        // verify
+        then(mockFrontNoticeJpaRepository).should(times(1)).findPrevOneNotice(frontNoticeEntity);
+        then(mockFrontNoticeJpaRepository).should(atLeastOnce()).findPrevOneNotice(frontNoticeEntity);
+        then(mockFrontNoticeJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("다음 프로덕션 상세 조회 Mockito 테스트")
+    void 다음프로덕션상세조회Mockito테스트() {
+        // given
+        frontNoticeEntity = FrontNoticeEntity.builder().idx(2).build();
+
+        // when
+        frontNoticeDTO = frontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity);
+
+        when(mockFrontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity)).thenReturn(frontNoticeDTO);
+        FrontNoticeDTO noticeInfo = mockFrontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity);
+
+        // then
+        assertThat(noticeInfo.getIdx()).isEqualTo(3);
+
+        // verify
+        verify(mockFrontNoticeJpaRepository, times(1)).findNextOneNotice(frontNoticeEntity);
+        verify(mockFrontNoticeJpaRepository, atLeastOnce()).findNextOneNotice(frontNoticeEntity);
+        verifyNoMoreInteractions(mockFrontNoticeJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontNoticeJpaRepository);
+        inOrder.verify(mockFrontNoticeJpaRepository).findNextOneNotice(frontNoticeEntity);
+    }
+
+    @Test
+    @DisplayName("다음 프로덕션 상세 조회 BDD 테스트")
+    void 다음프로덕션상세조회BDD테스트() {
+        // given
+        frontNoticeEntity = FrontNoticeEntity.builder().idx(2).build();
+
+        // when
+        frontNoticeDTO = frontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity);
+
+        given(mockFrontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity)).willReturn(frontNoticeDTO);
+        FrontNoticeDTO noticeInfo = mockFrontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity);
+
+        // then
+        assertThat(noticeInfo.getIdx()).isEqualTo(3);
+
+        // verify
+        then(mockFrontNoticeJpaRepository).should(times(1)).findNextOneNotice(frontNoticeEntity);
+        then(mockFrontNoticeJpaRepository).should(atLeastOnce()).findNextOneNotice(frontNoticeEntity);
+        then(mockFrontNoticeJpaRepository).shouldHaveNoMoreInteractions();
+    }
 }
