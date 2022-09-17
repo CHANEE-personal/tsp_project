@@ -3,6 +3,7 @@ package com.tsp.new_tsp_front.api.portfolio;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
 import com.tsp.new_tsp_front.api.portfolio.service.impl.FrontPortFolioJpaRepository;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
@@ -11,6 +12,7 @@ import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
@@ -27,16 +29,19 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
+import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
+@TestConstructor(autowireMode = ALL)
+@RequiredArgsConstructor
 @TestPropertySource(locations = "classpath:application.properties")
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("포트폴리오 Service Test")
 class FrontPortFolioJpaApiServiceTest {
-    @Mock private FrontPortFolioJpaRepository frontPortFolioJpaRepository;
-    @InjectMocks private FrontPortFolioJpaApiService frontPortFolioJpaApiService;
+    @Mock private FrontPortFolioJpaApiService mockFrontPortFolioJpaApiService;
+    private final FrontPortFolioJpaApiService frontPortFolioJpaApiService;
 
     @Test
     @DisplayName("포트폴리오리스트조회Mockito테스트")
@@ -51,7 +56,7 @@ class FrontPortFolioJpaApiServiceTest {
                 .idx(1).title("portfolioTest").description("portfolioTest").hashTag("portfolio").videoUrl("test").visible("Y").build());
 
         // when
-        when(frontPortFolioJpaRepository.getPortFolioList(portfolioMap)).thenReturn(returnPortfolioList);
+        when(mockFrontPortFolioJpaApiService.getPortFolioList(portfolioMap)).thenReturn(returnPortfolioList);
         List<FrontPortFolioDTO> portfolioList = frontPortFolioJpaApiService.getPortFolioList(portfolioMap);
 
         // then
@@ -68,12 +73,12 @@ class FrontPortFolioJpaApiServiceTest {
         assertThat(portfolioList.get(0).getVisible()).isEqualTo(returnPortfolioList.get(0).getVisible());
 
         // verify
-        verify(frontPortFolioJpaRepository, times(1)).getPortFolioList(portfolioMap);
-        verify(frontPortFolioJpaRepository, atLeastOnce()).getPortFolioList(portfolioMap);
-        verifyNoMoreInteractions(frontPortFolioJpaRepository);
+        verify(mockFrontPortFolioJpaApiService, times(1)).getPortFolioList(portfolioMap);
+        verify(mockFrontPortFolioJpaApiService, atLeastOnce()).getPortFolioList(portfolioMap);
+        verifyNoMoreInteractions(mockFrontPortFolioJpaApiService);
 
-        InOrder inOrder = inOrder(frontPortFolioJpaRepository);
-        inOrder.verify(frontPortFolioJpaRepository).getPortFolioList(portfolioMap);
+        InOrder inOrder = inOrder(mockFrontPortFolioJpaApiService);
+        inOrder.verify(mockFrontPortFolioJpaApiService).getPortFolioList(portfolioMap);
     }
 
     @Test
@@ -89,7 +94,7 @@ class FrontPortFolioJpaApiServiceTest {
                 .idx(1).title("portfolioTest").description("portfolioTest").hashTag("portfolio").videoUrl("test").visible("Y").build());
 
         // when
-        given(frontPortFolioJpaRepository.getPortFolioList(portfolioMap)).willReturn(returnPortfolioList);
+        given(mockFrontPortFolioJpaApiService.getPortFolioList(portfolioMap)).willReturn(returnPortfolioList);
         List<FrontPortFolioDTO> portfolioList = frontPortFolioJpaApiService.getPortFolioList(portfolioMap);
 
         // then
@@ -106,9 +111,9 @@ class FrontPortFolioJpaApiServiceTest {
         assertThat(portfolioList.get(0).getVisible()).isEqualTo(returnPortfolioList.get(0).getVisible());
 
         // verify
-        then(frontPortFolioJpaRepository).should(times(1)).getPortFolioList(portfolioMap);
-        then(frontPortFolioJpaRepository).should(atLeastOnce()).getPortFolioList(portfolioMap);
-        then(frontPortFolioJpaRepository).shouldHaveNoMoreInteractions();
+        then(mockFrontPortFolioJpaApiService).should(times(1)).getPortFolioList(portfolioMap);
+        then(mockFrontPortFolioJpaApiService).should(atLeastOnce()).getPortFolioList(portfolioMap);
+        then(mockFrontPortFolioJpaApiService).shouldHaveNoMoreInteractions();
     }
 
     @Test
@@ -119,7 +124,7 @@ class FrontPortFolioJpaApiServiceTest {
         FrontPortFolioDTO frontPortFolioDTO = FrontPortFolioDTO.builder().title("portfolioTest").description("portfolioTest").hashTag("portfolio").videoUrl("test").visible("Y").build();
 
         // when
-        when(frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity)).thenReturn(frontPortFolioDTO);
+        when(mockFrontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity)).thenReturn(frontPortFolioDTO);
         FrontPortFolioDTO portfolioInfo = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity);
 
         // then
@@ -131,12 +136,12 @@ class FrontPortFolioJpaApiServiceTest {
         assertThat(portfolioInfo.getVisible()).isEqualTo(frontPortFolioDTO.getVisible());
 
         // verify
-        verify(frontPortFolioJpaRepository, times(1)).getPortFolioInfo(frontPortFolioEntity);
-        verify(frontPortFolioJpaRepository, atLeastOnce()).getPortFolioInfo(frontPortFolioEntity);
-        verifyNoMoreInteractions(frontPortFolioJpaRepository);
+        verify(mockFrontPortFolioJpaApiService, times(1)).getPortFolioInfo(frontPortFolioEntity);
+        verify(mockFrontPortFolioJpaApiService, atLeastOnce()).getPortFolioInfo(frontPortFolioEntity);
+        verifyNoMoreInteractions(mockFrontPortFolioJpaApiService);
 
-        InOrder inOrder = inOrder(frontPortFolioJpaRepository);
-        inOrder.verify(frontPortFolioJpaRepository).getPortFolioInfo(frontPortFolioEntity);
+        InOrder inOrder = inOrder(mockFrontPortFolioJpaApiService);
+        inOrder.verify(mockFrontPortFolioJpaApiService).getPortFolioInfo(frontPortFolioEntity);
     }
 
     @Test
@@ -147,7 +152,7 @@ class FrontPortFolioJpaApiServiceTest {
         FrontPortFolioDTO frontPortFolioDTO = FrontPortFolioDTO.builder().title("portfolioTest").description("portfolioTest").hashTag("portfolio").videoUrl("test").visible("Y").build();
 
         // when
-        given(frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity)).willReturn(frontPortFolioDTO);
+        given(mockFrontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity)).willReturn(frontPortFolioDTO);
         FrontPortFolioDTO portfolioInfo = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity);
 
         // then
@@ -159,8 +164,153 @@ class FrontPortFolioJpaApiServiceTest {
         assertThat(portfolioInfo.getVisible()).isEqualTo(frontPortFolioDTO.getVisible());
 
         // verify
-        then(frontPortFolioJpaRepository).should(times(1)).getPortFolioInfo(frontPortFolioEntity);
-        then(frontPortFolioJpaRepository).should(atLeastOnce()).getPortFolioInfo(frontPortFolioEntity);
-        then(frontPortFolioJpaRepository).shouldHaveNoMoreInteractions();
+        then(mockFrontPortFolioJpaApiService).should(times(1)).getPortFolioInfo(frontPortFolioEntity);
+        then(mockFrontPortFolioJpaApiService).should(atLeastOnce()).getPortFolioInfo(frontPortFolioEntity);
+        then(mockFrontPortFolioJpaApiService).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("이전 or 다음 포트폴리오 상세 조회 테스트")
+    void 이전or다음포트폴리오상세조회테스트() {
+        // given
+        FrontPortFolioEntity frontPortFolioEntity = FrontPortFolioEntity.builder()
+                .idx(2)
+                .categoryCd(1)
+                .title("포트폴리오 테스트")
+                .description("포트폴리오 테스트")
+                .hashTag("#test")
+                .videoUrl("https://youtube.com")
+                .visible("Y")
+                .build();
+
+        // when
+        FrontPortFolioDTO frontPortFolioDTO = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity);
+
+        // 이전 프로덕션
+        assertThat(frontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity).getIdx()).isEqualTo(1);
+        // 다음 프로덕션
+        assertThat(frontPortFolioJpaApiService.findNextOnePortfolio(frontPortFolioEntity).getIdx()).isEqualTo(3);
+    }
+
+    @Test
+    @DisplayName("이전 포트폴리오 상세 조회 Mockito 테스트")
+    void 이전포트폴리오상세조회Mockito테스트() {
+        // given
+        FrontPortFolioEntity frontPortFolioEntity = FrontPortFolioEntity.builder()
+                .idx(2)
+                .categoryCd(1)
+                .title("포트폴리오 테스트")
+                .description("포트폴리오 테스트")
+                .hashTag("#test")
+                .videoUrl("https://youtube.com")
+                .visible("Y")
+                .build();
+
+        // when
+        FrontPortFolioDTO frontPortFolioDTO = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity);
+
+        when(mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity)).thenReturn(frontPortFolioDTO);
+        FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity);
+
+        // then
+        assertThat(portfolioInfo.getIdx()).isEqualTo(1);
+
+        // verify
+        verify(mockFrontPortFolioJpaApiService, times(1)).findPrevOnePortfolio(frontPortFolioEntity);
+        verify(mockFrontPortFolioJpaApiService, atLeastOnce()).findPrevOnePortfolio(frontPortFolioEntity);
+        verifyNoMoreInteractions(mockFrontPortFolioJpaApiService);
+
+        InOrder inOrder = inOrder(mockFrontPortFolioJpaApiService);
+        inOrder.verify(mockFrontPortFolioJpaApiService).findPrevOnePortfolio(frontPortFolioEntity);
+    }
+
+    @Test
+    @DisplayName("이전 포트폴리오 상세 조회 BDD 테스트")
+    void 이전포트폴리오상세조회BDD테스트() {
+        // given
+        FrontPortFolioEntity frontPortFolioEntity = FrontPortFolioEntity.builder()
+                .idx(2)
+                .categoryCd(1)
+                .title("포트폴리오 테스트")
+                .description("포트폴리오 테스트")
+                .hashTag("#test")
+                .videoUrl("https://youtube.com")
+                .visible("Y")
+                .build();
+
+        // when
+        FrontPortFolioDTO frontPortFolioDTO = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity);
+
+        given(mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity)).willReturn(frontPortFolioDTO);
+        FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity);
+
+        // then
+        assertThat(portfolioInfo.getIdx()).isEqualTo(1);
+
+        // verify
+        then(mockFrontPortFolioJpaApiService).should(times(1)).findPrevOnePortfolio(frontPortFolioEntity);
+        then(mockFrontPortFolioJpaApiService).should(atLeastOnce()).findPrevOnePortfolio(frontPortFolioEntity);
+        then(mockFrontPortFolioJpaApiService).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("다음 포트폴리오 상세 조회 Mockito 테스트")
+    void 다음포트폴리오상세조회Mockito테스트() {
+        // given
+        FrontPortFolioEntity frontPortFolioEntity = FrontPortFolioEntity.builder()
+                .idx(2)
+                .categoryCd(1)
+                .title("포트폴리오 테스트")
+                .description("포트폴리오 테스트")
+                .hashTag("#test")
+                .videoUrl("https://youtube.com")
+                .visible("Y")
+                .build();
+
+        // when
+        FrontPortFolioDTO frontPortFolioDTO = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity);
+
+        when(mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity)).thenReturn(frontPortFolioDTO);
+        FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity);
+
+        // then
+        assertThat(portfolioInfo.getIdx()).isEqualTo(3);
+
+        // verify
+        verify(mockFrontPortFolioJpaApiService, times(1)).findNextOnePortfolio(frontPortFolioEntity);
+        verify(mockFrontPortFolioJpaApiService, atLeastOnce()).findNextOnePortfolio(frontPortFolioEntity);
+        verifyNoMoreInteractions(mockFrontPortFolioJpaApiService);
+
+        InOrder inOrder = inOrder(mockFrontPortFolioJpaApiService);
+        inOrder.verify(mockFrontPortFolioJpaApiService).findNextOnePortfolio(frontPortFolioEntity);
+    }
+
+    @Test
+    @DisplayName("다음 포트폴리오 상세 조회 BDD 테스트")
+    void 다음포트폴리오상세조회BDD테스트() {
+        // given
+        FrontPortFolioEntity frontPortFolioEntity = FrontPortFolioEntity.builder()
+                .idx(2)
+                .categoryCd(1)
+                .title("포트폴리오 테스트")
+                .description("포트폴리오 테스트")
+                .hashTag("#test")
+                .videoUrl("https://youtube.com")
+                .visible("Y")
+                .build();
+
+        // when
+        FrontPortFolioDTO frontPortFolioDTO = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity);
+
+        given(mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity)).willReturn(frontPortFolioDTO);
+        FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity);
+
+        // then
+        assertThat(portfolioInfo.getIdx()).isEqualTo(3);
+
+        // verify
+        then(mockFrontPortFolioJpaApiService).should(times(1)).findNextOnePortfolio(frontPortFolioEntity);
+        then(mockFrontPortFolioJpaApiService).should(atLeastOnce()).findNextOnePortfolio(frontPortFolioEntity);
+        then(mockFrontPortFolioJpaApiService).shouldHaveNoMoreInteractions();
     }
 }

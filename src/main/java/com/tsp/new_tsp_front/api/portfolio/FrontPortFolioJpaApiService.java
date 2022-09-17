@@ -70,4 +70,40 @@ public class FrontPortFolioJpaApiService {
             throw new TspException(NOT_FOUND_PORTFOLIO, e);
         }
     }
+
+    /**
+     * <pre>
+     * 1. MethodName : findPrevOnePortfolio
+     * 2. ClassName  : FrontPortfolioJpaServiceImpl.java
+     * 3. Comment    : 이전 포트폴리오 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 17.
+     * </pre>
+     */
+    @Transactional(readOnly = true)
+    public FrontPortFolioDTO findPrevOnePortfolio(FrontPortFolioEntity frontPortFolioEntity) throws TspException {
+        try {
+            return frontPortFolioJpaRepository.findPrevOnePortfolio(frontPortFolioEntity);
+        } catch (Exception e) {
+            throw new TspException(NOT_FOUND_PORTFOLIO, e);
+        }
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : findPrevOnePortfolio
+     * 2. ClassName  : FrontPortfolioJpaServiceImpl.java
+     * 3. Comment    : 다음 포트폴리오 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 17.
+     * </pre>
+     */
+    @Transactional(readOnly = true)
+    public FrontPortFolioDTO findNextOnePortfolio(FrontPortFolioEntity frontPortFolioEntity) throws TspException {
+        try {
+            return frontPortFolioJpaRepository.findNextOnePortfolio(frontPortFolioEntity);
+        } catch (Exception e) {
+            throw new TspException(NOT_FOUND_PORTFOLIO, e);
+        }
+    }
 }
