@@ -70,4 +70,40 @@ public class FrontProductionJpaApiService {
             throw new TspException(NOT_FOUND_PRODUCTION, e);
         }
     }
+
+    /**
+     * <pre>
+     * 1. MethodName : findPrevOneProduction
+     * 2. ClassName  : FrontProductionJpaServiceImpl.java
+     * 3. Comment    : 이전 프로덕션 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 17.
+     * </pre>
+     */
+    @Transactional(readOnly = true)
+    public FrontProductionDTO findPrevOneProduction(FrontProductionEntity frontProductionEntity) throws TspException {
+        try {
+            return frontProductionJpaRepository.findPrevOneProduction(frontProductionEntity);
+        } catch (Exception e) {
+            throw new TspException(NOT_FOUND_PRODUCTION, e);
+        }
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : findPrevOneProduction
+     * 2. ClassName  : FrontProductionJpaServiceImpl.java
+     * 3. Comment    : 다음 프로덕션 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 17.
+     * </pre>
+     */
+    @Transactional(readOnly = true)
+    public FrontProductionDTO findNextOneProduction(FrontProductionEntity frontProductionEntity) throws TspException {
+        try {
+            return frontProductionJpaRepository.findNextOneProduction(frontProductionEntity);
+        } catch (Exception e) {
+            throw new TspException(NOT_FOUND_PRODUCTION, e);
+        }
+    }
 }
