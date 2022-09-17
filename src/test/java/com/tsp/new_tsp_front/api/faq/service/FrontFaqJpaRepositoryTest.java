@@ -194,4 +194,109 @@ class FrontFaqJpaRepositoryTest {
         then(mockFrontFaqJpaRepository).should(atLeastOnce()).findOneFaq(frontFaqEntity);
         then(mockFrontFaqJpaRepository).shouldHaveNoMoreInteractions();
     }
+
+    @Test
+    @DisplayName("이전 or 다음 FAQ 상세 조회 테스트")
+    void 이전or다음FAQ상세조회테스트() {
+        // given
+        frontFaqEntity = FrontFaqEntity.builder().idx(2).build();
+
+        // when
+        frontFaqDTO = frontFaqJpaRepository.findOneFaq(frontFaqEntity);
+
+        // 이전 소속사
+        assertThat(frontFaqJpaRepository.findPrevOneFaq(frontFaqEntity).getIdx()).isEqualTo(1);
+        // 다음 소속사
+        assertThat(frontFaqJpaRepository.findNextOneFaq(frontFaqEntity).getIdx()).isEqualTo(3);
+    }
+
+    @Test
+    @DisplayName("이전 FAQ 상세 조회 Mockito 테스트")
+    void 이전FAQ상세조회Mockito테스트() {
+        // given
+        frontFaqEntity = FrontFaqEntity.builder().idx(2).build();
+
+        // when
+        frontFaqDTO = frontFaqJpaRepository.findPrevOneFaq(frontFaqEntity);
+
+        when(mockFrontFaqJpaRepository.findPrevOneFaq(frontFaqEntity)).thenReturn(frontFaqDTO);
+        FrontFaqDTO faqInfo = mockFrontFaqJpaRepository.findPrevOneFaq(frontFaqEntity);
+
+        // then
+        assertThat(faqInfo.getIdx()).isEqualTo(1);
+
+        // verify
+        verify(mockFrontFaqJpaRepository, times(1)).findPrevOneFaq(frontFaqEntity);
+        verify(mockFrontFaqJpaRepository, atLeastOnce()).findPrevOneFaq(frontFaqEntity);
+        verifyNoMoreInteractions(mockFrontFaqJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontFaqJpaRepository);
+        inOrder.verify(mockFrontFaqJpaRepository).findPrevOneFaq(frontFaqEntity);
+    }
+
+    @Test
+    @DisplayName("이전 FAQ 상세 조회 BDD 테스트")
+    void 이전FAQ상세조회BDD테스트() {
+        // given
+        frontFaqEntity = FrontFaqEntity.builder().idx(2).build();
+
+        // when
+        frontFaqDTO = frontFaqJpaRepository.findPrevOneFaq(frontFaqEntity);
+
+        given(mockFrontFaqJpaRepository.findPrevOneFaq(frontFaqEntity)).willReturn(frontFaqDTO);
+        FrontFaqDTO faqInfo = mockFrontFaqJpaRepository.findPrevOneFaq(frontFaqEntity);
+
+        // then
+        assertThat(faqInfo.getIdx()).isEqualTo(1);
+
+        // verify
+        then(mockFrontFaqJpaRepository).should(times(1)).findPrevOneFaq(frontFaqEntity);
+        then(mockFrontFaqJpaRepository).should(atLeastOnce()).findPrevOneFaq(frontFaqEntity);
+        then(mockFrontFaqJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("다음 FAQ 상세 조회 Mockito 테스트")
+    void 다음FAQ상세조회Mockito테스트() {
+        // given
+        frontFaqEntity = FrontFaqEntity.builder().idx(2).build();
+
+        // when
+        frontFaqDTO = frontFaqJpaRepository.findNextOneFaq(frontFaqEntity);
+
+        when(mockFrontFaqJpaRepository.findNextOneFaq(frontFaqEntity)).thenReturn(frontFaqDTO);
+        FrontFaqDTO faqInfo = mockFrontFaqJpaRepository.findNextOneFaq(frontFaqEntity);
+
+        // then
+        assertThat(faqInfo.getIdx()).isEqualTo(3);
+
+        // verify
+        verify(mockFrontFaqJpaRepository, times(1)).findNextOneFaq(frontFaqEntity);
+        verify(mockFrontFaqJpaRepository, atLeastOnce()).findNextOneFaq(frontFaqEntity);
+        verifyNoMoreInteractions(mockFrontFaqJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontFaqJpaRepository);
+        inOrder.verify(mockFrontFaqJpaRepository).findNextOneFaq(frontFaqEntity);
+    }
+
+    @Test
+    @DisplayName("다음 소속사 상세 조회 BDD 테스트")
+    void 다음소속사상세조회BDD테스트() {
+        // given
+        frontFaqEntity = FrontFaqEntity.builder().idx(2).build();
+
+        // when
+        frontFaqDTO = frontFaqJpaRepository.findNextOneFaq(frontFaqEntity);
+
+        when(mockFrontFaqJpaRepository.findNextOneFaq(frontFaqEntity)).thenReturn(frontFaqDTO);
+        FrontFaqDTO faqInfo = mockFrontFaqJpaRepository.findNextOneFaq(frontFaqEntity);
+
+        // then
+        assertThat(faqInfo.getIdx()).isEqualTo(3);
+
+        // verify
+        then(mockFrontFaqJpaRepository).should(times(1)).findNextOneFaq(frontFaqEntity);
+        then(mockFrontFaqJpaRepository).should(atLeastOnce()).findNextOneFaq(frontFaqEntity);
+        then(mockFrontFaqJpaRepository).shouldHaveNoMoreInteractions();
+    }
 }
