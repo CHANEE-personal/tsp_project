@@ -255,8 +255,8 @@ class FrontNoticeJpaRepositoryTest {
     }
 
     @Test
-    @DisplayName("다음 프로덕션 상세 조회 Mockito 테스트")
-    void 다음프로덕션상세조회Mockito테스트() {
+    @DisplayName("다음 공지사항 상세 조회 Mockito 테스트")
+    void 다음공지사항상세조회Mockito테스트() {
         // given
         frontNoticeEntity = FrontNoticeEntity.builder().idx(2).build();
 
@@ -279,8 +279,8 @@ class FrontNoticeJpaRepositoryTest {
     }
 
     @Test
-    @DisplayName("다음 프로덕션 상세 조회 BDD 테스트")
-    void 다음프로덕션상세조회BDD테스트() {
+    @DisplayName("다음 공지사항 상세 조회 BDD 테스트")
+    void 다음공지사항상세조회BDD테스트() {
         // given
         frontNoticeEntity = FrontNoticeEntity.builder().idx(2).build();
 

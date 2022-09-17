@@ -111,7 +111,7 @@ public class FrontNoticeJpaRepository {
                         .and(frontNoticeEntity.visible.eq("Y")))
                 .fetchFirst();
 
-        return NoticeMapper.INSTANCE.toDto(findPrevOneNotice);
+        return INSTANCE.toDto(findPrevOneNotice);
     }
 
     /**
@@ -125,13 +125,13 @@ public class FrontNoticeJpaRepository {
      */
     public FrontNoticeDTO findNextOneNotice(FrontNoticeEntity existFrontNoticeEntity) {
         // 이전 공지사항 조회
-        FrontNoticeEntity findPrevOneNotice = queryFactory
+        FrontNoticeEntity findNextOneNotice = queryFactory
                 .selectFrom(frontNoticeEntity)
                 .orderBy(frontNoticeEntity.idx.desc())
                 .where(frontNoticeEntity.idx.gt(existFrontNoticeEntity.getIdx())
                         .and(frontNoticeEntity.visible.eq("Y")))
                 .fetchFirst();
 
-        return NoticeMapper.INSTANCE.toDto(findPrevOneNotice);
+        return INSTANCE.toDto(findNextOneNotice);
     }
 }
