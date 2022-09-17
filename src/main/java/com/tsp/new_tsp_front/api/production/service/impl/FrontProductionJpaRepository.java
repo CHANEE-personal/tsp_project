@@ -106,6 +106,48 @@ public class FrontProductionJpaRepository {
 
     /**
      * <pre>
+     * 1. MethodName : findPrevOneProduction
+     * 2. ClassName  : FrontProductionJpaRepository.java
+     * 3. Comment    : 이전 프로덕션 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 17.
+     * </pre>
+     */
+    public FrontProductionDTO findPrevOneProduction(FrontProductionEntity existFrontProductionEntity) {
+        // 이전 프로덕션 조회
+        FrontProductionEntity findPrevOneProduction = queryFactory
+                .selectFrom(frontProductionEntity)
+                .orderBy(frontProductionEntity.idx.desc())
+                .where(frontProductionEntity.idx.lt(existFrontProductionEntity.getIdx())
+                        .and(frontProductionEntity.visible.eq("Y")))
+                .fetchFirst();
+
+        return INSTANCE.toDto(findPrevOneProduction);
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : findNextOneProduction
+     * 2. ClassName  : FrontProductionJpaRepository.java
+     * 3. Comment    : 다음 프로덕션 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 17.
+     * </pre>
+     */
+    public FrontProductionDTO findNextOneProduction(FrontProductionEntity existFrontProductionEntity) {
+        // 다음 프로덕션 조회
+        FrontProductionEntity findNextOneProduction = queryFactory
+                .selectFrom(frontProductionEntity)
+                .orderBy(frontProductionEntity.idx.asc())
+                .where(frontProductionEntity.idx.gt(existFrontProductionEntity.getIdx())
+                        .and(frontProductionEntity.visible.eq("Y")))
+                .fetchFirst();
+
+        return INSTANCE.toDto(findNextOneProduction);
+    }
+
+    /**
+     * <pre>
      * 1. MethodName : viewProductionCount
      * 2. ClassName  : FrontProductionJpaRepository.java
      * 3. Comment    : 프론트 프로덕션 조회 수
