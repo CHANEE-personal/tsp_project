@@ -94,7 +94,7 @@ class FrontProductionJpaApiControllerTest {
     }
 
     @Test
-    @DisplayName("Admin 이전 프로덕션 상세 조회 테스트")
+    @DisplayName("이전 프로덕션 상세 조회 테스트")
     void 이전프로덕션상세조회Api테스트() throws Exception {
         mockMvc.perform(get("/api/production/118/prev"))
                 .andDo(print())
@@ -104,7 +104,7 @@ class FrontProductionJpaApiControllerTest {
     }
 
     @Test
-    @DisplayName("Admin 다음 프로덕션 상세 조회 테스트")
+    @DisplayName("다음 프로덕션 상세 조회 테스트")
     void 다음프로덕션상세조회Api테스트() throws Exception {
         mockMvc.perform(get("/api/production/118/next"))
                 .andDo(print())
