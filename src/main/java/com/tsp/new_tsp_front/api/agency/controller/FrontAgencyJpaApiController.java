@@ -121,7 +121,7 @@ public class FrontAgencyJpaApiController {
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
-    @GetMapping(value = "/{idx}/prev")
+    @GetMapping(value = "/{idx}/next")
     public FrontAgencyDTO findNextOneAgency(@PathVariable Integer idx) {
         return this.frontAgencyJpaService.findNextOneAgency(FrontAgencyEntity.builder().idx(idx).build());
     }
