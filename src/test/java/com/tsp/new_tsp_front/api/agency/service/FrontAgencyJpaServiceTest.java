@@ -224,4 +224,109 @@ class FrontAgencyJpaServiceTest {
         then(mockFrontAgencyJpaService).should(atLeastOnce()).favoriteAgency(frontAgencyEntity);
         then(mockFrontAgencyJpaService).shouldHaveNoMoreInteractions();
     }
+
+    @Test
+    @DisplayName("이전 or 다음 소속사 상세 조회 테스트")
+    void 이전or다음소속사상세조회테스트() {
+        // given
+        frontAgencyEntity = FrontAgencyEntity.builder().idx(2).build();
+
+        // when
+        frontAgencyDTO = frontAgencyJpaService.findOneAgency(frontAgencyEntity);
+
+        // 이전 소속사
+        assertThat(frontAgencyJpaService.findPrevOneAgency(frontAgencyEntity).getIdx()).isEqualTo(1);
+        // 다음 소속사
+        assertThat(frontAgencyJpaService.findNextOneAgency(frontAgencyEntity).getIdx()).isEqualTo(3);
+    }
+
+    @Test
+    @DisplayName("이전 소속사 상세 조회 Mockito 테스트")
+    void 이전소속사상세조회Mockito테스트() {
+        // given
+        frontAgencyEntity = FrontAgencyEntity.builder().idx(2).build();
+
+        // when
+        frontAgencyDTO = frontAgencyJpaService.findPrevOneAgency(frontAgencyEntity);
+
+        when(mockFrontAgencyJpaService.findPrevOneAgency(frontAgencyEntity)).thenReturn(frontAgencyDTO);
+        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaService.findPrevOneAgency(frontAgencyEntity);
+
+        // then
+        assertThat(agencyInfo.getIdx()).isEqualTo(1);
+
+        // verify
+        verify(mockFrontAgencyJpaService, times(1)).findPrevOneAgency(frontAgencyEntity);
+        verify(mockFrontAgencyJpaService, atLeastOnce()).findPrevOneAgency(frontAgencyEntity);
+        verifyNoMoreInteractions(mockFrontAgencyJpaService);
+
+        InOrder inOrder = inOrder(mockFrontAgencyJpaService);
+        inOrder.verify(mockFrontAgencyJpaService).findPrevOneAgency(frontAgencyEntity);
+    }
+
+    @Test
+    @DisplayName("이전 소속사 상세 조회 BDD 테스트")
+    void 이전소속사상세조회BDD테스트() {
+        // given
+        frontAgencyEntity = FrontAgencyEntity.builder().idx(2).build();
+
+        // when
+        frontAgencyDTO = frontAgencyJpaService.findPrevOneAgency(frontAgencyEntity);
+
+        given(mockFrontAgencyJpaService.findPrevOneAgency(frontAgencyEntity)).willReturn(frontAgencyDTO);
+        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaService.findPrevOneAgency(frontAgencyEntity);
+
+        // then
+        assertThat(agencyInfo.getIdx()).isEqualTo(1);
+
+        // verify
+        then(mockFrontAgencyJpaService).should(times(1)).findPrevOneAgency(frontAgencyEntity);
+        then(mockFrontAgencyJpaService).should(atLeastOnce()).findPrevOneAgency(frontAgencyEntity);
+        then(mockFrontAgencyJpaService).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("다음 소속사 상세 조회 Mockito 테스트")
+    void 다음소속사상세조회Mockito테스트() {
+        // given
+        frontAgencyEntity = FrontAgencyEntity.builder().idx(2).build();
+
+        // when
+        frontAgencyDTO = frontAgencyJpaService.findNextOneAgency(frontAgencyEntity);
+
+        when(mockFrontAgencyJpaService.findNextOneAgency(frontAgencyEntity)).thenReturn(frontAgencyDTO);
+        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaService.findNextOneAgency(frontAgencyEntity);
+
+        // then
+        assertThat(agencyInfo.getIdx()).isEqualTo(3);
+
+        // verify
+        verify(mockFrontAgencyJpaService, times(1)).findNextOneAgency(frontAgencyEntity);
+        verify(mockFrontAgencyJpaService, atLeastOnce()).findNextOneAgency(frontAgencyEntity);
+        verifyNoMoreInteractions(mockFrontAgencyJpaService);
+
+        InOrder inOrder = inOrder(mockFrontAgencyJpaService);
+        inOrder.verify(mockFrontAgencyJpaService).findNextOneAgency(frontAgencyEntity);
+    }
+
+    @Test
+    @DisplayName("다음 소속사 상세 조회 BDD 테스트")
+    void 다음소속사상세조회BDD테스트() {
+        // given
+        frontAgencyEntity = FrontAgencyEntity.builder().idx(2).build();
+
+        // when
+        frontAgencyDTO = frontAgencyJpaService.findNextOneAgency(frontAgencyEntity);
+
+        given(mockFrontAgencyJpaService.findNextOneAgency(frontAgencyEntity)).willReturn(frontAgencyDTO);
+        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaService.findNextOneAgency(frontAgencyEntity);
+
+        // then
+        assertThat(agencyInfo.getIdx()).isEqualTo(3);
+
+        // verify
+        then(mockFrontAgencyJpaService).should(times(1)).findNextOneAgency(frontAgencyEntity);
+        then(mockFrontAgencyJpaService).should(atLeastOnce()).findNextOneAgency(frontAgencyEntity);
+        then(mockFrontAgencyJpaService).shouldHaveNoMoreInteractions();
+    }
 }

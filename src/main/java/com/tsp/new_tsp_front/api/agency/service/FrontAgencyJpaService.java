@@ -75,6 +75,42 @@ public class FrontAgencyJpaService {
 
     /**
      * <pre>
+     * 1. MethodName : findPrevOneAgency
+     * 2. ClassName  : FrontAgencyJpaService.java
+     * 3. Comment    : 프론트 > 이전 Agency 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 17.
+     * </pre>
+     */
+    @Transactional(readOnly = true)
+    public FrontAgencyDTO findPrevOneAgency(FrontAgencyEntity frontAgencyEntity) throws TspException {
+        try {
+            return this.frontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity);
+        } catch (Exception e) {
+            throw new TspException(NOT_FOUND_AGENCY, e);
+        }
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : findNextOneAgency
+     * 2. ClassName  : FrontAgencyJpaService.java
+     * 3. Comment    : 프론트 > 다음 Agency 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 17.
+     * </pre>
+     */
+    @Transactional(readOnly = true)
+    public FrontAgencyDTO findNextOneAgency(FrontAgencyEntity frontAgencyEntity) throws TspException {
+        try {
+            return this.frontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity);
+        } catch (Exception e) {
+            throw new TspException(NOT_FOUND_AGENCY, e);
+        }
+    }
+
+    /**
+     * <pre>
      * 1. MethodName : favoriteAgencyCount
      * 2. ClassName  : FrontAgencyJpaService.java
      * 3. Comment    : 프론트 > Agency 좋아요 갯수 조회
