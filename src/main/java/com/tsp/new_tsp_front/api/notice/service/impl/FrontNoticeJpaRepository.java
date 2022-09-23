@@ -40,7 +40,7 @@ public class FrontNoticeJpaRepository {
      * <pre>
      * 1. MethodName : findNoticeCount
      * 2. ClassName  : AdminNoticeJpaRepository.java
-     * 3. Comment    : 관리자 공지사항 리스트 갯수 조회
+     * 3. Comment    : 공지사항 리스트 갯수 조회
      * 4. 작성자       : CHO
      * 5. 작성일       : 2022. 08. 16.
      * </pre>
@@ -53,7 +53,7 @@ public class FrontNoticeJpaRepository {
      * <pre>
      * 1. MethodName : findNoticesList
      * 2. ClassName  : AdminNoticeJpaRepository.java
-     * 3. Comment    : 관리자 공지사항 리스트 조회
+     * 3. Comment    : 공지사항 리스트 조회
      * 4. 작성자       : CHO
      * 5. 작성일       : 2022. 08. 16.
      * </pre>
@@ -77,7 +77,7 @@ public class FrontNoticeJpaRepository {
      * <pre>
      * 1. MethodName : findOneNotice
      * 2. ClassName  : AdminNoticeJpaRepository.java
-     * 3. Comment    : 관리자 공지사항 상세 조회
+     * 3. Comment    : 공지사항 상세 조회
      * 4. 작성자       : CHO
      * 5. 작성일       : 2022. 08. 16.
      * </pre>
@@ -91,5 +91,47 @@ public class FrontNoticeJpaRepository {
                 .fetchOne();
 
         return INSTANCE.toDto(findOneNotice);
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : findPrevOneNotice
+     * 2. ClassName  : FrontNoticeJpaRepository.java
+     * 3. Comment    : 이전 공지사항 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 17.
+     * </pre>
+     */
+    public FrontNoticeDTO findPrevOneNotice(FrontNoticeEntity existFrontNoticeEntity) {
+        // 이전 공지사항 조회
+        FrontNoticeEntity findPrevOneNotice = queryFactory
+                .selectFrom(frontNoticeEntity)
+                .orderBy(frontNoticeEntity.idx.desc())
+                .where(frontNoticeEntity.idx.lt(existFrontNoticeEntity.getIdx())
+                        .and(frontNoticeEntity.visible.eq("Y")))
+                .fetchFirst();
+
+        return INSTANCE.toDto(findPrevOneNotice);
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : findNextOneNotice
+     * 2. ClassName  : FrontNoticeJpaRepository.java
+     * 3. Comment    : 다음 공지사항 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 17.
+     * </pre>
+     */
+    public FrontNoticeDTO findNextOneNotice(FrontNoticeEntity existFrontNoticeEntity) {
+        // 다음 공지사항 조회
+        FrontNoticeEntity findNextOneNotice = queryFactory
+                .selectFrom(frontNoticeEntity)
+                .orderBy(frontNoticeEntity.idx.desc())
+                .where(frontNoticeEntity.idx.gt(existFrontNoticeEntity.getIdx())
+                        .and(frontNoticeEntity.visible.eq("Y")))
+                .fetchFirst();
+
+        return INSTANCE.toDto(findNextOneNotice);
     }
 }

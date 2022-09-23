@@ -1,6 +1,5 @@
 package com.tsp.new_tsp_front.api.notice.service.impl;
 
-import com.tsp.new_tsp_front.api.model.service.impl.ModelMapper;
 import com.tsp.new_tsp_front.api.notice.domain.FrontNoticeDTO;
 import com.tsp.new_tsp_front.api.notice.domain.FrontNoticeEntity;
 import com.tsp.new_tsp_front.common.mapStruct.StructMapper;
