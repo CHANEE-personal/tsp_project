@@ -418,6 +418,107 @@ class FrontModelJpaApiServiceTest {
     }
 
     @Test
+    @DisplayName("이전 or 다음 모델 상세 조회 테스트")
+    void 이전or다음모델상세조회테스트() {
+        // given
+        frontModelEntity = FrontModelEntity.builder().idx(145).categoryCd(2).build();
+
+        // when
+        frontModelDTO = frontModelJpaApiService.getModelInfo(frontModelEntity);
+
+        // 이전 모델
+        assertThat(frontModelJpaApiService.findPrevOneModel(frontModelEntity).getIdx()).isEqualTo(144);
+        // 다음 모델
+        assertThat(frontModelJpaApiService.findNextOneModel(frontModelEntity).getIdx()).isEqualTo(147);
+    }
+
+    @Test
+    @DisplayName("이전 모델 상세 조회 Mockito 테스트")
+    void 이전모델상세조회Mockito테스트() {
+        // given
+        frontModelEntity = FrontModelEntity.builder().idx(145).categoryCd(2).build();
+        // when
+        frontModelDTO = frontModelJpaApiService.findPrevOneModel(frontModelEntity);
+
+        when(mockFrontModelJpaApiService.findPrevOneModel(frontModelEntity)).thenReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaApiService.findPrevOneModel(frontModelEntity);
+
+        // then
+        assertThat(modelInfo.getIdx()).isEqualTo(144);
+
+        // verify
+        verify(mockFrontModelJpaApiService, times(1)).findPrevOneModel(frontModelEntity);
+        verify(mockFrontModelJpaApiService, atLeastOnce()).findPrevOneModel(frontModelEntity);
+        verifyNoMoreInteractions(mockFrontModelJpaApiService);
+
+        InOrder inOrder = inOrder(mockFrontModelJpaApiService);
+        inOrder.verify(mockFrontModelJpaApiService).findPrevOneModel(frontModelEntity);
+    }
+
+    @Test
+    @DisplayName("이전 모델 상세 조회 BDD 테스트")
+    void 이전모델상세조회BDD테스트() {
+        // given
+        frontModelEntity = FrontModelEntity.builder().idx(145).categoryCd(2).build();
+        // when
+        frontModelDTO = frontModelJpaApiService.findPrevOneModel(frontModelEntity);
+
+        given(mockFrontModelJpaApiService.findPrevOneModel(frontModelEntity)).willReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaApiService.findPrevOneModel(frontModelEntity);
+
+        // then
+        assertThat(modelInfo.getIdx()).isEqualTo(144);
+
+        // verify
+        then(mockFrontModelJpaApiService).should(times(1)).findPrevOneModel(frontModelEntity);
+        then(mockFrontModelJpaApiService).should(atLeastOnce()).findPrevOneModel(frontModelEntity);
+        then(mockFrontModelJpaApiService).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("다음 모델 상세 조회 Mockito 테스트")
+    void 다음모델상세조회Mockito테스트() {
+        // given
+        frontModelEntity = FrontModelEntity.builder().idx(145).categoryCd(2).build();
+        // when
+        frontModelDTO = frontModelJpaApiService.findNextOneModel(frontModelEntity);
+
+        when(mockFrontModelJpaApiService.findNextOneModel(frontModelEntity)).thenReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaApiService.findNextOneModel(frontModelEntity);
+
+        // then
+        assertThat(modelInfo.getIdx()).isEqualTo(147);
+
+        // verify
+        verify(mockFrontModelJpaApiService, times(1)).findNextOneModel(frontModelEntity);
+        verify(mockFrontModelJpaApiService, atLeastOnce()).findNextOneModel(frontModelEntity);
+        verifyNoMoreInteractions(mockFrontModelJpaApiService);
+
+        InOrder inOrder = inOrder(mockFrontModelJpaApiService);
+        inOrder.verify(mockFrontModelJpaApiService).findNextOneModel(frontModelEntity);
+    }
+
+    @Test
+    @DisplayName("다음 모델 상세 조회 BDD 테스트")
+    void 다음모델상세조회BDD테스트() {
+        // given
+        frontModelEntity = FrontModelEntity.builder().idx(145).categoryCd(2).build();
+        // when
+        frontModelDTO = frontModelJpaApiService.findNextOneModel(frontModelEntity);
+
+        given(mockFrontModelJpaApiService.findNextOneModel(frontModelEntity)).willReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaApiService.findNextOneModel(frontModelEntity);
+
+        // then
+        assertThat(modelInfo.getIdx()).isEqualTo(147);
+
+        // verify
+        then(mockFrontModelJpaApiService).should(times(1)).findNextOneModel(frontModelEntity);
+        then(mockFrontModelJpaApiService).should(atLeastOnce()).findNextOneModel(frontModelEntity);
+        then(mockFrontModelJpaApiService).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
     @DisplayName("모델 좋아요 Mockito 테스트")
     void 모델좋아요Mockito테스트() {
         // given

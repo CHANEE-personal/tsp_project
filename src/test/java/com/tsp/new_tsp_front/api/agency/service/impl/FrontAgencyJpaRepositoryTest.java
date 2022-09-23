@@ -216,8 +216,8 @@ class FrontAgencyJpaRepositoryTest {
     }
 
     @Test
-    @DisplayName("모델 좋아요 갯수 조회 BDD 테스트")
-    void 모델좋아요갯수조회BDD테스트() {
+    @DisplayName("소속사 좋아요 갯수 조회 BDD 테스트")
+    void 소속사좋아요갯수조회BDD테스트() {
         em.persist(frontAgencyEntity);
         frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
 
@@ -235,8 +235,8 @@ class FrontAgencyJpaRepositoryTest {
     }
 
     @Test
-    @DisplayName("모델 좋아요 Mockito 테스트")
-    void 모델좋아요Mockito테스트() {
+    @DisplayName("소속사 좋아요 Mockito 테스트")
+    void 소속사좋아요Mockito테스트() {
         // given
         em.persist(frontAgencyEntity);
         frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
@@ -260,8 +260,8 @@ class FrontAgencyJpaRepositoryTest {
     }
 
     @Test
-    @DisplayName("모델 좋아요 BDD 테스트")
-    void 모델좋아요BDD테스트() {
+    @DisplayName("소속사 좋아요 BDD 테스트")
+    void 소속사좋아요BDD테스트() {
         // given
         em.persist(frontAgencyEntity);
         frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
@@ -278,6 +278,111 @@ class FrontAgencyJpaRepositoryTest {
         // verify
         then(mockFrontAgencyJpaRepository).should(times(1)).favoriteAgency(frontAgencyEntity);
         then(mockFrontAgencyJpaRepository).should(atLeastOnce()).favoriteAgency(frontAgencyEntity);
+        then(mockFrontAgencyJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("이전 or 다음 소속사 상세 조회 테스트")
+    void 이전or다음소속사상세조회테스트() {
+        // given
+        frontAgencyEntity = FrontAgencyEntity.builder().idx(2).build();
+
+        // when
+        frontAgencyDTO = frontAgencyJpaRepository.findOneAgency(frontAgencyEntity);
+
+        // 이전 소속사
+        assertThat(frontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity).getIdx()).isEqualTo(1);
+        // 다음 소속사
+        assertThat(frontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity).getIdx()).isEqualTo(3);
+    }
+
+    @Test
+    @DisplayName("이전 소속사 상세 조회 Mockito 테스트")
+    void 이전소속사상세조회Mockito테스트() {
+        // given
+        frontAgencyEntity = FrontAgencyEntity.builder().idx(2).build();
+
+        // when
+        frontAgencyDTO = frontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity);
+
+        when(mockFrontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity)).thenReturn(frontAgencyDTO);
+        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity);
+
+        // then
+        assertThat(agencyInfo.getIdx()).isEqualTo(1);
+
+        // verify
+        verify(mockFrontAgencyJpaRepository, times(1)).findPrevOneAgency(frontAgencyEntity);
+        verify(mockFrontAgencyJpaRepository, atLeastOnce()).findPrevOneAgency(frontAgencyEntity);
+        verifyNoMoreInteractions(mockFrontAgencyJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontAgencyJpaRepository);
+        inOrder.verify(mockFrontAgencyJpaRepository).findPrevOneAgency(frontAgencyEntity);
+    }
+
+    @Test
+    @DisplayName("이전 소속사 상세 조회 BDD 테스트")
+    void 이전소속사상세조회BDD테스트() {
+        // given
+        frontAgencyEntity = FrontAgencyEntity.builder().idx(2).build();
+
+        // when
+        frontAgencyDTO = frontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity);
+
+        given(mockFrontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity)).willReturn(frontAgencyDTO);
+        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity);
+
+        // then
+        assertThat(agencyInfo.getIdx()).isEqualTo(1);
+
+        // verify
+        then(mockFrontAgencyJpaRepository).should(times(1)).findPrevOneAgency(frontAgencyEntity);
+        then(mockFrontAgencyJpaRepository).should(atLeastOnce()).findPrevOneAgency(frontAgencyEntity);
+        then(mockFrontAgencyJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("다음 소속사 상세 조회 Mockito 테스트")
+    void 다음소속사상세조회Mockito테스트() {
+        // given
+        frontAgencyEntity = FrontAgencyEntity.builder().idx(2).build();
+
+        // when
+        frontAgencyDTO = frontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity);
+
+        when(mockFrontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity)).thenReturn(frontAgencyDTO);
+        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity);
+
+        // then
+        assertThat(agencyInfo.getIdx()).isEqualTo(3);
+
+        // verify
+        verify(mockFrontAgencyJpaRepository, times(1)).findNextOneAgency(frontAgencyEntity);
+        verify(mockFrontAgencyJpaRepository, atLeastOnce()).findNextOneAgency(frontAgencyEntity);
+        verifyNoMoreInteractions(mockFrontAgencyJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontAgencyJpaRepository);
+        inOrder.verify(mockFrontAgencyJpaRepository).findNextOneAgency(frontAgencyEntity);
+    }
+
+    @Test
+    @DisplayName("다음 소속사 상세 조회 BDD 테스트")
+    void 다음소속사상세조회BDD테스트() {
+        // given
+        frontAgencyEntity = FrontAgencyEntity.builder().idx(2).build();
+
+        // when
+        frontAgencyDTO = frontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity);
+
+        given(mockFrontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity)).willReturn(frontAgencyDTO);
+        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity);
+
+        // then
+        assertThat(agencyInfo.getIdx()).isEqualTo(3);
+
+        // verify
+        then(mockFrontAgencyJpaRepository).should(times(1)).findNextOneAgency(frontAgencyEntity);
+        then(mockFrontAgencyJpaRepository).should(atLeastOnce()).findNextOneAgency(frontAgencyEntity);
         then(mockFrontAgencyJpaRepository).shouldHaveNoMoreInteractions();
     }
 }

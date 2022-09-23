@@ -70,4 +70,40 @@ public class FrontFaqJpaService {
             throw new TspException(NOT_FOUND_FAQ, e);
         }
     }
+
+    /**
+     * <pre>
+     * 1. MethodName : findPrevOneFaq
+     * 2. ClassName  : FrontFaqJpaService.java
+     * 3. Comment    : 프론트 > 이전 FAQ 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 17.
+     * </pre>
+     */
+    @Transactional(readOnly = true)
+    public FrontFaqDTO findPrevOneFaq(FrontFaqEntity frontFaqEntity) throws TspException {
+        try {
+            return this.frontFaqJpaRepository.findPrevOneFaq(frontFaqEntity);
+        } catch (Exception e) {
+            throw new TspException(NOT_FOUND_FAQ, e);
+        }
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : findNextOneFaq
+     * 2. ClassName  : FrontFaqJpaService.java
+     * 3. Comment    : 프론트 > FAQ 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 08. 23.
+     * </pre>
+     */
+    @Transactional(readOnly = true)
+    public FrontFaqDTO findNextOneFaq(FrontFaqEntity frontFaqEntity) throws TspException {
+        try {
+            return this.frontFaqJpaRepository.findNextOneFaq(frontFaqEntity);
+        } catch (Exception e) {
+            throw new TspException(NOT_FOUND_FAQ, e);
+        }
+    }
 }

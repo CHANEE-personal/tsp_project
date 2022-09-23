@@ -92,4 +92,46 @@ public class FrontFaqJpaRepository {
 
         return INSTANCE.toDto(findOneFaq);
     }
+
+    /**
+     * <pre>
+     * 1. MethodName : findPrevOneFaq
+     * 2. ClassName  : FrontFaqJpaRepository.java
+     * 3. Comment    : 이전 Faq 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 17.
+     * </pre>
+     */
+    public FrontFaqDTO findPrevOneFaq(FrontFaqEntity existFrontFaqEntity) {
+        // 이전 FAQ 조회
+        FrontFaqEntity findPrevOneFaq = queryFactory
+                .selectFrom(frontFaqEntity)
+                .orderBy(frontFaqEntity.idx.desc())
+                .where(frontFaqEntity.idx.lt(existFrontFaqEntity.getIdx())
+                        .and(frontFaqEntity.visible.eq("Y")))
+                .fetchFirst();
+
+        return INSTANCE.toDto(findPrevOneFaq);
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : findNextOneFaq
+     * 2. ClassName  : FrontFaqJpaRepository.java
+     * 3. Comment    : 다음 Faq 상세 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 17.
+     * </pre>
+     */
+    public FrontFaqDTO findNextOneFaq(FrontFaqEntity existFrontFaqEntity) {
+        // 다음 FAQ 조회
+        FrontFaqEntity findNextOneFaq = queryFactory
+                .selectFrom(frontFaqEntity)
+                .orderBy(frontFaqEntity.idx.desc())
+                .where(frontFaqEntity.idx.gt(existFrontFaqEntity.getIdx())
+                        .and(frontFaqEntity.visible.eq("Y")))
+                .fetchFirst();
+
+        return INSTANCE.toDto(findNextOneFaq);
+    }
 }

@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.event.EventListener;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -90,5 +91,25 @@ class FrontProductionJpaApiControllerTest {
                 .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.code").value("NOT_FOUND_PRODUCTION"))
                 .andExpect(jsonPath("$.message").value("해당 프로덕션 없음"));
+    }
+
+    @Test
+    @DisplayName("이전 프로덕션 상세 조회 테스트")
+    void 이전프로덕션상세조회Api테스트() throws Exception {
+        mockMvc.perform(get("/api/production/118/prev"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
+                .andExpect(jsonPath("$.idx").value("117"));
+    }
+
+    @Test
+    @DisplayName("다음 프로덕션 상세 조회 테스트")
+    void 다음프로덕션상세조회Api테스트() throws Exception {
+        mockMvc.perform(get("/api/production/118/next"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
+                .andExpect(jsonPath("$.idx").value("119"));
     }
 }

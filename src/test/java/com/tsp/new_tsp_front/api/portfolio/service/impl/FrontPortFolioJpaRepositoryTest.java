@@ -264,6 +264,151 @@ class FrontPortFolioJpaRepositoryTest {
     }
 
     @Test
+    @DisplayName("이전 or 다음 포트폴리오 상세 조회 테스트")
+    void 이전or다음포트폴리오상세조회테스트() {
+        // given
+        frontPortFolioEntity = FrontPortFolioEntity.builder()
+                .idx(2)
+                .categoryCd(1)
+                .title("포트폴리오 테스트")
+                .description("포트폴리오 테스트")
+                .hashTag("#test")
+                .videoUrl("https://youtube.com")
+                .visible("Y")
+                .build();
+
+        // when
+        frontPortFolioDTO = frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
+
+        // 이전 프로덕션
+        assertThat(frontPortFolioJpaRepository.findPrevOnePortfolio(frontPortFolioEntity).getIdx()).isEqualTo(1);
+        // 다음 프로덕션
+        assertThat(frontPortFolioJpaRepository.findNextOnePortfolio(frontPortFolioEntity).getIdx()).isEqualTo(3);
+    }
+
+    @Test
+    @DisplayName("이전 포트폴리오 상세 조회 Mockito 테스트")
+    void 이전포트폴리오상세조회Mockito테스트() {
+        // given
+        frontPortFolioEntity = FrontPortFolioEntity.builder()
+                .idx(2)
+                .categoryCd(1)
+                .title("포트폴리오 테스트")
+                .description("포트폴리오 테스트")
+                .hashTag("#test")
+                .videoUrl("https://youtube.com")
+                .visible("Y")
+                .build();
+
+        // when
+        frontPortFolioDTO = frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
+
+        when(mockFrontPortFolioJpaRepository.findPrevOnePortfolio(frontPortFolioEntity)).thenReturn(frontPortFolioDTO);
+        FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaRepository.findPrevOnePortfolio(frontPortFolioEntity);
+
+        // then
+        assertThat(portfolioInfo.getIdx()).isEqualTo(1);
+
+        // verify
+        verify(mockFrontPortFolioJpaRepository, times(1)).findPrevOnePortfolio(frontPortFolioEntity);
+        verify(mockFrontPortFolioJpaRepository, atLeastOnce()).findPrevOnePortfolio(frontPortFolioEntity);
+        verifyNoMoreInteractions(mockFrontPortFolioJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontPortFolioJpaRepository);
+        inOrder.verify(mockFrontPortFolioJpaRepository).findPrevOnePortfolio(frontPortFolioEntity);
+    }
+
+    @Test
+    @DisplayName("이전 포트폴리오 상세 조회 BDD 테스트")
+    void 이전포트폴리오상세조회BDD테스트() {
+        // given
+        frontPortFolioEntity = FrontPortFolioEntity.builder()
+                .idx(2)
+                .categoryCd(1)
+                .title("포트폴리오 테스트")
+                .description("포트폴리오 테스트")
+                .hashTag("#test")
+                .videoUrl("https://youtube.com")
+                .visible("Y")
+                .build();
+
+        // when
+        frontPortFolioDTO = frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
+
+        given(mockFrontPortFolioJpaRepository.findPrevOnePortfolio(frontPortFolioEntity)).willReturn(frontPortFolioDTO);
+        FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaRepository.findPrevOnePortfolio(frontPortFolioEntity);
+
+        // then
+        assertThat(portfolioInfo.getIdx()).isEqualTo(1);
+
+        // verify
+        then(mockFrontPortFolioJpaRepository).should(times(1)).findPrevOnePortfolio(frontPortFolioEntity);
+        then(mockFrontPortFolioJpaRepository).should(atLeastOnce()).findPrevOnePortfolio(frontPortFolioEntity);
+        then(mockFrontPortFolioJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("다음 포트폴리오 상세 조회 Mockito 테스트")
+    void 다음포트폴리오상세조회Mockito테스트() {
+        // given
+        frontPortFolioEntity = FrontPortFolioEntity.builder()
+                .idx(2)
+                .categoryCd(1)
+                .title("포트폴리오 테스트")
+                .description("포트폴리오 테스트")
+                .hashTag("#test")
+                .videoUrl("https://youtube.com")
+                .visible("Y")
+                .build();
+
+        // when
+        frontPortFolioDTO = frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
+
+        when(mockFrontPortFolioJpaRepository.findPrevOnePortfolio(frontPortFolioEntity)).thenReturn(frontPortFolioDTO);
+        FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaRepository.findPrevOnePortfolio(frontPortFolioEntity);
+
+        // then
+        assertThat(portfolioInfo.getIdx()).isEqualTo(3);
+
+        // verify
+        verify(mockFrontPortFolioJpaRepository, times(1)).findNextOnePortfolio(frontPortFolioEntity);
+        verify(mockFrontPortFolioJpaRepository, atLeastOnce()).findNextOnePortfolio(frontPortFolioEntity);
+        verifyNoMoreInteractions(mockFrontPortFolioJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontPortFolioJpaRepository);
+        inOrder.verify(mockFrontPortFolioJpaRepository).findNextOnePortfolio(frontPortFolioEntity);
+    }
+
+    @Test
+    @DisplayName("다음 포트폴리오 상세 조회 BDD 테스트")
+    void 다음포트폴리오상세조회BDD테스트() {
+        // given
+        frontPortFolioEntity = FrontPortFolioEntity.builder()
+                .idx(2)
+                .categoryCd(1)
+                .title("포트폴리오 테스트")
+                .description("포트폴리오 테스트")
+                .hashTag("#test")
+                .videoUrl("https://youtube.com")
+                .visible("Y")
+                .build();
+
+        // when
+        frontPortFolioDTO = frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity);
+
+        given(mockFrontPortFolioJpaRepository.findPrevOnePortfolio(frontPortFolioEntity)).willReturn(frontPortFolioDTO);
+        FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaRepository.findPrevOnePortfolio(frontPortFolioEntity);
+
+        // then
+        assertThat(portfolioInfo.getIdx()).isEqualTo(3);
+
+        // verify
+        then(mockFrontPortFolioJpaRepository).should(times(1)).findNextOnePortfolio(frontPortFolioEntity);
+        then(mockFrontPortFolioJpaRepository).should(atLeastOnce()).findNextOnePortfolio(frontPortFolioEntity);
+        then(mockFrontPortFolioJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
     @DisplayName("프로덕션 조회 수 Mockito 테스트")
     void 프로덕션조회수Mockito테스트() {
         // given
