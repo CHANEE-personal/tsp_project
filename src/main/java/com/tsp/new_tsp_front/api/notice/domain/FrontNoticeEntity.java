@@ -43,4 +43,7 @@ public class FrontNoticeEntity extends NewCommonMappedClass {
     @Column(name = "visible")
     @NotEmpty(message = "공지사항 노출 여부 선택은 필수입니다.")
     private String visible;
+
+    @Column(name = "top_fixed")
+    private String topFixed;
 }
