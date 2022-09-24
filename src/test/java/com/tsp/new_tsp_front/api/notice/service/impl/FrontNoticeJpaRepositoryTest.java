@@ -134,6 +134,63 @@ class FrontNoticeJpaRepositoryTest {
     }
 
     @Test
+    @DisplayName("상단 고정 공지사항 리스트 조회 Mockito 테스트")
+    void 상단고정공지사항리스트조회Mockito테스트() {
+        // given
+        Map<String, Object> noticeMap = new HashMap<>();
+        noticeMap.put("jpaStartPage", 1);
+        noticeMap.put("size", 3);
+
+        List<FrontNoticeDTO> noticeList = new ArrayList<>();
+        noticeList.add(FrontNoticeDTO.builder().idx(1).title("공지사항").description("공지사항").visible("Y").topFixed(Boolean.TRUE.toString()).build());
+
+        // when
+        when(mockFrontNoticeJpaRepository.findFixedNoticesList(noticeMap)).thenReturn(noticeList);
+        List<FrontNoticeDTO> newNoticeList = mockFrontNoticeJpaRepository.findFixedNoticesList(noticeMap);
+
+        // then
+        assertThat(newNoticeList.get(0).getIdx()).isEqualTo(noticeList.get(0).getIdx());
+        assertThat(newNoticeList.get(0).getTitle()).isEqualTo(noticeList.get(0).getTitle());
+        assertThat(newNoticeList.get(0).getDescription()).isEqualTo(noticeList.get(0).getDescription());
+        assertThat(newNoticeList.get(0).getTopFixed()).isEqualTo(noticeList.get(0).getTopFixed());
+
+        // verify
+        verify(mockFrontNoticeJpaRepository, times(1)).findFixedNoticesList(noticeMap);
+        verify(mockFrontNoticeJpaRepository, atLeastOnce()).findFixedNoticesList(noticeMap);
+        verifyNoMoreInteractions(mockFrontNoticeJpaRepository);
+
+        InOrder inOrder = inOrder(mockFrontNoticeJpaRepository);
+        inOrder.verify(mockFrontNoticeJpaRepository).findFixedNoticesList(noticeMap);
+    }
+
+    @Test
+    @DisplayName("상단 고정 공지사항 리스트 조회 BDD 테스트")
+    void 상단고정공지사항리스트조회BDD테스트() {
+        // given
+        Map<String, Object> noticeMap = new HashMap<>();
+        noticeMap.put("jpaStartPage", 1);
+        noticeMap.put("size", 3);
+
+        List<FrontNoticeDTO> noticeList = new ArrayList<>();
+        noticeList.add(FrontNoticeDTO.builder().idx(1).title("공지사항").description("공지사항").visible("Y").topFixed(Boolean.TRUE.toString()).build());
+
+        // when
+        given(mockFrontNoticeJpaRepository.findFixedNoticesList(noticeMap)).willReturn(noticeList);
+        List<FrontNoticeDTO> newNoticeList = mockFrontNoticeJpaRepository.findFixedNoticesList(noticeMap);
+
+        // then
+        assertThat(newNoticeList.get(0).getIdx()).isEqualTo(noticeList.get(0).getIdx());
+        assertThat(newNoticeList.get(0).getTitle()).isEqualTo(noticeList.get(0).getTitle());
+        assertThat(newNoticeList.get(0).getDescription()).isEqualTo(noticeList.get(0).getDescription());
+        assertThat(newNoticeList.get(0).getTopFixed()).isEqualTo(noticeList.get(0).getTopFixed());
+
+        // verify
+        then(mockFrontNoticeJpaRepository).should(times(1)).findFixedNoticesList(noticeMap);
+        then(mockFrontNoticeJpaRepository).should(atLeastOnce()).findFixedNoticesList(noticeMap);
+        then(mockFrontNoticeJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
     @DisplayName("공지사항상세Mockito조회테스트")
     void 공지사항상세Mockito조회테스트() {
         // given

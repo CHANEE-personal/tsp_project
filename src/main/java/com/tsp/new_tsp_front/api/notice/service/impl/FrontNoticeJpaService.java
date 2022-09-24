@@ -55,6 +55,42 @@ public class FrontNoticeJpaService {
 
     /**
      * <pre>
+     * 1. MethodName : findFixedNoticeCount
+     * 2. ClassName  : FrontNoticeJpaApiService.java
+     * 3. Comment    : 프론트 > 상단 고정 공지사항 리스트 갯수 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 24.
+     * </pre>
+     */
+    @Transactional(readOnly = true)
+    public int findFixedNoticeCount(Map<String, Object> noticeMap) throws TspException {
+        try {
+            return frontNoticeJpaRepository.findFixedNoticeCount(noticeMap);
+        } catch (Exception e) {
+            throw new TspException(NOT_FOUND_NOTICE_LIST, e);
+        }
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : findFixedNoticesList
+     * 2. ClassName  : FrontNoticeJpaService.java
+     * 3. Comment    : 프론트 > 상단 고정 공지사항 리스트 조회
+     * 4. 작성자       : CHO
+     * 5. 작성일       : 2022. 09. 24.
+     * </pre>
+     */
+    @Transactional(readOnly = true)
+    public List<FrontNoticeDTO> findFixedNoticesList(Map<String, Object> noticeMap) throws TspException {
+        try {
+            return frontNoticeJpaRepository.findFixedNoticesList(noticeMap);
+        } catch (Exception e) {
+            throw new TspException(NOT_FOUND_NOTICE_LIST, e);
+        }
+    }
+
+    /**
+     * <pre>
      * 1. MethodName : findOneNotice
      * 2. ClassName  : FrontNoticeJpaService.java
      * 3. Comment    : 프론트 > 공지사항 상세 조회
