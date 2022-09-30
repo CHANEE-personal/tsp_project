@@ -28,11 +28,11 @@ public class FrontScheduleDTO extends NewCommonDTO {
     private Integer rnum;
 
     @ApiModelProperty(required = true, value = "idx", hidden = true, example = "1")
-    private Integer idx;
+    private Long idx;
 
     @NotNull(message = "모델 IDX 입력은 필수입니다.")
     @ApiModelProperty(required = true, value = "modelIdx", example = "1")
-    private Integer modelIdx;
+    private Long modelIdx;
 
     @NotEmpty(message = "모델 스케줄 입력은 필수입니다.")
     @ApiModelProperty(required = true, value = "modelSchedule")

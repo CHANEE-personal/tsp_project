@@ -78,7 +78,7 @@ class FrontScheduleJpaApiServiceTest {
         scheduleMap.put("size", 3);
 
         List<FrontScheduleDTO> scheduleList = new ArrayList<>();
-        scheduleList.add(FrontScheduleDTO.builder().idx(1).modelIdx(1)
+        scheduleList.add(FrontScheduleDTO.builder().idx(1L).modelIdx(1L)
                 .modelSchedule("스케줄 테스트").modelScheduleTime(now()).build());
 
         // when
@@ -109,7 +109,7 @@ class FrontScheduleJpaApiServiceTest {
         scheduleMap.put("size", 3);
 
         List<FrontScheduleDTO> scheduleList = new ArrayList<>();
-        scheduleList.add(FrontScheduleDTO.builder().idx(1).modelIdx(1)
+        scheduleList.add(FrontScheduleDTO.builder().idx(1L).modelIdx(1L)
                 .modelSchedule("스케줄 테스트").modelScheduleTime(now()).build());
 
         // when
