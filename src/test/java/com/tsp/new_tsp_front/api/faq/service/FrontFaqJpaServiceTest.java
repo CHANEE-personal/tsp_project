@@ -51,8 +51,8 @@ class FrontFaqJpaServiceTest {
 
         List<FrontFaqDTO> returnFaqList = new ArrayList<>();
 
-        returnFaqList.add(FrontFaqDTO.builder().idx(1).title("FAQ테스트").description("FAQ테스트").visible("Y").build());
-        returnFaqList.add(FrontFaqDTO.builder().idx(2).title("FAQTest").description("FAQTest").visible("Y").build());
+        returnFaqList.add(FrontFaqDTO.builder().idx(1L).title("FAQ테스트").description("FAQ테스트").visible("Y").build());
+        returnFaqList.add(FrontFaqDTO.builder().idx(2L).title("FAQTest").description("FAQTest").visible("Y").build());
 
         // when
         when(mockFrontFaqJpaService.findFaqsList(faqMap)).thenReturn(returnFaqList);
@@ -88,8 +88,8 @@ class FrontFaqJpaServiceTest {
 
         List<FrontFaqDTO> returnFaqList = new ArrayList<>();
 
-        returnFaqList.add(FrontFaqDTO.builder().idx(1).title("FAQ테스트").description("FAQ테스트").visible("Y").build());
-        returnFaqList.add(FrontFaqDTO.builder().idx(2).title("FAQTest").description("FAQTest").visible("Y").build());
+        returnFaqList.add(FrontFaqDTO.builder().idx(1L).title("FAQ테스트").description("FAQ테스트").visible("Y").build());
+        returnFaqList.add(FrontFaqDTO.builder().idx(2L).title("FAQTest").description("FAQTest").visible("Y").build());
 
         // when
         given(mockFrontFaqJpaService.findFaqsList(faqMap)).willReturn(returnFaqList);
@@ -116,7 +116,7 @@ class FrontFaqJpaServiceTest {
     @DisplayName("FAQ상세조회Mockito테스트")
     void FAQ상세조회Mockito테스트() {
         // given
-        FrontFaqEntity frontFaqEntity = FrontFaqEntity.builder().idx(1).title("FAQTest").description("FAQTest").build();
+        FrontFaqEntity frontFaqEntity = FrontFaqEntity.builder().idx(1L).title("FAQTest").description("FAQTest").build();
         FrontFaqDTO frontFaqDTO = INSTANCE.toDto(frontFaqEntity);
 
         // when
@@ -142,7 +142,7 @@ class FrontFaqJpaServiceTest {
     @DisplayName("FAQ상세조회BDD테스트")
     void FAQ상세조회BDD테스트() {
         // given
-        FrontFaqEntity frontFaqEntity = FrontFaqEntity.builder().idx(1).title("FAQTest").description("FAQTest").build();
+        FrontFaqEntity frontFaqEntity = FrontFaqEntity.builder().idx(1L).title("FAQTest").description("FAQTest").build();
         FrontFaqDTO frontFaqDTO = INSTANCE.toDto(frontFaqEntity);
 
         // when
@@ -165,7 +165,7 @@ class FrontFaqJpaServiceTest {
     @DisplayName("이전 or 다음 FAQ 상세 조회 테스트")
     void 이전or다음FAQ상세조회테스트() {
         // given
-        FrontFaqEntity frontFaqEntity = FrontFaqEntity.builder().idx(2).build();
+        FrontFaqEntity frontFaqEntity = FrontFaqEntity.builder().idx(2L).build();
 
         // when
         FrontFaqDTO frontFaqDTO = frontFaqJpaService.findOneFaq(frontFaqEntity);
@@ -180,7 +180,7 @@ class FrontFaqJpaServiceTest {
     @DisplayName("이전 FAQ 상세 조회 Mockito 테스트")
     void 이전FAQ상세조회Mockito테스트() {
         // given
-        FrontFaqEntity frontFaqEntity = FrontFaqEntity.builder().idx(2).build();
+        FrontFaqEntity frontFaqEntity = FrontFaqEntity.builder().idx(2L).build();
 
         // when
         FrontFaqDTO frontFaqDTO = frontFaqJpaService.findPrevOneFaq(frontFaqEntity);
@@ -204,7 +204,7 @@ class FrontFaqJpaServiceTest {
     @DisplayName("이전 FAQ 상세 조회 BDD 테스트")
     void 이전FAQ상세조회BDD테스트() {
         // given
-        FrontFaqEntity frontFaqEntity = FrontFaqEntity.builder().idx(2).build();
+        FrontFaqEntity frontFaqEntity = FrontFaqEntity.builder().idx(2L).build();
 
         // when
         FrontFaqDTO frontFaqDTO = frontFaqJpaService.findPrevOneFaq(frontFaqEntity);
@@ -225,7 +225,7 @@ class FrontFaqJpaServiceTest {
     @DisplayName("다음 FAQ 상세 조회 Mockito 테스트")
     void 다음FAQ상세조회Mockito테스트() {
         // given
-        FrontFaqEntity frontFaqEntity = FrontFaqEntity.builder().idx(2).build();
+        FrontFaqEntity frontFaqEntity = FrontFaqEntity.builder().idx(2L).build();
 
         // when
         FrontFaqDTO frontFaqDTO = frontFaqJpaService.findNextOneFaq(frontFaqEntity);
@@ -249,7 +249,7 @@ class FrontFaqJpaServiceTest {
     @DisplayName("다음 소속사 상세 조회 BDD 테스트")
     void 다음소속사상세조회BDD테스트() {
         // given
-        FrontFaqEntity frontFaqEntity = FrontFaqEntity.builder().idx(2).build();
+        FrontFaqEntity frontFaqEntity = FrontFaqEntity.builder().idx(2L).build();
 
         // when
         FrontFaqDTO frontFaqDTO = frontFaqJpaService.findNextOneFaq(frontFaqEntity);
