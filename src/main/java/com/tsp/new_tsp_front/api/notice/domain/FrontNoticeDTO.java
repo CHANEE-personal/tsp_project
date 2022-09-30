@@ -22,7 +22,7 @@ public class FrontNoticeDTO extends NewCommonDTO {
     private Integer rnum;
 
     @ApiModelProperty(required = true, value = "idx", hidden = true)
-    private Integer idx;
+    private Long idx;
 
     @NotEmpty(message = "제목 입력은 필수입니다.")
     @ApiModelProperty(required = true, value = "title")

@@ -87,7 +87,7 @@ class FrontNoticeJpaRepositoryTest {
         noticeMap.put("size", 3);
 
         List<FrontNoticeDTO> noticeList = new ArrayList<>();
-        noticeList.add(FrontNoticeDTO.builder().idx(1).title("공지사항").description("공지사항").visible("Y").build());
+        noticeList.add(FrontNoticeDTO.builder().idx(1L).title("공지사항").description("공지사항").visible("Y").build());
 
         // when
         when(mockFrontNoticeJpaRepository.findNoticesList(noticeMap)).thenReturn(noticeList);
@@ -116,7 +116,7 @@ class FrontNoticeJpaRepositoryTest {
         noticeMap.put("size", 3);
 
         List<FrontNoticeDTO> noticeList = new ArrayList<>();
-        noticeList.add(FrontNoticeDTO.builder().idx(1).title("공지사항").description("공지사항").visible("Y").build());
+        noticeList.add(FrontNoticeDTO.builder().idx(1L).title("공지사항").description("공지사항").visible("Y").build());
 
         // when
         given(mockFrontNoticeJpaRepository.findNoticesList(noticeMap)).willReturn(noticeList);
@@ -142,7 +142,7 @@ class FrontNoticeJpaRepositoryTest {
         noticeMap.put("size", 3);
 
         List<FrontNoticeDTO> noticeList = new ArrayList<>();
-        noticeList.add(FrontNoticeDTO.builder().idx(1).title("공지사항").description("공지사항").visible("Y").topFixed(Boolean.TRUE.toString()).build());
+        noticeList.add(FrontNoticeDTO.builder().idx(1L).title("공지사항").description("공지사항").visible("Y").topFixed(Boolean.TRUE.toString()).build());
 
         // when
         when(mockFrontNoticeJpaRepository.findFixedNoticesList(noticeMap)).thenReturn(noticeList);
@@ -172,7 +172,7 @@ class FrontNoticeJpaRepositoryTest {
         noticeMap.put("size", 3);
 
         List<FrontNoticeDTO> noticeList = new ArrayList<>();
-        noticeList.add(FrontNoticeDTO.builder().idx(1).title("공지사항").description("공지사항").visible("Y").topFixed(Boolean.TRUE.toString()).build());
+        noticeList.add(FrontNoticeDTO.builder().idx(1L).title("공지사항").description("공지사항").visible("Y").topFixed(Boolean.TRUE.toString()).build());
 
         // when
         given(mockFrontNoticeJpaRepository.findFixedNoticesList(noticeMap)).willReturn(noticeList);
@@ -195,7 +195,7 @@ class FrontNoticeJpaRepositoryTest {
     void 공지사항상세Mockito조회테스트() {
         // given
         FrontNoticeEntity frontNoticeEntity = FrontNoticeEntity.builder()
-                .idx(1)
+                .idx(1L)
                 .title("공지사항 테스트")
                 .description("공지사항 테스트")
                 .visible("Y")
@@ -227,7 +227,7 @@ class FrontNoticeJpaRepositoryTest {
     void 공지사항상세BDD조회테스트() {
         // given
         FrontNoticeEntity frontNoticeEntity = FrontNoticeEntity.builder()
-                .idx(1)
+                .idx(1L)
                 .title("공지사항 테스트")
                 .description("공지사항 테스트")
                 .visible("Y")
@@ -255,7 +255,7 @@ class FrontNoticeJpaRepositoryTest {
     @DisplayName("이전 or 다음 공지사항 상세 조회 테스트")
     void 이전or다음공지사항상세조회테스트() {
         // given
-        frontNoticeEntity = FrontNoticeEntity.builder().idx(2).build();
+        frontNoticeEntity = FrontNoticeEntity.builder().idx(2L).build();
 
         // when
         frontNoticeDTO = frontNoticeJpaRepository.findOneNotice(frontNoticeEntity);
@@ -270,7 +270,7 @@ class FrontNoticeJpaRepositoryTest {
     @DisplayName("이전 공지사항 상세 조회 Mockito 테스트")
     void 이전공지사항상세조회Mockito테스트() {
         // given
-        frontNoticeEntity = FrontNoticeEntity.builder().idx(2).build();
+        frontNoticeEntity = FrontNoticeEntity.builder().idx(2L).build();
 
         // when
         frontNoticeDTO = frontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity);
@@ -294,7 +294,7 @@ class FrontNoticeJpaRepositoryTest {
     @DisplayName("이전 공지사항 상세 조회 BDD 테스트")
     void 이전공지사항상세조회BDD테스트() {
         // given
-        frontNoticeEntity = FrontNoticeEntity.builder().idx(2).build();
+        frontNoticeEntity = FrontNoticeEntity.builder().idx(2L).build();
 
         // when
         frontNoticeDTO = frontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity);
@@ -315,7 +315,7 @@ class FrontNoticeJpaRepositoryTest {
     @DisplayName("다음 공지사항 상세 조회 Mockito 테스트")
     void 다음공지사항상세조회Mockito테스트() {
         // given
-        frontNoticeEntity = FrontNoticeEntity.builder().idx(2).build();
+        frontNoticeEntity = FrontNoticeEntity.builder().idx(2L).build();
 
         // when
         frontNoticeDTO = frontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity);
@@ -339,7 +339,7 @@ class FrontNoticeJpaRepositoryTest {
     @DisplayName("다음 공지사항 상세 조회 BDD 테스트")
     void 다음공지사항상세조회BDD테스트() {
         // given
-        frontNoticeEntity = FrontNoticeEntity.builder().idx(2).build();
+        frontNoticeEntity = FrontNoticeEntity.builder().idx(2L).build();
 
         // when
         frontNoticeDTO = frontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity);
