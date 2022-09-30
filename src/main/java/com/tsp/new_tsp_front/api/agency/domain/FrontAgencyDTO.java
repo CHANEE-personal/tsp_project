@@ -22,25 +22,25 @@ import java.util.List;
 @ApiModel(value = "소속사 관련 변수")
 public class FrontAgencyDTO extends NewCommonDTO {
     @ApiModelProperty(required = true, value = "rnum", hidden = true)
-    Integer rnum;
+    private Integer rnum;
 
     @ApiModelProperty(required = true, value = "idx", hidden = true)
-    Integer idx;
+    private Long idx;
 
     @NotEmpty(message = "소속사명 입력은 필수입니다.")
     @ApiModelProperty(required = true, value = "agencyName")
-    String agencyName;
+    private String agencyName;
 
     @NotEmpty(message = "소속사 내용 입력은 필수입니다.")
     @ApiModelProperty(required = true, value = "agencyDescription")
-    String agencyDescription;
+    private String agencyDescription;
 
     @ApiModelProperty(value = "favoriteCount")
-    Integer favoriteCount;
+    private Integer favoriteCount;
 
     @NotEmpty(message = "소속사 노출 여부 선택은 필수입니다.")
     @ApiModelProperty(required = true, value = "visible")
-    String visible;
+    private String visible;
 
     @ApiModelProperty(required = true, value = "agencyImageList", hidden = true)
     private List<CommonImageDTO> agencyImage = new ArrayList<>();
