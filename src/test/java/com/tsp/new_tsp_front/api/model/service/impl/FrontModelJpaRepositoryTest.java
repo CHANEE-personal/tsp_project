@@ -91,12 +91,12 @@ class FrontModelJpaRepositoryTest {
         frontModelDTO = INSTANCE.toDto(frontModelEntity);
 
         commonImageEntity = CommonImageEntity.builder()
-                .idx(1)
+                .idx(1L)
                 .imageType("main")
                 .fileName("test.jpg")
                 .fileMask("test.jpg")
                 .filePath("/test/test.jpg")
-                .typeIdx(1)
+                .typeIdx(1L)
                 .typeName("model")
                 .build();
 
@@ -137,7 +137,7 @@ class FrontModelJpaRepositoryTest {
     @DisplayName("모델 상세 조회 테스트")
     void 모델상세조회테스트() {
         // given
-        FrontModelEntity menFrontModelEntity = FrontModelEntity.builder().idx(156).agencyIdx(1).build();
+        FrontModelEntity menFrontModelEntity = FrontModelEntity.builder().idx(156L).agencyIdx(1L).build();
 
         FrontModelDTO menModelDTO = frontModelJpaRepository.getModelInfo(menFrontModelEntity);
         assertThat(menModelDTO.getIdx()).isEqualTo(156);
@@ -149,7 +149,7 @@ class FrontModelJpaRepositoryTest {
         assertThat(menModelDTO.getModelAgency().getAgencyName()).isEqualTo("agency");
         assertThat(menModelDTO.getModelAgency().getAgencyDescription()).isEqualTo("agency");
 
-        FrontModelEntity womenFrontModelEntity = FrontModelEntity.builder().idx(143).agencyIdx(1).build();
+        FrontModelEntity womenFrontModelEntity = FrontModelEntity.builder().idx(143L).agencyIdx(1L).build();
 
         FrontModelDTO womenModelDTO = frontModelJpaRepository.getModelInfo(womenFrontModelEntity);
 
@@ -178,8 +178,8 @@ class FrontModelJpaRepositoryTest {
         commonImageDtoList.add(commonImageDTO);
 
         List<FrontModelDTO> modelList = new ArrayList<>();
-        modelList.add(FrontModelDTO.builder().idx(3).categoryCd(1).modelKorName("테스트모델1").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
-        modelList.add(FrontModelDTO.builder().idx(4).categoryCd(2).modelKorName("테스트모델2").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
+        modelList.add(FrontModelDTO.builder().idx(3L).categoryCd(1).modelKorName("테스트모델1").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
+        modelList.add(FrontModelDTO.builder().idx(4L).categoryCd(2).modelKorName("테스트모델2").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
 
         // when
         when(mockFrontModelJpaRepository.getModelList(modelMap)).thenReturn(modelList);
@@ -216,8 +216,8 @@ class FrontModelJpaRepositoryTest {
         commonImageDtoList.add(commonImageDTO);
 
         List<FrontModelDTO> modelList = new ArrayList<>();
-        modelList.add(FrontModelDTO.builder().idx(3).categoryCd(1).modelKorName("테스트모델1").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
-        modelList.add(FrontModelDTO.builder().idx(4).categoryCd(2).modelKorName("테스트모델2").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
+        modelList.add(FrontModelDTO.builder().idx(3L).categoryCd(1).modelKorName("테스트모델1").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
+        modelList.add(FrontModelDTO.builder().idx(4L).categoryCd(2).modelKorName("테스트모델2").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
 
         // when
         given(mockFrontModelJpaRepository.getModelList(modelMap)).willReturn(modelList);
@@ -243,10 +243,10 @@ class FrontModelJpaRepositoryTest {
         // given
         commonImageEntityList.add(commonImageEntity);
 
-        frontModelEntity = FrontModelEntity.builder().idx(1).commonImageEntityList(commonImageEntityList).build();
+        frontModelEntity = FrontModelEntity.builder().idx(1L).commonImageEntityList(commonImageEntityList).build();
 
         frontModelDTO = FrontModelDTO.builder()
-                .idx(1)
+                .idx(1L)
                 .categoryCd(1)
                 .categoryAge(2)
                 .modelKorName("조찬희")
@@ -298,10 +298,10 @@ class FrontModelJpaRepositoryTest {
         // given
         commonImageEntityList.add(commonImageEntity);
 
-        frontModelEntity = FrontModelEntity.builder().idx(1).commonImageEntityList(commonImageEntityList).build();
+        frontModelEntity = FrontModelEntity.builder().idx(1L).commonImageEntityList(commonImageEntityList).build();
 
         frontModelDTO = FrontModelDTO.builder()
-                .idx(1)
+                .idx(1L)
                 .categoryCd(1)
                 .categoryAge(2)
                 .modelKorName("조찬희")
@@ -348,7 +348,7 @@ class FrontModelJpaRepositoryTest {
     @DisplayName("이전 or 다음 모델 상세 조회 테스트")
     void 이전or다음모델상세조회테스트() {
         // given
-        frontModelEntity = FrontModelEntity.builder().idx(145).categoryCd(2).build();
+        frontModelEntity = FrontModelEntity.builder().idx(145L).categoryCd(2).build();
 
         // when
         frontModelDTO = frontModelJpaRepository.getModelInfo(frontModelEntity);
@@ -363,7 +363,7 @@ class FrontModelJpaRepositoryTest {
     @DisplayName("이전 모델 상세 조회 Mockito 테스트")
     void 이전모델상세조회Mockito테스트() {
         // given
-        frontModelEntity = FrontModelEntity.builder().idx(145).categoryCd(2).build();
+        frontModelEntity = FrontModelEntity.builder().idx(145L).categoryCd(2).build();
         // when
         frontModelDTO = frontModelJpaRepository.findPrevOneModel(frontModelEntity);
 
@@ -386,7 +386,7 @@ class FrontModelJpaRepositoryTest {
     @DisplayName("이전 모델 상세 조회 BDD 테스트")
     void 이전모델상세조회BDD테스트() {
         // given
-        frontModelEntity = FrontModelEntity.builder().idx(145).categoryCd(2).build();
+        frontModelEntity = FrontModelEntity.builder().idx(145L).categoryCd(2).build();
         // when
         frontModelDTO = frontModelJpaRepository.findPrevOneModel(frontModelEntity);
 
@@ -406,7 +406,7 @@ class FrontModelJpaRepositoryTest {
     @DisplayName("다음 모델 상세 조회 Mockito 테스트")
     void 다음모델상세조회Mockito테스트() {
         // given
-        frontModelEntity = FrontModelEntity.builder().idx(145).categoryCd(2).build();
+        frontModelEntity = FrontModelEntity.builder().idx(145L).categoryCd(2).build();
         // when
         frontModelDTO = frontModelJpaRepository.findNextOneModel(frontModelEntity);
 
@@ -429,7 +429,7 @@ class FrontModelJpaRepositoryTest {
     @DisplayName("다음 모델 상세 조회 BDD 테스트")
     void 다음모델상세조회BDD테스트() {
         // given
-        frontModelEntity = FrontModelEntity.builder().idx(145).categoryCd(2).build();
+        frontModelEntity = FrontModelEntity.builder().idx(145L).categoryCd(2).build();
         // when
         frontModelDTO = frontModelJpaRepository.findNextOneModel(frontModelEntity);
 
@@ -466,11 +466,11 @@ class FrontModelJpaRepositoryTest {
         List<FrontModelDTO> returnModelList = new ArrayList<>();
 
         // 남성
-        returnModelList.add(FrontModelDTO.builder().idx(1).categoryCd(1).modelKorName("남성모델").modelEngName("menModel").modelMainYn("Y").build());
+        returnModelList.add(FrontModelDTO.builder().idx(1L).categoryCd(1).modelKorName("남성모델").modelEngName("menModel").modelMainYn("Y").build());
         // 여성
-        returnModelList.add(FrontModelDTO.builder().idx(2).categoryCd(2).modelKorName("여성모델").modelEngName("womenModel").modelMainYn("Y").build());
+        returnModelList.add(FrontModelDTO.builder().idx(2L).categoryCd(2).modelKorName("여성모델").modelEngName("womenModel").modelMainYn("Y").build());
         // 시니어
-        returnModelList.add(FrontModelDTO.builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").modelMainYn("Y").build());
+        returnModelList.add(FrontModelDTO.builder().idx(3L).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").modelMainYn("Y").build());
 
         // when
         when(mockFrontModelJpaRepository.getMainModelList()).thenReturn(returnModelList);
@@ -503,11 +503,11 @@ class FrontModelJpaRepositoryTest {
         List<FrontModelDTO> returnModelList = new ArrayList<>();
 
         // 남성
-        returnModelList.add(FrontModelDTO.builder().idx(1).categoryCd(1).modelKorName("남성모델").modelEngName("menModel").modelMainYn("Y").build());
+        returnModelList.add(FrontModelDTO.builder().idx(1L).categoryCd(1).modelKorName("남성모델").modelEngName("menModel").modelMainYn("Y").build());
         // 여성
-        returnModelList.add(FrontModelDTO.builder().idx(2).categoryCd(2).modelKorName("여성모델").modelEngName("womenModel").modelMainYn("Y").build());
+        returnModelList.add(FrontModelDTO.builder().idx(2L).categoryCd(2).modelKorName("여성모델").modelEngName("womenModel").modelMainYn("Y").build());
         // 시니어
-        returnModelList.add(FrontModelDTO.builder().idx(3).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").modelMainYn("Y").build());
+        returnModelList.add(FrontModelDTO.builder().idx(3L).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").modelMainYn("Y").build());
 
         // when
         given(mockFrontModelJpaRepository.getMainModelList()).willReturn(returnModelList);
@@ -678,8 +678,8 @@ class FrontModelJpaRepositoryTest {
         commonImageDtoList.add(commonImageDTO);
 
         List<FrontModelDTO> modelList = new ArrayList<>();
-        modelList.add(FrontModelDTO.builder().idx(3).categoryCd(1).modelKorName("테스트모델1").newYn("Y").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
-        modelList.add(FrontModelDTO.builder().idx(4).categoryCd(2).modelKorName("테스트모델2").newYn("Y").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
+        modelList.add(FrontModelDTO.builder().idx(3L).categoryCd(1).modelKorName("테스트모델1").newYn("Y").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
+        modelList.add(FrontModelDTO.builder().idx(4L).categoryCd(2).modelKorName("테스트모델2").newYn("Y").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
 
         // when
         when(mockFrontModelJpaRepository.getNewModelList(newModelMap)).thenReturn(modelList);
@@ -717,8 +717,8 @@ class FrontModelJpaRepositoryTest {
         commonImageDtoList.add(commonImageDTO);
 
         List<FrontModelDTO> modelList = new ArrayList<>();
-        modelList.add(FrontModelDTO.builder().idx(3).categoryCd(1).modelKorName("테스트모델1").newYn("Y").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
-        modelList.add(FrontModelDTO.builder().idx(4).categoryCd(2).modelKorName("테스트모델2").newYn("Y").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
+        modelList.add(FrontModelDTO.builder().idx(3L).categoryCd(1).modelKorName("테스트모델1").newYn("Y").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
+        modelList.add(FrontModelDTO.builder().idx(4L).categoryCd(2).modelKorName("테스트모델2").newYn("Y").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
 
         // when
         given(mockFrontModelJpaRepository.getNewModelList(newModelMap)).willReturn(modelList);

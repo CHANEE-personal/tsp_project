@@ -113,7 +113,7 @@ public class FrontModelJpaApiController {
     })
     @GetMapping(value = "/{categoryCd}/{idx}")
     public FrontModelDTO getModelInfo(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
-                                            @PathVariable Integer idx) {
+                                      @PathVariable Long idx) {
         return this.frontModelJpaApiService.getModelInfo(FrontModelEntity.builder().categoryCd(categoryCd).idx(idx).build());
     }
 
@@ -136,7 +136,7 @@ public class FrontModelJpaApiController {
     })
     @GetMapping("/{categoryCd}/{idx}/prev")
     public FrontModelDTO getPrevModelEdit(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
-                                          @PathVariable Integer idx) {
+                                          @PathVariable Long idx) {
         return this.frontModelJpaApiService.findPrevOneModel(FrontModelEntity.builder().idx(idx).categoryCd(categoryCd).build());
     }
 
@@ -159,7 +159,7 @@ public class FrontModelJpaApiController {
     })
     @GetMapping("/{categoryCd}/{idx}/next")
     public FrontModelDTO getNextModelEdit(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
-                                          @PathVariable Integer idx) {
+                                          @PathVariable Long idx) {
         return this.frontModelJpaApiService.findNextOneModel(FrontModelEntity.builder().idx(idx).categoryCd(categoryCd).build());
     }
 
@@ -182,7 +182,7 @@ public class FrontModelJpaApiController {
     })
     @PutMapping(value = "/{categoryCd}/{idx}/like")
     public Integer favoriteModel(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
-                                 @PathVariable Integer idx) {
+                                 @PathVariable Long idx) {
         return this.frontModelJpaApiService.favoriteModel(FrontModelEntity.builder().categoryCd(categoryCd).idx(idx).build());
     }
 
