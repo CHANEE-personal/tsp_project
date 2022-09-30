@@ -99,7 +99,7 @@ public class FrontNegotiationJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}")
-    public FrontNegotiationDTO findOneNegotiation(@PathVariable Integer idx) {
+    public FrontNegotiationDTO findOneNegotiation(@PathVariable Long idx) {
         return this.frontNegotiationJpaApiService.findOneNegotiation(FrontNegotiationEntity.builder().idx(idx).build());
     }
 
@@ -165,7 +165,7 @@ public class FrontNegotiationJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @DeleteMapping("/{idx}")
-    public Integer deleteModelNegotiation(@PathVariable Integer idx) {
+    public Long deleteModelNegotiation(@PathVariable Long idx) {
         return this.frontNegotiationJpaApiService.deleteModelNegotiation(idx);
     }
 }

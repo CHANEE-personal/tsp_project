@@ -168,7 +168,7 @@ class FrontNegotiationApiServiceTest {
                 .modelNegotiationDesc("영화 프로젝트 참여 테스트 두번째").modelNegotiationDate(now()).build());
 
         List<FrontModelDTO> modelNegotiationList = new ArrayList<>();
-        modelNegotiationList.add(FrontModelDTO.builder().idx(3).categoryCd(1).modelKorName("조찬희")
+        modelNegotiationList.add(FrontModelDTO.builder().idx(3L).categoryCd(1).modelKorName("조찬희")
                 .modelNegotiationList(negotiationList).build());
 
         // when
@@ -203,7 +203,7 @@ class FrontNegotiationApiServiceTest {
                 .modelNegotiationDesc("영화 프로젝트 참여 테스트 두번째").modelNegotiationDate(now()).build());
 
         List<FrontModelDTO> modelNegotiationList = new ArrayList<>();
-        modelNegotiationList.add(FrontModelDTO.builder().idx(3).categoryCd(1).modelKorName("조찬희")
+        modelNegotiationList.add(FrontModelDTO.builder().idx(3L).categoryCd(1).modelKorName("조찬희")
                 .modelNegotiationList(negotiationList).build());
 
         // when
@@ -269,7 +269,7 @@ class FrontNegotiationApiServiceTest {
     @DisplayName("모델섭외수정Mockito테스트")
     void 모델섭외수정Mockito테스트() {
         // given
-        Integer idx = frontNegotiationJpaApiService.insertModelNegotiation(frontNegotiationEntity).getIdx();
+        Long idx = frontNegotiationJpaApiService.insertModelNegotiation(frontNegotiationEntity).getIdx();
 
         frontNegotiationEntity = FrontNegotiationEntity.builder()
                 .idx(idx)
@@ -308,7 +308,7 @@ class FrontNegotiationApiServiceTest {
     @DisplayName("모델섭외수정BDD테스트")
     void 모델섭외수정BDD테스트() {
         // given
-        Integer idx = frontNegotiationJpaApiService.insertModelNegotiation(frontNegotiationEntity).getIdx();
+        Long idx = frontNegotiationJpaApiService.insertModelNegotiation(frontNegotiationEntity).getIdx();
 
         frontNegotiationEntity = FrontNegotiationEntity.builder()
                 .idx(idx)
@@ -349,7 +349,7 @@ class FrontNegotiationApiServiceTest {
 
         // when
         when(mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity)).thenReturn(frontNegotiationDTO);
-        Integer deleteIdx = frontNegotiationJpaApiService.deleteModelNegotiation(frontNegotiationEntity.getIdx());
+        Long deleteIdx = frontNegotiationJpaApiService.deleteModelNegotiation(frontNegotiationEntity.getIdx());
 
         // then
         assertThat(mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity).getIdx()).isEqualTo(deleteIdx);
@@ -372,7 +372,7 @@ class FrontNegotiationApiServiceTest {
 
         // when
         given(mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity)).willReturn(frontNegotiationDTO);
-        Integer deleteIdx = frontNegotiationJpaApiService.deleteModelNegotiation(frontNegotiationEntity.getIdx());
+        Long deleteIdx = frontNegotiationJpaApiService.deleteModelNegotiation(frontNegotiationEntity.getIdx());
 
         // then
         assertThat(mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity).getIdx()).isEqualTo(deleteIdx);

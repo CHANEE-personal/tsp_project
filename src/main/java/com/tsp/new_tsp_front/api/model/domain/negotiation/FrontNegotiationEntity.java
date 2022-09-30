@@ -33,11 +33,11 @@ public class FrontNegotiationEntity extends NewCommonMappedClass {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "idx")
-    private Integer idx;
+    private Long idx;
 
     @Column(name = "model_idx")
     @ApiModelProperty(value = "모델 idx", required = true)
-    private Integer modelIdx;
+    private Long modelIdx;
 
     @Column(name = "model_kor_name")
     @NotEmpty(message = "모델 국문 이름 입력은 필수입니다.")
