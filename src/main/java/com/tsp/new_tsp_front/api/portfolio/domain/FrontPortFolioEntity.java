@@ -33,7 +33,7 @@ public class FrontPortFolioEntity extends NewCommonMappedClass {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "idx")
-    private Integer idx;
+    private Long idx;
 
     @Column(name = "category_cd")
     @NotNull(message = "포트폴리오 카테고리 선택은 필수입니다.")

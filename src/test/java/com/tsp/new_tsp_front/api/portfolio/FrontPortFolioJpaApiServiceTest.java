@@ -53,7 +53,7 @@ class FrontPortFolioJpaApiServiceTest {
 
         List<FrontPortFolioDTO> returnPortfolioList = new ArrayList<>();
         returnPortfolioList.add(FrontPortFolioDTO.builder()
-                .idx(1).title("portfolioTest").description("portfolioTest").hashTag("portfolio").videoUrl("test").visible("Y").build());
+                .idx(1L).title("portfolioTest").description("portfolioTest").hashTag("portfolio").videoUrl("test").visible("Y").build());
 
         // when
         when(mockFrontPortFolioJpaApiService.getPortFolioList(portfolioMap)).thenReturn(returnPortfolioList);
@@ -91,7 +91,7 @@ class FrontPortFolioJpaApiServiceTest {
 
         List<FrontPortFolioDTO> returnPortfolioList = new ArrayList<>();
         returnPortfolioList.add(FrontPortFolioDTO.builder()
-                .idx(1).title("portfolioTest").description("portfolioTest").hashTag("portfolio").videoUrl("test").visible("Y").build());
+                .idx(1L).title("portfolioTest").description("portfolioTest").hashTag("portfolio").videoUrl("test").visible("Y").build());
 
         // when
         given(mockFrontPortFolioJpaApiService.getPortFolioList(portfolioMap)).willReturn(returnPortfolioList);
@@ -120,7 +120,7 @@ class FrontPortFolioJpaApiServiceTest {
     @DisplayName("포트폴리오상세조회Mockito테스트")
     void 포트폴리오상세조회Mockito테스트() {
         // given
-        FrontPortFolioEntity frontPortFolioEntity = FrontPortFolioEntity.builder().idx(1).build();
+        FrontPortFolioEntity frontPortFolioEntity = FrontPortFolioEntity.builder().idx(1L).build();
         FrontPortFolioDTO frontPortFolioDTO = FrontPortFolioDTO.builder().title("portfolioTest").description("portfolioTest").hashTag("portfolio").videoUrl("test").visible("Y").build();
 
         // when
@@ -148,7 +148,7 @@ class FrontPortFolioJpaApiServiceTest {
     @DisplayName("포트폴리오상세조회BDD테스트")
     void 포트폴리오상세조회BDD테스트() {
         // given
-        FrontPortFolioEntity frontPortFolioEntity = FrontPortFolioEntity.builder().idx(1).build();
+        FrontPortFolioEntity frontPortFolioEntity = FrontPortFolioEntity.builder().idx(1L).build();
         FrontPortFolioDTO frontPortFolioDTO = FrontPortFolioDTO.builder().title("portfolioTest").description("portfolioTest").hashTag("portfolio").videoUrl("test").visible("Y").build();
 
         // when
@@ -174,7 +174,7 @@ class FrontPortFolioJpaApiServiceTest {
     void 이전or다음포트폴리오상세조회테스트() {
         // given
         FrontPortFolioEntity frontPortFolioEntity = FrontPortFolioEntity.builder()
-                .idx(2)
+                .idx(2L)
                 .categoryCd(1)
                 .title("포트폴리오 테스트")
                 .description("포트폴리오 테스트")
@@ -197,7 +197,7 @@ class FrontPortFolioJpaApiServiceTest {
     void 이전포트폴리오상세조회Mockito테스트() {
         // given
         FrontPortFolioEntity frontPortFolioEntity = FrontPortFolioEntity.builder()
-                .idx(2)
+                .idx(2L)
                 .categoryCd(1)
                 .title("포트폴리오 테스트")
                 .description("포트폴리오 테스트")
@@ -229,7 +229,7 @@ class FrontPortFolioJpaApiServiceTest {
     void 이전포트폴리오상세조회BDD테스트() {
         // given
         FrontPortFolioEntity frontPortFolioEntity = FrontPortFolioEntity.builder()
-                .idx(2)
+                .idx(2L)
                 .categoryCd(1)
                 .title("포트폴리오 테스트")
                 .description("포트폴리오 테스트")
@@ -258,7 +258,7 @@ class FrontPortFolioJpaApiServiceTest {
     void 다음포트폴리오상세조회Mockito테스트() {
         // given
         FrontPortFolioEntity frontPortFolioEntity = FrontPortFolioEntity.builder()
-                .idx(2)
+                .idx(2L)
                 .categoryCd(1)
                 .title("포트폴리오 테스트")
                 .description("포트폴리오 테스트")
@@ -290,7 +290,7 @@ class FrontPortFolioJpaApiServiceTest {
     void 다음포트폴리오상세조회BDD테스트() {
         // given
         FrontPortFolioEntity frontPortFolioEntity = FrontPortFolioEntity.builder()
-                .idx(2)
+                .idx(2L)
                 .categoryCd(1)
                 .title("포트폴리오 테스트")
                 .description("포트폴리오 테스트")

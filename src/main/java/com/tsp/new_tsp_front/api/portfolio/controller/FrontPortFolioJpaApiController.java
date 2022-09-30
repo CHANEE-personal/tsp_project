@@ -78,7 +78,7 @@ public class FrontPortFolioJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/{idx}")
-    public FrontPortFolioDTO getPortFolioInfo(@PathVariable Integer idx) {
+    public FrontPortFolioDTO getPortFolioInfo(@PathVariable Long idx) {
         return this.frontPortFolioJpaApiService.getPortFolioInfo(FrontPortFolioEntity.builder().idx(idx).build());
     }
 
@@ -100,7 +100,7 @@ public class FrontPortFolioJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}/prev")
-    public FrontPortFolioDTO getPrevPortfolioEdit(@PathVariable Integer idx) {
+    public FrontPortFolioDTO getPrevPortfolioEdit(@PathVariable Long idx) {
         return this.frontPortFolioJpaApiService.findPrevOnePortfolio(FrontPortFolioEntity.builder().idx(idx).build());
     }
 
@@ -122,7 +122,7 @@ public class FrontPortFolioJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}/next")
-    public FrontPortFolioDTO getNextPortfolioEdit(@PathVariable Integer idx) {
+    public FrontPortFolioDTO getNextPortfolioEdit(@PathVariable Long idx) {
         return this.frontPortFolioJpaApiService.findNextOnePortfolio(FrontPortFolioEntity.builder().idx(idx).build());
     }
 }
