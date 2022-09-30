@@ -53,8 +53,8 @@ class FrontProductionJpaApiServiceTest {
 
         List<FrontProductionDTO> returnProductionList = new ArrayList<>();
 
-        returnProductionList.add(FrontProductionDTO.builder().idx(1).title("프로덕션테스트").description("프로덕션테스트").visible("Y").build());
-        returnProductionList.add(FrontProductionDTO.builder().idx(2).title("productionTest").description("productionTest").visible("Y").build());
+        returnProductionList.add(FrontProductionDTO.builder().idx(1L).title("프로덕션테스트").description("프로덕션테스트").visible("Y").build());
+        returnProductionList.add(FrontProductionDTO.builder().idx(2L).title("productionTest").description("productionTest").visible("Y").build());
 
         // when
         when(mockFrontProductionJpaApiService.getProductionList(productionMap)).thenReturn(returnProductionList);
@@ -90,8 +90,8 @@ class FrontProductionJpaApiServiceTest {
 
         List<FrontProductionDTO> returnProductionList = new ArrayList<>();
 
-        returnProductionList.add(FrontProductionDTO.builder().idx(1).title("프로덕션테스트").description("프로덕션테스트").visible("Y").build());
-        returnProductionList.add(FrontProductionDTO.builder().idx(2).title("productionTest").description("productionTest").visible("Y").build());
+        returnProductionList.add(FrontProductionDTO.builder().idx(1L).title("프로덕션테스트").description("프로덕션테스트").visible("Y").build());
+        returnProductionList.add(FrontProductionDTO.builder().idx(2L).title("productionTest").description("productionTest").visible("Y").build());
 
         // when
         given(mockFrontProductionJpaApiService.getProductionList(productionMap)).willReturn(returnProductionList);
@@ -118,8 +118,8 @@ class FrontProductionJpaApiServiceTest {
     @DisplayName("프로덕션상세조회Mockito테스트")
     void 프로덕션상세조회Mockito테스트() {
         // given
-        FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(1).build();
-        FrontProductionDTO frontProductionDTO = FrontProductionDTO.builder().idx(1).title("productionTest").description("productionTest").build();
+        FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(1L).build();
+        FrontProductionDTO frontProductionDTO = FrontProductionDTO.builder().idx(1L).title("productionTest").description("productionTest").build();
 
         // when
         when(mockFrontProductionJpaApiService.getProductionInfo(frontProductionEntity)).thenReturn(frontProductionDTO);
@@ -144,8 +144,8 @@ class FrontProductionJpaApiServiceTest {
     @DisplayName("프로덕션상세조회BDD테스트")
     void 프로덕션상세조회BDD테스트() {
         // given
-        FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(1).build();
-        FrontProductionDTO frontProductionDTO = FrontProductionDTO.builder().idx(1).title("productionTest").description("productionTest").build();
+        FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(1L).build();
+        FrontProductionDTO frontProductionDTO = FrontProductionDTO.builder().idx(1L).title("productionTest").description("productionTest").build();
 
         // when
         given(mockFrontProductionJpaApiService.getProductionInfo(frontProductionEntity)).willReturn(frontProductionDTO);
@@ -167,7 +167,7 @@ class FrontProductionJpaApiServiceTest {
     @DisplayName("이전 or 다음 프로덕션 상세 조회 테스트")
     void 이전or다음프로덕션상세조회테스트() {
         // given
-        FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(118).build();
+        FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(118L).build();
 
         // when
         FrontProductionDTO frontProductionDTO = frontProductionJpaApiService.getProductionInfo(frontProductionEntity);
@@ -182,7 +182,7 @@ class FrontProductionJpaApiServiceTest {
     @DisplayName("이전 프로덕션 상세 조회 Mockito 테스트")
     void 이전프로덕션상세조회Mockito테스트() {
         // given
-        FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(118).build();
+        FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(118L).build();
 
         // when
         FrontProductionDTO frontProductionDTO = frontProductionJpaApiService.findPrevOneProduction(frontProductionEntity);
@@ -206,7 +206,7 @@ class FrontProductionJpaApiServiceTest {
     @DisplayName("이전 프로덕션 상세 조회 BDD 테스트")
     void 이전프로덕션상세조회BDD테스트() {
         // given
-        FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(118).build();
+        FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(118L).build();
 
         // when
         FrontProductionDTO frontProductionDTO = frontProductionJpaApiService.findPrevOneProduction(frontProductionEntity);
@@ -227,7 +227,7 @@ class FrontProductionJpaApiServiceTest {
     @DisplayName("다음 프로덕션 상세 조회 Mockito 테스트")
     void 다음프로덕션상세조회Mockito테스트() {
         // given
-        FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(118).build();
+        FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(118L).build();
 
         // when
         FrontProductionDTO frontProductionDTO = frontProductionJpaApiService.findNextOneProduction(frontProductionEntity);
@@ -251,7 +251,7 @@ class FrontProductionJpaApiServiceTest {
     @DisplayName("다음 프로덕션 상세 조회 BDD 테스트")
     void 다음프로덕션상세조회BDD테스트() {
         // given
-        FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(118).build();
+        FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(118L).build();
 
         // when
         FrontProductionDTO frontProductionDTO = frontProductionJpaApiService.findNextOneProduction(frontProductionEntity);

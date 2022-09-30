@@ -155,7 +155,7 @@ public class FrontProductionJpaRepository {
      * 5. 작성일       : 2022. 01. 12.
      * </pre>
      */
-    public Integer viewProductionCount(Integer idx) {
+    public Integer viewProductionCount(Long idx) {
         return requireNonNull(queryFactory
                 .selectFrom(frontProductionEntity)
                 .where(frontProductionEntity.idx.eq(idx)).fetchOne()).getViewCount();
