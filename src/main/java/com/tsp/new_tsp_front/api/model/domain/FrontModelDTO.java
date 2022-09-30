@@ -34,7 +34,7 @@ public class FrontModelDTO extends NewCommonDTO {
     private Integer rnum;
 
     @ApiModelProperty(required = true, value = "idx", hidden = true)
-    private Integer idx;
+    private Long idx;
 
     @ApiModelProperty(required = true, value = "category code")
     private Integer categoryCd;
@@ -99,7 +99,7 @@ public class FrontModelDTO extends NewCommonDTO {
     private String newYn;
 
     @ApiModelProperty(value = "소속사 idx((ex)1")
-    private Integer agencyIdx;
+    private Long agencyIdx;
 
     @Convert(converter = CustomConverter.class)
     @ApiModelProperty(value = "model career")

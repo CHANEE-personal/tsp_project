@@ -131,7 +131,7 @@ public class FrontNegotiationJpaApiService {
     @CacheEvict("negotiation")
     @Modifying(clearAutomatically = true)
     @Transactional
-    public Integer deleteModelNegotiation(Integer idx) throws TspException {
+    public Long deleteModelNegotiation(Long idx) throws TspException {
         try {
             return frontNegotiationJpaRepository.deleteModelNegotiation(idx);
         } catch (Exception e) {

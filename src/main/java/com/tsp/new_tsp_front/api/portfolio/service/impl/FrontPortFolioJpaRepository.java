@@ -152,7 +152,7 @@ public class FrontPortFolioJpaRepository {
      * 5. 작성일       : 2022. 01. 12.
      * </pre>
      */
-    public Integer viewPortfolioCount(Integer idx) {
+    public Integer viewPortfolioCount(Long idx) {
         return requireNonNull(queryFactory
                 .selectFrom(frontPortFolioEntity)
                 .where(frontPortFolioEntity.idx.eq(idx)).fetchOne()).getViewCount();

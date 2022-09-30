@@ -26,7 +26,7 @@ public class FrontSupportDTO extends NewCommonDTO {
     Integer rnum;
 
     @ApiModelProperty(value = "지원모델 IDX", required = true, hidden = true)
-    private Integer idx;
+    private Long idx;
 
     @ApiModelProperty(value = "지원모델 이름", required = true)
     private String supportName;

@@ -88,7 +88,7 @@ class FrontFaqJpaRepositoryTest {
         faqMap.put("size", 3);
 
         List<FrontFaqDTO> faqList = new ArrayList<>();
-        faqList.add(FrontFaqDTO.builder().idx(1).title("FAQ").description("FAQ").visible("Y").build());
+        faqList.add(FrontFaqDTO.builder().idx(1L).title("FAQ").description("FAQ").visible("Y").build());
 
         // when
         when(mockFrontFaqJpaRepository.findFaqsList(faqMap)).thenReturn(faqList);
@@ -117,7 +117,7 @@ class FrontFaqJpaRepositoryTest {
         faqMap.put("size", 3);
 
         List<FrontFaqDTO> faqList = new ArrayList<>();
-        faqList.add(FrontFaqDTO.builder().idx(1).title("FAQ").description("FAQ").visible("Y").build());
+        faqList.add(FrontFaqDTO.builder().idx(1L).title("FAQ").description("FAQ").visible("Y").build());
 
         // when
         given(mockFrontFaqJpaRepository.findFaqsList(faqMap)).willReturn(faqList);
@@ -139,7 +139,7 @@ class FrontFaqJpaRepositoryTest {
     void FAQ상세Mockito조회테스트() {
         // given
         FrontFaqEntity frontFaqEntity = FrontFaqEntity.builder()
-                .idx(1)
+                .idx(1L)
                 .title("FAQ 테스트")
                 .description("FAQ 테스트")
                 .visible("Y")
@@ -171,7 +171,7 @@ class FrontFaqJpaRepositoryTest {
     void FAQ상세BDD조회테스트() {
         // given
         FrontFaqEntity frontFaqEntity = FrontFaqEntity.builder()
-                .idx(1)
+                .idx(1L)
                 .title("FAQ 테스트")
                 .description("FAQ 테스트")
                 .visible("Y")
@@ -199,7 +199,7 @@ class FrontFaqJpaRepositoryTest {
     @DisplayName("이전 or 다음 FAQ 상세 조회 테스트")
     void 이전or다음FAQ상세조회테스트() {
         // given
-        frontFaqEntity = FrontFaqEntity.builder().idx(2).build();
+        frontFaqEntity = FrontFaqEntity.builder().idx(2L).build();
 
         // when
         frontFaqDTO = frontFaqJpaRepository.findOneFaq(frontFaqEntity);
@@ -214,7 +214,7 @@ class FrontFaqJpaRepositoryTest {
     @DisplayName("이전 FAQ 상세 조회 Mockito 테스트")
     void 이전FAQ상세조회Mockito테스트() {
         // given
-        frontFaqEntity = FrontFaqEntity.builder().idx(2).build();
+        frontFaqEntity = FrontFaqEntity.builder().idx(2L).build();
 
         // when
         frontFaqDTO = frontFaqJpaRepository.findPrevOneFaq(frontFaqEntity);
@@ -238,7 +238,7 @@ class FrontFaqJpaRepositoryTest {
     @DisplayName("이전 FAQ 상세 조회 BDD 테스트")
     void 이전FAQ상세조회BDD테스트() {
         // given
-        frontFaqEntity = FrontFaqEntity.builder().idx(2).build();
+        frontFaqEntity = FrontFaqEntity.builder().idx(2L).build();
 
         // when
         frontFaqDTO = frontFaqJpaRepository.findPrevOneFaq(frontFaqEntity);
@@ -259,7 +259,7 @@ class FrontFaqJpaRepositoryTest {
     @DisplayName("다음 FAQ 상세 조회 Mockito 테스트")
     void 다음FAQ상세조회Mockito테스트() {
         // given
-        frontFaqEntity = FrontFaqEntity.builder().idx(2).build();
+        frontFaqEntity = FrontFaqEntity.builder().idx(2L).build();
 
         // when
         frontFaqDTO = frontFaqJpaRepository.findNextOneFaq(frontFaqEntity);
@@ -283,7 +283,7 @@ class FrontFaqJpaRepositoryTest {
     @DisplayName("다음 소속사 상세 조회 BDD 테스트")
     void 다음소속사상세조회BDD테스트() {
         // given
-        frontFaqEntity = FrontFaqEntity.builder().idx(2).build();
+        frontFaqEntity = FrontFaqEntity.builder().idx(2L).build();
 
         // when
         frontFaqDTO = frontFaqJpaRepository.findNextOneFaq(frontFaqEntity);

@@ -56,12 +56,12 @@ class FrontPortFolioJpaRepositoryTest {
 
     private void createPortfolio() {
         commonImageEntity = CommonImageEntity.builder()
-                .idx(1)
+                .idx(1L)
                 .imageType("main")
                 .fileName("test.jpg")
                 .fileMask("test.jpg")
                 .filePath("/test/test.jpg")
-                .typeIdx(1)
+                .typeIdx(1L)
                 .typeName("portfolio")
                 .build();
 
@@ -112,7 +112,7 @@ class FrontPortFolioJpaRepositoryTest {
         commonImageDtoList.add(commonImageDTO);
 
         List<FrontPortFolioDTO> portfolioList = new ArrayList<>();
-        portfolioList.add(FrontPortFolioDTO.builder().idx(1).title("포트폴리오").description("포트폴리오")
+        portfolioList.add(FrontPortFolioDTO.builder().idx(1L).title("포트폴리오").description("포트폴리오")
                 .hashTag("#test").portfolioImage(commonImageDtoList).visible("Y").build());
 
         // when
@@ -148,7 +148,7 @@ class FrontPortFolioJpaRepositoryTest {
         commonImageDtoList.add(commonImageDTO);
 
         List<FrontPortFolioDTO> portfolioList = new ArrayList<>();
-        portfolioList.add(FrontPortFolioDTO.builder().idx(1).title("포트폴리오").description("포트폴리오")
+        portfolioList.add(FrontPortFolioDTO.builder().idx(1L).title("포트폴리오").description("포트폴리오")
                 .hashTag("#test").portfolioImage(commonImageDtoList).visible("Y").build());
 
         // when
@@ -268,7 +268,7 @@ class FrontPortFolioJpaRepositoryTest {
     void 이전or다음포트폴리오상세조회테스트() {
         // given
         frontPortFolioEntity = FrontPortFolioEntity.builder()
-                .idx(2)
+                .idx(2L)
                 .categoryCd(1)
                 .title("포트폴리오 테스트")
                 .description("포트폴리오 테스트")
@@ -291,7 +291,7 @@ class FrontPortFolioJpaRepositoryTest {
     void 이전포트폴리오상세조회Mockito테스트() {
         // given
         frontPortFolioEntity = FrontPortFolioEntity.builder()
-                .idx(2)
+                .idx(2L)
                 .categoryCd(1)
                 .title("포트폴리오 테스트")
                 .description("포트폴리오 테스트")
@@ -323,7 +323,7 @@ class FrontPortFolioJpaRepositoryTest {
     void 이전포트폴리오상세조회BDD테스트() {
         // given
         frontPortFolioEntity = FrontPortFolioEntity.builder()
-                .idx(2)
+                .idx(2L)
                 .categoryCd(1)
                 .title("포트폴리오 테스트")
                 .description("포트폴리오 테스트")
@@ -352,7 +352,7 @@ class FrontPortFolioJpaRepositoryTest {
     void 다음포트폴리오상세조회Mockito테스트() {
         // given
         frontPortFolioEntity = FrontPortFolioEntity.builder()
-                .idx(2)
+                .idx(2L)
                 .categoryCd(1)
                 .title("포트폴리오 테스트")
                 .description("포트폴리오 테스트")
@@ -384,7 +384,7 @@ class FrontPortFolioJpaRepositoryTest {
     void 다음포트폴리오상세조회BDD테스트() {
         // given
         frontPortFolioEntity = FrontPortFolioEntity.builder()
-                .idx(2)
+                .idx(2L)
                 .categoryCd(1)
                 .title("포트폴리오 테스트")
                 .description("포트폴리오 테스트")

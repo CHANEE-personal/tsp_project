@@ -24,11 +24,11 @@ import static javax.persistence.TemporalType.TIMESTAMP;
 public abstract class NewCommonMappedClass {
     @Column(name = "creator", updatable = false)
     @ApiModelProperty(required = true, value = "등록자")
-    private Integer creator;
+    private Long creator;
 
     @Column(name = "updater", insertable = false)
     @ApiModelProperty(required = true, value = "수정자")
-    private Integer updater;
+    private Long updater;
 
     @Column(name = "create_time", updatable = false)
     @Temporal(value = TIMESTAMP)

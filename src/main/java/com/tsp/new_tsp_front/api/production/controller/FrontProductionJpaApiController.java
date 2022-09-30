@@ -79,7 +79,7 @@ public class FrontProductionJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/{idx}")
-    public FrontProductionDTO getProductionInfo(@PathVariable Integer idx) {
+    public FrontProductionDTO getProductionInfo(@PathVariable Long idx) {
         return this.frontProductionJpaApiService.getProductionInfo(FrontProductionEntity.builder().idx(idx).build());
     }
 
@@ -101,7 +101,7 @@ public class FrontProductionJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}/prev")
-    public FrontProductionDTO getPrevProductionEdit(@PathVariable Integer idx) {
+    public FrontProductionDTO getPrevProductionEdit(@PathVariable Long idx) {
         return this.frontProductionJpaApiService.findPrevOneProduction(FrontProductionEntity.builder().idx(idx).build());
     }
 
@@ -123,7 +123,7 @@ public class FrontProductionJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}/next")
-    public FrontProductionDTO getNextProductionEdit(@PathVariable Integer idx) {
+    public FrontProductionDTO getNextProductionEdit(@PathVariable Long idx) {
         return this.frontProductionJpaApiService.findNextOneProduction(FrontProductionEntity.builder().idx(idx).build());
     }
 }

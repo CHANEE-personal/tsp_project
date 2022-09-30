@@ -42,7 +42,7 @@ public class FrontModelEntity extends NewCommonMappedClass {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "idx")
-    private Integer idx;
+    private Long idx;
 
     @Column(name = "category_cd")
     @Range(min = 1, max = 3, message = "모델 카테고리 값은 1~3 사이 값만 입력할 수 있습니다")
@@ -55,7 +55,7 @@ public class FrontModelEntity extends NewCommonMappedClass {
     private Integer categoryAge;
 
     @Column(name = "agency_idx")
-    private Integer agencyIdx;
+    private Long agencyIdx;
 
     @Column(name = "model_kor_name")
     @NotEmpty(message = "모델 국문 이름 입력은 필수입니다.")

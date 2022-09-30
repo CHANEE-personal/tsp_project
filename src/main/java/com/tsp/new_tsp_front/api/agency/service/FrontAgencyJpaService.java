@@ -119,7 +119,7 @@ public class FrontAgencyJpaService {
      * </pre>
      */
     @Transactional(readOnly = true)
-    public Integer favoriteModelCount(Integer idx) throws TspException {
+    public Integer favoriteModelCount(Long idx) throws TspException {
         try {
             return this.frontAgencyJpaRepository.favoriteAgencyCount(idx);
         } catch (Exception e) {

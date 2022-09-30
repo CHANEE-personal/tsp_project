@@ -106,7 +106,7 @@ class FrontNegotiationJpaApiControllerTest {
     @DisplayName("모델 섭외 등록 테스트")
     void 모델섭외등록Api테스트() throws Exception {
         FrontNegotiationEntity frontNegotiationEntity = FrontNegotiationEntity.builder()
-                .modelIdx(1)
+                .modelIdx(1L)
                 .modelKorName("조찬희")
                 .modelNegotiationDesc("영화 프로젝트 참여")
                 .modelNegotiationDate(now())
@@ -141,7 +141,7 @@ class FrontNegotiationJpaApiControllerTest {
     @DisplayName("모델 섭외 수정 테스트")
     void 모델섭외수정Api테스트() throws Exception {
         FrontNegotiationEntity frontNegotiationEntity = FrontNegotiationEntity.builder()
-                .modelIdx(1)
+                .modelIdx(1L)
                 .modelKorName("조찬희")
                 .modelNegotiationDesc("영화 프로젝트 참여")
                 .modelNegotiationDate(now())
@@ -155,7 +155,7 @@ class FrontNegotiationJpaApiControllerTest {
 
         FrontNegotiationEntity newFrontNegotiationEntity = FrontNegotiationEntity.builder()
                 .idx(frontNegotiationEntity.getIdx())
-                .modelIdx(1)
+                .modelIdx(1L)
                 .modelKorName("테스트")
                 .modelNegotiationDesc("섭외 수정 테스트")
                 .modelNegotiationDate(LocalDateTime.now())
@@ -190,7 +190,7 @@ class FrontNegotiationJpaApiControllerTest {
     @DisplayName("모델 섭외 삭제 테스트")
     void 모델섭외삭제Api테스트() throws Exception {
         FrontNegotiationEntity frontNegotiationEntity = FrontNegotiationEntity.builder()
-                .modelIdx(1)
+                .modelIdx(1L)
                 .modelKorName("조찬희")
                 .modelNegotiationDesc("영화 프로젝트 참여")
                 .modelNegotiationDate(now())

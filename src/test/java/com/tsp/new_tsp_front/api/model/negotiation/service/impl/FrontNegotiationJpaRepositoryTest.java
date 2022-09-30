@@ -169,7 +169,7 @@ class FrontNegotiationJpaRepositoryTest {
                 .modelNegotiationDesc("영화 프로젝트 참여 테스트 두번째").modelNegotiationDate(now()).build());
 
         List<FrontModelDTO> modelNegotiationList = new ArrayList<>();
-        modelNegotiationList.add(FrontModelDTO.builder().idx(3).categoryCd(1).modelKorName("조찬희")
+        modelNegotiationList.add(FrontModelDTO.builder().idx(3L).categoryCd(1).modelKorName("조찬희")
                 .modelNegotiationList(negotiationList).build());
 
         // when
@@ -204,7 +204,7 @@ class FrontNegotiationJpaRepositoryTest {
                 .modelNegotiationDesc("영화 프로젝트 참여 테스트 두번째").modelNegotiationDate(now()).build());
 
         List<FrontModelDTO> modelNegotiationList = new ArrayList<>();
-        modelNegotiationList.add(FrontModelDTO.builder().idx(3).categoryCd(1).modelKorName("조찬희")
+        modelNegotiationList.add(FrontModelDTO.builder().idx(3L).categoryCd(1).modelKorName("조찬희")
                 .modelNegotiationList(negotiationList).build());
 
         // when
@@ -270,7 +270,7 @@ class FrontNegotiationJpaRepositoryTest {
     @DisplayName("모델섭외수정Mockito테스트")
     void 모델섭외수정Mockito테스트() {
         // given
-        Integer idx = frontNegotiationJpaRepository.insertModelNegotiation(frontNegotiationEntity).getIdx();
+        Long idx = frontNegotiationJpaRepository.insertModelNegotiation(frontNegotiationEntity).getIdx();
 
         frontNegotiationEntity = FrontNegotiationEntity.builder()
                 .idx(idx)
@@ -309,7 +309,7 @@ class FrontNegotiationJpaRepositoryTest {
     @DisplayName("모델섭외수정BDD테스트")
     void 모델섭외수정BDD테스트() {
         // given
-        Integer idx = frontNegotiationJpaRepository.insertModelNegotiation(frontNegotiationEntity).getIdx();
+        Long idx = frontNegotiationJpaRepository.insertModelNegotiation(frontNegotiationEntity).getIdx();
 
         frontNegotiationEntity = FrontNegotiationEntity.builder()
                 .idx(idx)
@@ -350,7 +350,7 @@ class FrontNegotiationJpaRepositoryTest {
 
         // when
         when(mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity)).thenReturn(frontNegotiationDTO);
-        Integer deleteIdx = frontNegotiationJpaRepository.deleteModelNegotiation(frontNegotiationEntity.getIdx());
+        Long deleteIdx = frontNegotiationJpaRepository.deleteModelNegotiation(frontNegotiationEntity.getIdx());
 
         // then
         assertThat(mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity).getIdx()).isEqualTo(deleteIdx);
@@ -373,7 +373,7 @@ class FrontNegotiationJpaRepositoryTest {
 
         // when
         given(mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity)).willReturn(frontNegotiationDTO);
-        Integer deleteIdx = frontNegotiationJpaRepository.deleteModelNegotiation(frontNegotiationEntity.getIdx());
+        Long deleteIdx = frontNegotiationJpaRepository.deleteModelNegotiation(frontNegotiationEntity.getIdx());
 
         // then
         assertThat(mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity).getIdx()).isEqualTo(deleteIdx);

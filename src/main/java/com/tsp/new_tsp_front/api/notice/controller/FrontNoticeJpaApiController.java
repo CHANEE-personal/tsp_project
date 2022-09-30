@@ -80,7 +80,7 @@ public class FrontNoticeJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/{idx}")
-    public FrontNoticeDTO findOneNotice(@PathVariable Integer idx) {
+    public FrontNoticeDTO findOneNotice(@PathVariable Long idx) {
         return this.frontNoticeJpaService.findOneNotice(FrontNoticeEntity.builder().idx(idx).build());
     }
 
@@ -102,7 +102,7 @@ public class FrontNoticeJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/{idx}/prev")
-    public FrontNoticeDTO findPrevOneNotice(@PathVariable Integer idx) {
+    public FrontNoticeDTO findPrevOneNotice(@PathVariable Long idx) {
         return this.frontNoticeJpaService.findPrevOneNotice(FrontNoticeEntity.builder().idx(idx).build());
     }
 
@@ -124,7 +124,7 @@ public class FrontNoticeJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/{idx}/next")
-    public FrontNoticeDTO findNextOneNotice(@PathVariable Integer idx) {
+    public FrontNoticeDTO findNextOneNotice(@PathVariable Long idx) {
         return this.frontNoticeJpaService.findNextOneNotice(FrontNoticeEntity.builder().idx(idx).build());
     }
 }

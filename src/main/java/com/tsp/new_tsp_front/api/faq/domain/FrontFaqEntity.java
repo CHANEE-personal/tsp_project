@@ -26,7 +26,7 @@ public class FrontFaqEntity extends NewCommonMappedClass {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "idx")
-    private Integer idx;
+    private Long idx;
 
     @Column(name = "title")
     @NotEmpty(message = "제목 입력은 필수입니다.")

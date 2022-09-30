@@ -57,12 +57,12 @@ class FrontProductionJpaRepositoryTest {
 
     private void createProduction() {
         commonImageEntity = CommonImageEntity.builder()
-                .idx(1)
+                .idx(1L)
                 .imageType("main")
                 .fileName("test.jpg")
                 .fileMask("test.jpg")
                 .filePath("/test/test.jpg")
-                .typeIdx(1)
+                .typeIdx(1L)
                 .typeName("production")
                 .build();
 
@@ -123,7 +123,7 @@ class FrontProductionJpaRepositoryTest {
         commonImageDtoList.add(commonImageDTO);
 
         List<FrontProductionDTO> productionList = new ArrayList<>();
-        productionList.add(FrontProductionDTO.builder().idx(1).title("프로덕션").description("프로덕션").visible("Y")
+        productionList.add(FrontProductionDTO.builder().idx(1L).title("프로덕션").description("프로덕션").visible("Y")
                 .productionImage(commonImageDtoList).build());
 
         // when
@@ -158,7 +158,7 @@ class FrontProductionJpaRepositoryTest {
         commonImageDtoList.add(commonImageDTO);
 
         List<FrontProductionDTO> productionList = new ArrayList<>();
-        productionList.add(FrontProductionDTO.builder().idx(1).title("프로덕션").description("프로덕션").visible("Y")
+        productionList.add(FrontProductionDTO.builder().idx(1L).title("프로덕션").description("프로덕션").visible("Y")
                 .productionImage(commonImageDtoList).build());
 
         // when
@@ -229,7 +229,7 @@ class FrontProductionJpaRepositoryTest {
     @DisplayName("이전 or 다음 프로덕션 상세 조회 테스트")
     void 이전or다음프로덕션상세조회테스트() {
         // given
-        frontProductionEntity = FrontProductionEntity.builder().idx(118).build();
+        frontProductionEntity = FrontProductionEntity.builder().idx(118L).build();
 
         // when
         frontProductionDTO = frontProductionJpaRepository.getProductionInfo(frontProductionEntity);
@@ -244,7 +244,7 @@ class FrontProductionJpaRepositoryTest {
     @DisplayName("이전 프로덕션 상세 조회 Mockito 테스트")
     void 이전프로덕션상세조회Mockito테스트() {
         // given
-        frontProductionEntity = FrontProductionEntity.builder().idx(118).build();
+        frontProductionEntity = FrontProductionEntity.builder().idx(118L).build();
 
         // when
         frontProductionDTO = frontProductionJpaRepository.findPrevOneProduction(frontProductionEntity);
@@ -268,7 +268,7 @@ class FrontProductionJpaRepositoryTest {
     @DisplayName("이전 프로덕션 상세 조회 BDD 테스트")
     void 이전프로덕션상세조회BDD테스트() {
         // given
-        frontProductionEntity = FrontProductionEntity.builder().idx(118).build();
+        frontProductionEntity = FrontProductionEntity.builder().idx(118L).build();
 
         // when
         frontProductionDTO = frontProductionJpaRepository.findPrevOneProduction(frontProductionEntity);
@@ -289,7 +289,7 @@ class FrontProductionJpaRepositoryTest {
     @DisplayName("다음 프로덕션 상세 조회 Mockito 테스트")
     void 다음프로덕션상세조회Mockito테스트() {
         // given
-        frontProductionEntity = FrontProductionEntity.builder().idx(118).build();
+        frontProductionEntity = FrontProductionEntity.builder().idx(118L).build();
 
         // when
         frontProductionDTO = frontProductionJpaRepository.findNextOneProduction(frontProductionEntity);
@@ -313,7 +313,7 @@ class FrontProductionJpaRepositoryTest {
     @DisplayName("다음 프로덕션 상세 조회 BDD 테스트")
     void 다음프로덕션상세조회BDD테스트() {
         // given
-        frontProductionEntity = FrontProductionEntity.builder().idx(118).build();
+        frontProductionEntity = FrontProductionEntity.builder().idx(118L).build();
 
         // when
         frontProductionDTO = frontProductionJpaRepository.findNextOneProduction(frontProductionEntity);

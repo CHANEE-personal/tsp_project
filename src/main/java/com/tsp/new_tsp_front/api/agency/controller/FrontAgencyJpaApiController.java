@@ -78,7 +78,7 @@ public class FrontAgencyJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/{idx}")
-    public FrontAgencyDTO findOneAgency(@PathVariable Integer idx) {
+    public FrontAgencyDTO findOneAgency(@PathVariable Long idx) {
         return this.frontAgencyJpaService.findOneAgency(FrontAgencyEntity.builder().idx(idx).build());
     }
 
@@ -100,7 +100,7 @@ public class FrontAgencyJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/{idx}/prev")
-    public FrontAgencyDTO findPrevOneAgency(@PathVariable Integer idx) {
+    public FrontAgencyDTO findPrevOneAgency(@PathVariable Long idx) {
         return this.frontAgencyJpaService.findPrevOneAgency(FrontAgencyEntity.builder().idx(idx).build());
     }
 
@@ -122,7 +122,7 @@ public class FrontAgencyJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/{idx}/next")
-    public FrontAgencyDTO findNextOneAgency(@PathVariable Integer idx) {
+    public FrontAgencyDTO findNextOneAgency(@PathVariable Long idx) {
         return this.frontAgencyJpaService.findNextOneAgency(FrontAgencyEntity.builder().idx(idx).build());
     }
 
@@ -144,7 +144,7 @@ public class FrontAgencyJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PutMapping(value = "/{idx}/like")
-    public Integer favoriteAgency(@PathVariable Integer idx) {
+    public Integer favoriteAgency(@PathVariable Long idx) {
         return this.frontAgencyJpaService.favoriteAgency(FrontAgencyEntity.builder().idx(idx).build());
     }
 }

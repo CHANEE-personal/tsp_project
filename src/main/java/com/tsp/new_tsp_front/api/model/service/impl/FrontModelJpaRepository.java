@@ -202,7 +202,7 @@ public class FrontModelJpaRepository {
      * 5. 작성일       : 2022. 01. 09.
      * </pre>
      */
-    public Integer viewModelCount(Integer idx) {
+    public Integer viewModelCount(Long idx) {
         return requireNonNull(queryFactory
                 .selectFrom(frontModelEntity)
                 .where(frontModelEntity.idx.eq(idx)).fetchOne()).getModelViewCount();
@@ -241,7 +241,7 @@ public class FrontModelJpaRepository {
      * 5. 작성일       : 2022. 01. 09.
      * </pre>
      */
-    public Integer favoriteModelCount(Integer idx) {
+    public Integer favoriteModelCount(Long idx) {
         return requireNonNull(queryFactory
                 .selectFrom(frontModelEntity)
                 .where(frontModelEntity.idx.eq(idx)).fetchOne()).getModelFavoriteCount();

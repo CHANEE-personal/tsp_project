@@ -56,8 +56,8 @@ class FrontAgencyJpaServiceTest {
 
         List<FrontAgencyDTO> returnAgencyList = new ArrayList<>();
 
-        returnAgencyList.add(FrontAgencyDTO.builder().idx(1).agencyName("Agency테스트").agencyDescription("Agency테스트").visible("Y").build());
-        returnAgencyList.add(FrontAgencyDTO.builder().idx(2).agencyName("agencyTest").agencyDescription("agencyTest").visible("Y").build());
+        returnAgencyList.add(FrontAgencyDTO.builder().idx(1L).agencyName("Agency테스트").agencyDescription("Agency테스트").visible("Y").build());
+        returnAgencyList.add(FrontAgencyDTO.builder().idx(2L).agencyName("agencyTest").agencyDescription("agencyTest").visible("Y").build());
 
         // when
         when(mockFrontAgencyJpaService.findAgencyList(agencyMap)).thenReturn(returnAgencyList);
@@ -93,8 +93,8 @@ class FrontAgencyJpaServiceTest {
 
         List<FrontAgencyDTO> returnAgencyList = new ArrayList<>();
 
-        returnAgencyList.add(FrontAgencyDTO.builder().idx(1).agencyName("Agency테스트").agencyDescription("Agency테스트").visible("Y").build());
-        returnAgencyList.add(FrontAgencyDTO.builder().idx(2).agencyName("agencyTest").agencyDescription("agencyTest").visible("Y").build());
+        returnAgencyList.add(FrontAgencyDTO.builder().idx(1L).agencyName("Agency테스트").agencyDescription("Agency테스트").visible("Y").build());
+        returnAgencyList.add(FrontAgencyDTO.builder().idx(2L).agencyName("agencyTest").agencyDescription("agencyTest").visible("Y").build());
 
         // when
         given(mockFrontAgencyJpaService.findAgencyList(agencyMap)).willReturn(returnAgencyList);
@@ -121,7 +121,7 @@ class FrontAgencyJpaServiceTest {
     @DisplayName("Agency상세조회Mockito테스트")
     void Agency상세조회Mockito테스트() {
         // given
-        FrontAgencyEntity frontAgencyEntity = FrontAgencyEntity.builder().idx(1).agencyName("agencyTest").agencyDescription("agencyTest").build();
+        FrontAgencyEntity frontAgencyEntity = FrontAgencyEntity.builder().idx(1L).agencyName("agencyTest").agencyDescription("agencyTest").build();
         FrontAgencyDTO frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
 
         // when
@@ -147,7 +147,7 @@ class FrontAgencyJpaServiceTest {
     @DisplayName("Agency상세조회BDD테스트")
     void Agency상세조회BDD테스트() {
         // given
-        FrontAgencyEntity frontAgencyEntity = FrontAgencyEntity.builder().idx(1).agencyName("agencyTest").agencyDescription("agencyTest").build();
+        FrontAgencyEntity frontAgencyEntity = FrontAgencyEntity.builder().idx(1L).agencyName("agencyTest").agencyDescription("agencyTest").build();
         FrontAgencyDTO frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
 
         // when
@@ -229,7 +229,7 @@ class FrontAgencyJpaServiceTest {
     @DisplayName("이전 or 다음 소속사 상세 조회 테스트")
     void 이전or다음소속사상세조회테스트() {
         // given
-        frontAgencyEntity = FrontAgencyEntity.builder().idx(2).build();
+        frontAgencyEntity = FrontAgencyEntity.builder().idx(2L).build();
 
         // when
         frontAgencyDTO = frontAgencyJpaService.findOneAgency(frontAgencyEntity);
@@ -244,7 +244,7 @@ class FrontAgencyJpaServiceTest {
     @DisplayName("이전 소속사 상세 조회 Mockito 테스트")
     void 이전소속사상세조회Mockito테스트() {
         // given
-        frontAgencyEntity = FrontAgencyEntity.builder().idx(2).build();
+        frontAgencyEntity = FrontAgencyEntity.builder().idx(2L).build();
 
         // when
         frontAgencyDTO = frontAgencyJpaService.findPrevOneAgency(frontAgencyEntity);
@@ -268,7 +268,7 @@ class FrontAgencyJpaServiceTest {
     @DisplayName("이전 소속사 상세 조회 BDD 테스트")
     void 이전소속사상세조회BDD테스트() {
         // given
-        frontAgencyEntity = FrontAgencyEntity.builder().idx(2).build();
+        frontAgencyEntity = FrontAgencyEntity.builder().idx(2L).build();
 
         // when
         frontAgencyDTO = frontAgencyJpaService.findPrevOneAgency(frontAgencyEntity);
@@ -289,7 +289,7 @@ class FrontAgencyJpaServiceTest {
     @DisplayName("다음 소속사 상세 조회 Mockito 테스트")
     void 다음소속사상세조회Mockito테스트() {
         // given
-        frontAgencyEntity = FrontAgencyEntity.builder().idx(2).build();
+        frontAgencyEntity = FrontAgencyEntity.builder().idx(2L).build();
 
         // when
         frontAgencyDTO = frontAgencyJpaService.findNextOneAgency(frontAgencyEntity);
@@ -313,7 +313,7 @@ class FrontAgencyJpaServiceTest {
     @DisplayName("다음 소속사 상세 조회 BDD 테스트")
     void 다음소속사상세조회BDD테스트() {
         // given
-        frontAgencyEntity = FrontAgencyEntity.builder().idx(2).build();
+        frontAgencyEntity = FrontAgencyEntity.builder().idx(2L).build();
 
         // when
         frontAgencyDTO = frontAgencyJpaService.findNextOneAgency(frontAgencyEntity);

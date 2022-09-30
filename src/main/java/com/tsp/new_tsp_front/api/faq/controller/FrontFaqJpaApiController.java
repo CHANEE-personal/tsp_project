@@ -78,7 +78,7 @@ public class FrontFaqJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/{idx}")
-    public FrontFaqDTO findOneFaq(@PathVariable Integer idx) {
+    public FrontFaqDTO findOneFaq(@PathVariable Long idx) {
         return this.frontFaqJpaService.findOneFaq(FrontFaqEntity.builder().idx(idx).build());
     }
 
@@ -100,7 +100,7 @@ public class FrontFaqJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/{idx}/prev")
-    public FrontFaqDTO findPrevOneFaq(@PathVariable Integer idx) {
+    public FrontFaqDTO findPrevOneFaq(@PathVariable Long idx) {
         return this.frontFaqJpaService.findPrevOneFaq(FrontFaqEntity.builder().idx(idx).build());
     }
 
@@ -122,7 +122,7 @@ public class FrontFaqJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/{idx}/next")
-    public FrontFaqDTO findNextOneFaq(@PathVariable Integer idx) {
+    public FrontFaqDTO findNextOneFaq(@PathVariable Long idx) {
         return this.frontFaqJpaService.findNextOneFaq(FrontFaqEntity.builder().idx(idx).build());
     }
 }
