@@ -27,11 +27,11 @@ public class CommonImageEntity implements Serializable {
     @GeneratedValue
     @Column(name = "idx")
     @ApiModelProperty(value = "파일 IDX", required = true, hidden = true)
-    private Integer idx;
+    private Long idx;
 
     @Column(name = "type_idx")
     @ApiModelProperty(value = "분야 IDX", required = true, hidden = true)
-    private Integer typeIdx;
+    private Long typeIdx;
 
     @Column(name = "type_name")
     @ApiModelProperty(value = "분야명", required = true, hidden = true)

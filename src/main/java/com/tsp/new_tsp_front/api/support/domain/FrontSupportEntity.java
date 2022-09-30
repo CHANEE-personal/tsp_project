@@ -28,7 +28,7 @@ public class FrontSupportEntity extends NewCommonMappedClass {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "idx")
-    private Integer idx;
+    private Long idx;
 
     @Column(name = "support_name")
     @NotEmpty(message = "지원자 이름 입력은 필수입니다.")

@@ -16,10 +16,10 @@ import lombok.experimental.SuperBuilder;
 @ApiModel
 public class CommonImageDTO {
     @ApiModelProperty(value = "파일 IDX", required = true, hidden = true)
-    private Integer idx;
+    private Long idx;
 
     @ApiModelProperty(value = "분야 IDX", required = true, hidden = true)
-    private Integer typeIdx;
+    private Long typeIdx;
 
     @ApiModelProperty(value = "분야명", required = true, hidden = true)
     private String typeName;
