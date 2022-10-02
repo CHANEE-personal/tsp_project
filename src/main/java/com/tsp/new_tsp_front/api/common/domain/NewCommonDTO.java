@@ -10,7 +10,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 
@@ -33,10 +33,10 @@ public class NewCommonDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(shape = STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     @ApiModelProperty(required = true, value = "등록 일자", hidden = true)
-    private Date createTime;
+    private LocalDateTime createTime;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(shape = STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     @ApiModelProperty(required = true, value = "수정 일자", hidden = true)
-    private Date updateTime;
+    private LocalDateTime updateTime;
 }

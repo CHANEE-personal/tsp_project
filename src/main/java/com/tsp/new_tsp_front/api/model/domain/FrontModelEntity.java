@@ -7,10 +7,7 @@ import com.tsp.new_tsp_front.api.common.domain.NewCommonMappedClass;
 import com.tsp.new_tsp_front.api.model.domain.negotiation.FrontNegotiationEntity;
 import com.tsp.new_tsp_front.api.model.domain.schedule.FrontScheduleEntity;
 import com.tsp.new_tsp_front.common.CustomConverter;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Range;
@@ -31,6 +28,7 @@ import static javax.persistence.GenerationType.*;
 @Getter
 @Setter
 @SuperBuilder
+@EqualsAndHashCode(of = "idx", callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @DynamicUpdate

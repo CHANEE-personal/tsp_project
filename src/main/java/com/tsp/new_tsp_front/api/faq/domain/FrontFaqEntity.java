@@ -1,10 +1,7 @@
 package com.tsp.new_tsp_front.api.faq.domain;
 
 import com.tsp.new_tsp_front.api.common.domain.NewCommonMappedClass;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
@@ -16,6 +13,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Getter
 @Setter
 @SuperBuilder
+@EqualsAndHashCode(of = "idx", callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tsp_faq")
