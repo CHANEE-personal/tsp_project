@@ -2,10 +2,7 @@ package com.tsp.new_tsp_front.api.model.domain;
 
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
@@ -16,6 +13,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Getter
 @Setter
 @SuperBuilder
+@EqualsAndHashCode(of = "idx", callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tsp_model_image")
@@ -23,11 +21,11 @@ public class FrontModelImageEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "idx")
-    private Integer idx;
+    private Long idx;
 
     @Column(name = "type_idx")
     @ApiModelProperty(value = "분야 IDX", required = true, hidden = true)
-    private Integer typeIdx;
+    private Long typeIdx;
 
     @Column(name = "type_name")
     @ApiModelProperty(value = "분야명", required = true, hidden = true)

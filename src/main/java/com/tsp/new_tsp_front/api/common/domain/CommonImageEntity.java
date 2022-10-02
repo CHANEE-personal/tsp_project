@@ -16,6 +16,7 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @Setter
 @Builder
+@EqualsAndHashCode(of = "idx", callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tsp_image")
