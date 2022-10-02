@@ -8,7 +8,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 
@@ -50,6 +50,6 @@ public class FrontSupportDTO extends NewCommonDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(shape = STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     @ApiModelProperty(value = "지원 시각", required = true)
-    private Date supportTime;
+    private LocalDateTime supportTime;
 
 }

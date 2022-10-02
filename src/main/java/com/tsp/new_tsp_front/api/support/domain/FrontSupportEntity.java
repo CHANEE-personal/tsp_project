@@ -7,7 +7,7 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -57,5 +57,5 @@ public class FrontSupportEntity extends NewCommonMappedClass {
     private String visible;
 
     @Column(name = "support_time")
-    private Date supportTime;
+    private LocalDateTime supportTime;
 }

@@ -11,7 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import static javax.persistence.TemporalType.TIMESTAMP;
 
@@ -34,11 +34,11 @@ public abstract class NewCommonMappedClass {
     @Temporal(value = TIMESTAMP)
     @ApiModelProperty(required = true, value = "등록 일자")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date createTime;
+    private LocalDateTime createTime;
 
     @Column(name = "update_time", insertable = false)
     @Temporal(value = TIMESTAMP)
     @ApiModelProperty(required = true, value = "수정 일자")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date updateTime;
+    private LocalDateTime updateTime;
 }
