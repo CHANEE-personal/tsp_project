@@ -1,9 +1,15 @@
 package com.tsp.new_tsp_front.api.common.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
+
+import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 
 @Getter
 @Setter
@@ -43,6 +49,8 @@ public class FrontModelImageDTO {
     @ApiModelProperty(value = "이미지 사용 여부", hidden = true)
     private String visible;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     @ApiModelProperty(value = "등록일자", hidden = true)
-    private String regDate;
+    private LocalDateTime regDate;
 }

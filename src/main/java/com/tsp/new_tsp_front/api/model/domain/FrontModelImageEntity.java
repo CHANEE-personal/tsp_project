@@ -1,12 +1,17 @@
 package com.tsp.new_tsp_front.api.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 
+import java.time.LocalDateTime;
+
+import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -60,8 +65,10 @@ public class FrontModelImageEntity {
     private String visible;
 
     @Column(name = "reg_date", insertable = false, updatable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     @ApiModelProperty(value = "등록일자", hidden = true)
-    private String regDate;
+    private LocalDateTime regDate;
 
     @ManyToOne
     @JoinColumn(name = "type_idx", insertable = false, updatable = false)

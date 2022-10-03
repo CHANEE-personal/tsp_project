@@ -1,15 +1,19 @@
 package com.tsp.new_tsp_front.api.common.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
+import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -67,8 +71,10 @@ public class CommonImageEntity implements Serializable {
     private String visible;
 
     @Column(name = "reg_date", insertable = false, updatable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     @ApiModelProperty(value = "등록일자", hidden = true)
-    private String regDate;
+    private LocalDateTime regDate;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "type_idx", referencedColumnName = "idx", insertable = false, updatable = false)
