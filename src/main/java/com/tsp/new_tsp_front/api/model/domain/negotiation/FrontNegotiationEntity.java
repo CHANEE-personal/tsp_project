@@ -55,12 +55,12 @@ public class FrontNegotiationEntity extends NewCommonMappedClass {
     @NotEmpty(message = "모델 섭외자명 입력은 필수입니다.")
     private String name;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     @Email
     @NotEmpty(message = "모델 섭외자 이메일 입력은 필수입니다.")
     private String email;
 
-    @Column(name = "phone")
+    @Column(name = "phone", unique = true)
     @NotEmpty(message = "모델 섭외자 휴대폰 번호 입력은 필수입니다.")
     private String phone;
 

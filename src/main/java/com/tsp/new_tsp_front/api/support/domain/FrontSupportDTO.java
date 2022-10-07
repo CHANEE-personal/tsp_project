@@ -21,7 +21,7 @@ import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 @ApiModel
 public class FrontSupportDTO extends NewCommonDTO {
     @ApiModelProperty(required = true, value = "rnum", hidden = true)
-    Integer rnum;
+    private Integer rnum;
 
     @ApiModelProperty(value = "지원모델 IDX", required = true, hidden = true)
     private Long idx;
