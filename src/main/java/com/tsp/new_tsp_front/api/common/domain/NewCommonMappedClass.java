@@ -10,10 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Temporal;
 import java.time.LocalDateTime;
-
-import static javax.persistence.TemporalType.TIMESTAMP;
 
 @Getter
 @Setter
@@ -31,13 +28,11 @@ public abstract class NewCommonMappedClass {
     private Long updater;
 
     @Column(name = "create_time", updatable = false)
-    @Temporal(value = TIMESTAMP)
     @ApiModelProperty(required = true, value = "등록 일자")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime createTime;
 
     @Column(name = "update_time", insertable = false)
-    @Temporal(value = TIMESTAMP)
     @ApiModelProperty(required = true, value = "수정 일자")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime updateTime;
