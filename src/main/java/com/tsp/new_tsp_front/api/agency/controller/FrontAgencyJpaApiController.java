@@ -1,7 +1,6 @@
 package com.tsp.new_tsp_front.api.agency.controller;
 
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyDTO;
-import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
 import com.tsp.new_tsp_front.api.agency.service.FrontAgencyJpaService;
 import com.tsp.new_tsp_front.common.SearchCommon;
 import com.tsp.new_tsp_front.common.paging.Page;
@@ -79,7 +78,7 @@ public class FrontAgencyJpaApiController {
     })
     @GetMapping(value = "/{idx}")
     public FrontAgencyDTO findOneAgency(@PathVariable Long idx) {
-        return this.frontAgencyJpaService.findOneAgency(FrontAgencyEntity.builder().idx(idx).build());
+        return this.frontAgencyJpaService.findOneAgency(idx);
     }
 
     /**
@@ -101,7 +100,7 @@ public class FrontAgencyJpaApiController {
     })
     @GetMapping(value = "/{idx}/prev")
     public FrontAgencyDTO findPrevOneAgency(@PathVariable Long idx) {
-        return this.frontAgencyJpaService.findPrevOneAgency(FrontAgencyEntity.builder().idx(idx).build());
+        return this.frontAgencyJpaService.findPrevOneAgency(idx);
     }
 
     /**
@@ -123,7 +122,7 @@ public class FrontAgencyJpaApiController {
     })
     @GetMapping(value = "/{idx}/next")
     public FrontAgencyDTO findNextOneAgency(@PathVariable Long idx) {
-        return this.frontAgencyJpaService.findNextOneAgency(FrontAgencyEntity.builder().idx(idx).build());
+        return this.frontAgencyJpaService.findNextOneAgency(idx);
     }
 
     /**
@@ -145,6 +144,6 @@ public class FrontAgencyJpaApiController {
     })
     @PutMapping(value = "/{idx}/like")
     public Integer favoriteAgency(@PathVariable Long idx) {
-        return this.frontAgencyJpaService.favoriteAgency(FrontAgencyEntity.builder().idx(idx).build());
+        return this.frontAgencyJpaService.favoriteAgency(idx);
     }
 }
