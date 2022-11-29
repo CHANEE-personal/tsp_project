@@ -53,4 +53,8 @@ public class FrontAgencyEntity extends NewCommonMappedClass {
 
     @OneToOne(mappedBy = "frontAgencyEntity", cascade = ALL, fetch = LAZY)
     private FrontModelEntity frontModelEntity;
+
+    public void updateFavoriteCount() {
+        this.favoriteCount++;
+    }
 }

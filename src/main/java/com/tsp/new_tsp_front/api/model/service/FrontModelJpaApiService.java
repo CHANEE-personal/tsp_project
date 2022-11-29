@@ -3,11 +3,13 @@ package com.tsp.new_tsp_front.api.model.service;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.service.impl.FrontModelJpaRepository;
+import com.tsp.new_tsp_front.api.model.service.impl.ModelMapper;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
 
 import java.util.List;
 import java.util.Map;
@@ -64,9 +66,11 @@ public class FrontModelJpaApiService {
      * </pre>
      */
     @Transactional
-    public FrontModelDTO getModelInfo(FrontModelEntity frontModelEntity) throws TspException {
+    public FrontModelDTO getModelInfo(Long idx) throws TspException {
         try {
-            return this.frontModelJpaRepository.getModelInfo(frontModelEntity);
+            FrontModelEntity oneModel = frontModelJpaRepository.getModelInfo(idx);
+            oneModel.updateViewCount();
+            return ModelMapper.INSTANCE.toDto(oneModel);
         } catch (Exception e) {
             throw new TspException(NOT_FOUND_MODEL, e);
         }
@@ -155,9 +159,11 @@ public class FrontModelJpaApiService {
      */
     @Modifying(clearAutomatically = true)
     @Transactional
-    public Integer favoriteModel(FrontModelEntity frontModelEntity) throws TspException {
+    public Integer favoriteModel(Long idx) throws TspException {
         try {
-            return this.frontModelJpaRepository.favoriteModel(frontModelEntity);
+            FrontModelEntity oneModel = frontModelJpaRepository.getModelInfo(idx);
+            oneModel.updateFavoriteCount();
+            return oneModel.getModelFavoriteCount();
         } catch (Exception e) {
             throw new TspException(ERROR_MODEL_LIKE, e);
         }

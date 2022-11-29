@@ -352,13 +352,19 @@ class FrontModelJpaApiServiceTest {
                 .height(170)
                 .size3("34-24-34")
                 .shoes(270)
+                .modelViewCount(0)
+                .modelFavoriteCount(0)
                 .visible("Y")
                 .modelAgency(AgencyMapper.INSTANCE.toDto(frontAgencyEntity))
                 .build();
 
+        // 조회 수 관련 테스트
+        FrontModelDTO oneModel = frontModelJpaApiService.getModelInfo(frontModelEntity.getIdx());
+        assertThat(frontModelDTO.getModelViewCount() + 1).isEqualTo(oneModel.getModelViewCount());
+
         // when
-        when(mockFrontModelJpaApiService.getModelInfo(frontModelEntity)).thenReturn(frontModelDTO);
-        FrontModelDTO modelInfo = mockFrontModelJpaApiService.getModelInfo(frontModelEntity);
+        when(mockFrontModelJpaApiService.getModelInfo(frontModelEntity.getIdx())).thenReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaApiService.getModelInfo(frontModelEntity.getIdx());
 
         // then
         assertThat(modelInfo.getIdx()).isEqualTo(frontModelDTO.getIdx());
@@ -370,12 +376,12 @@ class FrontModelJpaApiServiceTest {
         assertThat(modelInfo.getModelEngName()).isEqualTo(frontModelDTO.getModelEngName());
 
         // verify
-        verify(mockFrontModelJpaApiService, times(1)).getModelInfo(frontModelEntity);
-        verify(mockFrontModelJpaApiService, atLeastOnce()).getModelInfo(frontModelEntity);
+        verify(mockFrontModelJpaApiService, times(1)).getModelInfo(frontModelEntity.getIdx());
+        verify(mockFrontModelJpaApiService, atLeastOnce()).getModelInfo(frontModelEntity.getIdx());
         verifyNoMoreInteractions(mockFrontModelJpaApiService);
 
         InOrder inOrder = inOrder(mockFrontModelJpaApiService);
-        inOrder.verify(mockFrontModelJpaApiService).getModelInfo(frontModelEntity);
+        inOrder.verify(mockFrontModelJpaApiService).getModelInfo(frontModelEntity.getIdx());
     }
 
     @Test
@@ -399,8 +405,8 @@ class FrontModelJpaApiServiceTest {
                 .build();
 
         // when
-        given(mockFrontModelJpaApiService.getModelInfo(frontModelEntity)).willReturn(frontModelDTO);
-        FrontModelDTO modelInfo = mockFrontModelJpaApiService.getModelInfo(frontModelEntity);
+        given(mockFrontModelJpaApiService.getModelInfo(frontModelEntity.getIdx())).willReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaApiService.getModelInfo(frontModelEntity.getIdx());
 
         // then
         assertThat(modelInfo.getIdx()).isEqualTo(frontModelDTO.getIdx());
@@ -412,8 +418,8 @@ class FrontModelJpaApiServiceTest {
         assertThat(modelInfo.getModelEngName()).isEqualTo(frontModelDTO.getModelEngName());
 
         // verify
-        then(mockFrontModelJpaApiService).should(times(1)).getModelInfo(frontModelEntity);
-        then(mockFrontModelJpaApiService).should(atLeastOnce()).getModelInfo(frontModelEntity);
+        then(mockFrontModelJpaApiService).should(times(1)).getModelInfo(frontModelEntity.getIdx());
+        then(mockFrontModelJpaApiService).should(atLeastOnce()).getModelInfo(frontModelEntity.getIdx());
         then(mockFrontModelJpaApiService).shouldHaveNoMoreInteractions();
     }
 
@@ -424,7 +430,7 @@ class FrontModelJpaApiServiceTest {
         frontModelEntity = FrontModelEntity.builder().idx(145L).categoryCd(2).build();
 
         // when
-        frontModelDTO = frontModelJpaApiService.getModelInfo(frontModelEntity);
+        frontModelDTO = frontModelJpaApiService.getModelInfo(frontModelEntity.getIdx());
 
         // 이전 모델
         assertThat(frontModelJpaApiService.findPrevOneModel(frontModelEntity).getIdx()).isEqualTo(144);
@@ -524,22 +530,22 @@ class FrontModelJpaApiServiceTest {
         // given
         em.persist(frontModelEntity);
 
-        Integer favoriteCount = frontModelJpaApiService.favoriteModel(frontModelEntity);
+        Integer favoriteCount = frontModelJpaApiService.favoriteModel(frontModelEntity.getIdx());
 
         // when
-        when(mockFrontModelJpaApiService.favoriteModel(frontModelEntity)).thenReturn(favoriteCount);
-        Integer newFavoriteCount = mockFrontModelJpaApiService.favoriteModel(frontModelEntity);
+        when(mockFrontModelJpaApiService.favoriteModel(frontModelEntity.getIdx())).thenReturn(favoriteCount);
+        Integer newFavoriteCount = mockFrontModelJpaApiService.favoriteModel(frontModelEntity.getIdx());
 
         // then
         assertThat(newFavoriteCount).isEqualTo(favoriteCount);
 
         // verify
-        verify(mockFrontModelJpaApiService, times(1)).favoriteModel(frontModelEntity);
-        verify(mockFrontModelJpaApiService, atLeastOnce()).favoriteModel(frontModelEntity);
+        verify(mockFrontModelJpaApiService, times(1)).favoriteModel(frontModelEntity.getIdx());
+        verify(mockFrontModelJpaApiService, atLeastOnce()).favoriteModel(frontModelEntity.getIdx());
         verifyNoMoreInteractions(mockFrontModelJpaApiService);
 
         InOrder inOrder = inOrder(mockFrontModelJpaApiService);
-        inOrder.verify(mockFrontModelJpaApiService).favoriteModel(frontModelEntity);
+        inOrder.verify(mockFrontModelJpaApiService).favoriteModel(frontModelEntity.getIdx());
     }
 
     @Test
@@ -549,18 +555,18 @@ class FrontModelJpaApiServiceTest {
         em.persist(frontModelEntity);
         frontModelDTO = INSTANCE.toDto(frontModelEntity);
 
-        Integer favoriteCount = frontModelJpaApiService.favoriteModel(frontModelEntity);
+        Integer favoriteCount = frontModelJpaApiService.favoriteModel(frontModelEntity.getIdx());
 
         // when
-        given(mockFrontModelJpaApiService.favoriteModel(frontModelEntity)).willReturn(favoriteCount);
-        Integer newFavoriteCount = mockFrontModelJpaApiService.favoriteModel(frontModelEntity);
+        given(mockFrontModelJpaApiService.favoriteModel(frontModelEntity.getIdx())).willReturn(favoriteCount);
+        Integer newFavoriteCount = mockFrontModelJpaApiService.favoriteModel(frontModelEntity.getIdx());
 
         // then
         assertThat(newFavoriteCount).isEqualTo(favoriteCount);
 
         // verify
-        then(mockFrontModelJpaApiService).should(times(1)).favoriteModel(frontModelEntity);
-        then(mockFrontModelJpaApiService).should(atLeastOnce()).favoriteModel(frontModelEntity);
+        then(mockFrontModelJpaApiService).should(times(1)).favoriteModel(frontModelEntity.getIdx());
+        then(mockFrontModelJpaApiService).should(atLeastOnce()).favoriteModel(frontModelEntity.getIdx());
         then(mockFrontModelJpaApiService).shouldHaveNoMoreInteractions();
     }
 

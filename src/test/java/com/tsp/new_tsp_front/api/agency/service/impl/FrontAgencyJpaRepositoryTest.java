@@ -148,8 +148,8 @@ class FrontAgencyJpaRepositoryTest {
         frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
 
         // when
-        when(mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity)).thenReturn(frontAgencyDTO);
-        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity);
+        when(mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx())).thenReturn(frontAgencyEntity);
+        FrontAgencyEntity agencyInfo = mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx());
 
         // then
         assertThat(agencyInfo.getIdx()).isEqualTo(1);
@@ -158,12 +158,12 @@ class FrontAgencyJpaRepositoryTest {
         assertThat(agencyInfo.getVisible()).isEqualTo("Y");
 
         // verify
-        verify(mockFrontAgencyJpaRepository, times(1)).findOneAgency(frontAgencyEntity);
-        verify(mockFrontAgencyJpaRepository, atLeastOnce()).findOneAgency(frontAgencyEntity);
+        verify(mockFrontAgencyJpaRepository, times(1)).findOneAgency(frontAgencyEntity.getIdx());
+        verify(mockFrontAgencyJpaRepository, atLeastOnce()).findOneAgency(frontAgencyEntity.getIdx());
         verifyNoMoreInteractions(mockFrontAgencyJpaRepository);
 
         InOrder inOrder = inOrder(mockFrontAgencyJpaRepository);
-        inOrder.verify(mockFrontAgencyJpaRepository).findOneAgency(frontAgencyEntity);
+        inOrder.verify(mockFrontAgencyJpaRepository).findOneAgency(frontAgencyEntity.getIdx());
     }
 
     @Test
@@ -180,8 +180,8 @@ class FrontAgencyJpaRepositoryTest {
         frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
 
         // when
-        given(mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity)).willReturn(frontAgencyDTO);
-        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity);
+        given(mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx())).willReturn(frontAgencyEntity);
+        FrontAgencyEntity agencyInfo = mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx());
 
         // then
         assertThat(agencyInfo.getIdx()).isEqualTo(1);
@@ -190,8 +190,8 @@ class FrontAgencyJpaRepositoryTest {
         assertThat(agencyInfo.getVisible()).isEqualTo("Y");
 
         // verify
-        then(mockFrontAgencyJpaRepository).should(times(1)).findOneAgency(frontAgencyEntity);
-        then(mockFrontAgencyJpaRepository).should(atLeastOnce()).findOneAgency(frontAgencyEntity);
+        then(mockFrontAgencyJpaRepository).should(times(1)).findOneAgency(frontAgencyEntity.getIdx());
+        then(mockFrontAgencyJpaRepository).should(atLeastOnce()).findOneAgency(frontAgencyEntity.getIdx());
         then(mockFrontAgencyJpaRepository).shouldHaveNoMoreInteractions();
     }
 
@@ -203,15 +203,15 @@ class FrontAgencyJpaRepositoryTest {
         frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
 
         // when
-        when(mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity)).thenReturn(frontAgencyDTO);
-        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity);
+        when(mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx())).thenReturn(frontAgencyEntity);
+        FrontAgencyEntity agencyInfo = mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx());
 
         // then
         assertThat(agencyInfo.getFavoriteCount()).isEqualTo(frontAgencyEntity.getFavoriteCount());
 
         // verify
-        verify(mockFrontAgencyJpaRepository, times(1)).findOneAgency(frontAgencyEntity);
-        verify(mockFrontAgencyJpaRepository, atLeastOnce()).findOneAgency(frontAgencyEntity);
+        verify(mockFrontAgencyJpaRepository, times(1)).findOneAgency(frontAgencyEntity.getIdx());
+        verify(mockFrontAgencyJpaRepository, atLeastOnce()).findOneAgency(frontAgencyEntity.getIdx());
         verifyNoMoreInteractions(mockFrontAgencyJpaRepository);
     }
 
@@ -222,15 +222,15 @@ class FrontAgencyJpaRepositoryTest {
         frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
 
         // when
-        given(mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity)).willReturn(frontAgencyDTO);
-        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity);
+        given(mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx())).willReturn(frontAgencyEntity);
+        FrontAgencyEntity agencyInfo = mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx());
 
         // then
         assertThat(agencyInfo.getFavoriteCount()).isEqualTo(frontAgencyEntity.getFavoriteCount());
 
         // verify
-        then(mockFrontAgencyJpaRepository).should(times(1)).findOneAgency(frontAgencyEntity);
-        then(mockFrontAgencyJpaRepository).should(atLeastOnce()).findOneAgency(frontAgencyEntity);
+        then(mockFrontAgencyJpaRepository).should(times(1)).findOneAgency(frontAgencyEntity.getIdx());
+        then(mockFrontAgencyJpaRepository).should(atLeastOnce()).findOneAgency(frontAgencyEntity.getIdx());
         then(mockFrontAgencyJpaRepository).shouldHaveNoMoreInteractions();
     }
 
@@ -288,12 +288,11 @@ class FrontAgencyJpaRepositoryTest {
         frontAgencyEntity = FrontAgencyEntity.builder().idx(2L).build();
 
         // when
-        frontAgencyDTO = frontAgencyJpaRepository.findOneAgency(frontAgencyEntity);
 
         // 이전 소속사
-        assertThat(frontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity).getIdx()).isEqualTo(1);
+        assertThat(frontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity.getIdx()).getIdx()).isEqualTo(1);
         // 다음 소속사
-        assertThat(frontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity).getIdx()).isEqualTo(3);
+        assertThat(frontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity.getIdx()).getIdx()).isEqualTo(3);
     }
 
     @Test
@@ -303,21 +302,21 @@ class FrontAgencyJpaRepositoryTest {
         frontAgencyEntity = FrontAgencyEntity.builder().idx(2L).build();
 
         // when
-        frontAgencyDTO = frontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity);
+        frontAgencyDTO = frontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity.getIdx());
 
-        when(mockFrontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity)).thenReturn(frontAgencyDTO);
-        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity);
+        when(mockFrontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity.getIdx())).thenReturn(frontAgencyDTO);
+        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity.getIdx());
 
         // then
         assertThat(agencyInfo.getIdx()).isEqualTo(1);
 
         // verify
-        verify(mockFrontAgencyJpaRepository, times(1)).findPrevOneAgency(frontAgencyEntity);
-        verify(mockFrontAgencyJpaRepository, atLeastOnce()).findPrevOneAgency(frontAgencyEntity);
+        verify(mockFrontAgencyJpaRepository, times(1)).findPrevOneAgency(frontAgencyEntity.getIdx());
+        verify(mockFrontAgencyJpaRepository, atLeastOnce()).findPrevOneAgency(frontAgencyEntity.getIdx());
         verifyNoMoreInteractions(mockFrontAgencyJpaRepository);
 
         InOrder inOrder = inOrder(mockFrontAgencyJpaRepository);
-        inOrder.verify(mockFrontAgencyJpaRepository).findPrevOneAgency(frontAgencyEntity);
+        inOrder.verify(mockFrontAgencyJpaRepository).findPrevOneAgency(frontAgencyEntity.getIdx());
     }
 
     @Test
@@ -327,17 +326,17 @@ class FrontAgencyJpaRepositoryTest {
         frontAgencyEntity = FrontAgencyEntity.builder().idx(2L).build();
 
         // when
-        frontAgencyDTO = frontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity);
+        frontAgencyDTO = frontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity.getIdx());
 
-        given(mockFrontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity)).willReturn(frontAgencyDTO);
-        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity);
+        given(mockFrontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity.getIdx())).willReturn(frontAgencyDTO);
+        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity.getIdx());
 
         // then
         assertThat(agencyInfo.getIdx()).isEqualTo(1);
 
         // verify
-        then(mockFrontAgencyJpaRepository).should(times(1)).findPrevOneAgency(frontAgencyEntity);
-        then(mockFrontAgencyJpaRepository).should(atLeastOnce()).findPrevOneAgency(frontAgencyEntity);
+        then(mockFrontAgencyJpaRepository).should(times(1)).findPrevOneAgency(frontAgencyEntity.getIdx());
+        then(mockFrontAgencyJpaRepository).should(atLeastOnce()).findPrevOneAgency(frontAgencyEntity.getIdx());
         then(mockFrontAgencyJpaRepository).shouldHaveNoMoreInteractions();
     }
 
@@ -348,21 +347,21 @@ class FrontAgencyJpaRepositoryTest {
         frontAgencyEntity = FrontAgencyEntity.builder().idx(2L).build();
 
         // when
-        frontAgencyDTO = frontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity);
+        frontAgencyDTO = frontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity.getIdx());
 
-        when(mockFrontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity)).thenReturn(frontAgencyDTO);
-        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity);
+        when(mockFrontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity.getIdx())).thenReturn(frontAgencyDTO);
+        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity.getIdx());
 
         // then
         assertThat(agencyInfo.getIdx()).isEqualTo(3);
 
         // verify
-        verify(mockFrontAgencyJpaRepository, times(1)).findNextOneAgency(frontAgencyEntity);
-        verify(mockFrontAgencyJpaRepository, atLeastOnce()).findNextOneAgency(frontAgencyEntity);
+        verify(mockFrontAgencyJpaRepository, times(1)).findNextOneAgency(frontAgencyEntity.getIdx());
+        verify(mockFrontAgencyJpaRepository, atLeastOnce()).findNextOneAgency(frontAgencyEntity.getIdx());
         verifyNoMoreInteractions(mockFrontAgencyJpaRepository);
 
         InOrder inOrder = inOrder(mockFrontAgencyJpaRepository);
-        inOrder.verify(mockFrontAgencyJpaRepository).findNextOneAgency(frontAgencyEntity);
+        inOrder.verify(mockFrontAgencyJpaRepository).findNextOneAgency(frontAgencyEntity.getIdx());
     }
 
     @Test
@@ -372,17 +371,17 @@ class FrontAgencyJpaRepositoryTest {
         frontAgencyEntity = FrontAgencyEntity.builder().idx(2L).build();
 
         // when
-        frontAgencyDTO = frontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity);
+        frontAgencyDTO = frontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity.getIdx());
 
-        given(mockFrontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity)).willReturn(frontAgencyDTO);
-        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity);
+        given(mockFrontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity.getIdx())).willReturn(frontAgencyDTO);
+        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity.getIdx());
 
         // then
         assertThat(agencyInfo.getIdx()).isEqualTo(3);
 
         // verify
-        then(mockFrontAgencyJpaRepository).should(times(1)).findNextOneAgency(frontAgencyEntity);
-        then(mockFrontAgencyJpaRepository).should(atLeastOnce()).findNextOneAgency(frontAgencyEntity);
+        then(mockFrontAgencyJpaRepository).should(times(1)).findNextOneAgency(frontAgencyEntity.getIdx());
+        then(mockFrontAgencyJpaRepository).should(atLeastOnce()).findNextOneAgency(frontAgencyEntity.getIdx());
         then(mockFrontAgencyJpaRepository).shouldHaveNoMoreInteractions();
     }
 }

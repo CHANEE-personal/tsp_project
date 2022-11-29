@@ -131,22 +131,20 @@ public class FrontModelJpaRepository {
      * 5. 작성일       : 2022. 01. 09.
      * </pre>
      */
-    public FrontModelDTO getModelInfo(FrontModelEntity existFrontModelEntity) {
+    public FrontModelEntity getModelInfo(Long idx) {
         // 모델 조회 수 증가
-        updateModelViewCount(existFrontModelEntity);
+//        updateModelViewCount(existFrontModelEntity);
 
         //모델 상세 조회
-        FrontModelEntity getModelInfo = queryFactory
+        return queryFactory
                 .selectFrom(frontModelEntity)
                 .innerJoin(frontModelEntity.frontAgencyEntity, frontAgencyEntity)
                 .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
                 .fetchJoin()
-                .where(frontModelEntity.idx.eq(existFrontModelEntity.getIdx())
+                .where(frontModelEntity.idx.eq(idx)
                         .and(frontModelEntity.visible.eq("Y"))
                         .and(commonImageEntity.typeName.eq("model")))
                 .fetchOne();
-
-        return INSTANCE.toDto(getModelInfo);
     }
 
     /**

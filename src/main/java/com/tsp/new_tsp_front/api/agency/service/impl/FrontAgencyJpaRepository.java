@@ -85,17 +85,12 @@ public class FrontAgencyJpaRepository {
      * 5. 작성일       : 2022. 08. 24.
      * </pre>
      */
-    public FrontAgencyDTO findOneAgency(FrontAgencyEntity existFrontAgencyEntity) {
-        FrontAgencyEntity findOneAgency = queryFactory
+    public FrontAgencyEntity findOneAgency(Long idx) {
+        return queryFactory
                 .selectFrom(frontAgencyEntity)
-                .orderBy(frontAgencyEntity.idx.desc())
-                .where(frontAgencyEntity.idx.eq(existFrontAgencyEntity.getIdx())
-                        .and(frontAgencyEntity.visible.eq("Y")))
+                .where(frontAgencyEntity.idx.eq(idx))
                 .fetchOne();
-
-        return INSTANCE.toDto(findOneAgency);
     }
-
     /**
      * <pre>
      * 1. MethodName : favoriteAgencyCount
@@ -143,12 +138,12 @@ public class FrontAgencyJpaRepository {
      * 5. 작성일       : 2022. 09. 17.
      * </pre>
      */
-    public FrontAgencyDTO findPrevOneAgency(FrontAgencyEntity existFrontAgencyEntity) {
+    public FrontAgencyDTO findPrevOneAgency(Long idx) {
         // 이전 소속사 조회
         FrontAgencyEntity findPrevOneAgency = queryFactory
                 .selectFrom(frontAgencyEntity)
                 .orderBy(frontAgencyEntity.idx.desc())
-                .where(frontAgencyEntity.idx.lt(existFrontAgencyEntity.getIdx())
+                .where(frontAgencyEntity.idx.lt(idx)
                         .and(frontAgencyEntity.visible.eq("Y")))
                 .fetchFirst();
 
@@ -164,12 +159,12 @@ public class FrontAgencyJpaRepository {
      * 5. 작성일       : 2022. 09. 17.
      * </pre>
      */
-    public FrontAgencyDTO findNextOneAgency(FrontAgencyEntity existFrontAgencyEntity) {
+    public FrontAgencyDTO findNextOneAgency(Long idx) {
         // 다음 소속사 조회
         FrontAgencyEntity findNextOneAgency = queryFactory
                 .selectFrom(frontAgencyEntity)
                 .orderBy(frontAgencyEntity.idx.desc())
-                .where(frontAgencyEntity.idx.gt(existFrontAgencyEntity.getIdx())
+                .where(frontAgencyEntity.idx.gt(idx)
                         .and(frontAgencyEntity.visible.eq("Y")))
                 .fetchFirst();
 
