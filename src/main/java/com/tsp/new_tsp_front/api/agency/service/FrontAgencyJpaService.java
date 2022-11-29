@@ -2,6 +2,7 @@ package com.tsp.new_tsp_front.api.agency.service;
 
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyDTO;
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
+import com.tsp.new_tsp_front.api.agency.service.impl.AgencyMapper;
 import com.tsp.new_tsp_front.api.agency.service.impl.FrontAgencyJpaRepository;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -65,9 +66,9 @@ public class FrontAgencyJpaService {
      * </pre>
      */
     @Transactional(readOnly = true)
-    public FrontAgencyDTO findOneAgency(FrontAgencyEntity frontAgencyEntity) throws TspException {
+    public FrontAgencyDTO findOneAgency(Long idx) throws TspException {
         try {
-            return this.frontAgencyJpaRepository.findOneAgency(frontAgencyEntity);
+            return AgencyMapper.INSTANCE.toDto(this.frontAgencyJpaRepository.findOneAgency(idx));
         } catch (Exception e) {
             throw new TspException(NOT_FOUND_AGENCY, e);
         }
@@ -83,9 +84,9 @@ public class FrontAgencyJpaService {
      * </pre>
      */
     @Transactional(readOnly = true)
-    public FrontAgencyDTO findPrevOneAgency(FrontAgencyEntity frontAgencyEntity) throws TspException {
+    public FrontAgencyDTO findPrevOneAgency(Long idx) throws TspException {
         try {
-            return this.frontAgencyJpaRepository.findPrevOneAgency(frontAgencyEntity);
+            return this.frontAgencyJpaRepository.findPrevOneAgency(idx);
         } catch (Exception e) {
             throw new TspException(NOT_FOUND_AGENCY, e);
         }
@@ -101,9 +102,9 @@ public class FrontAgencyJpaService {
      * </pre>
      */
     @Transactional(readOnly = true)
-    public FrontAgencyDTO findNextOneAgency(FrontAgencyEntity frontAgencyEntity) throws TspException {
+    public FrontAgencyDTO findNextOneAgency(Long idx) throws TspException {
         try {
-            return this.frontAgencyJpaRepository.findNextOneAgency(frontAgencyEntity);
+            return this.frontAgencyJpaRepository.findNextOneAgency(idx);
         } catch (Exception e) {
             throw new TspException(NOT_FOUND_AGENCY, e);
         }
@@ -138,9 +139,11 @@ public class FrontAgencyJpaService {
      */
     @Modifying(clearAutomatically = true)
     @Transactional
-    public Integer favoriteAgency(FrontAgencyEntity frontAgencyEntity) throws TspException {
+    public Integer favoriteAgency(Long idx) throws TspException {
         try {
-            return this.frontAgencyJpaRepository.favoriteAgency(frontAgencyEntity);
+            FrontAgencyEntity oneAgency = frontAgencyJpaRepository.findOneAgency(idx);
+            oneAgency.updateFavoriteCount();
+            return oneAgency.getFavoriteCount();
         } catch (Exception e) {
             throw new TspException(ERROR_AGENCY_LIKE, e);
         }
