@@ -139,4 +139,11 @@ public class FrontModelEntity extends NewCommonMappedClass {
 
     @OneToMany(mappedBy = "frontModelEntity")
     private List<FrontNegotiationEntity> modelNegotiationList = new ArrayList<>();
+
+    public void updateViewCount() {
+        this.modelViewCount++;
+    }
+    public void updateFavoriteCount() {
+        this.modelFavoriteCount++;
+    }
 }
