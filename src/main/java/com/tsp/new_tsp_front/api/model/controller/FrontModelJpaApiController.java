@@ -33,7 +33,7 @@ public class FrontModelJpaApiController {
 
     /**
      * <pre>
-     * 1. MethodName : getMainModelList
+     * 1. MethodName : findMainModelList
      * 2. ClassName  : FrontModelJpaApiController.java
      * 3. Comment    : 프론트 > 메인 모델 상세 조회
      * 4. 작성자       : CHO
@@ -49,18 +49,18 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists/main")
-    public Map<String, Object> getMainModelList() {
+    public Map<String, Object> findMainModelList() {
         Map<String, Object> mainModelMap = new HashMap<>();
 
         // 전체 아이템 수
-        mainModelMap.put("modelListTotalCnt", this.frontModelJpaApiService.getMainModelList().size());
-        mainModelMap.put("modelList", this.frontModelJpaApiService.getMainModelList());
+        mainModelMap.put("modelListTotalCnt", this.frontModelJpaApiService.findMainModelList().size());
+        mainModelMap.put("modelList", this.frontModelJpaApiService.findMainModelList());
         return mainModelMap;
     }
 
     /**
      * <pre>
-     * 1. MethodName : getModelList
+     * 1. MethodName : findModelList
      * 2. ClassName  : FrontModelJpaApiController.java
      * 3. Comment    : 프론트 > 모델 조회
      * 4. 작성자       : CHO
@@ -76,7 +76,7 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists/{categoryCd}")
-    public Map<String, Object> getModelList(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
+    public Map<String, Object> findModelList(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
                                             @RequestParam(required = false) Map<String, Object> paramMap, Page page) {
         Map<String, Object> resultMap = new HashMap<>();
         // 페이징 및 검색
@@ -86,17 +86,17 @@ public class FrontModelJpaApiController {
         // 리스트 수
         resultMap.put("pageSize", page.getSize());
         // 전체 페이지 수
-        resultMap.put("perPageListCnt", ceil((double) this.frontModelJpaApiService.getModelCount(modelMap) / page.getSize()));
+        resultMap.put("perPageListCnt", ceil((double) this.frontModelJpaApiService.findModelCount(modelMap) / page.getSize()));
         // 전체 아이템 수
-        resultMap.put("modelListTotalCnt", this.frontModelJpaApiService.getModelCount(modelMap));
-        resultMap.put("modelList", this.frontModelJpaApiService.getModelList(modelMap));
+        resultMap.put("modelListTotalCnt", this.frontModelJpaApiService.findModelCount(modelMap));
+        resultMap.put("modelList", this.frontModelJpaApiService.findModelList(modelMap));
 
         return resultMap;
     }
 
     /**
      * <pre>
-     * 1. MethodName : getModelInfo
+     * 1. MethodName : findOneModel
      * 2. ClassName  : FrontModelJpaApiController.java
      * 3. Comment    : 프론트 > 모델 상세 조회
      * 4. 작성자       : CHO
@@ -112,9 +112,9 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/{categoryCd}/{idx}")
-    public FrontModelDTO getModelInfo(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
+    public FrontModelDTO findOneModel(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
                                       @PathVariable Long idx) {
-        return this.frontModelJpaApiService.getModelInfo(idx);
+        return this.frontModelJpaApiService.findOneModel(idx);
     }
 
     /**

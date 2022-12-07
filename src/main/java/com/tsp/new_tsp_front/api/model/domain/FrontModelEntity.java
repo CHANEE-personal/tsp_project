@@ -134,10 +134,10 @@ public class FrontModelEntity extends NewCommonMappedClass {
     @JoinColumn(name = "agency_idx", referencedColumnName = "idx", insertable = false, updatable = false)
     private FrontAgencyEntity frontAgencyEntity;
 
-    @OneToMany(mappedBy = "frontModelEntity")
+    @OneToMany(mappedBy = "frontModelEntity", fetch = LAZY)
     private List<FrontScheduleEntity> modelScheduleList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "frontModelEntity")
+    @OneToMany(mappedBy = "frontModelEntity", fetch = LAZY)
     private List<FrontNegotiationEntity> modelNegotiationList = new ArrayList<>();
 
     public void updateViewCount() {
