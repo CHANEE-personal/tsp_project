@@ -43,8 +43,6 @@ public class ModelMapperImpl implements ModelMapper {
                 .updateTime(entity.getUpdateTime())
                 .modelAgency(AgencyMapper.INSTANCE.toDto(entity.getFrontAgencyEntity()))
                 .modelImage(ModelImageMapper.INSTANCE.toDtoList(entity.getCommonImageEntityList()))
-                .modelScheduleList(FrontScheduleMapper.INSTANCE.toDtoList(entity.getModelScheduleList()))
-                .modelNegotiationList(FrontNegotiationMapper.INSTANCE.toDtoList(entity.getModelNegotiationList()))
                 .build();
     }
 

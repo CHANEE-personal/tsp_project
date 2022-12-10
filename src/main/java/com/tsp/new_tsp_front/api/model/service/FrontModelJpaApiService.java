@@ -3,13 +3,11 @@ package com.tsp.new_tsp_front.api.model.service;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.service.impl.FrontModelJpaRepository;
-import com.tsp.new_tsp_front.api.model.service.impl.ModelMapper;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.ModelMap;
 
 import java.util.List;
 import java.util.Map;
@@ -23,16 +21,16 @@ public class FrontModelJpaApiService {
 
     /**
      * <pre>
-     * 1. MethodName : getModelCount
+     * 1. MethodName : findModelCount
      * 2. ClassName  : FrontModelJpaApiService.java
      * 3. Comment    : 프론트 > 모델 리스트 갯수 조회
      * 4. 작성자       : CHO
      * 5. 작성일       : 2022. 01. 02.
      * </pre>
      */
-    public int getModelCount(Map<String, Object> modelMap) throws TspException {
+    public int findModelCount(Map<String, Object> modelMap) throws TspException {
         try {
-            return frontModelJpaRepository.getModelCount(modelMap);
+            return frontModelJpaRepository.findModelCount(modelMap);
         } catch (Exception e) {
             throw new TspException(NOT_FOUND_MODEL_LIST, e);
         }
@@ -40,7 +38,7 @@ public class FrontModelJpaApiService {
 
     /**
      * <pre>
-     * 1. MethodName : getModelList
+     * 1. MethodName : findModelList
      * 2. ClassName  : FrontModelJpaApiService.java
      * 3. Comment    : 프론트 > 모델 리스트 조회
      * 4. 작성자       : CHO
@@ -48,9 +46,9 @@ public class FrontModelJpaApiService {
      * </pre>
      */
     @Transactional(readOnly = true)
-    public List<FrontModelDTO> getModelList(Map<String, Object> modelMap) throws TspException {
+    public List<FrontModelDTO> findModelList(Map<String, Object> modelMap) throws TspException {
         try {
-            return frontModelJpaRepository.getModelList(modelMap);
+            return frontModelJpaRepository.findModelList(modelMap);
         } catch (Exception e) {
             throw new TspException(NOT_FOUND_MODEL_LIST, e);
         }
@@ -58,7 +56,7 @@ public class FrontModelJpaApiService {
 
     /**
      * <pre>
-     * 1. MethodName : getModelInfo
+     * 1. MethodName : findOneModel
      * 2. ClassName  : FrontModelJpaApiService.java
      * 3. Comment    : 프론트 > 모델 상세 조회
      * 4. 작성자       : CHO
@@ -66,11 +64,9 @@ public class FrontModelJpaApiService {
      * </pre>
      */
     @Transactional
-    public FrontModelDTO getModelInfo(Long idx) throws TspException {
+    public FrontModelDTO findOneModel(Long idx) throws TspException {
         try {
-            FrontModelEntity oneModel = frontModelJpaRepository.getModelInfo(idx);
-            oneModel.updateViewCount();
-            return ModelMapper.INSTANCE.toDto(oneModel);
+            return frontModelJpaRepository.findOneModel(idx);
         } catch (Exception e) {
             throw new TspException(NOT_FOUND_MODEL, e);
         }
@@ -114,7 +110,7 @@ public class FrontModelJpaApiService {
 
     /**
      * <pre>
-     * 1. MethodName : getMainModelList
+     * 1. MethodName : findMainModelList
      * 2. ClassName  : FrontModelJpaApiService.java
      * 3. Comment    : 프론트 > 메인 모델 리스트 조회
      * 4. 작성자       : CHO
@@ -122,9 +118,9 @@ public class FrontModelJpaApiService {
      * </pre>
      */
     @Transactional(readOnly = true)
-    public List<FrontModelDTO> getMainModelList() throws TspException {
+    public List<FrontModelDTO> findMainModelList() throws TspException {
         try {
-            return this.frontModelJpaRepository.getMainModelList();
+            return this.frontModelJpaRepository.findMainModelList();
         } catch (Exception e) {
             throw new TspException(NOT_FOUND_MODEL_LIST, e);
         }
@@ -161,9 +157,7 @@ public class FrontModelJpaApiService {
     @Transactional
     public Integer favoriteModel(Long idx) throws TspException {
         try {
-            FrontModelEntity oneModel = frontModelJpaRepository.getModelInfo(idx);
-            oneModel.updateFavoriteCount();
-            return oneModel.getModelFavoriteCount();
+            return frontModelJpaRepository.favoriteModel(idx);
         } catch (Exception e) {
             throw new TspException(ERROR_MODEL_LIKE, e);
         }

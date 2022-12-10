@@ -120,7 +120,7 @@ class FrontModelJpaApiServiceTest {
         modelMap.put("categoryCd", -1);
 
         // then
-        assertThatThrownBy(() -> frontModelJpaApiService.getModelList(modelMap))
+        assertThatThrownBy(() -> frontModelJpaApiService.findModelList(modelMap))
                 .isInstanceOf(TspException.class);
     }
 
@@ -142,8 +142,8 @@ class FrontModelJpaApiServiceTest {
         returnModelList.add(FrontModelDTO.builder().idx(3L).categoryCd(3).modelKorName("시니어모델").modelAgency(frontAgencyDTO).modelEngName("seniorModel").build());
 
         // when
-        when(mockFrontModelJpaApiService.getModelList(modelMap)).thenReturn(returnModelList);
-        List<FrontModelDTO> modelList = mockFrontModelJpaApiService.getModelList(modelMap);
+        when(mockFrontModelJpaApiService.findModelList(modelMap)).thenReturn(returnModelList);
+        List<FrontModelDTO> modelList = mockFrontModelJpaApiService.findModelList(modelMap);
 
         // then
         assertAll(
@@ -173,12 +173,12 @@ class FrontModelJpaApiServiceTest {
         assertThat(modelList.get(2).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyDescription());
 
         // verify
-        verify(mockFrontModelJpaApiService, times(1)).getModelList(modelMap);
-        verify(mockFrontModelJpaApiService, atLeastOnce()).getModelList(modelMap);
+        verify(mockFrontModelJpaApiService, times(1)).findModelList(modelMap);
+        verify(mockFrontModelJpaApiService, atLeastOnce()).findModelList(modelMap);
         verifyNoMoreInteractions(mockFrontModelJpaApiService);
 
         InOrder inOrder = inOrder(mockFrontModelJpaApiService);
-        inOrder.verify(mockFrontModelJpaApiService).getModelList(modelMap);
+        inOrder.verify(mockFrontModelJpaApiService).findModelList(modelMap);
     }
 
     @Test
@@ -199,8 +199,8 @@ class FrontModelJpaApiServiceTest {
         returnModelList.add(FrontModelDTO.builder().idx(3L).categoryCd(3).modelKorName("시니어모델").modelAgency(frontAgencyDTO).modelEngName("seniorModel").build());
 
         // when
-        given(mockFrontModelJpaApiService.getModelList(modelMap)).willReturn(returnModelList);
-        List<FrontModelDTO> modelList = mockFrontModelJpaApiService.getModelList(modelMap);
+        given(mockFrontModelJpaApiService.findModelList(modelMap)).willReturn(returnModelList);
+        List<FrontModelDTO> modelList = mockFrontModelJpaApiService.findModelList(modelMap);
 
         // then
         assertAll(
@@ -230,8 +230,8 @@ class FrontModelJpaApiServiceTest {
         assertThat(modelList.get(2).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyDescription());
 
         // verify
-        then(mockFrontModelJpaApiService).should(times(1)).getModelList(modelMap);
-        then(mockFrontModelJpaApiService).should(atLeastOnce()).getModelList(modelMap);
+        then(mockFrontModelJpaApiService).should(times(1)).findModelList(modelMap);
+        then(mockFrontModelJpaApiService).should(atLeastOnce()).findModelList(modelMap);
         then(mockFrontModelJpaApiService).shouldHaveNoMoreInteractions();
     }
 
@@ -251,8 +251,8 @@ class FrontModelJpaApiServiceTest {
         returnModelList.add(FrontModelDTO.builder().idx(3L).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").modelMainYn("Y").build());
 
         // when
-        when(mockFrontModelJpaApiService.getMainModelList()).thenReturn(returnModelList);
-        List<FrontModelDTO> mainModelList = mockFrontModelJpaApiService.getMainModelList();
+        when(mockFrontModelJpaApiService.findMainModelList()).thenReturn(returnModelList);
+        List<FrontModelDTO> mainModelList = mockFrontModelJpaApiService.findMainModelList();
 
         // then
         assertAll(
@@ -279,12 +279,12 @@ class FrontModelJpaApiServiceTest {
         assertThat(mainModelList.get(2).getModelMainYn()).isEqualTo(returnModelList.get(2).getModelMainYn());
 
         // verify
-        verify(mockFrontModelJpaApiService, times(1)).getMainModelList();
-        verify(mockFrontModelJpaApiService, atLeastOnce()).getMainModelList();
+        verify(mockFrontModelJpaApiService, times(1)).findMainModelList();
+        verify(mockFrontModelJpaApiService, atLeastOnce()).findMainModelList();
         verifyNoMoreInteractions(mockFrontModelJpaApiService);
 
         InOrder inOrder = inOrder(mockFrontModelJpaApiService);
-        inOrder.verify(mockFrontModelJpaApiService).getMainModelList();
+        inOrder.verify(mockFrontModelJpaApiService).findMainModelList();
     }
 
     @Test
@@ -303,8 +303,8 @@ class FrontModelJpaApiServiceTest {
         returnModelList.add(FrontModelDTO.builder().idx(3L).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").modelMainYn("Y").build());
 
         // when
-        given(mockFrontModelJpaApiService.getMainModelList()).willReturn(returnModelList);
-        List<FrontModelDTO> mainModelList = mockFrontModelJpaApiService.getMainModelList();
+        given(mockFrontModelJpaApiService.findMainModelList()).willReturn(returnModelList);
+        List<FrontModelDTO> mainModelList = mockFrontModelJpaApiService.findMainModelList();
 
         // then
         assertAll(
@@ -331,8 +331,8 @@ class FrontModelJpaApiServiceTest {
         assertThat(mainModelList.get(2).getModelMainYn()).isEqualTo(returnModelList.get(2).getModelMainYn());
 
         // verify
-        then(mockFrontModelJpaApiService).should(times(1)).getMainModelList();
-        then(mockFrontModelJpaApiService).should(atLeastOnce()).getMainModelList();
+        then(mockFrontModelJpaApiService).should(times(1)).findMainModelList();
+        then(mockFrontModelJpaApiService).should(atLeastOnce()).findMainModelList();
         then(mockFrontModelJpaApiService).shouldHaveNoMoreInteractions();
     }
 
@@ -359,12 +359,12 @@ class FrontModelJpaApiServiceTest {
                 .build();
 
         // 조회 수 관련 테스트
-        FrontModelDTO oneModel = frontModelJpaApiService.getModelInfo(frontModelEntity.getIdx());
+        FrontModelDTO oneModel = frontModelJpaApiService.findOneModel(frontModelEntity.getIdx());
         assertThat(frontModelDTO.getModelViewCount() + 1).isEqualTo(oneModel.getModelViewCount());
 
         // when
-        when(mockFrontModelJpaApiService.getModelInfo(frontModelEntity.getIdx())).thenReturn(frontModelDTO);
-        FrontModelDTO modelInfo = mockFrontModelJpaApiService.getModelInfo(frontModelEntity.getIdx());
+        when(mockFrontModelJpaApiService.findOneModel(frontModelEntity.getIdx())).thenReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaApiService.findOneModel(frontModelEntity.getIdx());
 
         // then
         assertThat(modelInfo.getIdx()).isEqualTo(frontModelDTO.getIdx());
@@ -376,12 +376,12 @@ class FrontModelJpaApiServiceTest {
         assertThat(modelInfo.getModelEngName()).isEqualTo(frontModelDTO.getModelEngName());
 
         // verify
-        verify(mockFrontModelJpaApiService, times(1)).getModelInfo(frontModelEntity.getIdx());
-        verify(mockFrontModelJpaApiService, atLeastOnce()).getModelInfo(frontModelEntity.getIdx());
+        verify(mockFrontModelJpaApiService, times(1)).findOneModel(frontModelEntity.getIdx());
+        verify(mockFrontModelJpaApiService, atLeastOnce()).findOneModel(frontModelEntity.getIdx());
         verifyNoMoreInteractions(mockFrontModelJpaApiService);
 
         InOrder inOrder = inOrder(mockFrontModelJpaApiService);
-        inOrder.verify(mockFrontModelJpaApiService).getModelInfo(frontModelEntity.getIdx());
+        inOrder.verify(mockFrontModelJpaApiService).findOneModel(frontModelEntity.getIdx());
     }
 
     @Test
@@ -405,8 +405,8 @@ class FrontModelJpaApiServiceTest {
                 .build();
 
         // when
-        given(mockFrontModelJpaApiService.getModelInfo(frontModelEntity.getIdx())).willReturn(frontModelDTO);
-        FrontModelDTO modelInfo = mockFrontModelJpaApiService.getModelInfo(frontModelEntity.getIdx());
+        given(mockFrontModelJpaApiService.findOneModel(frontModelEntity.getIdx())).willReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaApiService.findOneModel(frontModelEntity.getIdx());
 
         // then
         assertThat(modelInfo.getIdx()).isEqualTo(frontModelDTO.getIdx());
@@ -418,8 +418,8 @@ class FrontModelJpaApiServiceTest {
         assertThat(modelInfo.getModelEngName()).isEqualTo(frontModelDTO.getModelEngName());
 
         // verify
-        then(mockFrontModelJpaApiService).should(times(1)).getModelInfo(frontModelEntity.getIdx());
-        then(mockFrontModelJpaApiService).should(atLeastOnce()).getModelInfo(frontModelEntity.getIdx());
+        then(mockFrontModelJpaApiService).should(times(1)).findOneModel(frontModelEntity.getIdx());
+        then(mockFrontModelJpaApiService).should(atLeastOnce()).findOneModel(frontModelEntity.getIdx());
         then(mockFrontModelJpaApiService).shouldHaveNoMoreInteractions();
     }
 
@@ -430,7 +430,7 @@ class FrontModelJpaApiServiceTest {
         frontModelEntity = FrontModelEntity.builder().idx(145L).categoryCd(2).build();
 
         // when
-        frontModelDTO = frontModelJpaApiService.getModelInfo(frontModelEntity.getIdx());
+        frontModelDTO = frontModelJpaApiService.findOneModel(frontModelEntity.getIdx());
 
         // 이전 모델
         assertThat(frontModelJpaApiService.findPrevOneModel(frontModelEntity).getIdx()).isEqualTo(144);

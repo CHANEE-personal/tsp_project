@@ -65,6 +65,6 @@ public class FrontPortFolioEntity extends NewCommonMappedClass {
     @JoinColumn(name = "category_cd", insertable = false, updatable = false)
     private NewCodeEntity newPortFolioJpaDTO;
 
-    @OneToMany(mappedBy = "frontPortFolioEntity")
+    @OneToMany(mappedBy = "frontPortFolioEntity", fetch = LAZY)
     private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 }

@@ -10,6 +10,7 @@ import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.*;
 
 @Entity
@@ -45,6 +46,6 @@ public class FrontProductionEntity extends NewCommonMappedClass {
     @NotEmpty(message = "프로덕션 노출 여부 선택은 필수입니다.")
     private String visible;
 
-    @OneToMany(mappedBy = "frontProductionEntity")
+    @OneToMany(mappedBy = "frontProductionEntity", fetch = LAZY)
     private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 }

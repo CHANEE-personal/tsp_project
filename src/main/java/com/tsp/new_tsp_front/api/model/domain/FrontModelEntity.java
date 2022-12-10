@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.CascadeType.REMOVE;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.*;
 
@@ -127,17 +128,17 @@ public class FrontModelEntity extends NewCommonMappedClass {
     @JoinColumn(name = "category_cd", insertable = false, updatable = false)
     private NewCodeEntity newModelCodeJpaDTO;
 
-    @OneToMany(mappedBy = "frontModelEntity")
+    @OneToMany(mappedBy = "frontModelEntity", fetch = LAZY, cascade = REMOVE)
     private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 
     @OneToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn(name = "agency_idx", referencedColumnName = "idx", insertable = false, updatable = false)
     private FrontAgencyEntity frontAgencyEntity;
 
-    @OneToMany(mappedBy = "frontModelEntity")
+    @OneToMany(mappedBy = "frontModelEntity", fetch = LAZY)
     private List<FrontScheduleEntity> modelScheduleList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "frontModelEntity")
+    @OneToMany(mappedBy = "frontModelEntity", fetch = LAZY)
     private List<FrontNegotiationEntity> modelNegotiationList = new ArrayList<>();
 
     public void updateViewCount() {
