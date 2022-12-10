@@ -28,26 +28,25 @@ public class FrontModelJpaRepository {
     private final JPAQueryFactory queryFactory;
     private final EntityManager em;
 
-    private BooleanExpression searchModel(Map<String, Object> modelMap) {
+    private BooleanExpression searchCategory(Map<String, Object> modelMap) {
+        int categoryCd = getInt(modelMap.get("categoryCd"), 1);
+
+        return frontModelEntity.categoryCd.eq(categoryCd);
+    }
+
+    private BooleanExpression searchModelInfo(Map<String, Object> modelMap) {
         String searchType = getString(modelMap.get("searchType"), "");
         String searchKeyword = getString(modelMap.get("searchKeyword"), "");
-        Integer categoryCd = getInt(modelMap.get("categoryCd"), 0);
 
         if ("0".equals(searchType)) {
             return frontModelEntity.modelKorName.contains(searchKeyword)
                     .or(frontModelEntity.modelEngName.contains(searchKeyword)
-                            .or(frontModelEntity.modelDescription.contains(searchKeyword)))
-                    .and(frontModelEntity.categoryCd.eq(categoryCd));
+                            .or(frontModelEntity.modelDescription.contains(searchKeyword)));
         } else if ("1".equals(searchType)) {
             return frontModelEntity.modelKorName.contains(searchKeyword)
-                    .or(frontModelEntity.modelEngName.contains(searchKeyword))
-                    .and(frontModelEntity.categoryCd.eq(categoryCd));
+                    .or(frontModelEntity.modelEngName.contains(searchKeyword));
         } else {
-            if (!"".equals(searchKeyword)) {
-                return frontModelEntity.modelDescription.contains(searchKeyword).and(frontModelEntity.categoryCd.eq(categoryCd));
-            } else {
-                return frontModelEntity.categoryCd.eq(categoryCd);
-            }
+            return frontModelEntity.modelDescription.contains(searchKeyword);
         }
     }
 
@@ -67,10 +66,10 @@ public class FrontModelJpaRepository {
                 .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
                 .fetchJoin()
                 .where(frontModelEntity.modelMainYn.eq("Y")
-                .and(frontModelEntity.visible.eq("Y")
-                .and(commonImageEntity.typeName.eq("model")
-                .and(commonImageEntity.imageType.eq("main"))
-                .and(commonImageEntity.visible.eq("Y")))))
+                        .and(frontModelEntity.visible.eq("Y")
+                                .and(commonImageEntity.typeName.eq("model")
+                                        .and(commonImageEntity.imageType.eq("main"))
+                                        .and(commonImageEntity.visible.eq("Y")))))
                 .fetch();
 
         modelList.forEach(list -> modelList.get(modelList.indexOf(list)).setRnum(modelList.indexOf(list)));
@@ -90,7 +89,7 @@ public class FrontModelJpaRepository {
     public int findModelCount(Map<String, Object> modelMap) {
         return queryFactory
                 .selectFrom(frontModelEntity)
-                .where(searchModel(modelMap)
+                .where((searchCategory(modelMap).or(searchModelInfo(modelMap)))
                         .and(frontModelEntity.visible.eq("Y")))
                 .fetch().size();
     }
@@ -112,7 +111,8 @@ public class FrontModelJpaRepository {
                 .fetchJoin()
                 .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
                 .fetchJoin()
-                .where(searchModel(modelMap).and(frontModelEntity.visible.eq("Y")))
+                .where((searchCategory(modelMap).or(searchModelInfo(modelMap)))
+                        .and(frontModelEntity.visible.eq("Y")))
                 .offset(getInt(modelMap.get("jpaStartPage"), 0))
                 .limit(getInt(modelMap.get("size"), 0))
                 .distinct()
@@ -285,7 +285,7 @@ public class FrontModelJpaRepository {
     public int getNewModelCount(Map<String, Object> modelMap) {
         return queryFactory
                 .selectFrom(frontModelEntity)
-                .where(searchModel(modelMap)
+                .where((searchCategory(modelMap).or(searchModelInfo(modelMap)))
                         .and(frontModelEntity.visible.eq("Y"))
                         .and(frontModelEntity.newYn.eq("Y")))
                 .fetch().size();
@@ -308,7 +308,7 @@ public class FrontModelJpaRepository {
                 .fetchJoin()
                 .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
                 .fetchJoin()
-                .where(searchModel(modelMap)
+                .where((searchCategory(modelMap).or(searchModelInfo(modelMap)))
                         .and(frontModelEntity.visible.eq("Y"))
                         .and(frontModelEntity.newYn.eq("Y")))
                 .offset(getInt(modelMap.get("jpaStartPage"), 0))
