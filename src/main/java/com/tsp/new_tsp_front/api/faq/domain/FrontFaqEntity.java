@@ -60,6 +60,7 @@ public class FrontFaqEntity extends NewCommonMappedClass {
     }
 
     public static List<FrontFaqDTO> toDtoList(List<FrontFaqEntity> entityList) {
+        if (entityList == null) return null;
         return entityList.stream()
                 .map(FrontFaqEntity::toDto)
                 .collect(Collectors.toList());

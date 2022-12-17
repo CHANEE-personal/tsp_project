@@ -7,6 +7,9 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -19,7 +22,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "tsp_notice")
 public class FrontNoticeEntity extends NewCommonMappedClass {
     @Transient
-    private Integer rnum;
+    private Integer rowNum;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -44,4 +47,26 @@ public class FrontNoticeEntity extends NewCommonMappedClass {
 
     @Column(name = "top_fixed")
     private String topFixed;
+
+    public static FrontNoticeDTO toDto(FrontNoticeEntity entity) {
+        if (entity == null) return null;
+        return FrontNoticeDTO.builder().idx(entity.getIdx())
+                .rowNum(entity.getRowNum())
+                .title(entity.getTitle())
+                .description(entity.getDescription())
+                .visible(entity.getVisible())
+                .topFixed(entity.getTopFixed())
+                .creator(entity.getCreator())
+                .createTime(entity.getCreateTime())
+                .updater(entity.getUpdater())
+                .updateTime(entity.getUpdateTime())
+                .build();
+    }
+
+    public static List<FrontNoticeDTO> toDtoList(List<FrontNoticeEntity> entityList) {
+        if (entityList == null) return null;
+        return entityList.stream()
+                .map(FrontNoticeEntity::toDto)
+                .collect(Collectors.toList());
+    }
 }
