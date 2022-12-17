@@ -7,6 +7,9 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -19,7 +22,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "tsp_faq")
 public class FrontFaqEntity extends NewCommonMappedClass {
     @Transient
-    private Integer rnum;
+    private Integer rowNum;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -41,4 +44,24 @@ public class FrontFaqEntity extends NewCommonMappedClass {
     @Column(name = "visible")
     @NotEmpty(message = "FAQ 노출 여부 선택은 필수입니다.")
     private String visible;
+
+    public static FrontFaqDTO toDto(FrontFaqEntity entity) {
+        if (entity == null) return null;
+        return FrontFaqDTO.builder().idx(entity.getIdx())
+                .rowNum(entity.getRowNum())
+                .title(entity.getTitle())
+                .description(entity.getDescription())
+                .visible(entity.getVisible())
+                .creator(entity.getCreator())
+                .createTime(entity.getCreateTime())
+                .updater(entity.getUpdater())
+                .updateTime(entity.getUpdateTime())
+                .build();
+    }
+
+    public static List<FrontFaqDTO> toDtoList(List<FrontFaqEntity> entityList) {
+        return entityList.stream()
+                .map(FrontFaqEntity::toDto)
+                .collect(Collectors.toList());
+    }
 }

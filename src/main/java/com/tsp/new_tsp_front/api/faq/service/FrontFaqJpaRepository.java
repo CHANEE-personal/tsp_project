@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.tsp.new_tsp_front.api.faq.domain.QFrontFaqEntity.frontFaqEntity;
-import static com.tsp.new_tsp_front.api.faq.mapper.FaqMapper.INSTANCE;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
 
@@ -68,9 +67,9 @@ public class FrontFaqJpaRepository {
                 .fetch();
 
         faqList.forEach(list -> faqList.get(faqList.indexOf(list))
-                .setRnum(getInt(faqMap.get("startPage"), 1) * (getInt(faqMap.get("size"), 1)) - (2 - faqList.indexOf(list))));
+                .setRowNum(getInt(faqMap.get("startPage"), 1) * (getInt(faqMap.get("size"), 1)) - (2 - faqList.indexOf(list))));
 
-        return INSTANCE.toDtoList(faqList);
+        return FrontFaqEntity.toDtoList(faqList);
     }
 
     /**
@@ -90,7 +89,7 @@ public class FrontFaqJpaRepository {
                         .and(frontFaqEntity.visible.eq("Y")))
                 .fetchOne();
 
-        return INSTANCE.toDto(findOneFaq);
+        return FrontFaqEntity.toDto(findOneFaq);
     }
 
     /**
@@ -111,7 +110,7 @@ public class FrontFaqJpaRepository {
                         .and(frontFaqEntity.visible.eq("Y")))
                 .fetchFirst();
 
-        return INSTANCE.toDto(findPrevOneFaq);
+        return FrontFaqEntity.toDto(findPrevOneFaq);
     }
 
     /**
@@ -132,6 +131,6 @@ public class FrontFaqJpaRepository {
                         .and(frontFaqEntity.visible.eq("Y")))
                 .fetchFirst();
 
-        return INSTANCE.toDto(findNextOneFaq);
+        return FrontFaqEntity.toDto(findNextOneFaq);
     }
 }

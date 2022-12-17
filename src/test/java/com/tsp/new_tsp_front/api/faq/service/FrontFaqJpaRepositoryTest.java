@@ -2,7 +2,6 @@ package com.tsp.new_tsp_front.api.faq.service;
 
 import com.tsp.new_tsp_front.api.faq.domain.FrontFaqDTO;
 import com.tsp.new_tsp_front.api.faq.domain.FrontFaqEntity;
-import com.tsp.new_tsp_front.api.faq.mapper.FaqMapper;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -56,7 +55,7 @@ class FrontFaqJpaRepositoryTest {
                 .viewCount(1)
                 .build();
 
-        frontFaqDTO = FaqMapper.INSTANCE.toDto(frontFaqEntity);
+        frontFaqDTO = FrontFaqEntity.toDto(frontFaqEntity);
     }
 
     @BeforeEach
@@ -145,7 +144,7 @@ class FrontFaqJpaRepositoryTest {
                 .visible("Y")
                 .build();
 
-        frontFaqDTO = FaqMapper.INSTANCE.toDto(frontFaqEntity);
+        frontFaqDTO = FrontFaqEntity.toDto(frontFaqEntity);
 
         // when
         when(mockFrontFaqJpaRepository.findOneFaq(frontFaqEntity)).thenReturn(frontFaqDTO);
@@ -177,7 +176,7 @@ class FrontFaqJpaRepositoryTest {
                 .visible("Y")
                 .build();
 
-        frontFaqDTO = FaqMapper.INSTANCE.toDto(frontFaqEntity);
+        frontFaqDTO = FrontFaqEntity.toDto(frontFaqEntity);
 
         // when
         given(mockFrontFaqJpaRepository.findOneFaq(frontFaqEntity)).willReturn(frontFaqDTO);
