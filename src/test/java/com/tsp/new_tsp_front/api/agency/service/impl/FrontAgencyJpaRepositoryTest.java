@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.api.agency.service.impl.AgencyMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -56,7 +55,7 @@ class FrontAgencyJpaRepositoryTest {
                 .visible("Y")
                 .build();
 
-        frontAgencyDTO = INSTANCE.toDto(frontAgencyEntity);
+        frontAgencyDTO = FrontAgencyEntity.toDto(frontAgencyEntity);
     }
 
     @BeforeEach
@@ -145,11 +144,11 @@ class FrontAgencyJpaRepositoryTest {
                 .visible("Y")
                 .build();
 
-        frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
+        frontAgencyDTO = FrontAgencyEntity.toDto(frontAgencyEntity);
 
         // when
-        when(mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx())).thenReturn(frontAgencyEntity);
-        FrontAgencyEntity agencyInfo = mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx());
+        when(mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx())).thenReturn(frontAgencyDTO);
+        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx());
 
         // then
         assertThat(agencyInfo.getIdx()).isEqualTo(1);
@@ -177,11 +176,11 @@ class FrontAgencyJpaRepositoryTest {
                 .visible("Y")
                 .build();
 
-        frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
+        frontAgencyDTO = FrontAgencyEntity.toDto(frontAgencyEntity);
 
         // when
-        given(mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx())).willReturn(frontAgencyEntity);
-        FrontAgencyEntity agencyInfo = mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx());
+        given(mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx())).willReturn(frontAgencyDTO);
+        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx());
 
         // then
         assertThat(agencyInfo.getIdx()).isEqualTo(1);
@@ -200,11 +199,11 @@ class FrontAgencyJpaRepositoryTest {
     void Agency좋아요갯수조회Mockito테스트() {
         // given
         em.persist(frontAgencyEntity);
-        frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
+        frontAgencyDTO = FrontAgencyEntity.toDto(frontAgencyEntity);
 
         // when
-        when(mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx())).thenReturn(frontAgencyEntity);
-        FrontAgencyEntity agencyInfo = mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx());
+        when(mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx())).thenReturn(frontAgencyDTO);
+        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx());
 
         // then
         assertThat(agencyInfo.getFavoriteCount()).isEqualTo(frontAgencyEntity.getFavoriteCount());
@@ -219,11 +218,11 @@ class FrontAgencyJpaRepositoryTest {
     @DisplayName("소속사 좋아요 갯수 조회 BDD 테스트")
     void 소속사좋아요갯수조회BDD테스트() {
         em.persist(frontAgencyEntity);
-        frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
+        frontAgencyDTO = FrontAgencyEntity.toDto(frontAgencyEntity);
 
         // when
-        given(mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx())).willReturn(frontAgencyEntity);
-        FrontAgencyEntity agencyInfo = mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx());
+        given(mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx())).willReturn(frontAgencyDTO);
+        FrontAgencyDTO agencyInfo = mockFrontAgencyJpaRepository.findOneAgency(frontAgencyEntity.getIdx());
 
         // then
         assertThat(agencyInfo.getFavoriteCount()).isEqualTo(frontAgencyEntity.getFavoriteCount());
@@ -239,24 +238,24 @@ class FrontAgencyJpaRepositoryTest {
     void 소속사좋아요Mockito테스트() {
         // given
         em.persist(frontAgencyEntity);
-        frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
+        frontAgencyDTO = FrontAgencyEntity.toDto(frontAgencyEntity);
 
-        Integer favoriteCount = frontAgencyJpaRepository.favoriteAgency(frontAgencyEntity);
+        Integer favoriteCount = frontAgencyJpaRepository.favoriteAgency(frontAgencyDTO.getIdx());
 
         // when
-        when(mockFrontAgencyJpaRepository.favoriteAgency(frontAgencyEntity)).thenReturn(favoriteCount);
-        Integer newFavoriteCount = mockFrontAgencyJpaRepository.favoriteAgencyCount(frontAgencyEntity.getIdx());
+        when(mockFrontAgencyJpaRepository.favoriteAgency(frontAgencyDTO.getIdx())).thenReturn(favoriteCount);
+        Integer newFavoriteCount = mockFrontAgencyJpaRepository.favoriteAgencyCount(frontAgencyDTO.getIdx());
 
         // then
         assertThat(newFavoriteCount).isEqualTo(favoriteCount);
 
         // verify
-        verify(mockFrontAgencyJpaRepository, times(1)).favoriteAgency(frontAgencyEntity);
-        verify(mockFrontAgencyJpaRepository, atLeastOnce()).favoriteAgency(frontAgencyEntity);
+        verify(mockFrontAgencyJpaRepository, times(1)).favoriteAgency(frontAgencyDTO.getIdx());
+        verify(mockFrontAgencyJpaRepository, atLeastOnce()).favoriteAgency(frontAgencyDTO.getIdx());
         verifyNoMoreInteractions(mockFrontAgencyJpaRepository);
 
         InOrder inOrder = inOrder(mockFrontAgencyJpaRepository);
-        inOrder.verify(mockFrontAgencyJpaRepository).favoriteAgency(frontAgencyEntity);
+        inOrder.verify(mockFrontAgencyJpaRepository).favoriteAgency(frontAgencyDTO.getIdx());
     }
 
     @Test
@@ -264,20 +263,20 @@ class FrontAgencyJpaRepositoryTest {
     void 소속사좋아요BDD테스트() {
         // given
         em.persist(frontAgencyEntity);
-        frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
+        frontAgencyDTO = FrontAgencyEntity.toDto(frontAgencyEntity);
 
-        Integer favoriteCount = frontAgencyJpaRepository.favoriteAgency(frontAgencyEntity);
+        Integer favoriteCount = frontAgencyJpaRepository.favoriteAgency(frontAgencyDTO.getIdx());
 
         // when
-        given(mockFrontAgencyJpaRepository.favoriteAgency(frontAgencyEntity)).willReturn(favoriteCount);
-        Integer newFavoriteCount = mockFrontAgencyJpaRepository.favoriteAgencyCount(frontAgencyEntity.getIdx());
+        given(mockFrontAgencyJpaRepository.favoriteAgency(frontAgencyDTO.getIdx())).willReturn(favoriteCount);
+        Integer newFavoriteCount = mockFrontAgencyJpaRepository.favoriteAgencyCount(frontAgencyDTO.getIdx());
 
         // then
         assertThat(newFavoriteCount).isEqualTo(favoriteCount);
 
         // verify
-        then(mockFrontAgencyJpaRepository).should(times(1)).favoriteAgency(frontAgencyEntity);
-        then(mockFrontAgencyJpaRepository).should(atLeastOnce()).favoriteAgency(frontAgencyEntity);
+        then(mockFrontAgencyJpaRepository).should(times(1)).favoriteAgency(frontAgencyDTO.getIdx());
+        then(mockFrontAgencyJpaRepository).should(atLeastOnce()).favoriteAgency(frontAgencyDTO.getIdx());
         then(mockFrontAgencyJpaRepository).shouldHaveNoMoreInteractions();
     }
 

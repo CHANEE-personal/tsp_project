@@ -1,7 +1,6 @@
 package com.tsp.new_tsp_front.api.model.domain;
 
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
-import com.tsp.new_tsp_front.api.agency.service.impl.AgencyMapper;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCodeEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonMappedClass;
@@ -178,7 +177,7 @@ public class FrontModelEntity extends NewCommonMappedClass {
                 .createTime(entity.getCreateTime())
                 .updater(entity.getUpdater())
                 .updateTime(entity.getUpdateTime())
-                .modelAgency(AgencyMapper.INSTANCE.toDto(entity.getFrontAgencyEntity()))
+                .modelAgency(FrontAgencyEntity.toDto(entity.getFrontAgencyEntity()))
                 .modelImage(CommonImageEntity.toDtoList(entity.getCommonImageEntityList()))
                 .build();
     }

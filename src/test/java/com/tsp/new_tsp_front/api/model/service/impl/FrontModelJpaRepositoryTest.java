@@ -2,7 +2,6 @@ package com.tsp.new_tsp_front.api.model.service.impl;
 
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyDTO;
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
-import com.tsp.new_tsp_front.api.agency.service.impl.AgencyMapper;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
@@ -63,7 +62,7 @@ class FrontModelJpaRepositoryTest {
                 .visible("Y")
                 .build();
 
-        frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
+        frontAgencyDTO = FrontAgencyEntity.toDto(frontAgencyEntity);
 
         frontModelEntity = FrontModelEntity.builder()
                 .categoryCd(1)
@@ -255,7 +254,7 @@ class FrontModelJpaRepositoryTest {
                 .size3("34-24-34")
                 .shoes(270)
                 .visible("Y")
-                .modelAgency(AgencyMapper.INSTANCE.toDto(frontAgencyEntity))
+                .modelAgency(FrontAgencyEntity.toDto(frontAgencyEntity))
                 .modelImage(CommonImageEntity.toDtoList(commonImageEntityList))
                 .build();
 
@@ -310,7 +309,7 @@ class FrontModelJpaRepositoryTest {
                 .size3("34-24-34")
                 .shoes(270)
                 .visible("Y")
-                .modelAgency(AgencyMapper.INSTANCE.toDto(frontAgencyEntity))
+                .modelAgency(FrontAgencyEntity.toDto(frontAgencyEntity))
                 .modelImage(CommonImageEntity.toDtoList(commonImageEntityList))
                 .build();
 

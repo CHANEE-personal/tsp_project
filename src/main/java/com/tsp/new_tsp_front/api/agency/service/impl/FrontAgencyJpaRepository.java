@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.tsp.new_tsp_front.api.agency.domain.QFrontAgencyEntity.frontAgencyEntity;
-import static com.tsp.new_tsp_front.api.agency.service.impl.AgencyMapper.INSTANCE;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
 import static java.util.Objects.requireNonNull;
@@ -71,9 +70,9 @@ public class FrontAgencyJpaRepository {
                 .fetch();
 
         agencyList.forEach(list -> agencyList.get(agencyList.indexOf(list))
-                .setRnum(getInt(agencyMap.get("startPage"), 1) * (getInt(agencyMap.get("size"), 1)) - (2 - agencyList.indexOf(list))));
+                .setRowNum(getInt(agencyMap.get("startPage"), 1) * (getInt(agencyMap.get("size"), 1)) - (2 - agencyList.indexOf(list))));
 
-        return INSTANCE.toDtoList(agencyList);
+        return FrontAgencyEntity.toDtoList(agencyList);
     }
 
     /**
@@ -85,11 +84,13 @@ public class FrontAgencyJpaRepository {
      * 5. 작성일       : 2022. 08. 24.
      * </pre>
      */
-    public FrontAgencyEntity findOneAgency(Long idx) {
-        return queryFactory
+    public FrontAgencyDTO findOneAgency(Long idx) {
+        FrontAgencyEntity oneAgency = queryFactory
                 .selectFrom(frontAgencyEntity)
                 .where(frontAgencyEntity.idx.eq(idx))
                 .fetchOne();
+
+        return FrontAgencyEntity.toDto(oneAgency);
     }
     /**
      * <pre>
@@ -115,18 +116,18 @@ public class FrontAgencyJpaRepository {
      * 5. 작성일       : 2022. 08. 24.
      * </pre>
      */
-    public Integer favoriteAgency(FrontAgencyEntity existFrontAgencyEntity) {
+    public Integer favoriteAgency(Long idx) {
         queryFactory
                 .update(frontAgencyEntity)
                 //add , minus , multiple 다 가능하다.
                 .set(frontAgencyEntity.favoriteCount, frontAgencyEntity.favoriteCount.add(1))
-                .where(frontAgencyEntity.idx.eq(existFrontAgencyEntity.getIdx()))
+                .where(frontAgencyEntity.idx.eq(idx))
                 .execute();
 
         em.flush();
         em.clear();
 
-        return favoriteAgencyCount(existFrontAgencyEntity.getIdx());
+        return favoriteAgencyCount(idx);
     }
 
     /**
@@ -147,7 +148,7 @@ public class FrontAgencyJpaRepository {
                         .and(frontAgencyEntity.visible.eq("Y")))
                 .fetchFirst();
 
-        return INSTANCE.toDto(findPrevOneAgency);
+        return FrontAgencyEntity.toDto(findPrevOneAgency);
     }
 
     /**
@@ -168,6 +169,6 @@ public class FrontAgencyJpaRepository {
                         .and(frontAgencyEntity.visible.eq("Y")))
                 .fetchFirst();
 
-        return INSTANCE.toDto(findNextOneAgency);
+        return FrontAgencyEntity.toDto(findNextOneAgency);
     }
 }

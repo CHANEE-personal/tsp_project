@@ -2,7 +2,6 @@ package com.tsp.new_tsp_front.api.model.negotiation.service.impl;
 
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyDTO;
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
-import com.tsp.new_tsp_front.api.agency.service.impl.AgencyMapper;
 import com.tsp.new_tsp_front.api.model.domain.CareerJson;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
@@ -71,7 +70,7 @@ class FrontNegotiationJpaRepositoryTest {
                 .visible("Y")
                 .build();
 
-        frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
+        frontAgencyDTO = FrontAgencyEntity.toDto(frontAgencyEntity);
 
         ArrayList<CareerJson> careerList = new ArrayList<>();
         careerList.add(new CareerJson("title","txt"));

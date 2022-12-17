@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
@@ -25,7 +26,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "tsp_agency")
 public class FrontAgencyEntity extends NewCommonMappedClass {
     @Transient
-    private Integer rnum;
+    private Integer rowNum;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -56,5 +57,28 @@ public class FrontAgencyEntity extends NewCommonMappedClass {
 
     public void updateFavoriteCount() {
         this.favoriteCount++;
+    }
+
+    public static FrontAgencyDTO toDto(FrontAgencyEntity entity) {
+        if (entity == null) return null;
+        return FrontAgencyDTO.builder()
+                .idx(entity.getIdx())
+                .rowNum(entity.getRowNum())
+                .agencyName(entity.getAgencyName())
+                .agencyDescription(entity.getAgencyDescription())
+                .favoriteCount(entity.getFavoriteCount())
+                .visible(entity.getVisible())
+                .creator(entity.getCreator())
+                .createTime(entity.getCreateTime())
+                .updater(entity.getUpdater())
+                .updateTime(entity.getUpdateTime())
+                .build();
+    }
+
+    public static List<FrontAgencyDTO> toDtoList(List<FrontAgencyEntity> entityList) {
+        if (entityList == null) return null;
+        return entityList.stream()
+                .map(FrontAgencyEntity::toDto)
+                .collect(Collectors.toList());
     }
 }

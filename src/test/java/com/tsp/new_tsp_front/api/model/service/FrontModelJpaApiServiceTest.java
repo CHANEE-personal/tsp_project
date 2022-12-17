@@ -2,7 +2,6 @@ package com.tsp.new_tsp_front.api.model.service;
 
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyDTO;
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
-import com.tsp.new_tsp_front.api.agency.service.impl.AgencyMapper;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
@@ -68,7 +67,7 @@ class FrontModelJpaApiServiceTest {
                 .visible("Y")
                 .build();
 
-        frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
+        frontAgencyDTO = FrontAgencyEntity.toDto(frontAgencyEntity);
 
         frontModelEntity = FrontModelEntity.builder()
                 .categoryCd(1)
@@ -353,7 +352,7 @@ class FrontModelJpaApiServiceTest {
                 .modelViewCount(0)
                 .modelFavoriteCount(0)
                 .visible("Y")
-                .modelAgency(AgencyMapper.INSTANCE.toDto(frontAgencyEntity))
+                .modelAgency(FrontAgencyEntity.toDto(frontAgencyEntity))
                 .build();
 
         // 조회 수 관련 테스트
@@ -399,7 +398,7 @@ class FrontModelJpaApiServiceTest {
                 .size3("34-24-34")
                 .shoes(270)
                 .visible("Y")
-                .modelAgency(AgencyMapper.INSTANCE.toDto(frontAgencyEntity))
+                .modelAgency(FrontAgencyEntity.toDto(frontAgencyEntity))
                 .build();
 
         // when
