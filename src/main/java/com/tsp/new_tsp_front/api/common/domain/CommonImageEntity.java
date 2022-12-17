@@ -12,6 +12,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 import static javax.persistence.FetchType.LAZY;
@@ -26,7 +28,7 @@ import static javax.persistence.FetchType.LAZY;
 @Table(name = "tsp_image")
 public class CommonImageEntity implements Serializable {
     @Transient
-    private Integer rnum;
+    private Integer rowNum;
 
     @Id
     @GeneratedValue
@@ -91,4 +93,28 @@ public class CommonImageEntity implements Serializable {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "type_idx", referencedColumnName = "idx", insertable = false, updatable = false)
     private FrontAgencyEntity frontAgencyEntity;
+
+    public static CommonImageDTO toDto(CommonImageEntity entity) {
+        if (entity == null) return null;
+        return CommonImageDTO.builder()
+                .idx(entity.getIdx())
+                .typeIdx(entity.getTypeIdx())
+                .typeName(entity.getTypeName())
+                .fileMask(entity.getFileMask())
+                .fileSize(entity.getFileSize())
+                .fileName(entity.getFileName())
+                .fileNum(entity.getFileNum())
+                .filePath(entity.getFilePath())
+                .imageType(entity.getImageType())
+                .visible(entity.getVisible())
+                .regDate(entity.getRegDate())
+                .build();
+    }
+
+    public static List<CommonImageDTO> toDtoList(List<CommonImageEntity> entityList) {
+        if (entityList == null) return null;
+        return entityList.stream()
+                .map(CommonImageEntity::toDto)
+                .collect(Collectors.toList());
+    }
 }

@@ -32,7 +32,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.api.model.service.impl.ModelMapper.INSTANCE;
 import static java.time.LocalDateTime.now;
 import static java.time.LocalDateTime.of;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -100,7 +99,7 @@ class FrontNegotiationApiServiceTest {
 
         em.persist(frontModelEntity);
 
-        frontModelDTO = INSTANCE.toDto(frontModelEntity);
+        frontModelDTO = FrontModelEntity.toDto(frontModelEntity);
 
         frontNegotiationEntity = FrontNegotiationEntity.builder()
                 .modelIdx(frontModelEntity.getIdx())

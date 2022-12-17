@@ -7,7 +7,6 @@ import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
-import com.tsp.new_tsp_front.api.model.service.impl.ModelImageMapper;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.api.model.service.impl.ModelMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
@@ -91,7 +89,7 @@ class FrontModelJpaApiServiceTest {
                 .visible("Y")
                 .build();
 
-        frontModelDTO = INSTANCE.toDto(frontModelEntity);
+        frontModelDTO = FrontModelEntity.toDto(frontModelEntity);
 
         commonImageEntity = CommonImageEntity.builder()
                 .idx(1L)
@@ -103,7 +101,7 @@ class FrontModelJpaApiServiceTest {
                 .typeName("model")
                 .build();
 
-        commonImageDTO = ModelImageMapper.INSTANCE.toDto(commonImageEntity);
+        commonImageDTO = CommonImageEntity.toDto(commonImageEntity);
     }
 
     @BeforeEach
@@ -553,7 +551,7 @@ class FrontModelJpaApiServiceTest {
     void 모델좋아요BDD테스트() {
         // given
         em.persist(frontModelEntity);
-        frontModelDTO = INSTANCE.toDto(frontModelEntity);
+        frontModelDTO = FrontModelEntity.toDto(frontModelEntity);
 
         Integer favoriteCount = frontModelJpaApiService.favoriteModel(frontModelEntity.getIdx());
 

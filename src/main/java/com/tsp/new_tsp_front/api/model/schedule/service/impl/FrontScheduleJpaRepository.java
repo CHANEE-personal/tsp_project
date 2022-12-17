@@ -6,7 +6,6 @@ import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.domain.schedule.FrontScheduleDTO;
 import com.tsp.new_tsp_front.api.model.domain.schedule.FrontScheduleEntity;
-import com.tsp.new_tsp_front.api.model.service.impl.ModelMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -112,8 +111,8 @@ public class FrontScheduleJpaRepository {
                 .fetch();
 
         findModelScheduleList.forEach(list -> findModelScheduleList.get(findModelScheduleList.indexOf(list))
-                .setRnum(getInt(scheduleMap.get("startPage"), 1) * (getInt(scheduleMap.get("size"), 1)) - (2 - findModelScheduleList.indexOf(list))));
+                .setRowNum(getInt(scheduleMap.get("startPage"), 1) * (getInt(scheduleMap.get("size"), 1)) - (2 - findModelScheduleList.indexOf(list))));
 
-        return ModelMapper.INSTANCE.toDtoList(findModelScheduleList);
+        return FrontModelEntity.toDtoList(findModelScheduleList);
     }
 }

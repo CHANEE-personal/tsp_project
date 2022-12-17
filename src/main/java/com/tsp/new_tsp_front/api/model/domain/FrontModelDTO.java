@@ -28,8 +28,8 @@ import java.util.List;
 @ApiModel
 @DynamicUpdate
 public class FrontModelDTO extends NewCommonDTO {
-    @ApiModelProperty(required = true, value = "rnum", hidden = true)
-    private Integer rnum;
+    @ApiModelProperty(required = true, value = "rowNum", hidden = true)
+    private Integer rowNum;
 
     @ApiModelProperty(required = true, value = "idx", hidden = true)
     private Long idx;

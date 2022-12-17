@@ -16,7 +16,6 @@ import java.util.Map;
 import static com.tsp.new_tsp_front.api.agency.domain.QFrontAgencyEntity.frontAgencyEntity;
 import static com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity.commonImageEntity;
 import static com.tsp.new_tsp_front.api.model.domain.QFrontModelEntity.frontModelEntity;
-import static com.tsp.new_tsp_front.api.model.service.impl.ModelMapper.INSTANCE;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
 import static java.util.Objects.requireNonNull;
@@ -72,9 +71,9 @@ public class FrontModelJpaRepository {
                                         .and(commonImageEntity.visible.eq("Y")))))
                 .fetch();
 
-        modelList.forEach(list -> modelList.get(modelList.indexOf(list)).setRnum(modelList.indexOf(list)));
+        modelList.forEach(list -> modelList.get(modelList.indexOf(list)).setRowNum(modelList.indexOf(list)));
 
-        return INSTANCE.toDtoList(modelList);
+        return FrontModelEntity.toDtoList(modelList);
     }
 
     /**
@@ -119,9 +118,9 @@ public class FrontModelJpaRepository {
                 .fetch();
 
         modelList.forEach(list -> modelList.get(modelList.indexOf(list))
-                .setRnum(getInt(modelMap.get("startPage"), 1) * (getInt(modelMap.get("size"), 1)) - (2 - modelList.indexOf(list))));
+                .setRowNum(getInt(modelMap.get("startPage"), 1) * (getInt(modelMap.get("size"), 1)) - (2 - modelList.indexOf(list))));
 
-        return INSTANCE.toDtoList(modelList);
+        return FrontModelEntity.toDtoList(modelList);
     }
 
     /**
@@ -149,7 +148,8 @@ public class FrontModelJpaRepository {
                         .and(commonImageEntity.typeName.eq("model")))
                 .fetchOne();
 
-        return INSTANCE.toDto(findOneModel);
+        assert findOneModel != null;
+        return FrontModelEntity.toDto(findOneModel);
     }
 
     /**
@@ -171,7 +171,7 @@ public class FrontModelJpaRepository {
                         .and(frontModelEntity.visible.eq("Y")))
                 .fetchFirst();
 
-        return INSTANCE.toDto(findPrevOneModel);
+        return FrontModelEntity.toDto(findPrevOneModel);
     }
 
     /**
@@ -193,7 +193,7 @@ public class FrontModelJpaRepository {
                         .and(frontModelEntity.visible.eq("Y")))
                 .fetchFirst();
 
-        return INSTANCE.toDto(findNextOneModel);
+        return FrontModelEntity.toDto(findNextOneModel);
     }
 
     /**
@@ -317,8 +317,8 @@ public class FrontModelJpaRepository {
                 .fetch();
 
         newModelList.forEach(list -> newModelList.get(newModelList.indexOf(list))
-                .setRnum(getInt(modelMap.get("startPage"), 1) * (getInt(modelMap.get("size"), 1)) - (2 - newModelList.indexOf(list))));
+                .setRowNum(getInt(modelMap.get("startPage"), 1) * (getInt(modelMap.get("size"), 1)) - (2 - newModelList.indexOf(list))));
 
-        return INSTANCE.toDtoList(newModelList);
+        return FrontModelEntity.toDtoList(newModelList);
     }
 }
