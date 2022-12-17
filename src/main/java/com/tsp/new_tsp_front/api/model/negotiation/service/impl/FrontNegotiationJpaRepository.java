@@ -113,7 +113,7 @@ public class FrontNegotiationJpaRepository {
                         .and(frontNegotiationEntity.idx.eq(existFrontNegotiationEntity.getIdx())))
                 .fetchOne();
 
-        return FrontNegotiationMapper.INSTANCE.toDto(findOneNegotiation);
+        return FrontNegotiationEntity.toDto(findOneNegotiation);
     }
 
     /**
@@ -151,7 +151,7 @@ public class FrontNegotiationJpaRepository {
      */
     public FrontNegotiationDTO insertModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) {
         em.persist(frontNegotiationEntity);
-        return FrontNegotiationMapper.INSTANCE.toDto(frontNegotiationEntity);
+        return FrontNegotiationEntity.toDto(frontNegotiationEntity);
     }
 
     /**
@@ -167,7 +167,7 @@ public class FrontNegotiationJpaRepository {
         em.merge(existFrontNegotiationEntity);
         em.flush();
         em.clear();
-        return FrontNegotiationMapper.INSTANCE.toDto(existFrontNegotiationEntity);
+        return FrontNegotiationEntity.toDto(existFrontNegotiationEntity);
     }
 
     /**

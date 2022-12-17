@@ -113,7 +113,7 @@ class FrontNegotiationJpaRepositoryTest {
                 .visible("Y")
                 .build();
 
-        frontNegotiationDTO = FrontNegotiationMapper.INSTANCE.toDto(frontNegotiationEntity);
+        frontNegotiationDTO = FrontNegotiationEntity.toDto(frontNegotiationEntity);
     }
 
     @BeforeEach
@@ -283,7 +283,7 @@ class FrontNegotiationJpaRepositoryTest {
                 .visible("Y")
                 .build();
 
-        FrontNegotiationDTO frontNegotiationDTO = FrontNegotiationMapper.INSTANCE.toDto(frontNegotiationEntity);
+        FrontNegotiationDTO frontNegotiationDTO = FrontNegotiationEntity.toDto(frontNegotiationEntity);
 
         frontNegotiationJpaRepository.updateModelNegotiation(frontNegotiationEntity);
 
@@ -322,7 +322,7 @@ class FrontNegotiationJpaRepositoryTest {
                 .visible("Y")
                 .build();
 
-        FrontNegotiationDTO frontNegotiationDTO = FrontNegotiationMapper.INSTANCE.toDto(frontNegotiationEntity);
+        FrontNegotiationDTO frontNegotiationDTO = FrontNegotiationEntity.toDto(frontNegotiationEntity);
 
         frontNegotiationJpaRepository.updateModelNegotiation(frontNegotiationEntity);
 
@@ -345,7 +345,7 @@ class FrontNegotiationJpaRepositoryTest {
     void 모델섭외삭제Mockito테스트() {
         // given
         em.persist(frontNegotiationEntity);
-        frontNegotiationDTO = FrontNegotiationMapper.INSTANCE.toDto(frontNegotiationEntity);
+        frontNegotiationDTO = FrontNegotiationEntity.toDto(frontNegotiationEntity);
 
         // when
         when(mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity)).thenReturn(frontNegotiationDTO);
@@ -368,7 +368,7 @@ class FrontNegotiationJpaRepositoryTest {
     void 모델섭외삭제BDD테스트() {
         // given
         em.persist(frontNegotiationEntity);
-        frontNegotiationDTO = FrontNegotiationMapper.INSTANCE.toDto(frontNegotiationEntity);
+        frontNegotiationDTO = FrontNegotiationEntity.toDto(frontNegotiationEntity);
 
         // when
         given(mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity)).willReturn(frontNegotiationDTO);
