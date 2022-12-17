@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.api.portfolio.service.impl.PortFolioMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
@@ -65,7 +64,7 @@ class FrontPortFolioJpaRepositoryTest {
                 .typeName("portfolio")
                 .build();
 
-        commonImageDTO = PortFolioImageMapper.INSTANCE.toDto(commonImageEntity);
+        commonImageDTO = CommonImageEntity.toDto(commonImageEntity);
 
         commonImageEntityList.add(commonImageEntity);
 
@@ -80,7 +79,7 @@ class FrontPortFolioJpaRepositoryTest {
                 .commonImageEntityList(commonImageEntityList)
                 .build();
 
-        frontPortFolioDTO = INSTANCE.toDto(frontPortFolioEntity);
+        frontPortFolioDTO = FrontPortFolioEntity.toDto(frontPortFolioEntity);
     }
 
     @BeforeEach
@@ -413,7 +412,7 @@ class FrontPortFolioJpaRepositoryTest {
     void 프로덕션조회수Mockito테스트() {
         // given
         em.persist(frontPortFolioEntity);
-        frontPortFolioDTO = PortFolioMapper.INSTANCE.toDto(frontPortFolioEntity);
+        frontPortFolioDTO = FrontPortFolioEntity.toDto(frontPortFolioEntity);
 
         Integer viewCount = frontPortFolioJpaRepository.updatePortfolioViewCount(frontPortFolioEntity);
 
@@ -438,7 +437,7 @@ class FrontPortFolioJpaRepositoryTest {
     void 프로덕션조회수BDD테스트() {
         // given
         em.persist(frontPortFolioEntity);
-        frontPortFolioDTO = PortFolioMapper.INSTANCE.toDto(frontPortFolioEntity);
+        frontPortFolioDTO = FrontPortFolioEntity.toDto(frontPortFolioEntity);
 
         Integer viewCount = frontPortFolioJpaRepository.updatePortfolioViewCount(frontPortFolioEntity);
 
