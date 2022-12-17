@@ -8,6 +8,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -21,7 +23,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "tsp_support")
 public class FrontSupportEntity extends NewCommonMappedClass {
     @Transient
-    private Integer rnum;
+    private Integer rowNum;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -58,4 +60,27 @@ public class FrontSupportEntity extends NewCommonMappedClass {
 
     @Column(name = "support_time")
     private LocalDateTime supportTime;
+
+    public static FrontSupportDTO toDto(FrontSupportEntity entity) {
+        if (entity == null) return null;
+        return FrontSupportDTO.builder()
+                .rowNum(entity.getRowNum())
+                .idx(entity.getIdx())
+                .supportName(entity.getSupportName())
+                .supportHeight(entity.getSupportHeight())
+                .supportSize3(entity.getSupportSize3())
+                .supportInstagram(entity.getSupportInstagram())
+                .supportPhone(entity.getSupportPhone())
+                .supportMessage(entity.getSupportMessage())
+                .visible(entity.getVisible())
+                .supportTime(entity.getSupportTime())
+                .build();
+    }
+
+    public static List<FrontSupportDTO> toDtoList(List<FrontSupportEntity> entityList) {
+        if (entityList == null) return null;
+        return entityList.stream()
+                .map(FrontSupportEntity::toDto)
+                .collect(Collectors.toList());
+    }
 }

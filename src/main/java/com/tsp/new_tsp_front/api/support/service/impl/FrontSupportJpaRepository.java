@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 
-import static com.tsp.new_tsp_front.api.support.mapper.SupportMapper.INSTANCE;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,7 +26,6 @@ public class FrontSupportJpaRepository {
      */
     public FrontSupportDTO insertSupportModel(FrontSupportEntity frontSupportEntity) {
         em.persist(frontSupportEntity);
-
-        return INSTANCE.toDto(frontSupportEntity);
+        return FrontSupportEntity.toDto(frontSupportEntity);
     }
 }

@@ -20,8 +20,8 @@ import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 @AllArgsConstructor
 @ApiModel
 public class FrontSupportDTO extends NewCommonDTO {
-    @ApiModelProperty(required = true, value = "rnum", hidden = true)
-    private Integer rnum;
+    @ApiModelProperty(required = true, value = "rowNum", hidden = true)
+    private Integer rowNum;
 
     @ApiModelProperty(value = "지원모델 IDX", required = true, hidden = true)
     private Long idx;

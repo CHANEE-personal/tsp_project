@@ -40,6 +40,7 @@ class FrontSupportJpaRepositoryTest {
                 .supportPhone("010-9466-2702")
                 .supportSize3("31-24-31")
                 .supportInstagram("https://instagram.com")
+                .visible("Y")
                 .build();
     }
 
