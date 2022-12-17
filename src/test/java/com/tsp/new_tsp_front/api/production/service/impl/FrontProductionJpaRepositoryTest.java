@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.api.production.service.impl.ProductionMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -66,7 +65,7 @@ class FrontProductionJpaRepositoryTest {
                 .typeName("production")
                 .build();
 
-        commonImageDTO = ProductionImageMapper.INSTANCE.toDto(commonImageEntity);
+        commonImageDTO = CommonImageEntity.toDto(commonImageEntity);
 
         commonImageEntityList.add(commonImageEntity);
 
@@ -78,7 +77,7 @@ class FrontProductionJpaRepositoryTest {
                 .commonImageEntityList(commonImageEntityList)
                 .build();
 
-        frontProductionDTO = INSTANCE.toDto(frontProductionEntity);
+        frontProductionDTO = FrontProductionEntity.toDto(frontProductionEntity);
 
 //        frontProductionDTO = FrontProductionDTO.builder()
 //                .idx(1)
@@ -335,7 +334,7 @@ class FrontProductionJpaRepositoryTest {
     void 프로덕션조회수Mockito테스트() {
         // given
         em.persist(frontProductionEntity);
-        frontProductionDTO = INSTANCE.toDto(frontProductionEntity);
+        frontProductionDTO = FrontProductionEntity.toDto(frontProductionEntity);
 
         Integer viewCount = frontProductionJpaRepository.updateProductionViewCount(frontProductionEntity);
 
@@ -360,7 +359,7 @@ class FrontProductionJpaRepositoryTest {
     void 프로덕션조회수BDD테스트() {
         // given
         em.persist(frontProductionEntity);
-        frontProductionDTO = INSTANCE.toDto(frontProductionEntity);
+        frontProductionDTO = FrontProductionEntity.toDto(frontProductionEntity);
 
         Integer viewCount = frontProductionJpaRepository.updateProductionViewCount(frontProductionEntity);
 
