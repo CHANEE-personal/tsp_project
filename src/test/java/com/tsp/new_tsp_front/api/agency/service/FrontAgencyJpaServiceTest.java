@@ -2,7 +2,6 @@ package com.tsp.new_tsp_front.api.agency.service;
 
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyDTO;
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
-import com.tsp.new_tsp_front.api.agency.service.impl.AgencyMapper;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -121,7 +120,7 @@ class FrontAgencyJpaServiceTest {
     void Agency상세조회Mockito테스트() {
         // given
         FrontAgencyEntity frontAgencyEntity = FrontAgencyEntity.builder().idx(1L).agencyName("agencyTest").agencyDescription("agencyTest").build();
-        FrontAgencyDTO frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
+        FrontAgencyDTO frontAgencyDTO = FrontAgencyEntity.toDto(frontAgencyEntity);
 
         // when
         when(mockFrontAgencyJpaService.findOneAgency(frontAgencyEntity.getIdx())).thenReturn(frontAgencyDTO);
@@ -147,7 +146,7 @@ class FrontAgencyJpaServiceTest {
     void Agency상세조회BDD테스트() {
         // given
         FrontAgencyEntity frontAgencyEntity = FrontAgencyEntity.builder().idx(1L).agencyName("agencyTest").agencyDescription("agencyTest").build();
-        FrontAgencyDTO frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
+        FrontAgencyDTO frontAgencyDTO = FrontAgencyEntity.toDto(frontAgencyEntity);
 
         // when
         given(mockFrontAgencyJpaService.findOneAgency(frontAgencyEntity.getIdx())).willReturn(frontAgencyDTO);
@@ -175,7 +174,7 @@ class FrontAgencyJpaServiceTest {
                 .visible("Y")
                 .build();
 
-        frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
+        frontAgencyDTO = FrontAgencyEntity.toDto(frontAgencyEntity);
         // given
         em.persist(frontAgencyEntity);
 
@@ -207,7 +206,7 @@ class FrontAgencyJpaServiceTest {
                 .visible("Y")
                 .build();
 
-        frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
+        frontAgencyDTO = FrontAgencyEntity.toDto(frontAgencyEntity);
         // given
         em.persist(frontAgencyEntity);
 

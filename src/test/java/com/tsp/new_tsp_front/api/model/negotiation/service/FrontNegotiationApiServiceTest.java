@@ -2,13 +2,11 @@ package com.tsp.new_tsp_front.api.model.negotiation.service;
 
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyDTO;
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
-import com.tsp.new_tsp_front.api.agency.service.impl.AgencyMapper;
 import com.tsp.new_tsp_front.api.model.domain.CareerJson;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.domain.negotiation.FrontNegotiationDTO;
 import com.tsp.new_tsp_front.api.model.domain.negotiation.FrontNegotiationEntity;
-import com.tsp.new_tsp_front.api.model.negotiation.service.impl.FrontNegotiationMapper;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,7 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.api.model.service.impl.ModelMapper.INSTANCE;
 import static java.time.LocalDateTime.now;
 import static java.time.LocalDateTime.of;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -71,7 +68,7 @@ class FrontNegotiationApiServiceTest {
                 .visible("Y")
                 .build();
 
-        frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
+        frontAgencyDTO = FrontAgencyEntity.toDto(frontAgencyEntity);
 
         ArrayList<CareerJson> careerList = new ArrayList<>();
         careerList.add(new CareerJson("title","txt"));
@@ -100,7 +97,7 @@ class FrontNegotiationApiServiceTest {
 
         em.persist(frontModelEntity);
 
-        frontModelDTO = INSTANCE.toDto(frontModelEntity);
+        frontModelDTO = FrontModelEntity.toDto(frontModelEntity);
 
         frontNegotiationEntity = FrontNegotiationEntity.builder()
                 .modelIdx(frontModelEntity.getIdx())
@@ -113,7 +110,7 @@ class FrontNegotiationApiServiceTest {
                 .visible("Y")
                 .build();
 
-        frontNegotiationDTO = FrontNegotiationMapper.INSTANCE.toDto(frontNegotiationEntity);
+        frontNegotiationDTO = FrontNegotiationEntity.toDto(frontNegotiationEntity);
     }
 
     @BeforeEach
@@ -283,7 +280,7 @@ class FrontNegotiationApiServiceTest {
                 .visible("Y")
                 .build();
 
-        FrontNegotiationDTO frontNegotiationDTO = FrontNegotiationMapper.INSTANCE.toDto(frontNegotiationEntity);
+        FrontNegotiationDTO frontNegotiationDTO = FrontNegotiationEntity.toDto(frontNegotiationEntity);
 
         frontNegotiationJpaApiService.updateModelNegotiation(frontNegotiationEntity);
 
@@ -322,7 +319,7 @@ class FrontNegotiationApiServiceTest {
                 .visible("Y")
                 .build();
 
-        FrontNegotiationDTO frontNegotiationDTO = FrontNegotiationMapper.INSTANCE.toDto(frontNegotiationEntity);
+        FrontNegotiationDTO frontNegotiationDTO = FrontNegotiationEntity.toDto(frontNegotiationEntity);
 
         frontNegotiationJpaApiService.updateModelNegotiation(frontNegotiationEntity);
 
@@ -345,7 +342,7 @@ class FrontNegotiationApiServiceTest {
     void 모델섭외삭제Mockito테스트() {
         // given
         em.persist(frontNegotiationEntity);
-        frontNegotiationDTO = FrontNegotiationMapper.INSTANCE.toDto(frontNegotiationEntity);
+        frontNegotiationDTO = FrontNegotiationEntity.toDto(frontNegotiationEntity);
 
         // when
         when(mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity)).thenReturn(frontNegotiationDTO);
@@ -368,7 +365,7 @@ class FrontNegotiationApiServiceTest {
     void 모델섭외삭제BDD테스트() {
         // given
         em.persist(frontNegotiationEntity);
-        frontNegotiationDTO = FrontNegotiationMapper.INSTANCE.toDto(frontNegotiationEntity);
+        frontNegotiationDTO = FrontNegotiationEntity.toDto(frontNegotiationEntity);
 
         // when
         given(mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity)).willReturn(frontNegotiationDTO);

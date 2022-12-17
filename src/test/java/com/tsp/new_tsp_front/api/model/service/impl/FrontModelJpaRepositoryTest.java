@@ -2,7 +2,6 @@ package com.tsp.new_tsp_front.api.model.service.impl;
 
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyDTO;
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
-import com.tsp.new_tsp_front.api.agency.service.impl.AgencyMapper;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
@@ -26,7 +25,6 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.*;
 
-import static com.tsp.new_tsp_front.api.model.service.impl.ModelMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
@@ -64,7 +62,7 @@ class FrontModelJpaRepositoryTest {
                 .visible("Y")
                 .build();
 
-        frontAgencyDTO = AgencyMapper.INSTANCE.toDto(frontAgencyEntity);
+        frontAgencyDTO = FrontAgencyEntity.toDto(frontAgencyEntity);
 
         frontModelEntity = FrontModelEntity.builder()
                 .categoryCd(1)
@@ -88,7 +86,7 @@ class FrontModelJpaRepositoryTest {
                 .visible("Y")
                 .build();
 
-        frontModelDTO = INSTANCE.toDto(frontModelEntity);
+        frontModelDTO = FrontModelEntity.toDto(frontModelEntity);
 
         commonImageEntity = CommonImageEntity.builder()
                 .idx(1L)
@@ -100,7 +98,7 @@ class FrontModelJpaRepositoryTest {
                 .typeName("model")
                 .build();
 
-        commonImageDTO = ModelImageMapper.INSTANCE.toDto(commonImageEntity);
+        commonImageDTO = CommonImageEntity.toDto(commonImageEntity);
     }
 
     @BeforeEach
@@ -256,8 +254,8 @@ class FrontModelJpaRepositoryTest {
                 .size3("34-24-34")
                 .shoes(270)
                 .visible("Y")
-                .modelAgency(AgencyMapper.INSTANCE.toDto(frontAgencyEntity))
-                .modelImage(ModelImageMapper.INSTANCE.toDtoList(commonImageEntityList))
+                .modelAgency(FrontAgencyEntity.toDto(frontAgencyEntity))
+                .modelImage(CommonImageEntity.toDtoList(commonImageEntityList))
                 .build();
 
         // when
@@ -311,8 +309,8 @@ class FrontModelJpaRepositoryTest {
                 .size3("34-24-34")
                 .shoes(270)
                 .visible("Y")
-                .modelAgency(AgencyMapper.INSTANCE.toDto(frontAgencyEntity))
-                .modelImage(ModelImageMapper.INSTANCE.toDtoList(commonImageEntityList))
+                .modelAgency(FrontAgencyEntity.toDto(frontAgencyEntity))
+                .modelImage(CommonImageEntity.toDtoList(commonImageEntityList))
                 .build();
 
         // when
@@ -532,7 +530,7 @@ class FrontModelJpaRepositoryTest {
     void 모델좋아요갯수조회Mockito테스트() {
         // given
         em.persist(frontModelEntity);
-        frontModelDTO = INSTANCE.toDto(frontModelEntity);
+        frontModelDTO = FrontModelEntity.toDto(frontModelEntity);
 
         // when
         when(mockFrontModelJpaRepository.findOneModel(frontModelEntity.getIdx())).thenReturn(frontModelDTO);
@@ -552,7 +550,7 @@ class FrontModelJpaRepositoryTest {
     void 모델좋아요갯수조회BDD테스트() {
         // given
         em.persist(frontModelEntity);
-        frontModelDTO = INSTANCE.toDto(frontModelEntity);
+        frontModelDTO = FrontModelEntity.toDto(frontModelEntity);
 
         // when
         given(mockFrontModelJpaRepository.findOneModel(frontModelEntity.getIdx())).willReturn(frontModelDTO);
@@ -572,7 +570,7 @@ class FrontModelJpaRepositoryTest {
     void 모델조회수Mockito테스트() {
         // given
         em.persist(frontModelEntity);
-        frontModelDTO = INSTANCE.toDto(frontModelEntity);
+        frontModelDTO = FrontModelEntity.toDto(frontModelEntity);
 
         Integer viewCount = frontModelJpaRepository.updateModelViewCount(frontModelEntity.getIdx());
 
@@ -597,7 +595,7 @@ class FrontModelJpaRepositoryTest {
     void 모델조회수BDD테스트() {
         // given
         em.persist(frontModelEntity);
-        frontModelDTO = INSTANCE.toDto(frontModelEntity);
+        frontModelDTO = FrontModelEntity.toDto(frontModelEntity);
 
         Integer viewCount = frontModelJpaRepository.updateModelViewCount(frontModelEntity.getIdx());
 
@@ -619,7 +617,7 @@ class FrontModelJpaRepositoryTest {
     void 모델좋아요Mockito테스트() {
         // given
         em.persist(frontModelEntity);
-        frontModelDTO = INSTANCE.toDto(frontModelEntity);
+        frontModelDTO = FrontModelEntity.toDto(frontModelEntity);
 
         Integer favoriteCount = frontModelJpaRepository.favoriteModel(frontModelEntity.getIdx());
 
@@ -644,7 +642,7 @@ class FrontModelJpaRepositoryTest {
     void 모델좋아요BDD테스트() {
         // given
         em.persist(frontModelEntity);
-        frontModelDTO = INSTANCE.toDto(frontModelEntity);
+        frontModelDTO = FrontModelEntity.toDto(frontModelEntity);
 
         Integer favoriteCount = frontModelJpaRepository.favoriteModel(frontModelEntity.getIdx());
 

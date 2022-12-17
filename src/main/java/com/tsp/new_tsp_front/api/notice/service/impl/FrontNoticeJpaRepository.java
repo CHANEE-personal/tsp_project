@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.tsp.new_tsp_front.api.notice.domain.QFrontNoticeEntity.frontNoticeEntity;
-import static com.tsp.new_tsp_front.api.notice.service.impl.NoticeMapper.INSTANCE;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
 import static java.lang.Boolean.TRUE;
@@ -69,9 +68,9 @@ public class FrontNoticeJpaRepository {
                 .fetch();
 
         noticeList.forEach(list -> noticeList.get(noticeList.indexOf(list))
-                .setRnum(getInt(noticeMap.get("startPage"), 1) * (getInt(noticeMap.get("size"), 1)) - (2 - noticeList.indexOf(list))));
+                .setRowNum(getInt(noticeMap.get("startPage"), 1) * (getInt(noticeMap.get("size"), 1)) - (2 - noticeList.indexOf(list))));
 
-        return INSTANCE.toDtoList(noticeList);
+        return FrontNoticeEntity.toDtoList(noticeList);
     }
 
     /**
@@ -109,9 +108,9 @@ public class FrontNoticeJpaRepository {
                 .fetch();
 
         noticeList.forEach(list -> noticeList.get(noticeList.indexOf(list))
-                .setRnum(getInt(noticeMap.get("startPage"), 1) * (getInt(noticeMap.get("size"), 1)) - (2 - noticeList.indexOf(list))));
+                .setRowNum(getInt(noticeMap.get("startPage"), 1) * (getInt(noticeMap.get("size"), 1)) - (2 - noticeList.indexOf(list))));
 
-        return INSTANCE.toDtoList(noticeList);
+        return FrontNoticeEntity.toDtoList(noticeList);
     }
 
     /**
@@ -131,7 +130,7 @@ public class FrontNoticeJpaRepository {
                         .and(frontNoticeEntity.visible.eq("Y")))
                 .fetchOne();
 
-        return INSTANCE.toDto(findOneNotice);
+        return FrontNoticeEntity.toDto(findOneNotice);
     }
 
     /**
@@ -152,7 +151,7 @@ public class FrontNoticeJpaRepository {
                         .and(frontNoticeEntity.visible.eq("Y")))
                 .fetchFirst();
 
-        return INSTANCE.toDto(findPrevOneNotice);
+        return FrontNoticeEntity.toDto(findPrevOneNotice);
     }
 
     /**
@@ -173,6 +172,6 @@ public class FrontNoticeJpaRepository {
                         .and(frontNoticeEntity.visible.eq("Y")))
                 .fetchFirst();
 
-        return INSTANCE.toDto(findNextOneNotice);
+        return FrontNoticeEntity.toDto(findNextOneNotice);
     }
 }

@@ -6,7 +6,6 @@ import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.domain.schedule.FrontScheduleDTO;
 import com.tsp.new_tsp_front.api.model.domain.schedule.FrontScheduleEntity;
-import com.tsp.new_tsp_front.api.model.service.impl.ModelMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -18,7 +17,6 @@ import java.util.Map;
 
 import static com.tsp.new_tsp_front.api.model.domain.QFrontModelEntity.*;
 import static com.tsp.new_tsp_front.api.model.domain.schedule.QFrontScheduleEntity.*;
-import static com.tsp.new_tsp_front.api.model.schedule.service.impl.FrontScheduleMapper.INSTANCE;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
 import static java.time.LocalDate.now;
@@ -87,9 +85,9 @@ public class FrontScheduleJpaRepository {
                 .fetch();
 
         scheduleList.forEach(list -> scheduleList.get(scheduleList.indexOf(list))
-                .setRnum(getInt(scheduleMap.get("startPage"), 1) * (getInt(scheduleMap.get("size"), 1)) - (2 - scheduleList.indexOf(list))));
+                .setRowNum(getInt(scheduleMap.get("startPage"), 1) * (getInt(scheduleMap.get("size"), 1)) - (2 - scheduleList.indexOf(list))));
 
-        return INSTANCE.toDtoList(scheduleList);
+        return FrontScheduleEntity.toDtoList(scheduleList);
     }
 
     /**
@@ -112,8 +110,8 @@ public class FrontScheduleJpaRepository {
                 .fetch();
 
         findModelScheduleList.forEach(list -> findModelScheduleList.get(findModelScheduleList.indexOf(list))
-                .setRnum(getInt(scheduleMap.get("startPage"), 1) * (getInt(scheduleMap.get("size"), 1)) - (2 - findModelScheduleList.indexOf(list))));
+                .setRowNum(getInt(scheduleMap.get("startPage"), 1) * (getInt(scheduleMap.get("size"), 1)) - (2 - findModelScheduleList.indexOf(list))));
 
-        return ModelMapper.INSTANCE.toDtoList(findModelScheduleList);
+        return FrontModelEntity.toDtoList(findModelScheduleList);
     }
 }

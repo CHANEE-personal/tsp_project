@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.api.faq.mapper.FaqMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
@@ -117,7 +116,7 @@ class FrontFaqJpaServiceTest {
     void FAQ상세조회Mockito테스트() {
         // given
         FrontFaqEntity frontFaqEntity = FrontFaqEntity.builder().idx(1L).title("FAQTest").description("FAQTest").build();
-        FrontFaqDTO frontFaqDTO = INSTANCE.toDto(frontFaqEntity);
+        FrontFaqDTO frontFaqDTO = FrontFaqEntity.toDto(frontFaqEntity);
 
         // when
         when(mockFrontFaqJpaService.findOneFaq(frontFaqEntity)).thenReturn(frontFaqDTO);
@@ -143,7 +142,7 @@ class FrontFaqJpaServiceTest {
     void FAQ상세조회BDD테스트() {
         // given
         FrontFaqEntity frontFaqEntity = FrontFaqEntity.builder().idx(1L).title("FAQTest").description("FAQTest").build();
-        FrontFaqDTO frontFaqDTO = INSTANCE.toDto(frontFaqEntity);
+        FrontFaqDTO frontFaqDTO = FrontFaqEntity.toDto(frontFaqEntity);
 
         // when
         when(mockFrontFaqJpaService.findOneFaq(frontFaqEntity)).thenReturn(frontFaqDTO);

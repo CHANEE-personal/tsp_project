@@ -22,8 +22,8 @@ import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 @AllArgsConstructor
 @ApiModel(value = "모델 스케줄 관련 변수")
 public class FrontScheduleDTO extends NewCommonDTO {
-    @ApiModelProperty(required = true, value = "rnum", hidden = true, example = "1")
-    private Integer rnum;
+    @ApiModelProperty(required = true, value = "rowNum", hidden = true, example = "1")
+    private Integer rowNum;
 
     @ApiModelProperty(required = true, value = "idx", hidden = true, example = "1")
     private Long idx;

@@ -4,7 +4,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
-import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +13,6 @@ import java.util.Map;
 
 import static com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity.commonImageEntity;
 import static com.tsp.new_tsp_front.api.portfolio.domain.QFrontPortFolioEntity.frontPortFolioEntity;
-import static com.tsp.new_tsp_front.api.portfolio.service.impl.PortFolioMapper.INSTANCE;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
 import static java.util.Objects.requireNonNull;
@@ -74,9 +72,9 @@ public class FrontPortFolioJpaRepository {
                 .fetch();
 
         portFolioList.forEach(list -> portFolioList.get(portFolioList.indexOf(list))
-                .setRnum(getInt(portFolioMap.get("startPage"), 1) * (getInt(portFolioMap.get("size"), 1)) - (2 - portFolioList.indexOf(list))));
+                .setRowNum(getInt(portFolioMap.get("startPage"), 1) * (getInt(portFolioMap.get("size"), 1)) - (2 - portFolioList.indexOf(list))));
 
-        return INSTANCE.toDtoList(portFolioList);
+        return FrontPortFolioEntity.toDtoList(portFolioList);
     }
 
     /**
@@ -98,7 +96,7 @@ public class FrontPortFolioJpaRepository {
                         .and(commonImageEntity.typeName.eq("portfolio")))
                 .fetchOne();
 
-        return INSTANCE.toDto(getPortFolioInfo);
+        return FrontPortFolioEntity.toDto(getPortFolioInfo);
     }
 
     /**
@@ -119,7 +117,7 @@ public class FrontPortFolioJpaRepository {
                         .and(frontPortFolioEntity.visible.eq("Y")))
                 .fetchFirst();
 
-        return INSTANCE.toDto(findPrevOnePortfolio);
+        return FrontPortFolioEntity.toDto(findPrevOnePortfolio);
     }
 
     /**
@@ -140,7 +138,7 @@ public class FrontPortFolioJpaRepository {
                         .and(frontPortFolioEntity.visible.eq("Y")))
                 .fetchFirst();
 
-        return INSTANCE.toDto(findPrevOnePortfolio);
+        return FrontPortFolioEntity.toDto(findPrevOnePortfolio);
     }
 
     /**

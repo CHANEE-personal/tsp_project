@@ -16,8 +16,8 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @ApiModel(value = "FAQ 관련 변수")
 public class FrontFaqDTO extends NewCommonDTO {
-    @ApiModelProperty(required = true, value = "rnum", hidden = true)
-    private Integer rnum;
+    @ApiModelProperty(required = true, value = "rowNum", hidden = true)
+    private Integer rowNum;
 
     @ApiModelProperty(required = true, value = "idx", hidden = true)
     private Long idx;

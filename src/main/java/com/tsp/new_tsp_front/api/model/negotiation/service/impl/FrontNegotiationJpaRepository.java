@@ -6,7 +6,6 @@ import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.domain.negotiation.FrontNegotiationDTO;
 import com.tsp.new_tsp_front.api.model.domain.negotiation.FrontNegotiationEntity;
-import com.tsp.new_tsp_front.api.model.service.impl.ModelMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -92,9 +91,9 @@ public class FrontNegotiationJpaRepository {
                 .fetch();
 
         modelNegotiationList.forEach(list -> modelNegotiationList.get(modelNegotiationList.indexOf(list))
-                .setRnum(getInt(negotiationMap.get("startPage"), 1) * (getInt(negotiationMap.get("size"), 1)) - (2 - modelNegotiationList.indexOf(list))));
+                .setRowNum(getInt(negotiationMap.get("startPage"), 1) * (getInt(negotiationMap.get("size"), 1)) - (2 - modelNegotiationList.indexOf(list))));
 
-        return ModelMapper.INSTANCE.toDtoList(modelNegotiationList);
+        return FrontModelEntity.toDtoList(modelNegotiationList);
     }
 
     /**
@@ -114,7 +113,7 @@ public class FrontNegotiationJpaRepository {
                         .and(frontNegotiationEntity.idx.eq(existFrontNegotiationEntity.getIdx())))
                 .fetchOne();
 
-        return FrontNegotiationMapper.INSTANCE.toDto(findOneNegotiation);
+        return FrontNegotiationEntity.toDto(findOneNegotiation);
     }
 
     /**
@@ -137,7 +136,8 @@ public class FrontNegotiationJpaRepository {
                         .and(frontNegotiationEntity.idx.eq(existFrontNegotiationEntity.getIdx())))
                 .fetchOne();
 
-        return ModelMapper.INSTANCE.toDto(findOneModelNegotiation);
+        assert findOneModelNegotiation != null;
+        return FrontModelEntity.toDto(findOneModelNegotiation);
     }
 
     /**
@@ -151,7 +151,7 @@ public class FrontNegotiationJpaRepository {
      */
     public FrontNegotiationDTO insertModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) {
         em.persist(frontNegotiationEntity);
-        return FrontNegotiationMapper.INSTANCE.toDto(frontNegotiationEntity);
+        return FrontNegotiationEntity.toDto(frontNegotiationEntity);
     }
 
     /**
@@ -167,7 +167,7 @@ public class FrontNegotiationJpaRepository {
         em.merge(existFrontNegotiationEntity);
         em.flush();
         em.clear();
-        return FrontNegotiationMapper.INSTANCE.toDto(existFrontNegotiationEntity);
+        return FrontNegotiationEntity.toDto(existFrontNegotiationEntity);
     }
 
     /**

@@ -2,7 +2,6 @@ package com.tsp.new_tsp_front.api.agency.service;
 
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyDTO;
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
-import com.tsp.new_tsp_front.api.agency.service.impl.AgencyMapper;
 import com.tsp.new_tsp_front.api.agency.service.impl.FrontAgencyJpaRepository;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -68,7 +67,7 @@ public class FrontAgencyJpaService {
     @Transactional(readOnly = true)
     public FrontAgencyDTO findOneAgency(Long idx) throws TspException {
         try {
-            return AgencyMapper.INSTANCE.toDto(this.frontAgencyJpaRepository.findOneAgency(idx));
+            return this.frontAgencyJpaRepository.findOneAgency(idx);
         } catch (Exception e) {
             throw new TspException(NOT_FOUND_AGENCY, e);
         }
@@ -141,9 +140,7 @@ public class FrontAgencyJpaService {
     @Transactional
     public Integer favoriteAgency(Long idx) throws TspException {
         try {
-            FrontAgencyEntity oneAgency = frontAgencyJpaRepository.findOneAgency(idx);
-            oneAgency.updateFavoriteCount();
-            return oneAgency.getFavoriteCount();
+            return frontAgencyJpaRepository.favoriteAgency(idx);
         } catch (Exception e) {
             throw new TspException(ERROR_AGENCY_LIKE, e);
         }

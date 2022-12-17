@@ -13,7 +13,6 @@ import java.util.Map;
 
 import static com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity.commonImageEntity;
 import static com.tsp.new_tsp_front.api.production.domain.QFrontProductionEntity.frontProductionEntity;
-import static com.tsp.new_tsp_front.api.production.service.impl.ProductionMapper.INSTANCE;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
 import static java.util.Objects.requireNonNull;
@@ -73,9 +72,9 @@ public class FrontProductionJpaRepository {
                 .fetch();
 
         productionList.forEach(list -> productionList.get(productionList.indexOf(list))
-                .setRnum(getInt(productionMap.get("startPage"), 1) * (getInt(productionMap.get("size"), 1)) - (2 - productionList.indexOf(list))));
+                .setRowNum(getInt(productionMap.get("startPage"), 1) * (getInt(productionMap.get("size"), 1)) - (2 - productionList.indexOf(list))));
 
-        return INSTANCE.toDtoList(productionList);
+        return FrontProductionEntity.toDtoList(productionList);
     }
 
     /**
@@ -101,7 +100,7 @@ public class FrontProductionJpaRepository {
                         .and(commonImageEntity.typeName.eq("production")))
                 .fetchOne();
 
-        return INSTANCE.toDto(getProductionInfo);
+        return FrontProductionEntity.toDto(getProductionInfo);
     }
 
     /**
@@ -122,7 +121,7 @@ public class FrontProductionJpaRepository {
                         .and(frontProductionEntity.visible.eq("Y")))
                 .fetchFirst();
 
-        return INSTANCE.toDto(findPrevOneProduction);
+        return FrontProductionEntity.toDto(findPrevOneProduction);
     }
 
     /**
@@ -143,7 +142,7 @@ public class FrontProductionJpaRepository {
                         .and(frontProductionEntity.visible.eq("Y")))
                 .fetchFirst();
 
-        return INSTANCE.toDto(findNextOneProduction);
+        return FrontProductionEntity.toDto(findNextOneProduction);
     }
 
     /**

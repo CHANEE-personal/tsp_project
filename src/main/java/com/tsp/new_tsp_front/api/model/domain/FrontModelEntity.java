@@ -19,6 +19,7 @@ import javax.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.CascadeType.REMOVE;
@@ -36,7 +37,7 @@ import static javax.persistence.GenerationType.*;
 @Table(name = "tsp_model")
 public class FrontModelEntity extends NewCommonMappedClass {
     @Transient
-    private Integer rnum;
+    private Integer rowNum;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -146,5 +147,45 @@ public class FrontModelEntity extends NewCommonMappedClass {
     }
     public void updateFavoriteCount() {
         this.modelFavoriteCount++;
+    }
+
+    public static FrontModelDTO toDto(FrontModelEntity entity) {
+        if (entity == null) return null;
+        return FrontModelDTO.builder()
+                .idx(entity.getIdx())
+                .rowNum(entity.getRowNum())
+                .categoryCd(entity.getCategoryCd())
+                .agencyIdx(entity.getAgencyIdx())
+                .modelKorName(entity.getModelKorName())
+                .modelEngName(entity.getModelEngName())
+                .modelDescription(entity.getModelDescription())
+                .visible(entity.getVisible())
+                .height(entity.getHeight())
+                .shoes(entity.getShoes())
+                .size3(entity.getSize3())
+                .categoryAge(entity.getCategoryAge())
+                .modelMainYn(entity.getModelMainYn())
+                .modelFirstName(entity.getModelFirstName())
+                .modelSecondName(entity.getModelSecondName())
+                .modelKorFirstName(entity.getModelKorFirstName())
+                .modelKorSecondName(entity.getModelKorSecondName())
+                .modelFavoriteCount(entity.getModelFavoriteCount())
+                .modelViewCount(entity.getModelViewCount())
+                .newYn(entity.getNewYn())
+                .careerList(entity.getCareerList())
+                .creator(entity.getCreator())
+                .createTime(entity.getCreateTime())
+                .updater(entity.getUpdater())
+                .updateTime(entity.getUpdateTime())
+                .modelAgency(FrontAgencyEntity.toDto(entity.getFrontAgencyEntity()))
+                .modelImage(CommonImageEntity.toDtoList(entity.getCommonImageEntityList()))
+                .build();
+    }
+
+    public static List<FrontModelDTO> toDtoList(List<FrontModelEntity> entityList) {
+        if (entityList == null) return null;
+        return entityList.stream()
+                .map(FrontModelEntity::toDto)
+                .collect(Collectors.toList());
     }
 }

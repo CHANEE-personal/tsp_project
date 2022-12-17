@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.api.notice.service.impl.NoticeMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -55,7 +54,7 @@ class FrontNoticeJpaRepositoryTest {
                 .viewCount(1)
                 .build();
 
-        frontNoticeDTO = INSTANCE.toDto(frontNoticeEntity);
+        frontNoticeDTO = FrontNoticeEntity.toDto(frontNoticeEntity);
     }
 
     @BeforeEach
@@ -201,7 +200,7 @@ class FrontNoticeJpaRepositoryTest {
                 .visible("Y")
                 .build();
 
-        frontNoticeDTO = INSTANCE.toDto(frontNoticeEntity);
+        frontNoticeDTO = FrontNoticeEntity.toDto(frontNoticeEntity);
 
         // when
         when(mockFrontNoticeJpaRepository.findOneNotice(frontNoticeEntity)).thenReturn(frontNoticeDTO);
@@ -233,7 +232,7 @@ class FrontNoticeJpaRepositoryTest {
                 .visible("Y")
                 .build();
 
-        frontNoticeDTO = INSTANCE.toDto(frontNoticeEntity);
+        frontNoticeDTO = FrontNoticeEntity.toDto(frontNoticeEntity);
 
         // when
         given(mockFrontNoticeJpaRepository.findOneNotice(frontNoticeEntity)).willReturn(frontNoticeDTO);
