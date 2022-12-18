@@ -164,17 +164,13 @@ class FrontNegotiationApiServiceTest {
         negotiationList.add(FrontNegotiationDTO.builder().modelIdx(frontModelEntity.getIdx())
                 .modelNegotiationDesc("영화 프로젝트 참여 테스트 두번째").modelNegotiationDate(now()).build());
 
-        List<FrontModelDTO> modelNegotiationList = new ArrayList<>();
-        modelNegotiationList.add(FrontModelDTO.builder().idx(3L).categoryCd(1).modelKorName("조찬희")
-                .modelNegotiationList(negotiationList).build());
-
         // when
-        when(mockFrontNegotiationJpaApiService.findModelNegotiationList(negotiationMap)).thenReturn(modelNegotiationList);
-        List<FrontModelDTO> newModelNegotiationList = mockFrontNegotiationJpaApiService.findModelNegotiationList(negotiationMap);
+        when(mockFrontNegotiationJpaApiService.findModelNegotiationList(negotiationMap)).thenReturn(negotiationList);
+        List<FrontNegotiationDTO> newModelNegotiationList = mockFrontNegotiationJpaApiService.findModelNegotiationList(negotiationMap);
 
         // then
-        assertThat(newModelNegotiationList.get(0).getIdx()).isEqualTo(modelNegotiationList.get(0).getIdx());
-        assertThat(newModelNegotiationList.get(0).getModelNegotiationList().get(0).getModelNegotiationDesc()).isEqualTo(negotiationList.get(0).getModelNegotiationDesc());
+        assertThat(newModelNegotiationList.get(0).getIdx()).isEqualTo(negotiationList.get(0).getIdx());
+        assertThat(newModelNegotiationList.get(0).getModelNegotiationDesc()).isEqualTo(negotiationList.get(0).getModelNegotiationDesc());
 
         // verify
         verify(mockFrontNegotiationJpaApiService, times(1)).findModelNegotiationList(negotiationMap);
@@ -199,17 +195,13 @@ class FrontNegotiationApiServiceTest {
         negotiationList.add(FrontNegotiationDTO.builder().modelIdx(frontModelEntity.getIdx())
                 .modelNegotiationDesc("영화 프로젝트 참여 테스트 두번째").modelNegotiationDate(now()).build());
 
-        List<FrontModelDTO> modelNegotiationList = new ArrayList<>();
-        modelNegotiationList.add(FrontModelDTO.builder().idx(3L).categoryCd(1).modelKorName("조찬희")
-                .modelNegotiationList(negotiationList).build());
-
         // when
-        given(mockFrontNegotiationJpaApiService.findModelNegotiationList(negotiationMap)).willReturn(modelNegotiationList);
-        List<FrontModelDTO> newModelNegotiationList = mockFrontNegotiationJpaApiService.findModelNegotiationList(negotiationMap);
+        given(mockFrontNegotiationJpaApiService.findModelNegotiationList(negotiationMap)).willReturn(negotiationList);
+        List<FrontNegotiationDTO> newModelNegotiationList = mockFrontNegotiationJpaApiService.findModelNegotiationList(negotiationMap);
 
         // then
-        assertThat(newModelNegotiationList.get(0).getIdx()).isEqualTo(modelNegotiationList.get(0).getIdx());
-        assertThat(newModelNegotiationList.get(0).getModelNegotiationList().get(0).getModelNegotiationDesc()).isEqualTo(negotiationList.get(0).getModelNegotiationDesc());
+        assertThat(newModelNegotiationList.get(0).getIdx()).isEqualTo(negotiationList.get(0).getIdx());
+        assertThat(newModelNegotiationList.get(0).getModelNegotiationDesc()).isEqualTo(negotiationList.get(0).getModelNegotiationDesc());
 
         // verify
         then(mockFrontNegotiationJpaApiService).should(times(1)).findModelNegotiationList(negotiationMap);

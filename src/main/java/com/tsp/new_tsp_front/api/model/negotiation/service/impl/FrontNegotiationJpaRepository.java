@@ -44,10 +44,7 @@ public class FrontNegotiationJpaRepository {
         }
 
         if (!"".equals(searchKeyword)) {
-            return frontModelEntity.modelKorName.contains(searchKeyword)
-                    .or(frontModelEntity.modelEngName.contains(searchKeyword)
-                            .or(frontModelEntity.modelDescription.contains(searchKeyword)))
-                    .or(frontNegotiationEntity.modelNegotiationDesc.contains(searchKeyword));
+            return frontNegotiationEntity.modelNegotiationDesc.contains(searchKeyword);
         } else {
             return frontNegotiationEntity.modelNegotiationDate.between(searchStartTime, searchEndTime);
         }
@@ -77,14 +74,11 @@ public class FrontNegotiationJpaRepository {
      * 5. 작성일       : 2022. 09. 11.
      * </pre>
      */
-    public List<FrontModelDTO> findModelNegotiationList(Map<String, Object> negotiationMap) {
-        List<FrontModelEntity> modelNegotiationList = queryFactory
-                .selectFrom(frontModelEntity)
-                .orderBy(frontModelEntity.idx.desc())
-                .leftJoin(frontModelEntity.modelNegotiationList, frontNegotiationEntity)
-                .fetchJoin()
+    public List<FrontNegotiationDTO> findModelNegotiationList(Map<String, Object> negotiationMap) {
+        List<FrontNegotiationEntity> modelNegotiationList = queryFactory
+                .selectFrom(frontNegotiationEntity)
+                .orderBy(frontNegotiationEntity.idx.desc())
                 .where(searchNegotiation(negotiationMap)
-                        .and(frontModelEntity.visible.eq("Y"))
                         .and(frontNegotiationEntity.visible.eq("Y")))
                 .offset(getInt(negotiationMap.get("jpaStartPage"), 0))
                 .limit(getInt(negotiationMap.get("size"), 0))
@@ -93,7 +87,7 @@ public class FrontNegotiationJpaRepository {
         modelNegotiationList.forEach(list -> modelNegotiationList.get(modelNegotiationList.indexOf(list))
                 .setRowNum(getInt(negotiationMap.get("startPage"), 1) * (getInt(negotiationMap.get("size"), 1)) - (2 - modelNegotiationList.indexOf(list))));
 
-        return FrontModelEntity.toDtoList(modelNegotiationList);
+        return FrontNegotiationEntity.toDtoList(modelNegotiationList);
     }
 
     /**

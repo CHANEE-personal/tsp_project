@@ -9,7 +9,9 @@ import com.tsp.new_tsp_front.api.model.domain.schedule.FrontScheduleEntity;
 import com.tsp.new_tsp_front.common.CustomConverter;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
@@ -129,6 +131,8 @@ public class FrontModelEntity extends NewCommonMappedClass {
     @JoinColumn(name = "category_cd", insertable = false, updatable = false)
     private NewCodeEntity newModelCodeJpaDTO;
 
+    @BatchSize(size = 5)
+    @Where(clause = "type_name = 'model'")
     @OneToMany(mappedBy = "frontModelEntity", fetch = LAZY, cascade = REMOVE)
     private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 

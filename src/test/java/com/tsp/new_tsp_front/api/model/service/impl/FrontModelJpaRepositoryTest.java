@@ -144,8 +144,8 @@ class FrontModelJpaRepositoryTest {
         assertThat(menModelInfo.getModelFirstName()).isEqualTo("Sun");
         assertThat(menModelInfo.getModelSecondName()).isEqualTo("so yeon");
         assertThat(menModelInfo.getAgencyIdx()).isEqualTo(1L);
-        assertThat(menModelInfo.getModelAgency().getAgencyName()).isEqualTo("agency");
-        assertThat(menModelInfo.getModelAgency().getAgencyDescription()).isEqualTo("agency");
+        assertThat(menModelInfo.getModelAgency().getAgencyName()).isEqualTo("test");
+        assertThat(menModelInfo.getModelAgency().getAgencyDescription()).isEqualTo("test");
 
         FrontModelEntity womenFrontModelEntity = FrontModelEntity.builder().idx(2L).agencyIdx(1L).build();
 
@@ -158,8 +158,8 @@ class FrontModelJpaRepositoryTest {
         assertThat(womenModelInfo.getModelFirstName()).isEqualTo("Lee");
         assertThat(womenModelInfo.getModelSecondName()).isEqualTo("hwa seon");
         assertThat(womenModelInfo.getAgencyIdx()).isEqualTo(1L);
-        assertThat(womenModelInfo.getModelAgency().getAgencyName()).isEqualTo("agency");
-        assertThat(womenModelInfo.getModelAgency().getAgencyDescription()).isEqualTo("agency");
+        assertThat(womenModelInfo.getModelAgency().getAgencyName()).isEqualTo("test");
+        assertThat(womenModelInfo.getModelAgency().getAgencyDescription()).isEqualTo("test");
     }
 
     @Test

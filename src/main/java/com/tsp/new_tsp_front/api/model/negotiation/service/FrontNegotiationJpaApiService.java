@@ -1,6 +1,5 @@
 package com.tsp.new_tsp_front.api.model.negotiation.service;
 
-import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.negotiation.FrontNegotiationDTO;
 import com.tsp.new_tsp_front.api.model.domain.negotiation.FrontNegotiationEntity;
 import com.tsp.new_tsp_front.api.model.negotiation.service.impl.FrontNegotiationJpaRepository;
@@ -50,9 +49,9 @@ public class FrontNegotiationJpaApiService {
      * 5. 작성일       : 2022. 09. 11.
      * </pre>
      */
-    @Cacheable("model")
+    @Cacheable("negotiation")
     @Transactional(readOnly = true)
-    public List<FrontModelDTO> findModelNegotiationList(Map<String, Object> negotiationMap) throws TspException {
+    public List<FrontNegotiationDTO> findModelNegotiationList(Map<String, Object> negotiationMap) throws TspException {
         try {
             return frontNegotiationJpaRepository.findModelNegotiationList(negotiationMap);
         } catch (Exception e) {

@@ -108,8 +108,6 @@ public class FrontModelJpaRepository {
                 .orderBy(frontModelEntity.idx.desc())
                 .innerJoin(frontModelEntity.frontAgencyEntity, frontAgencyEntity)
                 .fetchJoin()
-                .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
-                .fetchJoin()
                 .where((searchCategory(modelMap).or(searchModelInfo(modelMap)))
                         .and(frontModelEntity.visible.eq("Y")))
                 .offset(getInt(modelMap.get("jpaStartPage"), 0))
@@ -306,14 +304,11 @@ public class FrontModelJpaRepository {
                 .orderBy(frontModelEntity.idx.desc())
                 .innerJoin(frontModelEntity.frontAgencyEntity, frontAgencyEntity)
                 .fetchJoin()
-                .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
-                .fetchJoin()
                 .where((searchCategory(modelMap).or(searchModelInfo(modelMap)))
                         .and(frontModelEntity.visible.eq("Y"))
                         .and(frontModelEntity.newYn.eq("Y")))
                 .offset(getInt(modelMap.get("jpaStartPage"), 0))
                 .limit(getInt(modelMap.get("size"), 0))
-                .distinct()
                 .fetch();
 
         newModelList.forEach(list -> newModelList.get(newModelList.indexOf(list))

@@ -63,7 +63,7 @@ public class FrontNegotiationJpaApiController {
         }
 
         Integer negotiationCount = this.frontNegotiationJpaApiService.findNegotiationCount(negotiationMap);
-        List<FrontModelDTO> negotiationList = new ArrayList<>();
+        List<FrontNegotiationDTO> negotiationList = new ArrayList<>();
 
         if (negotiationCount > 0) {
             negotiationList = this.frontNegotiationJpaApiService.findModelNegotiationList(negotiationMap);
