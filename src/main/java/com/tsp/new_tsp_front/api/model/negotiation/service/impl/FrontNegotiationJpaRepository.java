@@ -32,16 +32,8 @@ public class FrontNegotiationJpaRepository {
 
     private BooleanExpression searchNegotiation(Map<String, Object> negotiationMap) {
         String searchKeyword = getString(negotiationMap.get("searchKeyword"), "");
-        LocalDateTime searchStartTime = (LocalDateTime) negotiationMap.get("searchStartTime");
-        LocalDateTime searchEndTime = (LocalDateTime) negotiationMap.get("searchEndTime");
-
-        if (searchStartTime != null && searchEndTime != null) {
-            searchStartTime = (LocalDateTime) negotiationMap.get("searchStartTime");
-            searchEndTime = (LocalDateTime) negotiationMap.get("searchEndTime");
-        } else {
-            searchStartTime = now().minusDays(now().getDayOfMonth()-1).atStartOfDay();
-            searchEndTime = of(now().minusDays(now().getDayOfMonth()).plusMonths(1), LocalTime.of(23,59,59));
-        }
+        LocalDateTime searchStartTime = negotiationMap.get("searchStartTime") != null ? (LocalDateTime) negotiationMap.get("searchStartTime") : now().minusDays(now().getDayOfMonth() - 1).atStartOfDay();
+        LocalDateTime searchEndTime = negotiationMap.get("searchEndTime") != null ? (LocalDateTime) negotiationMap.get("searchStartTime") : of(now().minusDays(now().getDayOfMonth()).plusMonths(1), LocalTime.of(23, 59, 59));
 
         if (!"".equals(searchKeyword)) {
             return frontNegotiationEntity.modelNegotiationDesc.contains(searchKeyword);
