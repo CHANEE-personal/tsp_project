@@ -5,6 +5,8 @@ import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.service.impl.FrontModelJpaRepository;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,7 @@ public class FrontModelJpaApiService {
      * 5. 작성일       : 2022. 01. 02.
      * </pre>
      */
+    @Transactional(readOnly = true)
     public int findModelCount(Map<String, Object> modelMap) throws TspException {
         try {
             return frontModelJpaRepository.findModelCount(modelMap);
@@ -45,6 +48,7 @@ public class FrontModelJpaApiService {
      * 5. 작성일       : 2022. 01. 02.
      * </pre>
      */
+    @Cacheable(value = "model", key = "#modelMap")
     @Transactional(readOnly = true)
     public List<FrontModelDTO> findModelList(Map<String, Object> modelMap) throws TspException {
         try {
@@ -63,6 +67,7 @@ public class FrontModelJpaApiService {
      * 5. 작성일       : 2022. 01. 09.
      * </pre>
      */
+    @CachePut(value = "model", key = "#idx")
     @Transactional
     public FrontModelDTO findOneModel(Long idx) throws TspException {
         try {
@@ -81,7 +86,8 @@ public class FrontModelJpaApiService {
      * 5. 작성일       : 2022. 09. 17.
      * </pre>
      */
-    @Transactional(readOnly = true)
+    @CachePut(value = "model", key = "#frontModelEntity.idx")
+    @Transactional
     public FrontModelDTO findPrevOneModel(FrontModelEntity frontModelEntity) throws TspException {
         try {
             return frontModelJpaRepository.findPrevOneModel(frontModelEntity);
@@ -99,7 +105,8 @@ public class FrontModelJpaApiService {
      * 5. 작성일       : 2022. 09. 17.
      * </pre>
      */
-    @Transactional(readOnly = true)
+    @CachePut(value = "model", key = "#frontModelEntity.idx")
+    @Transactional
     public FrontModelDTO findNextOneModel(FrontModelEntity frontModelEntity) throws TspException {
         try {
             return frontModelJpaRepository.findNextOneModel(frontModelEntity);
@@ -117,6 +124,7 @@ public class FrontModelJpaApiService {
      * 5. 작성일       : 2022. 03. 27.
      * </pre>
      */
+    @Cacheable("mainModel")
     @Transactional(readOnly = true)
     public List<FrontModelDTO> findMainModelList() throws TspException {
         try {
@@ -153,6 +161,7 @@ public class FrontModelJpaApiService {
      * 5. 작성일       : 2022. 03. 27.
      * </pre>
      */
+    @CachePut(value = "model", key = "#idx")
     @Modifying(clearAutomatically = true)
     @Transactional
     public Integer favoriteModel(Long idx) throws TspException {
@@ -172,6 +181,7 @@ public class FrontModelJpaApiService {
      * 5. 작성일       : 2022. 08. 29.
      * </pre>
      */
+    @Transactional(readOnly = true)
     public int getNewModelCount(Map<String, Object> newModelMap) throws TspException {
         try {
             return frontModelJpaRepository.getNewModelCount(newModelMap);
@@ -189,6 +199,7 @@ public class FrontModelJpaApiService {
      * 5. 작성일       : 2022. 08. 29.
      * </pre>
      */
+    @Cacheable(value = "model", key = "#newModelMap")
     @Transactional(readOnly = true)
     public List<FrontModelDTO> getNewModelList(Map<String, Object> newModelMap) throws TspException {
         try {

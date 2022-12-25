@@ -122,8 +122,8 @@ class FrontPortFolioJpaApiServiceTest {
         FrontPortFolioDTO frontPortFolioDTO = FrontPortFolioDTO.builder().title("portfolioTest").description("portfolioTest").hashTag("portfolio").videoUrl("test").visible("Y").build();
 
         // when
-        when(mockFrontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity)).thenReturn(frontPortFolioDTO);
-        FrontPortFolioDTO portfolioInfo = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity);
+        when(mockFrontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity.getIdx())).thenReturn(frontPortFolioDTO);
+        FrontPortFolioDTO portfolioInfo = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity.getIdx());
 
         // then
         assertThat(portfolioInfo.getIdx()).isEqualTo(frontPortFolioDTO.getIdx());
@@ -134,12 +134,12 @@ class FrontPortFolioJpaApiServiceTest {
         assertThat(portfolioInfo.getVisible()).isEqualTo(frontPortFolioDTO.getVisible());
 
         // verify
-        verify(mockFrontPortFolioJpaApiService, times(1)).getPortFolioInfo(frontPortFolioEntity);
-        verify(mockFrontPortFolioJpaApiService, atLeastOnce()).getPortFolioInfo(frontPortFolioEntity);
+        verify(mockFrontPortFolioJpaApiService, times(1)).getPortFolioInfo(frontPortFolioEntity.getIdx());
+        verify(mockFrontPortFolioJpaApiService, atLeastOnce()).getPortFolioInfo(frontPortFolioEntity.getIdx());
         verifyNoMoreInteractions(mockFrontPortFolioJpaApiService);
 
         InOrder inOrder = inOrder(mockFrontPortFolioJpaApiService);
-        inOrder.verify(mockFrontPortFolioJpaApiService).getPortFolioInfo(frontPortFolioEntity);
+        inOrder.verify(mockFrontPortFolioJpaApiService).getPortFolioInfo(frontPortFolioEntity.getIdx());
     }
 
     @Test
@@ -150,8 +150,8 @@ class FrontPortFolioJpaApiServiceTest {
         FrontPortFolioDTO frontPortFolioDTO = FrontPortFolioDTO.builder().title("portfolioTest").description("portfolioTest").hashTag("portfolio").videoUrl("test").visible("Y").build();
 
         // when
-        given(mockFrontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity)).willReturn(frontPortFolioDTO);
-        FrontPortFolioDTO portfolioInfo = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity);
+        given(mockFrontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity.getIdx())).willReturn(frontPortFolioDTO);
+        FrontPortFolioDTO portfolioInfo = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity.getIdx());
 
         // then
         assertThat(portfolioInfo.getIdx()).isEqualTo(frontPortFolioDTO.getIdx());
@@ -162,8 +162,8 @@ class FrontPortFolioJpaApiServiceTest {
         assertThat(portfolioInfo.getVisible()).isEqualTo(frontPortFolioDTO.getVisible());
 
         // verify
-        then(mockFrontPortFolioJpaApiService).should(times(1)).getPortFolioInfo(frontPortFolioEntity);
-        then(mockFrontPortFolioJpaApiService).should(atLeastOnce()).getPortFolioInfo(frontPortFolioEntity);
+        then(mockFrontPortFolioJpaApiService).should(times(1)).getPortFolioInfo(frontPortFolioEntity.getIdx());
+        then(mockFrontPortFolioJpaApiService).should(atLeastOnce()).getPortFolioInfo(frontPortFolioEntity.getIdx());
         then(mockFrontPortFolioJpaApiService).shouldHaveNoMoreInteractions();
     }
 
@@ -182,12 +182,12 @@ class FrontPortFolioJpaApiServiceTest {
                 .build();
 
         // when
-        FrontPortFolioDTO frontPortFolioDTO = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity);
+        FrontPortFolioDTO frontPortFolioDTO = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity.getIdx());
 
         // 이전 프로덕션
-        assertThat(frontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity).getIdx()).isEqualTo(1);
+        assertThat(frontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity.getIdx())).isEqualTo(1);
         // 다음 프로덕션
-        assertThat(frontPortFolioJpaApiService.findNextOnePortfolio(frontPortFolioEntity).getIdx()).isEqualTo(3);
+        assertThat(frontPortFolioJpaApiService.findNextOnePortfolio(frontPortFolioEntity.getIdx())).isEqualTo(3);
     }
 
     @Test
@@ -205,21 +205,21 @@ class FrontPortFolioJpaApiServiceTest {
                 .build();
 
         // when
-        FrontPortFolioDTO frontPortFolioDTO = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity);
+        FrontPortFolioDTO frontPortFolioDTO = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity.getIdx());
 
-        when(mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity)).thenReturn(frontPortFolioDTO);
-        FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity);
+        when(mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity.getIdx())).thenReturn(frontPortFolioDTO);
+        FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity.getIdx());
 
         // then
         assertThat(portfolioInfo.getIdx()).isEqualTo(1);
 
         // verify
-        verify(mockFrontPortFolioJpaApiService, times(1)).findPrevOnePortfolio(frontPortFolioEntity);
-        verify(mockFrontPortFolioJpaApiService, atLeastOnce()).findPrevOnePortfolio(frontPortFolioEntity);
+        verify(mockFrontPortFolioJpaApiService, times(1)).findPrevOnePortfolio(frontPortFolioEntity.getIdx());
+        verify(mockFrontPortFolioJpaApiService, atLeastOnce()).findPrevOnePortfolio(frontPortFolioEntity.getIdx());
         verifyNoMoreInteractions(mockFrontPortFolioJpaApiService);
 
         InOrder inOrder = inOrder(mockFrontPortFolioJpaApiService);
-        inOrder.verify(mockFrontPortFolioJpaApiService).findPrevOnePortfolio(frontPortFolioEntity);
+        inOrder.verify(mockFrontPortFolioJpaApiService).findPrevOnePortfolio(frontPortFolioEntity.getIdx());
     }
 
     @Test
@@ -237,17 +237,17 @@ class FrontPortFolioJpaApiServiceTest {
                 .build();
 
         // when
-        FrontPortFolioDTO frontPortFolioDTO = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity);
+        FrontPortFolioDTO frontPortFolioDTO = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity.getIdx());
 
-        given(mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity)).willReturn(frontPortFolioDTO);
-        FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity);
+        given(mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity.getIdx())).willReturn(frontPortFolioDTO);
+        FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity.getIdx());
 
         // then
         assertThat(portfolioInfo.getIdx()).isEqualTo(1);
 
         // verify
-        then(mockFrontPortFolioJpaApiService).should(times(1)).findPrevOnePortfolio(frontPortFolioEntity);
-        then(mockFrontPortFolioJpaApiService).should(atLeastOnce()).findPrevOnePortfolio(frontPortFolioEntity);
+        then(mockFrontPortFolioJpaApiService).should(times(1)).findPrevOnePortfolio(frontPortFolioEntity.getIdx());
+        then(mockFrontPortFolioJpaApiService).should(atLeastOnce()).findPrevOnePortfolio(frontPortFolioEntity.getIdx());
         then(mockFrontPortFolioJpaApiService).shouldHaveNoMoreInteractions();
     }
 
@@ -266,21 +266,21 @@ class FrontPortFolioJpaApiServiceTest {
                 .build();
 
         // when
-        FrontPortFolioDTO frontPortFolioDTO = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity);
+        FrontPortFolioDTO frontPortFolioDTO = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity.getIdx());
 
-        when(mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity)).thenReturn(frontPortFolioDTO);
-        FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity);
+        when(mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity.getIdx())).thenReturn(frontPortFolioDTO);
+        FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity.getIdx());
 
         // then
         assertThat(portfolioInfo.getIdx()).isEqualTo(3);
 
         // verify
-        verify(mockFrontPortFolioJpaApiService, times(1)).findNextOnePortfolio(frontPortFolioEntity);
-        verify(mockFrontPortFolioJpaApiService, atLeastOnce()).findNextOnePortfolio(frontPortFolioEntity);
+        verify(mockFrontPortFolioJpaApiService, times(1)).findNextOnePortfolio(frontPortFolioEntity.getIdx());
+        verify(mockFrontPortFolioJpaApiService, atLeastOnce()).findNextOnePortfolio(frontPortFolioEntity.getIdx());
         verifyNoMoreInteractions(mockFrontPortFolioJpaApiService);
 
         InOrder inOrder = inOrder(mockFrontPortFolioJpaApiService);
-        inOrder.verify(mockFrontPortFolioJpaApiService).findNextOnePortfolio(frontPortFolioEntity);
+        inOrder.verify(mockFrontPortFolioJpaApiService).findNextOnePortfolio(frontPortFolioEntity.getIdx());
     }
 
     @Test
@@ -298,17 +298,17 @@ class FrontPortFolioJpaApiServiceTest {
                 .build();
 
         // when
-        FrontPortFolioDTO frontPortFolioDTO = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity);
+        FrontPortFolioDTO frontPortFolioDTO = frontPortFolioJpaApiService.getPortFolioInfo(frontPortFolioEntity.getIdx());
 
-        given(mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity)).willReturn(frontPortFolioDTO);
-        FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity);
+        given(mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity.getIdx())).willReturn(frontPortFolioDTO);
+        FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaApiService.findPrevOnePortfolio(frontPortFolioEntity.getIdx());
 
         // then
         assertThat(portfolioInfo.getIdx()).isEqualTo(3);
 
         // verify
-        then(mockFrontPortFolioJpaApiService).should(times(1)).findNextOnePortfolio(frontPortFolioEntity);
-        then(mockFrontPortFolioJpaApiService).should(atLeastOnce()).findNextOnePortfolio(frontPortFolioEntity);
+        then(mockFrontPortFolioJpaApiService).should(times(1)).findNextOnePortfolio(frontPortFolioEntity.getIdx());
+        then(mockFrontPortFolioJpaApiService).should(atLeastOnce()).findNextOnePortfolio(frontPortFolioEntity.getIdx());
         then(mockFrontPortFolioJpaApiService).shouldHaveNoMoreInteractions();
     }
 }

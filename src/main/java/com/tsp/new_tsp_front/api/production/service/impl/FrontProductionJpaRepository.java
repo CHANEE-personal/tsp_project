@@ -38,14 +38,14 @@ public class FrontProductionJpaRepository {
 
     /**
      * <pre>
-     * 1. MethodName : getProductionCount
+     * 1. MethodName : findProductionCount
      * 2. ClassName  : FrontModelJpaRepository.java
      * 3. Comment    : 프로덕션 리스트 갯수 조회
      * 4. 작성자       : CHO
      * 5. 작성일       : 2022. 01. 06.
      * </pre>
      */
-    public int getProductionCount(Map<String, Object> productionMap) {
+    public int findProductionCount(Map<String, Object> productionMap) {
         return queryFactory
                 .selectFrom(frontProductionEntity)
                 .where(searchProduction(productionMap)
@@ -55,14 +55,14 @@ public class FrontProductionJpaRepository {
 
     /**
      * <pre>
-     * 1. MethodName : getProductionList
+     * 1. MethodName : findProductionList
      * 2. ClassName  : FrontProductionJpaRepository.java
      * 3. Comment    : 프로덕션 리스트 조회
      * 4. 작성자       : CHO
      * 5. 작성일       : 2022. 01. 06.
      * </pre>
      */
-    public List<FrontProductionDTO> getProductionList(Map<String, Object> productionMap) {
+    public List<FrontProductionDTO> findProductionList(Map<String, Object> productionMap) {
         List<FrontProductionEntity> productionList = queryFactory
                 .selectFrom(frontProductionEntity)
                 .where(searchProduction(productionMap).and(frontProductionEntity.visible.eq("Y")))
@@ -86,21 +86,21 @@ public class FrontProductionJpaRepository {
      * 5. 작성일       : 2022. 01. 12.
      * </pre>
      */
-    public FrontProductionDTO getProductionInfo(FrontProductionEntity existFrontProductionEntity) {
+    public FrontProductionDTO findOneProduction(Long idx) {
         // 프로덕션 조회 수 증가
-        updateProductionViewCount(existFrontProductionEntity);
+        updateProductionViewCount(idx);
 
         //프로덕션 상세 조회
-        FrontProductionEntity getProductionInfo = queryFactory
+        FrontProductionEntity findOneProduction = queryFactory
                 .selectFrom(frontProductionEntity)
                 .leftJoin(frontProductionEntity.commonImageEntityList, commonImageEntity)
                 .fetchJoin()
-                .where(frontProductionEntity.idx.eq(existFrontProductionEntity.getIdx())
+                .where(frontProductionEntity.idx.eq(idx)
                         .and(frontProductionEntity.visible.eq("Y"))
                         .and(commonImageEntity.typeName.eq("production")))
                 .fetchOne();
 
-        return FrontProductionEntity.toDto(getProductionInfo);
+        return FrontProductionEntity.toDto(findOneProduction);
     }
 
     /**
@@ -112,12 +112,15 @@ public class FrontProductionJpaRepository {
      * 5. 작성일       : 2022. 09. 17.
      * </pre>
      */
-    public FrontProductionDTO findPrevOneProduction(FrontProductionEntity existFrontProductionEntity) {
+    public FrontProductionDTO findPrevOneProduction(Long idx) {
+        // 프로덕션 조회 수 증가
+        updateProductionViewCount(idx);
+
         // 이전 프로덕션 조회
         FrontProductionEntity findPrevOneProduction = queryFactory
                 .selectFrom(frontProductionEntity)
                 .orderBy(frontProductionEntity.idx.desc())
-                .where(frontProductionEntity.idx.lt(existFrontProductionEntity.getIdx())
+                .where(frontProductionEntity.idx.lt(idx)
                         .and(frontProductionEntity.visible.eq("Y")))
                 .fetchFirst();
 
@@ -133,12 +136,15 @@ public class FrontProductionJpaRepository {
      * 5. 작성일       : 2022. 09. 17.
      * </pre>
      */
-    public FrontProductionDTO findNextOneProduction(FrontProductionEntity existFrontProductionEntity) {
+    public FrontProductionDTO findNextOneProduction(Long idx) {
+        // 프로덕션 조회 수 증가
+        updateProductionViewCount(idx);
+
         // 다음 프로덕션 조회
         FrontProductionEntity findNextOneProduction = queryFactory
                 .selectFrom(frontProductionEntity)
                 .orderBy(frontProductionEntity.idx.asc())
-                .where(frontProductionEntity.idx.gt(existFrontProductionEntity.getIdx())
+                .where(frontProductionEntity.idx.gt(idx)
                         .and(frontProductionEntity.visible.eq("Y")))
                 .fetchFirst();
 
@@ -154,7 +160,7 @@ public class FrontProductionJpaRepository {
      * 5. 작성일       : 2022. 01. 12.
      * </pre>
      */
-    public Integer viewProductionCount(Long idx) {
+    public int viewProductionCount(Long idx) {
         return requireNonNull(queryFactory
                 .selectFrom(frontProductionEntity)
                 .where(frontProductionEntity.idx.eq(idx)).fetchOne()).getViewCount();
@@ -169,18 +175,18 @@ public class FrontProductionJpaRepository {
      * 5. 작성일       : 2022. 01. 09.
      * </pre>
      */
-    public Integer updateProductionViewCount(FrontProductionEntity existFrontProductionEntity) {
+    public int updateProductionViewCount(Long idx) {
         // 모델 조회 수 증가
         queryFactory
                 .update(frontProductionEntity)
                 //add , minus , multiple 다 가능하다.
                 .set(frontProductionEntity.viewCount, frontProductionEntity.viewCount.add(1))
-                .where(frontProductionEntity.idx.eq(existFrontProductionEntity.getIdx()))
+                .where(frontProductionEntity.idx.eq(idx))
                 .execute();
 
         em.flush();
         em.clear();
 
-        return viewProductionCount(existFrontProductionEntity.getIdx());
+        return viewProductionCount(idx);
     }
 }

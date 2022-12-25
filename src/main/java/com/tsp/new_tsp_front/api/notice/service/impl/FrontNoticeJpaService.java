@@ -4,6 +4,7 @@ import com.tsp.new_tsp_front.api.notice.domain.FrontNoticeDTO;
 import com.tsp.new_tsp_front.api.notice.domain.FrontNoticeEntity;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,17 +38,18 @@ public class FrontNoticeJpaService {
 
     /**
      * <pre>
-     * 1. MethodName : findNoticesList
+     * 1. MethodName : findNoticeList
      * 2. ClassName  : FrontNoticeJpaService.java
      * 3. Comment    : 프론트 > 공지사항 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 16.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 08. 16.
      * </pre>
      */
+    @Cacheable(value = "notice", key = "#noticeMap")
     @Transactional(readOnly = true)
-    public List<FrontNoticeDTO> findNoticesList(Map<String, Object> noticeMap) throws TspException {
+    public List<FrontNoticeDTO> findNoticeList(Map<String, Object> noticeMap) throws TspException {
         try {
-            return frontNoticeJpaRepository.findNoticesList(noticeMap);
+            return frontNoticeJpaRepository.findNoticeList(noticeMap);
         } catch (Exception e) {
             throw new TspException(NOT_FOUND_NOTICE_LIST, e);
         }
@@ -58,14 +60,14 @@ public class FrontNoticeJpaService {
      * 1. MethodName : findFixedNoticeCount
      * 2. ClassName  : FrontNoticeJpaApiService.java
      * 3. Comment    : 프론트 > 상단 고정 공지사항 리스트 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 24.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 24.
      * </pre>
      */
     @Transactional(readOnly = true)
     public int findFixedNoticeCount(Map<String, Object> noticeMap) throws TspException {
         try {
-            return frontNoticeJpaRepository.findFixedNoticeCount(noticeMap);
+            return frontNoticeJpaRepository.findNoticeCount(noticeMap);
         } catch (Exception e) {
             throw new TspException(NOT_FOUND_NOTICE_LIST, e);
         }
@@ -73,17 +75,18 @@ public class FrontNoticeJpaService {
 
     /**
      * <pre>
-     * 1. MethodName : findFixedNoticesList
+     * 1. MethodName : findFixedNoticeList
      * 2. ClassName  : FrontNoticeJpaService.java
      * 3. Comment    : 프론트 > 상단 고정 공지사항 리스트 조회
      * 4. 작성자       : CHO
      * 5. 작성일       : 2022. 09. 24.
      * </pre>
      */
+    @Cacheable(value = "notice", key = "#noticeMap.get('topFixed')")
     @Transactional(readOnly = true)
-    public List<FrontNoticeDTO> findFixedNoticesList(Map<String, Object> noticeMap) throws TspException {
+    public List<FrontNoticeDTO> findFixedNoticeList(Map<String, Object> noticeMap) throws TspException {
         try {
-            return frontNoticeJpaRepository.findFixedNoticesList(noticeMap);
+            return frontNoticeJpaRepository.findNoticeList(noticeMap);
         } catch (Exception e) {
             throw new TspException(NOT_FOUND_NOTICE_LIST, e);
         }
@@ -98,6 +101,7 @@ public class FrontNoticeJpaService {
      * 5. 작성일       : 2022. 08. 16.
      * </pre>
      */
+    @Cacheable(value = "notice", key = "#frontNoticeEntity.idx")
     @Transactional(readOnly = true)
     public FrontNoticeDTO findOneNotice(FrontNoticeEntity frontNoticeEntity) throws TspException {
         try {

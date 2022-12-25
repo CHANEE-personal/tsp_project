@@ -86,12 +86,15 @@ public class FrontPortFolioJpaRepository {
      * 5. 작성일       : 2022. 01. 12.
      * </pre>
      */
-    public FrontPortFolioDTO getPortFolioInfo(FrontPortFolioEntity existFrontPortFolioEntity) {
+    public FrontPortFolioDTO getPortFolioInfo(Long idx) {
+        // 포트폴리오 조회 수 증가
+        updatePortfolioViewCount(idx);
+
         FrontPortFolioEntity getPortFolioInfo = queryFactory
                 .selectFrom(frontPortFolioEntity)
                 .leftJoin(frontPortFolioEntity.commonImageEntityList, commonImageEntity)
                 .fetchJoin()
-                .where(frontPortFolioEntity.idx.eq(existFrontPortFolioEntity.getIdx())
+                .where(frontPortFolioEntity.idx.eq(idx)
                         .and(frontPortFolioEntity.visible.eq("Y"))
                         .and(commonImageEntity.typeName.eq("portfolio")))
                 .fetchOne();
@@ -108,12 +111,15 @@ public class FrontPortFolioJpaRepository {
      * 5. 작성일       : 2022. 09. 17.
      * </pre>
      */
-    public FrontPortFolioDTO findPrevOnePortfolio(FrontPortFolioEntity existFrontPortfolioEntity) {
+    public FrontPortFolioDTO findPrevOnePortfolio(Long idx) {
+        // 포트폴리오 조회 수 증가
+        updatePortfolioViewCount(idx);
+
         // 이전 포트폴리오 조회
         FrontPortFolioEntity findPrevOnePortfolio = queryFactory
                 .selectFrom(frontPortFolioEntity)
                 .orderBy(frontPortFolioEntity.idx.desc())
-                .where(frontPortFolioEntity.idx.lt(existFrontPortfolioEntity.getIdx())
+                .where(frontPortFolioEntity.idx.lt(idx)
                         .and(frontPortFolioEntity.visible.eq("Y")))
                 .fetchFirst();
 
@@ -129,12 +135,15 @@ public class FrontPortFolioJpaRepository {
      * 5. 작성일       : 2022. 09. 17.
      * </pre>
      */
-    public FrontPortFolioDTO findNextOnePortfolio(FrontPortFolioEntity existFrontPortfolioEntity) {
+    public FrontPortFolioDTO findNextOnePortfolio(Long idx) {
+        // 포트폴리오 조회 수 증가
+        updatePortfolioViewCount(idx);
+
         // 다음 포트폴리오 조회
         FrontPortFolioEntity findPrevOnePortfolio = queryFactory
                 .selectFrom(frontPortFolioEntity)
                 .orderBy(frontPortFolioEntity.idx.desc())
-                .where(frontPortFolioEntity.idx.gt(existFrontPortfolioEntity.getIdx())
+                .where(frontPortFolioEntity.idx.gt(idx)
                         .and(frontPortFolioEntity.visible.eq("Y")))
                 .fetchFirst();
 
@@ -150,7 +159,7 @@ public class FrontPortFolioJpaRepository {
      * 5. 작성일       : 2022. 01. 12.
      * </pre>
      */
-    public Integer viewPortfolioCount(Long idx) {
+    public int viewPortfolioCount(Long idx) {
         return requireNonNull(queryFactory
                 .selectFrom(frontPortFolioEntity)
                 .where(frontPortFolioEntity.idx.eq(idx)).fetchOne()).getViewCount();
@@ -165,18 +174,18 @@ public class FrontPortFolioJpaRepository {
      * 5. 작성일       : 2022. 01. 12.
      * </pre>
      */
-    public Integer updatePortfolioViewCount(FrontPortFolioEntity existFrontPortFolioEntity) {
+    public int updatePortfolioViewCount(Long idx) {
         // 모델 조회 수 증가
         queryFactory
                 .update(frontPortFolioEntity)
                 //add , minus , multiple 다 가능하다.
                 .set(frontPortFolioEntity.viewCount, frontPortFolioEntity.viewCount.add(1))
-                .where(frontPortFolioEntity.idx.eq(existFrontPortFolioEntity.getIdx()))
+                .where(frontPortFolioEntity.idx.eq(idx))
                 .execute();
 
         em.flush();
         em.clear();
 
-        return viewPortfolioCount(existFrontPortFolioEntity.getIdx());
+        return viewPortfolioCount(idx);
     }
 }

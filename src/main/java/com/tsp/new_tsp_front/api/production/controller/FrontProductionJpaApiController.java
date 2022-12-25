@@ -1,7 +1,6 @@
 package com.tsp.new_tsp_front.api.production.controller;
 
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
-import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 import com.tsp.new_tsp_front.api.production.service.FrontProductionJpaApiService;
 import com.tsp.new_tsp_front.common.SearchCommon;
 import com.tsp.new_tsp_front.common.paging.Page;
@@ -30,11 +29,11 @@ public class FrontProductionJpaApiController {
 
     /**
      * <pre>
-     * 1. MethodName : getProductionList
+     * 1. MethodName : findProductionList
      * 2. ClassName  : FrontProductionJpaApiController.java
      * 3. Comment    : 프론트 > 프로덕션 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 06.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 06.
      * </pre>
      */
     @ApiOperation(value = "프로덕션 조회", notes = "프로덕션을 조회한다.")
@@ -46,28 +45,28 @@ public class FrontProductionJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists")
-    public Map<String, Object> getProductionList(@RequestParam(required = false) Map<String, Object> paramMap, Page page) {
+    public Map<String, Object> findProductionList(@RequestParam(required = false) Map<String, Object> paramMap, Page page) {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> productionMap = searchCommon.searchCommon(page, paramMap);
 
         // 리스트 수
         resultMap.put("pageSize", page.getSize());
         // 전체 페이지 수
-        resultMap.put("perPageListCnt", ceil((double)this.frontProductionJpaApiService.getProductionCount(productionMap) / page.getSize()));
+        resultMap.put("perPageListCnt", ceil((double)this.frontProductionJpaApiService.findProductionCount(productionMap) / page.getSize()));
         // 전체 아이템 수
-        resultMap.put("productionListTotalCnt", this.frontProductionJpaApiService.getProductionCount(productionMap));
-        resultMap.put("productionList", this.frontProductionJpaApiService.getProductionList(productionMap));
+        resultMap.put("productionListTotalCnt", this.frontProductionJpaApiService.findProductionList(productionMap));
+        resultMap.put("productionList", this.frontProductionJpaApiService.findProductionList(productionMap));
 
         return resultMap;
     }
 
     /**
      * <pre>
-     * 1. MethodName : getProductionInfo
+     * 1. MethodName : findOneProduction
      * 2. ClassName  : FrontProductionJpaApiController.java
      * 3. Comment    : 프론트 > 프로덕션 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 11.
      * </pre>
      */
     @ApiOperation(value = "프로덕션 상세 조회", notes = "프로덕션을 상세 조회한다.")
@@ -79,17 +78,17 @@ public class FrontProductionJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/{idx}")
-    public FrontProductionDTO getProductionInfo(@PathVariable Long idx) {
-        return this.frontProductionJpaApiService.getProductionInfo(FrontProductionEntity.builder().idx(idx).build());
+    public FrontProductionDTO findOneProduction(@PathVariable Long idx) {
+        return this.frontProductionJpaApiService.findOneProduction(idx);
     }
 
     /**
      * <pre>
-     * 1. MethodName : getPrevProductionEdit
+     * 1. MethodName : findPrevOneProduction
      * 2. ClassName  : FrontProductionJpaController.java
      * 3. Comment    : 이전 프로덕션 상세
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
     @ApiOperation(value = "이전 프로덕션 상세 조회", notes = "이전 프로덕션을 상세 조회한다.")
@@ -101,17 +100,17 @@ public class FrontProductionJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}/prev")
-    public FrontProductionDTO getPrevProductionEdit(@PathVariable Long idx) {
-        return this.frontProductionJpaApiService.findPrevOneProduction(FrontProductionEntity.builder().idx(idx).build());
+    public FrontProductionDTO findPrevOneProduction(@PathVariable Long idx) {
+        return this.frontProductionJpaApiService.findPrevOneProduction(idx);
     }
 
     /**
      * <pre>
-     * 1. MethodName : getNextProductionEdit
+     * 1. MethodName : findNextOneProduction
      * 2. ClassName  : FrontProductionJpaController.java
      * 3. Comment    : 다음 프로덕션 상세
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
     @ApiOperation(value = "다음 프로덕션 상세 조회", notes = "다음 프로덕션을 상세 조회한다.")
@@ -123,7 +122,7 @@ public class FrontProductionJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}/next")
-    public FrontProductionDTO getNextProductionEdit(@PathVariable Long idx) {
-        return this.frontProductionJpaApiService.findNextOneProduction(FrontProductionEntity.builder().idx(idx).build());
+    public FrontProductionDTO findNextOneProduction(@PathVariable Long idx) {
+        return this.frontProductionJpaApiService.findNextOneProduction(idx);
     }
 }

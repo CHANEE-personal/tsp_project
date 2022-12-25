@@ -45,7 +45,7 @@ public class FrontScheduleJpaApiService {
      * 5. 작성일       : 2022. 09. 01.
      * </pre>
      */
-    @Cacheable("schedule")
+    @Cacheable(value = "schedule", key = "#scheduleMap")
     @Transactional(readOnly = true)
     public List<FrontScheduleDTO> findScheduleList(Map<String, Object> scheduleMap) throws TspException {
         try {
@@ -64,7 +64,7 @@ public class FrontScheduleJpaApiService {
      * 5. 작성일       : 2022. 09. 03.
      * </pre>
      */
-    @Cacheable("schedule")
+    @Cacheable(value = "model", key = "#scheduleMap")
     @Transactional(readOnly = true)
     public List<FrontModelDTO> findModelScheduleList(Map<String, Object> scheduleMap) throws TspException {
         try {
