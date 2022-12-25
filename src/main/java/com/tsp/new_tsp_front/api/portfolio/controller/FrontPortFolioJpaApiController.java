@@ -79,7 +79,7 @@ public class FrontPortFolioJpaApiController {
     })
     @GetMapping(value = "/{idx}")
     public FrontPortFolioDTO getPortFolioInfo(@PathVariable Long idx) {
-        return this.frontPortFolioJpaApiService.getPortFolioInfo(FrontPortFolioEntity.builder().idx(idx).build());
+        return this.frontPortFolioJpaApiService.getPortFolioInfo(idx);
     }
 
     /**
@@ -101,7 +101,7 @@ public class FrontPortFolioJpaApiController {
     })
     @GetMapping("/{idx}/prev")
     public FrontPortFolioDTO getPrevPortfolioEdit(@PathVariable Long idx) {
-        return this.frontPortFolioJpaApiService.findPrevOnePortfolio(FrontPortFolioEntity.builder().idx(idx).build());
+        return this.frontPortFolioJpaApiService.findPrevOnePortfolio(idx);
     }
 
     /**
@@ -123,6 +123,6 @@ public class FrontPortFolioJpaApiController {
     })
     @GetMapping("/{idx}/next")
     public FrontPortFolioDTO getNextPortfolioEdit(@PathVariable Long idx) {
-        return this.frontPortFolioJpaApiService.findNextOnePortfolio(FrontPortFolioEntity.builder().idx(idx).build());
+        return this.frontPortFolioJpaApiService.findNextOnePortfolio(idx);
     }
 }
