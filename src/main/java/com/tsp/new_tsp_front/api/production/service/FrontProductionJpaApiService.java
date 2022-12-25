@@ -1,10 +1,11 @@
 package com.tsp.new_tsp_front.api.production.service;
 
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
-import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 import com.tsp.new_tsp_front.api.production.service.impl.FrontProductionJpaRepository;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,9 +28,9 @@ public class FrontProductionJpaApiService {
      * 5. 작성일       : 2022. 01. 06.
      * </pre>
      */
-    public int getProductionCount(Map<String, Object> productionMap) throws TspException {
+    public int findProductionCount(Map<String, Object> productionMap) throws TspException {
         try {
-            return frontProductionJpaRepository.getProductionCount(productionMap);
+            return frontProductionJpaRepository.findProductionCount(productionMap);
         } catch (Exception e) {
             throw new TspException(NOT_FOUND_PRODUCTION_LIST, e);
         }
@@ -44,10 +45,11 @@ public class FrontProductionJpaApiService {
      * 5. 작성일       : 2022. 01. 06.
      * </pre>
      */
+    @Cacheable(value = "production", key = "#productionMap")
     @Transactional(readOnly = true)
-    public List<FrontProductionDTO> getProductionList(Map<String, Object> productionMap) throws TspException {
+    public List<FrontProductionDTO> findProductionList(Map<String, Object> productionMap) throws TspException {
         try {
-            return frontProductionJpaRepository.getProductionList(productionMap);
+            return frontProductionJpaRepository.findProductionList(productionMap);
         } catch (Exception e) {
             throw new TspException(NOT_FOUND_PRODUCTION_LIST, e);
         }
@@ -55,17 +57,18 @@ public class FrontProductionJpaApiService {
 
     /**
      * <pre>
-     * 1. MethodName : getProductionInfo
+     * 1. MethodName : findOneProduction
      * 2. ClassName  : FrontProductionJpaService.java
      * 3. Comment    : 프론트 > 프로덕션 상세 조회
      * 4. 작성자       : CHO
      * 5. 작성일       : 2022. 01. 11.
      * </pre>
      */
+    @CachePut(value = "production", key = "#idx")
     @Transactional
-    public FrontProductionDTO getProductionInfo(FrontProductionEntity frontProductionEntity) throws TspException {
+    public FrontProductionDTO findOneProduction(Long idx) throws TspException {
         try {
-            return frontProductionJpaRepository.getProductionInfo(frontProductionEntity);
+            return frontProductionJpaRepository.findOneProduction(idx);
         } catch (Exception e) {
             throw new TspException(NOT_FOUND_PRODUCTION, e);
         }
@@ -80,10 +83,11 @@ public class FrontProductionJpaApiService {
      * 5. 작성일       : 2022. 09. 17.
      * </pre>
      */
-    @Transactional(readOnly = true)
-    public FrontProductionDTO findPrevOneProduction(FrontProductionEntity frontProductionEntity) throws TspException {
+    @CachePut(value = "production", key = "#idx")
+    @Transactional
+    public FrontProductionDTO findPrevOneProduction(Long idx) throws TspException {
         try {
-            return frontProductionJpaRepository.findPrevOneProduction(frontProductionEntity);
+            return frontProductionJpaRepository.findPrevOneProduction(idx);
         } catch (Exception e) {
             throw new TspException(NOT_FOUND_PRODUCTION, e);
         }
@@ -98,10 +102,11 @@ public class FrontProductionJpaApiService {
      * 5. 작성일       : 2022. 09. 17.
      * </pre>
      */
-    @Transactional(readOnly = true)
-    public FrontProductionDTO findNextOneProduction(FrontProductionEntity frontProductionEntity) throws TspException {
+    @CachePut(value = "production", key = "#idx")
+    @Transactional
+    public FrontProductionDTO findNextOneProduction(Long idx) throws TspException {
         try {
-            return frontProductionJpaRepository.findNextOneProduction(frontProductionEntity);
+            return frontProductionJpaRepository.findNextOneProduction(idx);
         } catch (Exception e) {
             throw new TspException(NOT_FOUND_PRODUCTION, e);
         }
