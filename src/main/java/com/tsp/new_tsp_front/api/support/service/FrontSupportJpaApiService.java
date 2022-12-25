@@ -5,6 +5,7 @@ import com.tsp.new_tsp_front.api.support.domain.FrontSupportEntity;
 import com.tsp.new_tsp_front.api.support.service.impl.FrontSupportJpaRepository;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ public class FrontSupportJpaApiService {
      * 5. 작성일       : 2022. 05. 07.
      * </pre>
      */
+    @CachePut("support")
     @Modifying(clearAutomatically = true)
     @Transactional
     public FrontSupportDTO insertSupportModel(FrontSupportEntity frontSupportEntity) throws TspException {

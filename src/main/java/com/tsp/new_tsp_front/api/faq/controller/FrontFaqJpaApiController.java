@@ -29,11 +29,11 @@ public class FrontFaqJpaApiController {
 
     /**
      * <pre>
-     * 1. MethodName : findFaqsList
+     * 1. MethodName : findFaqList
      * 2. ClassName  : FrontFaqJpaApiController.java
      * 3. Comment    : 프론트 > FAQ 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 23.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 08. 23.
      * </pre>
      */
     @ApiOperation(value = "FAQ 조회", notes = "FAQ를 조회한다.")
@@ -45,7 +45,7 @@ public class FrontFaqJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists")
-    public Map<String, Object> findFaqsList(@RequestParam(required = false) Map<String, Object> paramMap, Page page) {
+    public Map<String, Object> findFaqList(@RequestParam(required = false) Map<String, Object> paramMap, Page page) {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> faqMap = searchCommon.searchCommon(page, paramMap);
 
@@ -54,8 +54,8 @@ public class FrontFaqJpaApiController {
         // 전체 페이지 수
         resultMap.put("perPageListCnt", ceil((double)this.frontFaqJpaService.findFaqCount(faqMap) / page.getSize()));
         // 전체 아이템 수
-        resultMap.put("faqListTotalCnt", this.frontFaqJpaService.findFaqsList(faqMap));
-        resultMap.put("faqList", this.frontFaqJpaService.findFaqsList(faqMap));
+        resultMap.put("faqListTotalCnt", this.frontFaqJpaService.findFaqList(faqMap));
+        resultMap.put("faqList", this.frontFaqJpaService.findFaqList(faqMap));
 
         return resultMap;
     }
@@ -79,7 +79,7 @@ public class FrontFaqJpaApiController {
     })
     @GetMapping(value = "/{idx}")
     public FrontFaqDTO findOneFaq(@PathVariable Long idx) {
-        return this.frontFaqJpaService.findOneFaq(FrontFaqEntity.builder().idx(idx).build());
+        return this.frontFaqJpaService.findOneFaq(idx);
     }
 
     /**
@@ -101,7 +101,7 @@ public class FrontFaqJpaApiController {
     })
     @GetMapping(value = "/{idx}/prev")
     public FrontFaqDTO findPrevOneFaq(@PathVariable Long idx) {
-        return this.frontFaqJpaService.findPrevOneFaq(FrontFaqEntity.builder().idx(idx).build());
+        return this.frontFaqJpaService.findPrevOneFaq(idx);
     }
 
     /**
@@ -123,6 +123,6 @@ public class FrontFaqJpaApiController {
     })
     @GetMapping(value = "/{idx}/next")
     public FrontFaqDTO findNextOneFaq(@PathVariable Long idx) {
-        return this.frontFaqJpaService.findNextOneFaq(FrontFaqEntity.builder().idx(idx).build());
+        return this.frontFaqJpaService.findNextOneFaq(idx);
     }
 }

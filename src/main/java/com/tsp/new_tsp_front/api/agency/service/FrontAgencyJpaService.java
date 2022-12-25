@@ -5,6 +5,8 @@ import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
 import com.tsp.new_tsp_front.api.agency.service.impl.FrontAgencyJpaRepository;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +48,7 @@ public class FrontAgencyJpaService {
      * 5. 작성일       : 2022. 08. 24.
      * </pre>
      */
+    @Cacheable(value = "agency", key = "#agencyMap")
     @Transactional(readOnly = true)
     public List<FrontAgencyDTO> findAgencyList(Map<String, Object> agencyMap) throws TspException {
         try {
@@ -64,6 +67,7 @@ public class FrontAgencyJpaService {
      * 5. 작성일       : 2022. 08. 24.
      * </pre>
      */
+    @Cacheable(value = "agency", key = "#idx")
     @Transactional(readOnly = true)
     public FrontAgencyDTO findOneAgency(Long idx) throws TspException {
         try {
@@ -82,6 +86,7 @@ public class FrontAgencyJpaService {
      * 5. 작성일       : 2022. 09. 17.
      * </pre>
      */
+    @Cacheable(value = "agency", key = "#idx")
     @Transactional(readOnly = true)
     public FrontAgencyDTO findPrevOneAgency(Long idx) throws TspException {
         try {
@@ -100,6 +105,7 @@ public class FrontAgencyJpaService {
      * 5. 작성일       : 2022. 09. 17.
      * </pre>
      */
+    @Cacheable(value = "agency", key = "#idx")
     @Transactional(readOnly = true)
     public FrontAgencyDTO findNextOneAgency(Long idx) throws TspException {
         try {
@@ -119,7 +125,7 @@ public class FrontAgencyJpaService {
      * </pre>
      */
     @Transactional(readOnly = true)
-    public Integer favoriteModelCount(Long idx) throws TspException {
+    public int favoriteModelCount(Long idx) throws TspException {
         try {
             return this.frontAgencyJpaRepository.favoriteAgencyCount(idx);
         } catch (Exception e) {
@@ -136,9 +142,10 @@ public class FrontAgencyJpaService {
      * 5. 작성일       : 2022. 08. 24.
      * </pre>
      */
+    @CachePut(value = "agency", key = "#idx")
     @Modifying(clearAutomatically = true)
     @Transactional
-    public Integer favoriteAgency(Long idx) throws TspException {
+    public int favoriteAgency(Long idx) throws TspException {
         try {
             return frontAgencyJpaRepository.favoriteAgency(idx);
         } catch (Exception e) {

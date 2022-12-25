@@ -40,24 +40,24 @@ public class FrontFaqJpaRepository {
      * 1. MethodName : findFaqCount
      * 2. ClassName  : FrontFaqJpaRepository.java
      * 3. Comment    : 관리자 FAQ 리스트 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 23.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 08. 23.
      * </pre>
      */
-    public Integer findFaqCount(Map<String, Object> faqMap) {
+    public int findFaqCount(Map<String, Object> faqMap) {
         return queryFactory.selectFrom(frontFaqEntity).where(searchFaq(faqMap)).fetch().size();
     }
 
     /**
      * <pre>
-     * 1. MethodName : findFaqsList
+     * 1. MethodName : findFaqList
      * 2. ClassName  : FrontFaqJpaRepository.java
-     * 3. Comment    : 관리자 FAQ 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 23.
+     * 3. Comment    : FAQ 리스트 조회
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 08. 23.
      * </pre>
      */
-    public List<FrontFaqDTO> findFaqsList(Map<String, Object> faqMap) {
+    public List<FrontFaqDTO> findFaqList(Map<String, Object> faqMap) {
         List<FrontFaqEntity> faqList = queryFactory
                 .selectFrom(frontFaqEntity)
                 .orderBy(frontFaqEntity.idx.desc())
@@ -81,11 +81,11 @@ public class FrontFaqJpaRepository {
      * 5. 작성일       : 2022. 08. 23.
      * </pre>
      */
-    public FrontFaqDTO findOneFaq(FrontFaqEntity existFrontFaqEntity) {
+    public FrontFaqDTO findOneFaq(Long idx) {
         FrontFaqEntity findOneFaq = queryFactory
                 .selectFrom(frontFaqEntity)
                 .orderBy(frontFaqEntity.idx.desc())
-                .where(frontFaqEntity.idx.eq(existFrontFaqEntity.getIdx())
+                .where(frontFaqEntity.idx.eq(idx)
                         .and(frontFaqEntity.visible.eq("Y")))
                 .fetchOne();
 
@@ -101,12 +101,12 @@ public class FrontFaqJpaRepository {
      * 5. 작성일       : 2022. 09. 17.
      * </pre>
      */
-    public FrontFaqDTO findPrevOneFaq(FrontFaqEntity existFrontFaqEntity) {
+    public FrontFaqDTO findPrevOneFaq(Long idx) {
         // 이전 FAQ 조회
         FrontFaqEntity findPrevOneFaq = queryFactory
                 .selectFrom(frontFaqEntity)
                 .orderBy(frontFaqEntity.idx.desc())
-                .where(frontFaqEntity.idx.lt(existFrontFaqEntity.getIdx())
+                .where(frontFaqEntity.idx.lt(idx)
                         .and(frontFaqEntity.visible.eq("Y")))
                 .fetchFirst();
 
@@ -122,12 +122,12 @@ public class FrontFaqJpaRepository {
      * 5. 작성일       : 2022. 09. 17.
      * </pre>
      */
-    public FrontFaqDTO findNextOneFaq(FrontFaqEntity existFrontFaqEntity) {
+    public FrontFaqDTO findNextOneFaq(Long idx) {
         // 다음 FAQ 조회
         FrontFaqEntity findNextOneFaq = queryFactory
                 .selectFrom(frontFaqEntity)
                 .orderBy(frontFaqEntity.idx.desc())
-                .where(frontFaqEntity.idx.gt(existFrontFaqEntity.getIdx())
+                .where(frontFaqEntity.idx.gt(idx)
                         .and(frontFaqEntity.visible.eq("Y")))
                 .fetchFirst();
 

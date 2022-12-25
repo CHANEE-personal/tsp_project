@@ -101,7 +101,7 @@ public class FrontAgencyJpaRepository {
      * 5. 작성일       : 2022. 08. 24.
      * </pre>
      */
-    public Integer favoriteAgencyCount(Long idx) {
+    public int favoriteAgencyCount(Long idx) {
         return requireNonNull(queryFactory
                 .selectFrom(frontAgencyEntity)
                 .where(frontAgencyEntity.idx.eq(idx)).fetchOne()).getFavoriteCount();
@@ -116,7 +116,7 @@ public class FrontAgencyJpaRepository {
      * 5. 작성일       : 2022. 08. 24.
      * </pre>
      */
-    public Integer favoriteAgency(Long idx) {
+    public int favoriteAgency(Long idx) {
         queryFactory
                 .update(frontAgencyEntity)
                 //add , minus , multiple 다 가능하다.
