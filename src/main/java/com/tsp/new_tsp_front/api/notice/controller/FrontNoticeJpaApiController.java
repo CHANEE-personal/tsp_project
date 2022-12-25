@@ -29,11 +29,11 @@ public class FrontNoticeJpaApiController {
 
     /**
      * <pre>
-     * 1. MethodName : findNoticesList
+     * 1. MethodName : findNoticeList
      * 2. ClassName  : FrontNoticeJpaApiController.java
      * 3. Comment    : 프론트 > 공지사항 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 16.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 08. 16.
      * </pre>
      */
     @ApiOperation(value = "공지사항 조회", notes = "공지사항을 조회한다.")
@@ -45,7 +45,7 @@ public class FrontNoticeJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists")
-    public Map<String, Object> findNoticesList(@RequestParam(required = false) Map<String, Object> paramMap, Page page) {
+    public Map<String, Object> findNoticeList(@RequestParam(required = false) Map<String, Object> paramMap, Page page) {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> noticeMap = searchCommon.searchCommon(page, paramMap);
 
@@ -56,8 +56,8 @@ public class FrontNoticeJpaApiController {
         resultMap.put("perPageListCnt", ceil((double)count / page.getSize()));
         // 전체 아이템 수
         resultMap.put("noticeListTotalCnt", count);
-        resultMap.put("noticeList", this.frontNoticeJpaService.findNoticesList(noticeMap));
-        resultMap.put("fixedNoticeList", this.frontNoticeJpaService.findFixedNoticesList(noticeMap));
+        resultMap.put("noticeList", this.frontNoticeJpaService.findNoticeList(noticeMap));
+        resultMap.put("fixedNoticeList", this.frontNoticeJpaService.findFixedNoticeList(noticeMap));
 
         return resultMap;
     }

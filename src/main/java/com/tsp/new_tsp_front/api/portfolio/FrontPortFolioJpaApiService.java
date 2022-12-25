@@ -5,6 +5,7 @@ import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
 import com.tsp.new_tsp_front.api.portfolio.service.impl.FrontPortFolioJpaRepository;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,10 +41,11 @@ public class FrontPortFolioJpaApiService {
      * 1. MethodName : getPortFolio
      * 2. ClassName  : FrontPortFolioJpaApiService.java
      * 3. Comment    : 프론트 > 포트폴리오 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 11.
      * </pre>
      */
+    @Cacheable(value = "portfolio", key = "#portFolioMap")
     @Transactional(readOnly = true)
     public List<FrontPortFolioDTO> getPortFolioList(Map<String, Object> portFolioMap) throws TspException {
         try {
@@ -62,6 +64,7 @@ public class FrontPortFolioJpaApiService {
      * 5. 작성일       : 2022. 01. 12.
      * </pre>
      */
+    @Cacheable(value = "portfolio", key = "#frontPortFolioEntity.idx")
     @Transactional
     public FrontPortFolioDTO getPortFolioInfo(FrontPortFolioEntity frontPortFolioEntity) throws TspException {
         try {

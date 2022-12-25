@@ -160,6 +160,9 @@ public class FrontModelJpaRepository {
      * </pre>
      */
     public FrontModelDTO findPrevOneModel(FrontModelEntity existFrontModelEntity) {
+        // 모델 조회 수 증가
+        updateModelViewCount(existFrontModelEntity.getIdx());
+
         // 이전 모델 조회
         FrontModelEntity findPrevOneModel = queryFactory
                 .selectFrom(frontModelEntity)
@@ -182,6 +185,9 @@ public class FrontModelJpaRepository {
      * </pre>
      */
     public FrontModelDTO findNextOneModel(FrontModelEntity existFrontModelEntity) {
+        // 모델 조회 수 증가
+        updateModelViewCount(existFrontModelEntity.getIdx());
+
         // 다음 모델 조회
         FrontModelEntity findNextOneModel = queryFactory
                 .selectFrom(frontModelEntity)

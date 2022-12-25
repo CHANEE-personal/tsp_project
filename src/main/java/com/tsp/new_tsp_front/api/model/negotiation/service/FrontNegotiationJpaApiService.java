@@ -49,7 +49,7 @@ public class FrontNegotiationJpaApiService {
      * 5. 작성일       : 2022. 09. 11.
      * </pre>
      */
-    @Cacheable("negotiation")
+    @Cacheable(value = "negotiation", key = "#negotiationMap")
     @Transactional(readOnly = true)
     public List<FrontNegotiationDTO> findModelNegotiationList(Map<String, Object> negotiationMap) throws TspException {
         try {
@@ -68,7 +68,7 @@ public class FrontNegotiationJpaApiService {
      * 5. 작성일       : 2022. 09. 11.
      * </pre>
      */
-    @Cacheable("negotiation")
+    @Cacheable(value = "negotiation", key = "#frontNegotiationEntity.idx")
     @Transactional(readOnly = true)
     public FrontNegotiationDTO findOneNegotiation(FrontNegotiationEntity frontNegotiationEntity) throws TspException {
         try {
@@ -107,7 +107,7 @@ public class FrontNegotiationJpaApiService {
      * 5. 작성일       : 2022. 09. 11.
      * </pre>
      */
-    @CachePut("negotiation")
+    @CachePut(value = "negotiation", key = "#frontNegotiationEntity.idx")
     @Modifying(clearAutomatically = true)
     @Transactional
     public FrontNegotiationDTO updateModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) throws TspException {
@@ -127,7 +127,7 @@ public class FrontNegotiationJpaApiService {
      * 5. 작성일       : 2022. 09. 11.
      * </pre>
      */
-    @CacheEvict("negotiation")
+    @CacheEvict(value = "negotiation", key = "#idx")
     @Modifying(clearAutomatically = true)
     @Transactional
     public Long deleteModelNegotiation(Long idx) throws TspException {
