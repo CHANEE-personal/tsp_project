@@ -94,7 +94,7 @@ public class FrontNegotiationEntity extends NewCommonMappedClass {
                 .build();
     }
 
-    public List<FrontNegotiationDTO> toDtoList(List<FrontNegotiationEntity> entityList) {
+    public static List<FrontNegotiationDTO> toDtoList(List<FrontNegotiationEntity> entityList) {
         if (entityList == null) return null;
         return entityList.stream()
                 .map(FrontNegotiationEntity::toDto)
