@@ -22,8 +22,8 @@ public class FrontSupportJpaApiService {
      * 1. MethodName : insertSupportModel
      * 2. ClassName  : FrontSupportJpaApiService.java
      * 3. Comment    : 모델 지원하기
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 05. 07.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 05. 07.
      * </pre>
      */
     @CachePut("support")
