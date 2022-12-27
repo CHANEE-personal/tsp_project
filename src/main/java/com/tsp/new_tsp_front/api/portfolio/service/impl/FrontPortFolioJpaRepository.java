@@ -55,6 +55,7 @@ public class FrontPortFolioJpaRepository {
         return queryFactory
                 .selectFrom(frontPortFolioEntity)
                 .where(searchPortFolio(portfolioMap))
+                .where(frontPortFolioEntity.visible.eq("Y"))
                 .fetch().size();
     }
 
@@ -71,6 +72,7 @@ public class FrontPortFolioJpaRepository {
         List<FrontPortFolioEntity> portFolioList = queryFactory
                 .selectFrom(frontPortFolioEntity)
                 .where(searchPortFolio(portFolioMap))
+                .where(frontPortFolioEntity.visible.eq("Y"))
                 .orderBy(frontPortFolioEntity.idx.desc())
                 .offset(getInt(portFolioMap.get("jpaStartPage"), 0))
                 .limit(getInt(portFolioMap.get("size"), 0))
