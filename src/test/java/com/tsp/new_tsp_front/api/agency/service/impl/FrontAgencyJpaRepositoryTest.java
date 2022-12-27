@@ -244,7 +244,7 @@ class FrontAgencyJpaRepositoryTest {
 
         // when
         when(mockFrontAgencyJpaRepository.favoriteAgency(frontAgencyDTO.getIdx())).thenReturn(favoriteCount);
-        Integer newFavoriteCount = mockFrontAgencyJpaRepository.favoriteAgencyCount(frontAgencyDTO.getIdx());
+        Integer newFavoriteCount = mockFrontAgencyJpaRepository.favoriteAgency(frontAgencyDTO.getIdx());
 
         // then
         assertThat(newFavoriteCount).isEqualTo(favoriteCount);
@@ -269,7 +269,7 @@ class FrontAgencyJpaRepositoryTest {
 
         // when
         given(mockFrontAgencyJpaRepository.favoriteAgency(frontAgencyDTO.getIdx())).willReturn(favoriteCount);
-        Integer newFavoriteCount = mockFrontAgencyJpaRepository.favoriteAgencyCount(frontAgencyDTO.getIdx());
+        Integer newFavoriteCount = mockFrontAgencyJpaRepository.favoriteAgency(frontAgencyDTO.getIdx());
 
         // then
         assertThat(newFavoriteCount).isEqualTo(favoriteCount);

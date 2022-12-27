@@ -32,12 +32,8 @@ public class FrontNegotiationJpaApiService {
      * </pre>
      */
     @Transactional(readOnly = true)
-    public Integer findNegotiationCount(Map<String, Object> negotiationMap) throws TspException {
-        try {
-            return frontNegotiationJpaRepository.findNegotiationCount(negotiationMap);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL_NEGOTIATION_LIST, e);
-        }
+    public int findNegotiationCount(Map<String, Object> negotiationMap) {
+        return frontNegotiationJpaRepository.findNegotiationCount(negotiationMap);
     }
 
     /**
@@ -51,12 +47,8 @@ public class FrontNegotiationJpaApiService {
      */
     @Cacheable(value = "negotiation", key = "#negotiationMap")
     @Transactional(readOnly = true)
-    public List<FrontNegotiationDTO> findModelNegotiationList(Map<String, Object> negotiationMap) throws TspException {
-        try {
-            return frontNegotiationJpaRepository.findModelNegotiationList(negotiationMap);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL_NEGOTIATION_LIST, e);
-        }
+    public List<FrontNegotiationDTO> findModelNegotiationList(Map<String, Object> negotiationMap) {
+        return frontNegotiationJpaRepository.findModelNegotiationList(negotiationMap);
     }
 
     /**
@@ -70,12 +62,8 @@ public class FrontNegotiationJpaApiService {
      */
     @Cacheable(value = "negotiation", key = "#frontNegotiationEntity.idx")
     @Transactional(readOnly = true)
-    public FrontNegotiationDTO findOneNegotiation(FrontNegotiationEntity frontNegotiationEntity) throws TspException {
-        try {
-            return frontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL_NEGOTIATION, e);
-        }
+    public FrontNegotiationDTO findOneNegotiation(FrontNegotiationEntity frontNegotiationEntity) {
+        return frontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity);
     }
 
     /**
@@ -90,7 +78,7 @@ public class FrontNegotiationJpaApiService {
     @CachePut("negotiation")
     @Modifying(clearAutomatically = true)
     @Transactional
-    public FrontNegotiationDTO insertModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) throws TspException {
+    public FrontNegotiationDTO insertModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) {
         try {
             return frontNegotiationJpaRepository.insertModelNegotiation(frontNegotiationEntity);
         } catch (Exception e) {
@@ -110,7 +98,7 @@ public class FrontNegotiationJpaApiService {
     @CachePut(value = "negotiation", key = "#frontNegotiationEntity.idx")
     @Modifying(clearAutomatically = true)
     @Transactional
-    public FrontNegotiationDTO updateModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) throws TspException {
+    public FrontNegotiationDTO updateModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) {
         try {
             return frontNegotiationJpaRepository.updateModelNegotiation(frontNegotiationEntity);
         } catch (Exception e) {
@@ -130,7 +118,7 @@ public class FrontNegotiationJpaApiService {
     @CacheEvict(value = "negotiation", key = "#idx")
     @Modifying(clearAutomatically = true)
     @Transactional
-    public Long deleteModelNegotiation(Long idx) throws TspException {
+    public Long deleteModelNegotiation(Long idx) {
         try {
             return frontNegotiationJpaRepository.deleteModelNegotiation(idx);
         } catch (Exception e) {

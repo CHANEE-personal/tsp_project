@@ -5,20 +5,23 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
+import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.tsp.new_tsp_front.api.agency.domain.QFrontAgencyEntity.frontAgencyEntity;
 import static com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity.commonImageEntity;
+import static com.tsp.new_tsp_front.api.model.domain.FrontModelEntity.toDto;
+import static com.tsp.new_tsp_front.api.model.domain.FrontModelEntity.toDtoList;
 import static com.tsp.new_tsp_front.api.model.domain.QFrontModelEntity.frontModelEntity;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
-import static java.util.Objects.requireNonNull;
+import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_MODEL;
+import static java.util.Collections.emptyList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,16 +40,23 @@ public class FrontModelJpaRepository {
         String searchType = getString(modelMap.get("searchType"), "");
         String searchKeyword = getString(modelMap.get("searchKeyword"), "");
 
-        if ("0".equals(searchType)) {
-            return frontModelEntity.modelKorName.contains(searchKeyword)
-                    .or(frontModelEntity.modelEngName.contains(searchKeyword)
-                            .or(frontModelEntity.modelDescription.contains(searchKeyword)));
-        } else if ("1".equals(searchType)) {
-            return frontModelEntity.modelKorName.contains(searchKeyword)
-                    .or(frontModelEntity.modelEngName.contains(searchKeyword));
+        if (!Objects.equals(searchKeyword, "")) {
+            return "0".equals(searchType) ?
+                    frontModelEntity.modelKorName.contains(searchKeyword)
+                            .or(frontModelEntity.modelEngName.contains(searchKeyword)
+                                    .or(frontModelEntity.modelDescription.contains(searchKeyword))) :
+                    "1".equals(searchType) ?
+                            frontModelEntity.modelKorName.contains(searchKeyword)
+                                    .or(frontModelEntity.modelEngName.contains(searchKeyword)) :
+                            frontModelEntity.modelDescription.contains(searchKeyword);
         } else {
-            return frontModelEntity.modelDescription.contains(searchKeyword);
+            return null;
         }
+    }
+
+    private BooleanExpression searchNewModel(Map<String, Object> modelMap) {
+        String newYn = getString(modelMap.get("newYn"), "");
+        return !Objects.equals(newYn, "") ? frontModelEntity.newYn.eq(newYn) : null;
     }
 
     /**
@@ -71,9 +81,7 @@ public class FrontModelJpaRepository {
                                         .and(commonImageEntity.visible.eq("Y")))))
                 .fetch();
 
-        modelList.forEach(list -> modelList.get(modelList.indexOf(list)).setRowNum(modelList.indexOf(list)));
-
-        return FrontModelEntity.toDtoList(modelList);
+        return modelList != null ? toDtoList(modelList) : emptyList();
     }
 
     /**
@@ -88,8 +96,8 @@ public class FrontModelJpaRepository {
     public int findModelCount(Map<String, Object> modelMap) {
         return queryFactory
                 .selectFrom(frontModelEntity)
-                .where((searchCategory(modelMap).or(searchModelInfo(modelMap)))
-                        .and(frontModelEntity.visible.eq("Y")))
+                .where(searchCategory(modelMap), searchModelInfo(modelMap), searchNewModel(modelMap))
+                .where(frontModelEntity.visible.eq("Y"))
                 .fetch().size();
     }
 
@@ -108,17 +116,13 @@ public class FrontModelJpaRepository {
                 .orderBy(frontModelEntity.idx.desc())
                 .innerJoin(frontModelEntity.frontAgencyEntity, frontAgencyEntity)
                 .fetchJoin()
-                .where((searchCategory(modelMap).or(searchModelInfo(modelMap)))
-                        .and(frontModelEntity.visible.eq("Y")))
+                .where(searchCategory(modelMap), searchModelInfo(modelMap), searchNewModel(modelMap))
+                .where(frontModelEntity.visible.eq("Y"))
                 .offset(getInt(modelMap.get("jpaStartPage"), 0))
                 .limit(getInt(modelMap.get("size"), 0))
-                .distinct()
                 .fetch();
 
-        modelList.forEach(list -> modelList.get(modelList.indexOf(list))
-                .setRowNum(getInt(modelMap.get("startPage"), 1) * (getInt(modelMap.get("size"), 1)) - (2 - modelList.indexOf(list))));
-
-        return FrontModelEntity.toDtoList(modelList);
+        return modelList != null ? toDtoList(modelList) : emptyList();
     }
 
     /**
@@ -135,7 +139,7 @@ public class FrontModelJpaRepository {
         updateModelViewCount(idx);
 
         //모델 상세 조회
-        FrontModelEntity findOneModel = queryFactory
+        FrontModelEntity findOneModel = Optional.ofNullable(queryFactory
                 .selectFrom(frontModelEntity)
                 .innerJoin(frontModelEntity.frontAgencyEntity, frontAgencyEntity)
                 .fetchJoin()
@@ -144,10 +148,9 @@ public class FrontModelJpaRepository {
                 .where(frontModelEntity.idx.eq(idx)
                         .and(frontModelEntity.visible.eq("Y"))
                         .and(commonImageEntity.typeName.eq("model")))
-                .fetchOne();
+                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_MODEL, new Throwable()));
 
-        assert findOneModel != null;
-        return FrontModelEntity.toDto(findOneModel);
+        return toDto(findOneModel);
     }
 
     /**
@@ -164,15 +167,15 @@ public class FrontModelJpaRepository {
         updateModelViewCount(existFrontModelEntity.getIdx());
 
         // 이전 모델 조회
-        FrontModelEntity findPrevOneModel = queryFactory
+        FrontModelEntity findPrevOneModel = Optional.ofNullable(queryFactory
                 .selectFrom(frontModelEntity)
                 .orderBy(frontModelEntity.idx.desc())
                 .where(frontModelEntity.idx.lt(existFrontModelEntity.getIdx())
                         .and(frontModelEntity.categoryCd.eq(existFrontModelEntity.getCategoryCd()))
                         .and(frontModelEntity.visible.eq("Y")))
-                .fetchFirst();
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_MODEL, new Throwable()));
 
-        return FrontModelEntity.toDto(findPrevOneModel);
+        return toDto(findPrevOneModel);
     }
 
     /**
@@ -189,30 +192,15 @@ public class FrontModelJpaRepository {
         updateModelViewCount(existFrontModelEntity.getIdx());
 
         // 다음 모델 조회
-        FrontModelEntity findNextOneModel = queryFactory
+        FrontModelEntity findNextOneModel = Optional.ofNullable(queryFactory
                 .selectFrom(frontModelEntity)
                 .orderBy(frontModelEntity.idx.asc())
                 .where(frontModelEntity.idx.gt(existFrontModelEntity.getIdx())
                         .and(frontModelEntity.categoryCd.eq(existFrontModelEntity.getCategoryCd()))
                         .and(frontModelEntity.visible.eq("Y")))
-                .fetchFirst();
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_MODEL, new Throwable()));
 
-        return FrontModelEntity.toDto(findNextOneModel);
-    }
-
-    /**
-     * <pre>
-     * 1. MethodName : viewModelCount
-     * 2. ClassName  : FrontModelJpaRepository.java
-     * 3. Comment    : 프론트 모델 조회 수
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 09.
-     * </pre>
-     */
-    public Integer viewModelCount(Long idx) {
-        return requireNonNull(queryFactory
-                .selectFrom(frontModelEntity)
-                .where(frontModelEntity.idx.eq(idx)).fetchOne()).getModelViewCount();
+        return toDto(findNextOneModel);
     }
 
     /**
@@ -224,7 +212,7 @@ public class FrontModelJpaRepository {
      * 5. 작성일       : 2022. 01. 09.
      * </pre>
      */
-    public Integer updateModelViewCount(Long idx) {
+    public int updateModelViewCount(Long idx) {
         // 모델 조회 수 증가
         queryFactory
                 .update(frontModelEntity)
@@ -236,22 +224,7 @@ public class FrontModelJpaRepository {
         em.flush();
         em.clear();
 
-        return viewModelCount(idx);
-    }
-
-    /**
-     * <pre>
-     * 1. MethodName : favoriteModelCount
-     * 2. ClassName  : FrontModelJpaRepository.java
-     * 3. Comment    : 프론트 모델 좋아요 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 09.
-     * </pre>
-     */
-    public Integer favoriteModelCount(Long idx) {
-        return requireNonNull(queryFactory
-                .selectFrom(frontModelEntity)
-                .where(frontModelEntity.idx.eq(idx)).fetchOne()).getModelFavoriteCount();
+        return em.find(FrontModelEntity.class, idx).getModelViewCount();
     }
 
     /**
@@ -263,7 +236,7 @@ public class FrontModelJpaRepository {
      * 5. 작성일       : 2022. 01. 09.
      * </pre>
      */
-    public Integer favoriteModel(Long idx) {
+    public int favoriteModel(Long idx) {
         queryFactory
                 .update(frontModelEntity)
                 //add , minus , multiple 다 가능하다.
@@ -274,52 +247,6 @@ public class FrontModelJpaRepository {
         em.flush();
         em.clear();
 
-        return favoriteModelCount(idx);
-    }
-
-    /**
-     * <pre>
-     * 1. MethodName : getNewModelCount
-     * 2. ClassName  : FrontModelJpaRepository.java
-     * 3. Comment    : 프론트 새로운 모델 리스트 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 29.
-     * </pre>
-     */
-    public int getNewModelCount(Map<String, Object> modelMap) {
-        return queryFactory
-                .selectFrom(frontModelEntity)
-                .where((searchCategory(modelMap).or(searchModelInfo(modelMap)))
-                        .and(frontModelEntity.visible.eq("Y"))
-                        .and(frontModelEntity.newYn.eq("Y")))
-                .fetch().size();
-    }
-
-    /**
-     * <pre>
-     * 1. MethodName : getNewModelList
-     * 2. ClassName  : FrontModelJpaRepository.java
-     * 3. Comment    : 프론트 새로운 모델 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 29.
-     * </pre>
-     */
-    public List<FrontModelDTO> getNewModelList(Map<String, Object> modelMap) {
-        List<FrontModelEntity> newModelList = queryFactory
-                .selectFrom(frontModelEntity)
-                .orderBy(frontModelEntity.idx.desc())
-                .innerJoin(frontModelEntity.frontAgencyEntity, frontAgencyEntity)
-                .fetchJoin()
-                .where((searchCategory(modelMap).or(searchModelInfo(modelMap)))
-                        .and(frontModelEntity.visible.eq("Y"))
-                        .and(frontModelEntity.newYn.eq("Y")))
-                .offset(getInt(modelMap.get("jpaStartPage"), 0))
-                .limit(getInt(modelMap.get("size"), 0))
-                .fetch();
-
-        newModelList.forEach(list -> newModelList.get(newModelList.indexOf(list))
-                .setRowNum(getInt(modelMap.get("startPage"), 1) * (getInt(modelMap.get("size"), 1)) - (2 - newModelList.indexOf(list))));
-
-        return FrontModelEntity.toDtoList(newModelList);
+        return em.find(FrontModelEntity.class, idx).getModelFavoriteCount();
     }
 }

@@ -574,6 +574,7 @@ class FrontModelJpaApiServiceTest {
         newModelMap.put("categoryCd", "1");
         newModelMap.put("jpaStartPage", 1);
         newModelMap.put("size", 3);
+        newModelMap.put("newYn", "Y");
 
         List<FrontModelDTO> returnModelList = new ArrayList<>();
 
@@ -585,68 +586,8 @@ class FrontModelJpaApiServiceTest {
         returnModelList.add(FrontModelDTO.builder().idx(3L).categoryCd(3).modelKorName("시니어모델").newYn("Y").modelAgency(frontAgencyDTO).modelEngName("seniorModel").build());
 
         // when
-        when(mockFrontModelJpaApiService.getNewModelList(newModelMap)).thenReturn(returnModelList);
-        List<FrontModelDTO> newModelList = mockFrontModelJpaApiService.getNewModelList(newModelMap);
-
-        // then
-        assertAll(
-                () -> assertThat(newModelList).isNotEmpty(),
-                () -> assertThat(newModelList).hasSize(3)
-        );
-
-        assertThat(newModelList.get(0).getIdx()).isEqualTo(returnModelList.get(0).getIdx());
-        assertThat(newModelList.get(0).getCategoryCd()).isEqualTo(returnModelList.get(0).getIdx());
-        assertThat(newModelList.get(0).getModelKorName()).isEqualTo(returnModelList.get(0).getModelKorName());
-        assertThat(newModelList.get(0).getModelEngName()).isEqualTo(returnModelList.get(0).getModelEngName());
-        assertThat(newModelList.get(0).getNewYn()).isEqualTo(returnModelList.get(0).getNewYn());
-        assertThat(newModelList.get(0).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyName());
-        assertThat(newModelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyDescription());
-
-        assertThat(newModelList.get(1).getIdx()).isEqualTo(returnModelList.get(1).getIdx());
-        assertThat(newModelList.get(1).getCategoryCd()).isEqualTo(returnModelList.get(1).getIdx());
-        assertThat(newModelList.get(1).getModelKorName()).isEqualTo(returnModelList.get(1).getModelKorName());
-        assertThat(newModelList.get(1).getModelEngName()).isEqualTo(returnModelList.get(1).getModelEngName());
-        assertThat(newModelList.get(1).getNewYn()).isEqualTo(returnModelList.get(1).getNewYn());
-        assertThat(newModelList.get(1).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyName());
-        assertThat(newModelList.get(1).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyDescription());
-
-        assertThat(newModelList.get(2).getIdx()).isEqualTo(returnModelList.get(2).getIdx());
-        assertThat(newModelList.get(2).getCategoryCd()).isEqualTo(returnModelList.get(2).getIdx());
-        assertThat(newModelList.get(2).getModelKorName()).isEqualTo(returnModelList.get(2).getModelKorName());
-        assertThat(newModelList.get(2).getModelEngName()).isEqualTo(returnModelList.get(2).getModelEngName());
-        assertThat(newModelList.get(2).getNewYn()).isEqualTo(returnModelList.get(2).getNewYn());
-        assertThat(newModelList.get(2).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyName());
-        assertThat(newModelList.get(2).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyDescription());
-
-        // verify
-        verify(mockFrontModelJpaApiService, times(1)).getNewModelList(newModelMap);
-        verify(mockFrontModelJpaApiService, atLeastOnce()).getNewModelList(newModelMap);
-        verifyNoMoreInteractions(mockFrontModelJpaApiService);
-
-        InOrder inOrder = inOrder(mockFrontModelJpaApiService);
-        inOrder.verify(mockFrontModelJpaApiService).getNewModelList(newModelMap);
-    }
-
-    @Test
-    @DisplayName("새로운모델리스트조회BDD테스트")
-    void 새로운모델리스트조회BDD테스트() {
-        Map<String, Object> newModelMap = new HashMap<>();
-        newModelMap.put("categoryCd", "1");
-        newModelMap.put("jpaStartPage", 1);
-        newModelMap.put("size", 3);
-
-        List<FrontModelDTO> returnModelList = new ArrayList<>();
-
-        // 남성
-        returnModelList.add(FrontModelDTO.builder().idx(1L).categoryCd(1).modelKorName("남성모델").newYn("Y").modelAgency(frontAgencyDTO).modelEngName("menModel").build());
-        // 여성
-        returnModelList.add(FrontModelDTO.builder().idx(2L).categoryCd(2).modelKorName("여성모델").newYn("Y").modelAgency(frontAgencyDTO).modelEngName("womenModel").build());
-        // 시니어
-        returnModelList.add(FrontModelDTO.builder().idx(3L).categoryCd(3).modelKorName("시니어모델").newYn("Y").modelAgency(frontAgencyDTO).modelEngName("seniorModel").build());
-
-        // when
-        given(mockFrontModelJpaApiService.getNewModelList(newModelMap)).willReturn(returnModelList);
-        List<FrontModelDTO> newModelList = mockFrontModelJpaApiService.getNewModelList(newModelMap);
+        when(mockFrontModelJpaApiService.findModelList(newModelMap)).thenReturn(returnModelList);
+        List<FrontModelDTO> newModelList = mockFrontModelJpaApiService.findModelList(newModelMap);
 
         // then
         assertAll(
@@ -679,8 +620,69 @@ class FrontModelJpaApiServiceTest {
         assertThat(newModelList.get(2).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyDescription());
 
         // verify
-        then(mockFrontModelJpaApiService).should(times(1)).getNewModelList(newModelMap);
-        then(mockFrontModelJpaApiService).should(atLeastOnce()).getNewModelList(newModelMap);
+        verify(mockFrontModelJpaApiService, times(1)).findModelList(newModelMap);
+        verify(mockFrontModelJpaApiService, atLeastOnce()).findModelList(newModelMap);
+        verifyNoMoreInteractions(mockFrontModelJpaApiService);
+
+        InOrder inOrder = inOrder(mockFrontModelJpaApiService);
+        inOrder.verify(mockFrontModelJpaApiService).findModelList(newModelMap);
+    }
+
+    @Test
+    @DisplayName("새로운모델리스트조회BDD테스트")
+    void 새로운모델리스트조회BDD테스트() {
+        Map<String, Object> newModelMap = new HashMap<>();
+        newModelMap.put("categoryCd", "1");
+        newModelMap.put("jpaStartPage", 1);
+        newModelMap.put("size", 3);
+        newModelMap.put("newYn", "Y");
+
+        List<FrontModelDTO> returnModelList = new ArrayList<>();
+
+        // 남성
+        returnModelList.add(FrontModelDTO.builder().idx(1L).categoryCd(1).modelKorName("남성모델").newYn("Y").modelAgency(frontAgencyDTO).modelEngName("menModel").build());
+        // 여성
+        returnModelList.add(FrontModelDTO.builder().idx(2L).categoryCd(2).modelKorName("여성모델").newYn("Y").modelAgency(frontAgencyDTO).modelEngName("womenModel").build());
+        // 시니어
+        returnModelList.add(FrontModelDTO.builder().idx(3L).categoryCd(3).modelKorName("시니어모델").newYn("Y").modelAgency(frontAgencyDTO).modelEngName("seniorModel").build());
+
+        // when
+        given(mockFrontModelJpaApiService.findModelList(newModelMap)).willReturn(returnModelList);
+        List<FrontModelDTO> newModelList = mockFrontModelJpaApiService.findModelList(newModelMap);
+
+        // then
+        assertAll(
+                () -> assertThat(newModelList).isNotEmpty(),
+                () -> assertThat(newModelList).hasSize(3)
+        );
+
+        assertThat(newModelList.get(0).getIdx()).isEqualTo(returnModelList.get(0).getIdx());
+        assertThat(newModelList.get(0).getCategoryCd()).isEqualTo(returnModelList.get(0).getCategoryCd());
+        assertThat(newModelList.get(0).getModelKorName()).isEqualTo(returnModelList.get(0).getModelKorName());
+        assertThat(newModelList.get(0).getModelEngName()).isEqualTo(returnModelList.get(0).getModelEngName());
+        assertThat(newModelList.get(0).getNewYn()).isEqualTo(returnModelList.get(0).getNewYn());
+        assertThat(newModelList.get(0).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyName());
+        assertThat(newModelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyDescription());
+
+        assertThat(newModelList.get(1).getIdx()).isEqualTo(returnModelList.get(1).getIdx());
+        assertThat(newModelList.get(1).getCategoryCd()).isEqualTo(returnModelList.get(1).getCategoryCd());
+        assertThat(newModelList.get(1).getModelKorName()).isEqualTo(returnModelList.get(1).getModelKorName());
+        assertThat(newModelList.get(1).getModelEngName()).isEqualTo(returnModelList.get(1).getModelEngName());
+        assertThat(newModelList.get(1).getNewYn()).isEqualTo(returnModelList.get(1).getNewYn());
+        assertThat(newModelList.get(1).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyName());
+        assertThat(newModelList.get(1).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyDescription());
+
+        assertThat(newModelList.get(2).getIdx()).isEqualTo(returnModelList.get(2).getIdx());
+        assertThat(newModelList.get(2).getCategoryCd()).isEqualTo(returnModelList.get(2).getCategoryCd());
+        assertThat(newModelList.get(2).getModelKorName()).isEqualTo(returnModelList.get(2).getModelKorName());
+        assertThat(newModelList.get(2).getModelEngName()).isEqualTo(returnModelList.get(2).getModelEngName());
+        assertThat(newModelList.get(2).getNewYn()).isEqualTo(returnModelList.get(2).getNewYn());
+        assertThat(newModelList.get(2).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyName());
+        assertThat(newModelList.get(2).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyDescription());
+
+        // verify
+        then(mockFrontModelJpaApiService).should(times(1)).findModelList(newModelMap);
+        then(mockFrontModelJpaApiService).should(atLeastOnce()).findModelList(newModelMap);
         then(mockFrontModelJpaApiService).shouldHaveNoMoreInteractions();
     }
 }

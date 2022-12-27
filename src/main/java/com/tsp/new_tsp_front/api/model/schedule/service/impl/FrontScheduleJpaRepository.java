@@ -14,13 +14,17 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
+import static com.tsp.new_tsp_front.api.model.domain.FrontModelEntity.toDtoList;
 import static com.tsp.new_tsp_front.api.model.domain.QFrontModelEntity.*;
+import static com.tsp.new_tsp_front.api.model.domain.schedule.FrontScheduleEntity.toDtoList;
 import static com.tsp.new_tsp_front.api.model.domain.schedule.QFrontScheduleEntity.*;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
 import static java.time.LocalDate.now;
 import static java.time.LocalDateTime.of;
+import static java.util.Collections.emptyList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -30,25 +34,15 @@ public class FrontScheduleJpaRepository {
 
     private BooleanExpression searchModelSchedule(Map<String, Object> scheduleMap) {
         String searchKeyword = getString(scheduleMap.get("searchKeyword"), "");
-        LocalDateTime searchStartTime = (LocalDateTime) scheduleMap.get("searchStartTime");
-        LocalDateTime searchEndTime = (LocalDateTime) scheduleMap.get("searchEndTime");
+        LocalDateTime searchStartTime = scheduleMap.get("searchStartTime") != null ? (LocalDateTime) scheduleMap.get("searchStartTime") : now().minusDays(now().getDayOfMonth() - 1).atStartOfDay();
+        LocalDateTime searchEndTime = scheduleMap.get("searchEndTime") != null ? (LocalDateTime) scheduleMap.get("searchStartTime") : of(now().minusDays(now().getDayOfMonth()).plusMonths(1), LocalTime.of(23, 59, 59));
 
-        if (searchStartTime != null && searchEndTime != null) {
-            searchStartTime = (LocalDateTime) scheduleMap.get("searchStartTime");
-            searchEndTime = (LocalDateTime) scheduleMap.get("searchEndTime");
-        } else {
-            searchStartTime = now().minusDays(now().getDayOfMonth()-1).atStartOfDay();
-            searchEndTime = of(now().minusDays(now().getDayOfMonth()).plusMonths(1), LocalTime.of(23,59,59));
-        }
-
-        if (!"".equals(searchKeyword)) {
-            return frontModelEntity.modelKorName.contains(searchKeyword)
-                    .or(frontModelEntity.modelEngName.contains(searchKeyword)
-                            .or(frontModelEntity.modelDescription.contains(searchKeyword)))
-                    .or(frontScheduleEntity.modelSchedule.contains(searchKeyword));
-        } else {
-            return frontScheduleEntity.modelScheduleTime.between(searchStartTime, searchEndTime);
-        }
+        return !Objects.equals(searchKeyword, "") ?
+                frontModelEntity.modelKorName.contains(searchKeyword)
+                        .or(frontModelEntity.modelEngName.contains(searchKeyword)
+                                .or(frontModelEntity.modelDescription.contains(searchKeyword)))
+                        .or(frontScheduleEntity.modelSchedule.contains(searchKeyword)) :
+                frontScheduleEntity.modelScheduleTime.between(searchStartTime, searchEndTime);
     }
 
     /**
@@ -60,7 +54,7 @@ public class FrontScheduleJpaRepository {
      * 5. 작성일       : 2022. 09. 01.
      * </pre>
      */
-    public Integer findScheduleCount(Map<String, Object> scheduleMap) {
+    public int findScheduleCount(Map<String, Object> scheduleMap) {
         return queryFactory.selectFrom(frontScheduleEntity)
                 .where(searchModelSchedule(scheduleMap))
                 .fetch().size();
@@ -84,10 +78,7 @@ public class FrontScheduleJpaRepository {
                 .limit(getInt(scheduleMap.get("size"), 0))
                 .fetch();
 
-        scheduleList.forEach(list -> scheduleList.get(scheduleList.indexOf(list))
-                .setRowNum(getInt(scheduleMap.get("startPage"), 1) * (getInt(scheduleMap.get("size"), 1)) - (2 - scheduleList.indexOf(list))));
-
-        return FrontScheduleEntity.toDtoList(scheduleList);
+        return scheduleList != null ? toDtoList(scheduleList) : emptyList();
     }
 
     /**
@@ -109,9 +100,6 @@ public class FrontScheduleJpaRepository {
                         .and(frontModelEntity.visible.eq("Y")))
                 .fetch();
 
-        findModelScheduleList.forEach(list -> findModelScheduleList.get(findModelScheduleList.indexOf(list))
-                .setRowNum(getInt(scheduleMap.get("startPage"), 1) * (getInt(scheduleMap.get("size"), 1)) - (2 - findModelScheduleList.indexOf(list))));
-
-        return FrontModelEntity.toDtoList(findModelScheduleList);
+        return findModelScheduleList != null ? toDtoList(findModelScheduleList) : emptyList();
     }
 }

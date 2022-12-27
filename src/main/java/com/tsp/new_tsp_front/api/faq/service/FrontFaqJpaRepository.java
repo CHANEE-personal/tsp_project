@@ -4,16 +4,20 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tsp.new_tsp_front.api.faq.domain.FrontFaqDTO;
 import com.tsp.new_tsp_front.api.faq.domain.FrontFaqEntity;
+import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import static com.tsp.new_tsp_front.api.faq.domain.FrontFaqEntity.toDto;
+import static com.tsp.new_tsp_front.api.faq.domain.FrontFaqEntity.toDtoList;
 import static com.tsp.new_tsp_front.api.faq.domain.QFrontFaqEntity.frontFaqEntity;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
+import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_FAQ;
+import static java.util.Collections.emptyList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,13 +29,15 @@ public class FrontFaqJpaRepository {
         String searchType = getString(faqMap.get("searchType"), "");
         String searchKeyword = getString(faqMap.get("searchKeyword"), "");
 
-        if ("0".equals(searchType)) {
-            return frontFaqEntity.title.contains(searchKeyword)
-                    .or(frontFaqEntity.description.contains(searchKeyword));
-        } else if ("1".equals(searchType)) {
-            return frontFaqEntity.title.contains(searchKeyword);
+        if (!Objects.equals(searchKeyword, "")) {
+            return "0".equals(searchType) ?
+                    frontFaqEntity.title.contains(searchKeyword)
+                            .or(frontFaqEntity.description.contains(searchKeyword)) :
+                    "1".equals(searchType) ?
+                            frontFaqEntity.title.contains(searchKeyword) :
+                            frontFaqEntity.description.contains(searchKeyword);
         } else {
-            return frontFaqEntity.description.contains(searchKeyword);
+            return null;
         }
     }
 
@@ -66,10 +72,7 @@ public class FrontFaqJpaRepository {
                 .limit(getInt(faqMap.get("size"), 0))
                 .fetch();
 
-        faqList.forEach(list -> faqList.get(faqList.indexOf(list))
-                .setRowNum(getInt(faqMap.get("startPage"), 1) * (getInt(faqMap.get("size"), 1)) - (2 - faqList.indexOf(list))));
-
-        return FrontFaqEntity.toDtoList(faqList);
+        return faqList != null ? toDtoList(faqList) : emptyList();
     }
 
     /**
@@ -82,14 +85,14 @@ public class FrontFaqJpaRepository {
      * </pre>
      */
     public FrontFaqDTO findOneFaq(Long idx) {
-        FrontFaqEntity findOneFaq = queryFactory
+        FrontFaqEntity findOneFaq = Optional.ofNullable(queryFactory
                 .selectFrom(frontFaqEntity)
                 .orderBy(frontFaqEntity.idx.desc())
                 .where(frontFaqEntity.idx.eq(idx)
                         .and(frontFaqEntity.visible.eq("Y")))
-                .fetchOne();
+                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_FAQ, new Throwable()));
 
-        return FrontFaqEntity.toDto(findOneFaq);
+        return toDto(findOneFaq);
     }
 
     /**
@@ -103,14 +106,14 @@ public class FrontFaqJpaRepository {
      */
     public FrontFaqDTO findPrevOneFaq(Long idx) {
         // 이전 FAQ 조회
-        FrontFaqEntity findPrevOneFaq = queryFactory
+        FrontFaqEntity findPrevOneFaq = Optional.ofNullable(queryFactory
                 .selectFrom(frontFaqEntity)
                 .orderBy(frontFaqEntity.idx.desc())
                 .where(frontFaqEntity.idx.lt(idx)
                         .and(frontFaqEntity.visible.eq("Y")))
-                .fetchFirst();
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_FAQ, new Throwable()));
 
-        return FrontFaqEntity.toDto(findPrevOneFaq);
+        return toDto(findPrevOneFaq);
     }
 
     /**
@@ -124,13 +127,13 @@ public class FrontFaqJpaRepository {
      */
     public FrontFaqDTO findNextOneFaq(Long idx) {
         // 다음 FAQ 조회
-        FrontFaqEntity findNextOneFaq = queryFactory
+        FrontFaqEntity findNextOneFaq = Optional.ofNullable(queryFactory
                 .selectFrom(frontFaqEntity)
                 .orderBy(frontFaqEntity.idx.desc())
                 .where(frontFaqEntity.idx.gt(idx)
                         .and(frontFaqEntity.visible.eq("Y")))
-                .fetchFirst();
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_FAQ, new Throwable()));
 
-        return FrontFaqEntity.toDto(findNextOneFaq);
+        return toDto(findNextOneFaq);
     }
 }

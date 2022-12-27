@@ -96,7 +96,7 @@ class FrontPortFolioJpaRepositoryTest {
         portfolioMap.put("size", 3);
 
         // then
-        assertThat(frontPortFolioJpaRepository.getPortFolioList(portfolioMap)).isNotEmpty();
+        assertThat(frontPortFolioJpaRepository.findPortfolioList(portfolioMap)).isNotEmpty();
     }
 
     @Test
@@ -115,8 +115,8 @@ class FrontPortFolioJpaRepositoryTest {
                 .hashTag("#test").portfolioImage(commonImageDtoList).visible("Y").build());
 
         // when
-        when(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap)).thenReturn(portfolioList);
-        List<FrontPortFolioDTO> newPortfolioList = mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap);
+        when(mockFrontPortFolioJpaRepository.findPortfolioList(portfolioMap)).thenReturn(portfolioList);
+        List<FrontPortFolioDTO> newPortfolioList = mockFrontPortFolioJpaRepository.findPortfolioList(portfolioMap);
 
         // then
         assertThat(newPortfolioList.get(0).getIdx()).isEqualTo(portfolioList.get(0).getIdx());
@@ -127,12 +127,12 @@ class FrontPortFolioJpaRepositoryTest {
         assertThat(newPortfolioList.get(0).getPortfolioImage().get(0).getTypeName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getTypeName());
 
         // verify
-        verify(mockFrontPortFolioJpaRepository, times(1)).getPortFolioList(portfolioMap);
-        verify(mockFrontPortFolioJpaRepository, atLeastOnce()).getPortFolioList(portfolioMap);
+        verify(mockFrontPortFolioJpaRepository, times(1)).findPortfolioList(portfolioMap);
+        verify(mockFrontPortFolioJpaRepository, atLeastOnce()).findPortfolioList(portfolioMap);
         verifyNoMoreInteractions(mockFrontPortFolioJpaRepository);
 
         InOrder inOrder = inOrder(mockFrontPortFolioJpaRepository);
-        inOrder.verify(mockFrontPortFolioJpaRepository).getPortFolioList(portfolioMap);
+        inOrder.verify(mockFrontPortFolioJpaRepository).findPortfolioList(portfolioMap);
     }
 
     @Test
@@ -151,8 +151,8 @@ class FrontPortFolioJpaRepositoryTest {
                 .hashTag("#test").portfolioImage(commonImageDtoList).visible("Y").build());
 
         // when
-        given(mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap)).willReturn(portfolioList);
-        List<FrontPortFolioDTO> newPortfolioList = mockFrontPortFolioJpaRepository.getPortFolioList(portfolioMap);
+        given(mockFrontPortFolioJpaRepository.findPortfolioList(portfolioMap)).willReturn(portfolioList);
+        List<FrontPortFolioDTO> newPortfolioList = mockFrontPortFolioJpaRepository.findPortfolioList(portfolioMap);
 
         // then
         assertThat(newPortfolioList.get(0).getIdx()).isEqualTo(portfolioList.get(0).getIdx());
@@ -163,15 +163,15 @@ class FrontPortFolioJpaRepositoryTest {
         assertThat(newPortfolioList.get(0).getPortfolioImage().get(0).getTypeName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getTypeName());
 
         // verify
-        then(mockFrontPortFolioJpaRepository).should(times(1)).getPortFolioList(portfolioMap);
-        then(mockFrontPortFolioJpaRepository).should(atLeastOnce()).getPortFolioList(portfolioMap);
+        then(mockFrontPortFolioJpaRepository).should(times(1)).findPortfolioList(portfolioMap);
+        then(mockFrontPortFolioJpaRepository).should(atLeastOnce()).findPortfolioList(portfolioMap);
         then(mockFrontPortFolioJpaRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
     @DisplayName("포트폴리오 상세 조회 테스트")
     void 포트폴리오상세조회테스트() {
-        frontPortFolioDTO = frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity.getIdx());
+        frontPortFolioDTO = frontPortFolioJpaRepository.findOnePortfolio(frontPortFolioEntity.getIdx());
 
         // then
         assertAll(() -> {
@@ -211,8 +211,8 @@ class FrontPortFolioJpaRepositoryTest {
     @DisplayName("포트폴리오 상세 조회 Mockito 테스트")
     void 포트폴리오상세조회Mockito테스트() {
         // when
-        when(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity.getIdx())).thenReturn(frontPortFolioDTO);
-        FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity.getIdx());
+        when(mockFrontPortFolioJpaRepository.findOnePortfolio(frontPortFolioEntity.getIdx())).thenReturn(frontPortFolioDTO);
+        FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaRepository.findOnePortfolio(frontPortFolioEntity.getIdx());
 
         // then
         assertThat(portfolioInfo.getTitle()).isEqualTo("포트폴리오 Test");
@@ -228,20 +228,20 @@ class FrontPortFolioJpaRepositoryTest {
         assertThat(portfolioInfo.getPortfolioImage().get(0).getTypeName()).isEqualTo("portfolio");
 
         // verify
-        verify(mockFrontPortFolioJpaRepository, times(1)).getPortFolioInfo(frontPortFolioEntity.getIdx());
-        verify(mockFrontPortFolioJpaRepository, atLeastOnce()).getPortFolioInfo(frontPortFolioEntity.getIdx());
+        verify(mockFrontPortFolioJpaRepository, times(1)).findOnePortfolio(frontPortFolioEntity.getIdx());
+        verify(mockFrontPortFolioJpaRepository, atLeastOnce()).findOnePortfolio(frontPortFolioEntity.getIdx());
         verifyNoMoreInteractions(mockFrontPortFolioJpaRepository);
 
         InOrder inOrder = inOrder(mockFrontPortFolioJpaRepository);
-        inOrder.verify(mockFrontPortFolioJpaRepository).getPortFolioInfo(frontPortFolioEntity.getIdx());
+        inOrder.verify(mockFrontPortFolioJpaRepository).findOnePortfolio(frontPortFolioEntity.getIdx());
     }
 
     @Test
     @DisplayName("포트폴리오 상세 조회 BDD 테스트")
     void 포트폴리오상세조회BDD테스트() {
         // when
-        given(mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity.getIdx())).willReturn(frontPortFolioDTO);
-        FrontPortFolioDTO portFolioInfo = mockFrontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity.getIdx());
+        given(mockFrontPortFolioJpaRepository.findOnePortfolio(frontPortFolioEntity.getIdx())).willReturn(frontPortFolioDTO);
+        FrontPortFolioDTO portFolioInfo = mockFrontPortFolioJpaRepository.findOnePortfolio(frontPortFolioEntity.getIdx());
 
         // then
         assertThat(portFolioInfo.getTitle()).isEqualTo("포트폴리오 Test");
@@ -257,8 +257,8 @@ class FrontPortFolioJpaRepositoryTest {
         assertThat(portFolioInfo.getPortfolioImage().get(0).getTypeName()).isEqualTo("portfolio");
 
         // verify
-        then(mockFrontPortFolioJpaRepository).should(times(1)).getPortFolioInfo(frontPortFolioEntity.getIdx());
-        then(mockFrontPortFolioJpaRepository).should(atLeastOnce()).getPortFolioInfo(frontPortFolioEntity.getIdx());
+        then(mockFrontPortFolioJpaRepository).should(times(1)).findOnePortfolio(frontPortFolioEntity.getIdx());
+        then(mockFrontPortFolioJpaRepository).should(atLeastOnce()).findOnePortfolio(frontPortFolioEntity.getIdx());
         then(mockFrontPortFolioJpaRepository).shouldHaveNoMoreInteractions();
     }
 
@@ -277,7 +277,7 @@ class FrontPortFolioJpaRepositoryTest {
                 .build();
 
         // when
-        frontPortFolioDTO = frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity.getIdx());
+        frontPortFolioDTO = frontPortFolioJpaRepository.findOnePortfolio(frontPortFolioEntity.getIdx());
 
         // 이전 프로덕션
         assertThat(frontPortFolioJpaRepository.findPrevOnePortfolio(frontPortFolioEntity.getIdx())).isEqualTo(1);
@@ -300,7 +300,7 @@ class FrontPortFolioJpaRepositoryTest {
                 .build();
 
         // when
-        frontPortFolioDTO = frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity.getIdx());
+        frontPortFolioDTO = frontPortFolioJpaRepository.findOnePortfolio(frontPortFolioEntity.getIdx());
 
         when(mockFrontPortFolioJpaRepository.findPrevOnePortfolio(frontPortFolioEntity.getIdx())).thenReturn(frontPortFolioDTO);
         FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaRepository.findPrevOnePortfolio(frontPortFolioEntity.getIdx());
@@ -332,7 +332,7 @@ class FrontPortFolioJpaRepositoryTest {
                 .build();
 
         // when
-        frontPortFolioDTO = frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity.getIdx());
+        frontPortFolioDTO = frontPortFolioJpaRepository.findOnePortfolio(frontPortFolioEntity.getIdx());
 
         given(mockFrontPortFolioJpaRepository.findPrevOnePortfolio(frontPortFolioEntity.getIdx())).willReturn(frontPortFolioDTO);
         FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaRepository.findPrevOnePortfolio(frontPortFolioEntity.getIdx());
@@ -361,7 +361,7 @@ class FrontPortFolioJpaRepositoryTest {
                 .build();
 
         // when
-        frontPortFolioDTO = frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity.getIdx());
+        frontPortFolioDTO = frontPortFolioJpaRepository.findOnePortfolio(frontPortFolioEntity.getIdx());
 
         when(mockFrontPortFolioJpaRepository.findPrevOnePortfolio(frontPortFolioEntity.getIdx())).thenReturn(frontPortFolioDTO);
         FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaRepository.findPrevOnePortfolio(frontPortFolioEntity.getIdx());
@@ -393,7 +393,7 @@ class FrontPortFolioJpaRepositoryTest {
                 .build();
 
         // when
-        frontPortFolioDTO = frontPortFolioJpaRepository.getPortFolioInfo(frontPortFolioEntity.getIdx());
+        frontPortFolioDTO = frontPortFolioJpaRepository.findOnePortfolio(frontPortFolioEntity.getIdx());
 
         given(mockFrontPortFolioJpaRepository.findPrevOnePortfolio(frontPortFolioEntity.getIdx())).willReturn(frontPortFolioDTO);
         FrontPortFolioDTO portfolioInfo = mockFrontPortFolioJpaRepository.findPrevOnePortfolio(frontPortFolioEntity.getIdx());

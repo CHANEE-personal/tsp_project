@@ -182,7 +182,7 @@ class FrontModelJpaApiControllerTest {
     @Transactional
     @DisplayName("모델 좋아요 테스트")
     void 모델좋아요테스트() throws Exception {
-        mockMvc.perform(put("/api/model/1/156/like"))
+        mockMvc.perform(put("/api/model/156/like"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))

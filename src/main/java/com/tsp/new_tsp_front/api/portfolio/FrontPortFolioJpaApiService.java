@@ -21,24 +21,20 @@ public class FrontPortFolioJpaApiService {
 
     /**
      * <pre>
-     * 1. MethodName : getPortfolioCount
+     * 1. MethodName : findPortfolioCount
      * 2. ClassName  : FrontPortFolioJpaApiService.java
      * 3. Comment    : 프론트 > 포트폴리오 리스트 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 11.
      * </pre>
      */
-    public int getPortfolioCount(Map<String, Object> portfolioMap) throws TspException {
-        try {
-            return frontPortFolioJpaRepository.getPortfolioCount(portfolioMap);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_PORTFOLIO_LIST, e);
-        }
+    public int findPortfolioCount(Map<String, Object> portfolioMap) {
+        return frontPortFolioJpaRepository.findPortfolioCount(portfolioMap);
     }
 
     /**
      * <pre>
-     * 1. MethodName : getPortFolio
+     * 1. MethodName : findPortfolioList
      * 2. ClassName  : FrontPortFolioJpaApiService.java
      * 3. Comment    : 프론트 > 포트폴리오 리스트 조회
      * 4. 작성자      : CHO
@@ -47,31 +43,23 @@ public class FrontPortFolioJpaApiService {
      */
     @Cacheable(value = "portfolio", key = "#portFolioMap")
     @Transactional(readOnly = true)
-    public List<FrontPortFolioDTO> getPortFolioList(Map<String, Object> portFolioMap) throws TspException {
-        try {
-            return frontPortFolioJpaRepository.getPortFolioList(portFolioMap);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_PORTFOLIO_LIST, e);
-        }
+    public List<FrontPortFolioDTO> findPortfolioList(Map<String, Object> portFolioMap) {
+        return frontPortFolioJpaRepository.findPortfolioList(portFolioMap);
     }
 
     /**
      * <pre>
-     * 1. MethodName : getPortFolioInfo
+     * 1. MethodName : findOnePortfolio
      * 2. ClassName  : FrontPortFolioJpaApiService.java
      * 3. Comment    : 프론트 > 포트폴리오 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 12.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 12.
      * </pre>
      */
     @CachePut(value = "portfolio", key = "#idx")
     @Transactional
-    public FrontPortFolioDTO getPortFolioInfo(Long idx) throws TspException {
-        try {
-            return frontPortFolioJpaRepository.getPortFolioInfo(idx);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_PORTFOLIO, e);
-        }
+    public FrontPortFolioDTO findOnePortfolio(Long idx) {
+        return frontPortFolioJpaRepository.findOnePortfolio(idx);
     }
 
     /**
@@ -85,12 +73,8 @@ public class FrontPortFolioJpaApiService {
      */
     @CachePut(value = "portfolio", key = "#idx")
     @Transactional
-    public FrontPortFolioDTO findPrevOnePortfolio(Long idx) throws TspException {
-        try {
-            return frontPortFolioJpaRepository.findPrevOnePortfolio(idx);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_PORTFOLIO, e);
-        }
+    public FrontPortFolioDTO findPrevOnePortfolio(Long idx) {
+        return frontPortFolioJpaRepository.findPrevOnePortfolio(idx);
     }
 
     /**
@@ -104,11 +88,7 @@ public class FrontPortFolioJpaApiService {
      */
     @CachePut(value = "portfolio", key = "#idx")
     @Transactional
-    public FrontPortFolioDTO findNextOnePortfolio(Long idx) throws TspException {
-        try {
-            return frontPortFolioJpaRepository.findNextOnePortfolio(idx);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_PORTFOLIO, e);
-        }
+    public FrontPortFolioDTO findNextOnePortfolio(Long idx) {
+        return frontPortFolioJpaRepository.findNextOnePortfolio(idx);
     }
 }
