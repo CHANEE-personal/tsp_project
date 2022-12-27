@@ -60,7 +60,7 @@ public class FrontAgencyJpaService {
      */
     @Cacheable(value = "agency", key = "#idx")
     @Transactional(readOnly = true)
-    public FrontAgencyDTO findOneAgency(Long idx) throws TspException {
+    public FrontAgencyDTO findOneAgency(Long idx) {
         return this.frontAgencyJpaRepository.findOneAgency(idx);
     }
 
@@ -75,7 +75,7 @@ public class FrontAgencyJpaService {
      */
     @Cacheable(value = "agency", key = "#idx")
     @Transactional(readOnly = true)
-    public FrontAgencyDTO findPrevOneAgency(Long idx) throws TspException {
+    public FrontAgencyDTO findPrevOneAgency(Long idx) {
         return this.frontAgencyJpaRepository.findPrevOneAgency(idx);
     }
 
@@ -90,7 +90,7 @@ public class FrontAgencyJpaService {
      */
     @Cacheable(value = "agency", key = "#idx")
     @Transactional(readOnly = true)
-    public FrontAgencyDTO findNextOneAgency(Long idx) throws TspException {
+    public FrontAgencyDTO findNextOneAgency(Long idx) {
         try {
             return this.frontAgencyJpaRepository.findNextOneAgency(idx);
         } catch (Exception e) {

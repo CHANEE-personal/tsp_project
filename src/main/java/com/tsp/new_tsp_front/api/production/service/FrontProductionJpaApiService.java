@@ -56,7 +56,7 @@ public class FrontProductionJpaApiService {
      */
     @CachePut(value = "production", key = "#idx")
     @Transactional
-    public FrontProductionDTO findOneProduction(Long idx) throws TspException {
+    public FrontProductionDTO findOneProduction(Long idx) {
         return frontProductionJpaRepository.findOneProduction(idx);
     }
 

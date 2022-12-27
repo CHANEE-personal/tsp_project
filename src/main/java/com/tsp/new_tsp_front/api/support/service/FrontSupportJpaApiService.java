@@ -29,7 +29,7 @@ public class FrontSupportJpaApiService {
     @CachePut("support")
     @Modifying(clearAutomatically = true)
     @Transactional
-    public FrontSupportDTO insertSupportModel(FrontSupportEntity frontSupportEntity) throws TspException {
+    public FrontSupportDTO insertSupportModel(FrontSupportEntity frontSupportEntity) {
         try {
             return this.frontSupportJpaRepository.insertSupportModel(frontSupportEntity);
         } catch (Exception e) {

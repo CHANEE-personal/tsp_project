@@ -78,7 +78,7 @@ public class FrontNegotiationJpaApiService {
     @CachePut("negotiation")
     @Modifying(clearAutomatically = true)
     @Transactional
-    public FrontNegotiationDTO insertModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) throws TspException {
+    public FrontNegotiationDTO insertModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) {
         try {
             return frontNegotiationJpaRepository.insertModelNegotiation(frontNegotiationEntity);
         } catch (Exception e) {
@@ -98,7 +98,7 @@ public class FrontNegotiationJpaApiService {
     @CachePut(value = "negotiation", key = "#frontNegotiationEntity.idx")
     @Modifying(clearAutomatically = true)
     @Transactional
-    public FrontNegotiationDTO updateModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) throws TspException {
+    public FrontNegotiationDTO updateModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) {
         try {
             return frontNegotiationJpaRepository.updateModelNegotiation(frontNegotiationEntity);
         } catch (Exception e) {
@@ -118,7 +118,7 @@ public class FrontNegotiationJpaApiService {
     @CacheEvict(value = "negotiation", key = "#idx")
     @Modifying(clearAutomatically = true)
     @Transactional
-    public Long deleteModelNegotiation(Long idx) throws TspException {
+    public Long deleteModelNegotiation(Long idx) {
         try {
             return frontNegotiationJpaRepository.deleteModelNegotiation(idx);
         } catch (Exception e) {
