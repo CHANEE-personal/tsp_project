@@ -1,8 +1,6 @@
 package com.tsp.new_tsp_front.api.faq.service;
 
 import com.tsp.new_tsp_front.api.faq.domain.FrontFaqDTO;
-import com.tsp.new_tsp_front.api.faq.domain.FrontFaqEntity;
-import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -11,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.exception.ApiExceptionType.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,12 +25,8 @@ public class FrontFaqJpaService {
      * </pre>
      */
     @Transactional(readOnly = true)
-    public int findFaqCount(Map<String, Object> faqMap) throws TspException {
-        try {
-            return frontFaqJpaRepository.findFaqCount(faqMap);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_FAQ_LIST, e);
-        }
+    public int findFaqCount(Map<String, Object> faqMap) {
+        return frontFaqJpaRepository.findFaqCount(faqMap);
     }
 
     /**
@@ -47,12 +40,8 @@ public class FrontFaqJpaService {
      */
     @Cacheable(value = "faq", key = "#faqMap")
     @Transactional(readOnly = true)
-    public List<FrontFaqDTO> findFaqList(Map<String, Object> faqMap) throws TspException {
-        try {
-            return frontFaqJpaRepository.findFaqList(faqMap);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_FAQ_LIST, e);
-        }
+    public List<FrontFaqDTO> findFaqList(Map<String, Object> faqMap) {
+        return frontFaqJpaRepository.findFaqList(faqMap);
     }
 
     /**
@@ -66,12 +55,8 @@ public class FrontFaqJpaService {
      */
     @Cacheable(value = "faq", key = "#idx")
     @Transactional(readOnly = true)
-    public FrontFaqDTO findOneFaq(Long idx) throws TspException {
-        try {
-            return this.frontFaqJpaRepository.findOneFaq(idx);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_FAQ, e);
-        }
+    public FrontFaqDTO findOneFaq(Long idx) {
+        return this.frontFaqJpaRepository.findOneFaq(idx);
     }
 
     /**
@@ -85,12 +70,8 @@ public class FrontFaqJpaService {
      */
     @Cacheable(value = "faq", key = "#idx")
     @Transactional(readOnly = true)
-    public FrontFaqDTO findPrevOneFaq(Long idx) throws TspException {
-        try {
-            return this.frontFaqJpaRepository.findPrevOneFaq(idx);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_FAQ, e);
-        }
+    public FrontFaqDTO findPrevOneFaq(Long idx) {
+        return this.frontFaqJpaRepository.findPrevOneFaq(idx);
     }
 
     /**
@@ -104,11 +85,7 @@ public class FrontFaqJpaService {
      */
     @Cacheable(value = "faq", key = "#idx")
     @Transactional(readOnly = true)
-    public FrontFaqDTO findNextOneFaq(Long idx) throws TspException {
-        try {
-            return this.frontFaqJpaRepository.findNextOneFaq(idx);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_FAQ, e);
-        }
+    public FrontFaqDTO findNextOneFaq(Long idx) {
+        return this.frontFaqJpaRepository.findNextOneFaq(idx);
     }
 }

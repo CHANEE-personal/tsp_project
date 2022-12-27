@@ -2,7 +2,6 @@ package com.tsp.new_tsp_front.api.notice.service.impl;
 
 import com.tsp.new_tsp_front.api.notice.domain.FrontNoticeDTO;
 import com.tsp.new_tsp_front.api.notice.domain.FrontNoticeEntity;
-import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -11,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.exception.ApiExceptionType.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,12 +26,8 @@ public class FrontNoticeJpaService {
      * </pre>
      */
     @Transactional(readOnly = true)
-    public int findNoticeCount(Map<String, Object> noticeMap) throws TspException {
-        try {
-            return frontNoticeJpaRepository.findNoticeCount(noticeMap);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_NOTICE_LIST, e);
-        }
+    public int findNoticeCount(Map<String, Object> noticeMap) {
+        return frontNoticeJpaRepository.findNoticeCount(noticeMap);
     }
 
     /**
@@ -47,12 +41,8 @@ public class FrontNoticeJpaService {
      */
     @Cacheable(value = "notice", key = "#noticeMap")
     @Transactional(readOnly = true)
-    public List<FrontNoticeDTO> findNoticeList(Map<String, Object> noticeMap) throws TspException {
-        try {
-            return frontNoticeJpaRepository.findNoticeList(noticeMap);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_NOTICE_LIST, e);
-        }
+    public List<FrontNoticeDTO> findNoticeList(Map<String, Object> noticeMap) {
+        return frontNoticeJpaRepository.findNoticeList(noticeMap);
     }
 
     /**
@@ -65,12 +55,8 @@ public class FrontNoticeJpaService {
      * </pre>
      */
     @Transactional(readOnly = true)
-    public int findFixedNoticeCount(Map<String, Object> noticeMap) throws TspException {
-        try {
-            return frontNoticeJpaRepository.findNoticeCount(noticeMap);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_NOTICE_LIST, e);
-        }
+    public int findFixedNoticeCount(Map<String, Object> noticeMap) {
+        return frontNoticeJpaRepository.findNoticeCount(noticeMap);
     }
 
     /**
@@ -84,12 +70,8 @@ public class FrontNoticeJpaService {
      */
     @Cacheable(value = "notice", key = "#noticeMap.get('topFixed')")
     @Transactional(readOnly = true)
-    public List<FrontNoticeDTO> findFixedNoticeList(Map<String, Object> noticeMap) throws TspException {
-        try {
-            return frontNoticeJpaRepository.findNoticeList(noticeMap);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_NOTICE_LIST, e);
-        }
+    public List<FrontNoticeDTO> findFixedNoticeList(Map<String, Object> noticeMap) {
+        return frontNoticeJpaRepository.findNoticeList(noticeMap);
     }
 
     /**
@@ -103,12 +85,8 @@ public class FrontNoticeJpaService {
      */
     @Cacheable(value = "notice", key = "#frontNoticeEntity.idx")
     @Transactional(readOnly = true)
-    public FrontNoticeDTO findOneNotice(FrontNoticeEntity frontNoticeEntity) throws TspException {
-        try {
-            return this.frontNoticeJpaRepository.findOneNotice(frontNoticeEntity);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_NOTICE, e);
-        }
+    public FrontNoticeDTO findOneNotice(FrontNoticeEntity frontNoticeEntity) {
+        return this.frontNoticeJpaRepository.findOneNotice(frontNoticeEntity);
     }
 
     /**
@@ -121,12 +99,8 @@ public class FrontNoticeJpaService {
      * </pre>
      */
     @Transactional(readOnly = true)
-    public FrontNoticeDTO findPrevOneNotice(FrontNoticeEntity frontNoticeEntity) throws TspException {
-        try {
-            return this.frontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_NOTICE, e);
-        }
+    public FrontNoticeDTO findPrevOneNotice(FrontNoticeEntity frontNoticeEntity) {
+        return this.frontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity);
     }
 
     /**
@@ -139,11 +113,7 @@ public class FrontNoticeJpaService {
      * </pre>
      */
     @Transactional(readOnly = true)
-    public FrontNoticeDTO findNextOneNotice(FrontNoticeEntity frontNoticeEntity) throws TspException {
-        try {
-            return this.frontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_NOTICE, e);
-        }
+    public FrontNoticeDTO findNextOneNotice(FrontNoticeEntity frontNoticeEntity) {
+        return this.frontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity);
     }
 }

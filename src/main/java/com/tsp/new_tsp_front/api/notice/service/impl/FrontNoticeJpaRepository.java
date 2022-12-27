@@ -4,18 +4,21 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tsp.new_tsp_front.api.notice.domain.FrontNoticeDTO;
 import com.tsp.new_tsp_front.api.notice.domain.FrontNoticeEntity;
+import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
+import static com.tsp.new_tsp_front.api.notice.domain.FrontNoticeEntity.toDto;
+import static com.tsp.new_tsp_front.api.notice.domain.FrontNoticeEntity.toDtoList;
 import static com.tsp.new_tsp_front.api.notice.domain.QFrontNoticeEntity.frontNoticeEntity;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
+import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_NOTICE;
 import static java.lang.Boolean.TRUE;
+import static java.util.Collections.emptyList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,13 +30,15 @@ public class FrontNoticeJpaRepository {
         String searchType = getString(noticeMap.get("searchType"), "");
         String searchKeyword = getString(noticeMap.get("searchKeyword"), "");
 
-        if ("0".equals(searchType)) {
-            return frontNoticeEntity.title.contains(searchKeyword)
-                    .or(frontNoticeEntity.description.contains(searchKeyword));
-        } else if ("1".equals(searchType)) {
-            return frontNoticeEntity.title.contains(searchKeyword);
+        if (!Objects.equals(searchKeyword, "")) {
+            return "0".equals(searchType) ?
+                    frontNoticeEntity.title.contains(searchKeyword)
+                            .or(frontNoticeEntity.description.contains(searchKeyword)) :
+                    "1".equals(searchType) ?
+                            frontNoticeEntity.title.contains(searchKeyword) :
+                            frontNoticeEntity.description.contains(searchKeyword);
         } else {
-            return frontNoticeEntity.description.contains(searchKeyword);
+            return null;
         }
     }
 
@@ -51,9 +56,9 @@ public class FrontNoticeJpaRepository {
      * 5. 작성일       : 2022. 08. 16.
      * </pre>
      */
-    public Integer findNoticeCount(Map<String, Object> noticeMap) {
+    public int findNoticeCount(Map<String, Object> noticeMap) {
         return queryFactory.selectFrom(frontNoticeEntity)
-                .where(searchNotice(noticeMap).and(fixedNotice(noticeMap))).fetch().size();
+                .where(searchNotice(noticeMap) ,fixedNotice(noticeMap)).fetch().size();
     }
 
     /**
@@ -74,10 +79,7 @@ public class FrontNoticeJpaRepository {
                 .limit(getInt(noticeMap.get("size"), 0))
                 .fetch();
 
-        noticeList.forEach(list -> noticeList.get(noticeList.indexOf(list))
-                .setRowNum(getInt(noticeMap.get("startPage"), 1) * (getInt(noticeMap.get("size"), 1)) - (2 - noticeList.indexOf(list))));
-
-        return FrontNoticeEntity.toDtoList(noticeList);
+        return noticeList != null ? toDtoList(noticeList) : emptyList();
     }
 
     /**
@@ -90,14 +92,14 @@ public class FrontNoticeJpaRepository {
      * </pre>
      */
     FrontNoticeDTO findOneNotice(FrontNoticeEntity existFrontNoticeEntity) {
-        FrontNoticeEntity findOneNotice = queryFactory
+        FrontNoticeEntity findOneNotice = Optional.ofNullable(queryFactory
                 .selectFrom(frontNoticeEntity)
                 .orderBy(frontNoticeEntity.idx.desc())
                 .where(frontNoticeEntity.idx.eq(existFrontNoticeEntity.getIdx())
                         .and(frontNoticeEntity.visible.eq("Y")))
-                .fetchOne();
+                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_NOTICE, new Throwable()));
 
-        return FrontNoticeEntity.toDto(findOneNotice);
+        return toDto(findOneNotice);
     }
 
     /**
@@ -111,14 +113,14 @@ public class FrontNoticeJpaRepository {
      */
     public FrontNoticeDTO findPrevOneNotice(FrontNoticeEntity existFrontNoticeEntity) {
         // 이전 공지사항 조회
-        FrontNoticeEntity findPrevOneNotice = queryFactory
+        FrontNoticeEntity findPrevOneNotice = Optional.ofNullable(queryFactory
                 .selectFrom(frontNoticeEntity)
                 .orderBy(frontNoticeEntity.idx.desc())
                 .where(frontNoticeEntity.idx.lt(existFrontNoticeEntity.getIdx())
                         .and(frontNoticeEntity.visible.eq("Y")))
-                .fetchFirst();
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_NOTICE, new Throwable()));
 
-        return FrontNoticeEntity.toDto(findPrevOneNotice);
+        return toDto(findPrevOneNotice);
     }
 
     /**
@@ -132,13 +134,13 @@ public class FrontNoticeJpaRepository {
      */
     public FrontNoticeDTO findNextOneNotice(FrontNoticeEntity existFrontNoticeEntity) {
         // 다음 공지사항 조회
-        FrontNoticeEntity findNextOneNotice = queryFactory
+        FrontNoticeEntity findNextOneNotice = Optional.ofNullable(queryFactory
                 .selectFrom(frontNoticeEntity)
                 .orderBy(frontNoticeEntity.idx.desc())
                 .where(frontNoticeEntity.idx.gt(existFrontNoticeEntity.getIdx())
                         .and(frontNoticeEntity.visible.eq("Y")))
-                .fetchFirst();
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_NOTICE, new Throwable()));
 
-        return FrontNoticeEntity.toDto(findNextOneNotice);
+        return toDto(findNextOneNotice);
     }
 }
