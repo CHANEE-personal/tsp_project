@@ -31,12 +31,8 @@ public class FrontModelJpaApiService {
      * </pre>
      */
     @Transactional(readOnly = true)
-    public int findModelCount(Map<String, Object> modelMap) throws TspException {
-        try {
-            return frontModelJpaRepository.findModelCount(modelMap);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL_LIST, e);
-        }
+    public int findModelCount(Map<String, Object> modelMap) {
+        return frontModelJpaRepository.findModelCount(modelMap);
     }
 
     /**
@@ -50,12 +46,8 @@ public class FrontModelJpaApiService {
      */
     @Cacheable(value = "model", key = "#modelMap")
     @Transactional(readOnly = true)
-    public List<FrontModelDTO> findModelList(Map<String, Object> modelMap) throws TspException {
-        try {
-            return frontModelJpaRepository.findModelList(modelMap);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL_LIST, e);
-        }
+    public List<FrontModelDTO> findModelList(Map<String, Object> modelMap) {
+        return frontModelJpaRepository.findModelList(modelMap);
     }
 
     /**
@@ -69,12 +61,8 @@ public class FrontModelJpaApiService {
      */
     @CachePut(value = "model", key = "#idx")
     @Transactional
-    public FrontModelDTO findOneModel(Long idx) throws TspException {
-        try {
-            return frontModelJpaRepository.findOneModel(idx);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL, e);
-        }
+    public FrontModelDTO findOneModel(Long idx) {
+        return frontModelJpaRepository.findOneModel(idx);
     }
 
     /**
@@ -88,12 +76,8 @@ public class FrontModelJpaApiService {
      */
     @CachePut(value = "model", key = "#frontModelEntity.idx")
     @Transactional
-    public FrontModelDTO findPrevOneModel(FrontModelEntity frontModelEntity) throws TspException {
-        try {
-            return frontModelJpaRepository.findPrevOneModel(frontModelEntity);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL, e);
-        }
+    public FrontModelDTO findPrevOneModel(FrontModelEntity frontModelEntity) {
+        return frontModelJpaRepository.findPrevOneModel(frontModelEntity);
     }
 
     /**
@@ -107,12 +91,8 @@ public class FrontModelJpaApiService {
      */
     @CachePut(value = "model", key = "#frontModelEntity.idx")
     @Transactional
-    public FrontModelDTO findNextOneModel(FrontModelEntity frontModelEntity) throws TspException {
-        try {
-            return frontModelJpaRepository.findNextOneModel(frontModelEntity);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL, e);
-        }
+    public FrontModelDTO findNextOneModel(FrontModelEntity frontModelEntity) {
+        return frontModelJpaRepository.findNextOneModel(frontModelEntity);
     }
 
     /**
@@ -126,12 +106,8 @@ public class FrontModelJpaApiService {
      */
     @Cacheable("mainModel")
     @Transactional(readOnly = true)
-    public List<FrontModelDTO> findMainModelList() throws TspException {
-        try {
-            return this.frontModelJpaRepository.findMainModelList();
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL_LIST, e);
-        }
+    public List<FrontModelDTO> findMainModelList() {
+        return this.frontModelJpaRepository.findMainModelList();
     }
 
     /**
@@ -144,12 +120,8 @@ public class FrontModelJpaApiService {
      * </pre>
      */
     @Transactional(readOnly = true)
-    public Integer favoriteModelCount(Long idx) throws TspException {
-        try {
-            return this.frontModelJpaRepository.favoriteModelCount(idx);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL, e);
-        }
+    public int favoriteModelCount(Long idx) {
+        return frontModelJpaRepository.findOneModel(idx).getModelFavoriteCount();
     }
 
     /**
@@ -164,48 +136,11 @@ public class FrontModelJpaApiService {
     @CachePut(value = "model", key = "#idx")
     @Modifying(clearAutomatically = true)
     @Transactional
-    public Integer favoriteModel(Long idx) throws TspException {
+    public int favoriteModel(Long idx) {
         try {
             return frontModelJpaRepository.favoriteModel(idx);
         } catch (Exception e) {
             throw new TspException(ERROR_MODEL_LIKE, e);
-        }
-    }
-
-    /**
-     * <pre>
-     * 1. MethodName : getNewModelCount
-     * 2. ClassName  : FrontModelJpaApiService.java
-     * 3. Comment    : 프론트 > 새로운 모델 리스트 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 29.
-     * </pre>
-     */
-    @Transactional(readOnly = true)
-    public int getNewModelCount(Map<String, Object> newModelMap) throws TspException {
-        try {
-            return frontModelJpaRepository.getNewModelCount(newModelMap);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL_LIST, e);
-        }
-    }
-
-    /**
-     * <pre>
-     * 1. MethodName : getNewModelList
-     * 2. ClassName  : FrontModelJpaApiService.java
-     * 3. Comment    : 프론트 > 새로운 모델 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 29.
-     * </pre>
-     */
-    @Cacheable(value = "model", key = "#newModelMap")
-    @Transactional(readOnly = true)
-    public List<FrontModelDTO> getNewModelList(Map<String, Object> newModelMap) throws TspException {
-        try {
-            return frontModelJpaRepository.getNewModelList(newModelMap);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL_LIST, e);
         }
     }
 }

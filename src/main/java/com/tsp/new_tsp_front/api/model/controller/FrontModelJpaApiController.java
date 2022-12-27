@@ -36,8 +36,8 @@ public class FrontModelJpaApiController {
      * 1. MethodName : findMainModelList
      * 2. ClassName  : FrontModelJpaApiController.java
      * 3. Comment    : 프론트 > 메인 모델 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 03. 27.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 03. 27.
      * </pre>
      */
     @ApiOperation(value = "메인 모델 배너", notes = "메인 배너 모델을 조회한다.")
@@ -63,8 +63,8 @@ public class FrontModelJpaApiController {
      * 1. MethodName : findModelList
      * 2. ClassName  : FrontModelJpaApiController.java
      * 3. Comment    : 프론트 > 모델 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 02.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 02.
      * </pre>
      */
     @ApiOperation(value = "모델 조회", notes = "모델을 조회한다.")
@@ -99,8 +99,8 @@ public class FrontModelJpaApiController {
      * 1. MethodName : findOneModel
      * 2. ClassName  : FrontModelJpaApiController.java
      * 3. Comment    : 프론트 > 모델 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 09.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 09.
      * </pre>
      */
     @ApiOperation(value = "모델 상세 조회", notes = "모델을 상세 조회한다.")
@@ -119,11 +119,11 @@ public class FrontModelJpaApiController {
 
     /**
      * <pre>
-     * 1. MethodName : getPrevModelEdit
+     * 1. MethodName : findPrevOneModel
      * 2. ClassName  : FrontModelJpaController.java
      * 3. Comment    : 이전 모델 상세
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
     @ApiOperation(value = "이전 모델 상세 조회", notes = "이전 모델을 상세 조회한다.")
@@ -135,18 +135,18 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{categoryCd}/{idx}/prev")
-    public FrontModelDTO getPrevModelEdit(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
+    public FrontModelDTO findPrevOneModel(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
                                           @PathVariable Long idx) {
         return this.frontModelJpaApiService.findPrevOneModel(FrontModelEntity.builder().idx(idx).categoryCd(categoryCd).build());
     }
 
     /**
      * <pre>
-     * 1. MethodName : getNextModelEdit
+     * 1. MethodName : findNextOneModel
      * 2. ClassName  : FrontModelJpaController.java
      * 3. Comment    : 다음 모델 상세
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
     @ApiOperation(value = "다음 모델 상세 조회", notes = "다음 모델을 상세 조회한다.")
@@ -158,7 +158,7 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{categoryCd}/{idx}/next")
-    public FrontModelDTO getNextModelEdit(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
+    public FrontModelDTO findNextOneModel(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
                                           @PathVariable Long idx) {
         return this.frontModelJpaApiService.findNextOneModel(FrontModelEntity.builder().idx(idx).categoryCd(categoryCd).build());
     }
@@ -180,9 +180,8 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
-    @PutMapping(value = "/{categoryCd}/{idx}/like")
-    public Integer favoriteModel(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
-                                 @PathVariable Long idx) {
+    @PutMapping(value = "/{idx}/like")
+    public int favoriteModel(@PathVariable Long idx) {
         return this.frontModelJpaApiService.favoriteModel(idx);
     }
 
@@ -191,8 +190,8 @@ public class FrontModelJpaApiController {
      * 1. MethodName : getNewModelList
      * 2. ClassName  : FrontModelJpaApiController.java
      * 3. Comment    : 프론트 > 새로운 모델 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 29.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 08. 29.
      * </pre>
      */
     @ApiOperation(value = "새로운 모델 조회", notes = "모델을 조회한다.")
@@ -204,20 +203,21 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists/new/{categoryCd}")
-    public Map<String, Object> getNewModelList(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
+    public Map<String, Object> findNewModelList(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
                                             @RequestParam(required = false) Map<String, Object> paramMap, Page page) {
         Map<String, Object> resultMap = new HashMap<>();
         // 페이징 및 검색
         Map<String, Object> newModelMap = searchCommon.searchCommon(page, paramMap);
         newModelMap.put("categoryCd", categoryCd);
+        newModelMap.put("newYn", "Y");
 
         // 리스트 수
         resultMap.put("pageSize", page.getSize());
         // 전체 페이지 수
-        resultMap.put("perPageListCnt", ceil((double) this.frontModelJpaApiService.getNewModelCount(newModelMap) / page.getSize()));
+        resultMap.put("perPageListCnt", ceil((double) this.frontModelJpaApiService.findModelCount(newModelMap) / page.getSize()));
         // 전체 아이템 수
-        resultMap.put("newModelListTotalCnt", this.frontModelJpaApiService.getNewModelCount(newModelMap));
-        resultMap.put("newModelList", this.frontModelJpaApiService.getNewModelList(newModelMap));
+        resultMap.put("newModelListTotalCnt", this.frontModelJpaApiService.findModelList(newModelMap));
+        resultMap.put("newModelList", this.frontModelJpaApiService.findModelList(newModelMap));
 
         return resultMap;
     }
