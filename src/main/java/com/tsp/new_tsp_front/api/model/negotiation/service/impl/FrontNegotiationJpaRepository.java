@@ -6,6 +6,7 @@ import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.domain.negotiation.FrontNegotiationDTO;
 import com.tsp.new_tsp_front.api.model.domain.negotiation.FrontNegotiationEntity;
+import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -13,15 +14,18 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.tsp.new_tsp_front.api.model.domain.QFrontModelEntity.frontModelEntity;
+import static com.tsp.new_tsp_front.api.model.domain.negotiation.FrontNegotiationEntity.toDto;
+import static com.tsp.new_tsp_front.api.model.domain.negotiation.FrontNegotiationEntity.toDtoList;
 import static com.tsp.new_tsp_front.api.model.domain.negotiation.QFrontNegotiationEntity.frontNegotiationEntity;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
+import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_MODEL_NEGOTIATION;
 import static java.time.LocalDate.now;
 import static java.time.LocalDateTime.of;
+import static java.util.Collections.emptyList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -35,11 +39,9 @@ public class FrontNegotiationJpaRepository {
         LocalDateTime searchStartTime = negotiationMap.get("searchStartTime") != null ? (LocalDateTime) negotiationMap.get("searchStartTime") : now().minusDays(now().getDayOfMonth() - 1).atStartOfDay();
         LocalDateTime searchEndTime = negotiationMap.get("searchEndTime") != null ? (LocalDateTime) negotiationMap.get("searchStartTime") : of(now().minusDays(now().getDayOfMonth()).plusMonths(1), LocalTime.of(23, 59, 59));
 
-        if (!"".equals(searchKeyword)) {
-            return frontNegotiationEntity.modelNegotiationDesc.contains(searchKeyword);
-        } else {
-            return frontNegotiationEntity.modelNegotiationDate.between(searchStartTime, searchEndTime);
-        }
+        return !Objects.equals(searchKeyword, "") ?
+                frontNegotiationEntity.modelNegotiationDesc.contains(searchKeyword) :
+                frontNegotiationEntity.modelNegotiationDate.between(searchStartTime, searchEndTime);
     }
 
     /**
@@ -51,7 +53,7 @@ public class FrontNegotiationJpaRepository {
      * 5. 작성일       : 2022. 09. 11.
      * </pre>
      */
-    public Integer findNegotiationCount(Map<String, Object> negotiationMap) {
+    public int findNegotiationCount(Map<String, Object> negotiationMap) {
         return queryFactory.selectFrom(frontNegotiationEntity)
                 .where(searchNegotiation(negotiationMap))
                 .fetch().size();
@@ -76,10 +78,7 @@ public class FrontNegotiationJpaRepository {
                 .limit(getInt(negotiationMap.get("size"), 0))
                 .fetch();
 
-        modelNegotiationList.forEach(list -> modelNegotiationList.get(modelNegotiationList.indexOf(list))
-                .setRowNum(getInt(negotiationMap.get("startPage"), 1) * (getInt(negotiationMap.get("size"), 1)) - (2 - modelNegotiationList.indexOf(list))));
-
-        return FrontNegotiationEntity.toDtoList(modelNegotiationList);
+        return modelNegotiationList != null ? toDtoList(modelNegotiationList) : emptyList();
     }
 
     /**
@@ -92,14 +91,14 @@ public class FrontNegotiationJpaRepository {
      * </pre>
      */
     public FrontNegotiationDTO findOneNegotiation(FrontNegotiationEntity existFrontNegotiationEntity) {
-        FrontNegotiationEntity findOneNegotiation = queryFactory
+        FrontNegotiationEntity findOneNegotiation = Optional.ofNullable(queryFactory
                 .selectFrom(frontNegotiationEntity)
                 .orderBy(frontNegotiationEntity.idx.desc())
                 .where(frontNegotiationEntity.visible.eq("Y")
                         .and(frontNegotiationEntity.idx.eq(existFrontNegotiationEntity.getIdx())))
-                .fetchOne();
+                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_MODEL_NEGOTIATION, new Throwable()));
 
-        return FrontNegotiationEntity.toDto(findOneNegotiation);
+        return toDto(findOneNegotiation);
     }
 
     /**
@@ -112,7 +111,7 @@ public class FrontNegotiationJpaRepository {
      * </pre>
      */
     public FrontModelDTO findOneModelNegotiation(FrontNegotiationEntity existFrontNegotiationEntity) {
-        FrontModelEntity findOneModelNegotiation = queryFactory
+        FrontModelEntity findOneModelNegotiation = Optional.ofNullable(queryFactory
                 .selectFrom(frontModelEntity)
                 .leftJoin(frontModelEntity.modelNegotiationList, frontNegotiationEntity)
                 .fetchJoin()
@@ -120,9 +119,8 @@ public class FrontNegotiationJpaRepository {
                         .and(frontNegotiationEntity.visible.eq("Y"))
                         .and(frontModelEntity.idx.eq(existFrontNegotiationEntity.getModelIdx()))
                         .and(frontNegotiationEntity.idx.eq(existFrontNegotiationEntity.getIdx())))
-                .fetchOne();
+                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_MODEL_NEGOTIATION, new Throwable()));
 
-        assert findOneModelNegotiation != null;
         return FrontModelEntity.toDto(findOneModelNegotiation);
     }
 
@@ -137,7 +135,7 @@ public class FrontNegotiationJpaRepository {
      */
     public FrontNegotiationDTO insertModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) {
         em.persist(frontNegotiationEntity);
-        return FrontNegotiationEntity.toDto(frontNegotiationEntity);
+        return toDto(frontNegotiationEntity);
     }
 
     /**
@@ -153,7 +151,7 @@ public class FrontNegotiationJpaRepository {
         em.merge(existFrontNegotiationEntity);
         em.flush();
         em.clear();
-        return FrontNegotiationEntity.toDto(existFrontNegotiationEntity);
+        return toDto(existFrontNegotiationEntity);
     }
 
     /**

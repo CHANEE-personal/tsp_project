@@ -1,7 +1,6 @@
 package com.tsp.new_tsp_front.api.agency.service;
 
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyDTO;
-import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
 import com.tsp.new_tsp_front.api.agency.service.impl.FrontAgencyJpaRepository;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +30,8 @@ public class FrontAgencyJpaService {
      * </pre>
      */
     @Transactional(readOnly = true)
-    public int findAgencyCount(Map<String, Object> agencyMap) throws TspException {
-        try {
-            return frontAgencyJpaRepository.findAgencyCount(agencyMap);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_AGENCY_LIST, e);
-        }
+    public int findAgencyCount(Map<String, Object> agencyMap) {
+        return frontAgencyJpaRepository.findAgencyCount(agencyMap);
     }
 
     /**
@@ -50,12 +45,8 @@ public class FrontAgencyJpaService {
      */
     @Cacheable(value = "agency", key = "#agencyMap")
     @Transactional(readOnly = true)
-    public List<FrontAgencyDTO> findAgencyList(Map<String, Object> agencyMap) throws TspException {
-        try {
-            return frontAgencyJpaRepository.findAgencyList(agencyMap);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_AGENCY_LIST, e);
-        }
+    public List<FrontAgencyDTO> findAgencyList(Map<String, Object> agencyMap) {
+        return frontAgencyJpaRepository.findAgencyList(agencyMap);
     }
 
     /**
@@ -63,18 +54,14 @@ public class FrontAgencyJpaService {
      * 1. MethodName : findOneAgency
      * 2. ClassName  : FrontAgencyJpaService.java
      * 3. Comment    : 프론트 > Agency 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 24.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 08. 24.
      * </pre>
      */
     @Cacheable(value = "agency", key = "#idx")
     @Transactional(readOnly = true)
     public FrontAgencyDTO findOneAgency(Long idx) throws TspException {
-        try {
-            return this.frontAgencyJpaRepository.findOneAgency(idx);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_AGENCY, e);
-        }
+        return this.frontAgencyJpaRepository.findOneAgency(idx);
     }
 
     /**
@@ -82,18 +69,14 @@ public class FrontAgencyJpaService {
      * 1. MethodName : findPrevOneAgency
      * 2. ClassName  : FrontAgencyJpaService.java
      * 3. Comment    : 프론트 > 이전 Agency 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
     @Cacheable(value = "agency", key = "#idx")
     @Transactional(readOnly = true)
     public FrontAgencyDTO findPrevOneAgency(Long idx) throws TspException {
-        try {
-            return this.frontAgencyJpaRepository.findPrevOneAgency(idx);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_AGENCY, e);
-        }
+        return this.frontAgencyJpaRepository.findPrevOneAgency(idx);
     }
 
     /**
@@ -117,24 +100,6 @@ public class FrontAgencyJpaService {
 
     /**
      * <pre>
-     * 1. MethodName : favoriteAgencyCount
-     * 2. ClassName  : FrontAgencyJpaService.java
-     * 3. Comment    : 프론트 > Agency 좋아요 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 24.
-     * </pre>
-     */
-    @Transactional(readOnly = true)
-    public int favoriteModelCount(Long idx) throws TspException {
-        try {
-            return this.frontAgencyJpaRepository.favoriteAgencyCount(idx);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_AGENCY, e);
-        }
-    }
-
-    /**
-     * <pre>
      * 1. MethodName : favoriteAgency
      * 2. ClassName  : FrontAgencyJpaService.java
      * 3. Comment    : 프론트 > Agency 좋아요
@@ -145,7 +110,7 @@ public class FrontAgencyJpaService {
     @CachePut(value = "agency", key = "#idx")
     @Modifying(clearAutomatically = true)
     @Transactional
-    public int favoriteAgency(Long idx) throws TspException {
+    public int favoriteAgency(Long idx) {
         try {
             return frontAgencyJpaRepository.favoriteAgency(idx);
         } catch (Exception e) {
