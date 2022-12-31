@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_front.api.portfolio.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCodeEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonMappedClass;
@@ -56,16 +57,18 @@ public class FrontPortFolioEntity extends NewCommonMappedClass {
     private String videoUrl;
 
     @Column(name = "view_count")
-    private Integer viewCount;
+    private int viewCount;
 
     @Column(name = "visible")
     @NotEmpty(message = "포트폴리오 노출 여부 선택은 필수입니다.")
     private String visible;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "category_cd", insertable = false, updatable = false)
     private NewCodeEntity newPortFolioJpaDTO;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "frontPortFolioEntity", fetch = LAZY)
     private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 

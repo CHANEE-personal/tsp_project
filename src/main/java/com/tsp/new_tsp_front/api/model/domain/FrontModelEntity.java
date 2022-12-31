@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_front.api.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCodeEntity;
@@ -127,22 +128,27 @@ public class FrontModelEntity extends NewCommonMappedClass {
     @Convert(converter = CustomConverter.class)
     private ArrayList<CareerJson> careerList;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "category_cd", insertable = false, updatable = false)
     private NewCodeEntity newModelCodeJpaDTO;
 
+    @JsonIgnore
     @BatchSize(size = 5)
     @Where(clause = "type_name = 'model'")
     @OneToMany(mappedBy = "frontModelEntity", fetch = LAZY, cascade = REMOVE)
     private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 
+    @JsonIgnore
     @OneToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn(name = "agency_idx", referencedColumnName = "idx", insertable = false, updatable = false)
     private FrontAgencyEntity frontAgencyEntity;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "frontModelEntity", fetch = LAZY)
     private List<FrontScheduleEntity> modelScheduleList = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "frontModelEntity", fetch = LAZY)
     private List<FrontNegotiationEntity> modelNegotiationList = new ArrayList<>();
 

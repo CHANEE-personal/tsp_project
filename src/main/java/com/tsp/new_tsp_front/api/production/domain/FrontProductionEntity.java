@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_front.api.production.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonMappedClass;
 import lombok.*;
@@ -41,12 +42,13 @@ public class FrontProductionEntity extends NewCommonMappedClass {
     private String description;
 
     @Column(name = "view_count")
-    private Integer viewCount;
+    private int viewCount;
 
     @Column(name = "visible")
     @NotEmpty(message = "프로덕션 노출 여부 선택은 필수입니다.")
     private String visible;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "frontProductionEntity", fetch = LAZY)
     private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 

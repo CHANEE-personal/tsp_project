@@ -74,7 +74,7 @@ public class FrontNoticeJpaRepository {
         List<FrontNoticeEntity> noticeList = queryFactory
                 .selectFrom(frontNoticeEntity)
                 .orderBy(frontNoticeEntity.idx.desc())
-                .where(searchNotice(noticeMap).and(fixedNotice(noticeMap)))
+                .where(searchNotice(noticeMap), fixedNotice(noticeMap))
                 .offset(getInt(noticeMap.get("jpaStartPage"), 0))
                 .limit(getInt(noticeMap.get("size"), 0))
                 .fetch();

@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_front.api.common.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -39,6 +40,7 @@ public class NewCodeEntity extends NewCommonMappedClass {
     @Column(name = "cmm_type")
     private String cmmType;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "newModelCodeJpaDTO", cascade = MERGE, fetch = LAZY)
     private List<FrontModelEntity> frontModelEntityList = new ArrayList<>();
 }
