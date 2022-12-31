@@ -19,7 +19,6 @@ import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
 import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_PRODUCTION;
 import static java.util.Collections.emptyList;
-import static java.util.Objects.requireNonNull;
 
 @Repository
 @RequiredArgsConstructor
