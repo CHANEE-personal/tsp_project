@@ -45,7 +45,7 @@ public class FrontPortFolioDTO extends NewCommonDTO {
     private String description;
 
     @ApiModelProperty(value = "viewCount")
-    private Integer viewCount;
+    private int viewCount;
 
     @ApiModelProperty(required = true, value = "visible")
     private String visible;

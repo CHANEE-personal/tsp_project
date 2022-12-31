@@ -31,7 +31,7 @@ public class FrontNoticeDTO extends NewCommonDTO {
     private String description;
 
     @ApiModelProperty(required = true, value = "viewCount")
-    private Integer viewCount;
+    private int viewCount;
 
     @NotEmpty(message = "공지사항 노출 여부 선택은 필수입니다.")
     @ApiModelProperty(required = true, value = "visible")

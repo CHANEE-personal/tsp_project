@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_front.api.agency.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonMappedClass;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
@@ -43,15 +44,17 @@ public class FrontAgencyEntity extends NewCommonMappedClass {
     private String agencyDescription;
 
     @Column(name = "favorite_count")
-    private Integer favoriteCount;
+    private int favoriteCount;
 
     @Column(name = "visible")
     @NotEmpty(message = "소속사 노출 여부 선택은 필수입니다.")
     private String visible;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "frontAgencyEntity")
     private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 
+    @JsonIgnore
     @OneToOne(mappedBy = "frontAgencyEntity", cascade = ALL, fetch = LAZY)
     private FrontModelEntity frontModelEntity;
 

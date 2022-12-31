@@ -34,7 +34,7 @@ public class FrontAgencyDTO extends NewCommonDTO {
     private String agencyDescription;
 
     @ApiModelProperty(value = "favoriteCount")
-    private Integer favoriteCount;
+    private int favoriteCount;
 
     @NotEmpty(message = "소속사 노출 여부 선택은 필수입니다.")
     @ApiModelProperty(required = true, value = "visible")

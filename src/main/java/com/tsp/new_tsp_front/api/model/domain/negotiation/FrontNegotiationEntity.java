@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_front.api.model.domain.negotiation;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonMappedClass;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import io.swagger.annotations.ApiModelProperty;
@@ -70,6 +71,7 @@ public class FrontNegotiationEntity extends NewCommonMappedClass {
     @NotEmpty(message = "모델 섭외 노출 여부 선택은 필수입니다.")
     private String visible;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "model_idx", referencedColumnName = "idx", insertable = false, updatable = false)
     private FrontModelEntity frontModelEntity;
