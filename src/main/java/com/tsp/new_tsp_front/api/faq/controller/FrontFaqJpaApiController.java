@@ -1,7 +1,6 @@
 package com.tsp.new_tsp_front.api.faq.controller;
 
 import com.tsp.new_tsp_front.api.faq.domain.FrontFaqDTO;
-import com.tsp.new_tsp_front.api.faq.domain.FrontFaqEntity;
 import com.tsp.new_tsp_front.api.faq.service.FrontFaqJpaService;
 import com.tsp.new_tsp_front.common.SearchCommon;
 import com.tsp.new_tsp_front.common.paging.Page;

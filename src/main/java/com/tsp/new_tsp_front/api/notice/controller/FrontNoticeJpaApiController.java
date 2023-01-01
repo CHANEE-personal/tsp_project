@@ -1,7 +1,6 @@
 package com.tsp.new_tsp_front.api.notice.controller;
 
 import com.tsp.new_tsp_front.api.notice.domain.FrontNoticeDTO;
-import com.tsp.new_tsp_front.api.notice.domain.FrontNoticeEntity;
 import com.tsp.new_tsp_front.api.notice.service.impl.FrontNoticeJpaService;
 import com.tsp.new_tsp_front.common.SearchCommon;
 import com.tsp.new_tsp_front.common.paging.Page;
