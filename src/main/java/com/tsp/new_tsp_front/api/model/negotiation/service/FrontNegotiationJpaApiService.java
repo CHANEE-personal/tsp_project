@@ -60,10 +60,10 @@ public class FrontNegotiationJpaApiService {
      * 5. 작성일       : 2022. 09. 11.
      * </pre>
      */
-    @Cacheable(value = "negotiation", key = "#frontNegotiationEntity.idx")
+    @Cacheable(value = "negotiation", key = "#idx")
     @Transactional(readOnly = true)
-    public FrontNegotiationDTO findOneNegotiation(FrontNegotiationEntity frontNegotiationEntity) {
-        return frontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity);
+    public FrontNegotiationDTO findOneNegotiation(Long idx) {
+        return frontNegotiationJpaRepository.findOneNegotiation(idx);
     }
 
     /**

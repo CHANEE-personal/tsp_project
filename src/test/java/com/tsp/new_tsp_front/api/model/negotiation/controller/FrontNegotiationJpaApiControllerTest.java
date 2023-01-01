@@ -131,7 +131,7 @@ class FrontNegotiationJpaApiControllerTest {
                                 fieldWithPath("modelIdx").type(NUMBER).description(1),
                                 fieldWithPath("modelNegotiationDesc").type(STRING).description("영화 프로젝트 참여")
                         )))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.modelIdx").value(1))
                 .andExpect(jsonPath("$.modelNegotiationDesc").value("영화 프로젝트 참여"));
@@ -204,7 +204,7 @@ class FrontNegotiationJpaApiControllerTest {
 
         mockMvc.perform(delete("/api/negotiation/{idx}", frontNegotiationEntity.getIdx()))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(content().string(getString(frontNegotiationEntity.getIdx())));
     }

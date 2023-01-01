@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -45,19 +46,19 @@ public class FrontProductionJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists")
-    public Map<String, Object> findProductionList(@RequestParam(required = false) Map<String, Object> paramMap, Page page) {
+    public ResponseEntity<Map<String, Object>> findProductionList(@RequestParam(required = false) Map<String, Object> paramMap, Page page) {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> productionMap = searchCommon.searchCommon(page, paramMap);
 
         // 리스트 수
         resultMap.put("pageSize", page.getSize());
         // 전체 페이지 수
-        resultMap.put("perPageListCnt", ceil((double)this.frontProductionJpaApiService.findProductionCount(productionMap) / page.getSize()));
+        resultMap.put("perPageListCnt", ceil((double) this.frontProductionJpaApiService.findProductionCount(productionMap) / page.getSize()));
         // 전체 아이템 수
         resultMap.put("productionListTotalCnt", this.frontProductionJpaApiService.findProductionList(productionMap));
         resultMap.put("productionList", this.frontProductionJpaApiService.findProductionList(productionMap));
 
-        return resultMap;
+        return ResponseEntity.ok().body(resultMap);
     }
 
     /**
@@ -71,15 +72,15 @@ public class FrontProductionJpaApiController {
      */
     @ApiOperation(value = "프로덕션 상세 조회", notes = "프로덕션을 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "프로덕션 상세 조회 성공", response = Map.class),
+            @ApiResponse(code = 200, message = "프로덕션 상세 조회 성공", response = FrontProductionDTO.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/{idx}")
-    public FrontProductionDTO findOneProduction(@PathVariable Long idx) {
-        return this.frontProductionJpaApiService.findOneProduction(idx);
+    public ResponseEntity<FrontProductionDTO> findOneProduction(@PathVariable Long idx) {
+        return ResponseEntity.ok(frontProductionJpaApiService.findOneProduction(idx));
     }
 
     /**
@@ -93,15 +94,15 @@ public class FrontProductionJpaApiController {
      */
     @ApiOperation(value = "이전 프로덕션 상세 조회", notes = "이전 프로덕션을 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "이전 프로덕션 상세조회 성공", response = Map.class),
+            @ApiResponse(code = 200, message = "이전 프로덕션 상세조회 성공", response = FrontProductionDTO.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}/prev")
-    public FrontProductionDTO findPrevOneProduction(@PathVariable Long idx) {
-        return this.frontProductionJpaApiService.findPrevOneProduction(idx);
+    public ResponseEntity<FrontProductionDTO> findPrevOneProduction(@PathVariable Long idx) {
+        return ResponseEntity.ok(frontProductionJpaApiService.findPrevOneProduction(idx));
     }
 
     /**
@@ -115,14 +116,14 @@ public class FrontProductionJpaApiController {
      */
     @ApiOperation(value = "다음 프로덕션 상세 조회", notes = "다음 프로덕션을 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "다음 프로덕션 상세조회 성공", response = Map.class),
+            @ApiResponse(code = 200, message = "다음 프로덕션 상세조회 성공", response = FrontProductionDTO.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}/next")
-    public FrontProductionDTO findNextOneProduction(@PathVariable Long idx) {
-        return this.frontProductionJpaApiService.findNextOneProduction(idx);
+    public ResponseEntity<FrontProductionDTO> findNextOneProduction(@PathVariable Long idx) {
+        return ResponseEntity.ok(frontProductionJpaApiService.findNextOneProduction(idx));
     }
 }

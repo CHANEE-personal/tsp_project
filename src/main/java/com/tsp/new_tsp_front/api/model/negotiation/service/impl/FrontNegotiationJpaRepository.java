@@ -90,12 +90,12 @@ public class FrontNegotiationJpaRepository {
      * 5. 작성일       : 2022. 09. 11.
      * </pre>
      */
-    public FrontNegotiationDTO findOneNegotiation(FrontNegotiationEntity existFrontNegotiationEntity) {
+    public FrontNegotiationDTO findOneNegotiation(Long idx) {
         FrontNegotiationEntity findOneNegotiation = Optional.ofNullable(queryFactory
                 .selectFrom(frontNegotiationEntity)
                 .orderBy(frontNegotiationEntity.idx.desc())
                 .where(frontNegotiationEntity.visible.eq("Y")
-                        .and(frontNegotiationEntity.idx.eq(existFrontNegotiationEntity.getIdx())))
+                        .and(frontNegotiationEntity.idx.eq(idx)))
                 .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_MODEL_NEGOTIATION, new Throwable()));
 
         return toDto(findOneNegotiation);

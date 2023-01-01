@@ -83,10 +83,10 @@ public class FrontNoticeJpaService {
      * 5. 작성일       : 2022. 08. 16.
      * </pre>
      */
-    @Cacheable(value = "notice", key = "#frontNoticeEntity.idx")
+    @Cacheable(value = "notice", key = "#idx")
     @Transactional(readOnly = true)
-    public FrontNoticeDTO findOneNotice(FrontNoticeEntity frontNoticeEntity) {
-        return this.frontNoticeJpaRepository.findOneNotice(frontNoticeEntity);
+    public FrontNoticeDTO findOneNotice(Long idx) {
+        return this.frontNoticeJpaRepository.findOneNotice(idx);
     }
 
     /**
@@ -99,8 +99,8 @@ public class FrontNoticeJpaService {
      * </pre>
      */
     @Transactional(readOnly = true)
-    public FrontNoticeDTO findPrevOneNotice(FrontNoticeEntity frontNoticeEntity) {
-        return this.frontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity);
+    public FrontNoticeDTO findPrevOneNotice(Long idx) {
+        return this.frontNoticeJpaRepository.findPrevOneNotice(idx);
     }
 
     /**
@@ -113,7 +113,7 @@ public class FrontNoticeJpaService {
      * </pre>
      */
     @Transactional(readOnly = true)
-    public FrontNoticeDTO findNextOneNotice(FrontNoticeEntity frontNoticeEntity) {
-        return this.frontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity);
+    public FrontNoticeDTO findNextOneNotice(Long idx) {
+        return this.frontNoticeJpaRepository.findNextOneNotice(idx);
     }
 }
