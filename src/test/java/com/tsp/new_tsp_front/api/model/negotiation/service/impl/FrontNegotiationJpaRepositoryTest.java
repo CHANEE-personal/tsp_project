@@ -218,8 +218,8 @@ class FrontNegotiationJpaRepositoryTest {
         frontNegotiationJpaRepository.insertModelNegotiation(frontNegotiationEntity);
 
         // when
-        when(mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity)).thenReturn(frontNegotiationDTO);
-        FrontNegotiationDTO negotiationInfo = mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity);
+        when(mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity.getIdx())).thenReturn(frontNegotiationDTO);
+        FrontNegotiationDTO negotiationInfo = mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity.getIdx());
 
         // then
         assertThat(negotiationInfo.getModelIdx()).isEqualTo(frontModelEntity.getIdx());
@@ -227,12 +227,12 @@ class FrontNegotiationJpaRepositoryTest {
         assertThat(negotiationInfo.getModelNegotiationDesc()).isNotNull();
 
         // verify
-        verify(mockFrontNegotiationJpaRepository, times(1)).findOneNegotiation(frontNegotiationEntity);
-        verify(mockFrontNegotiationJpaRepository, atLeastOnce()).findOneNegotiation(frontNegotiationEntity);
+        verify(mockFrontNegotiationJpaRepository, times(1)).findOneNegotiation(frontNegotiationEntity.getIdx());
+        verify(mockFrontNegotiationJpaRepository, atLeastOnce()).findOneNegotiation(frontNegotiationEntity.getIdx());
         verifyNoMoreInteractions(mockFrontNegotiationJpaRepository);
 
         InOrder inOrder = inOrder(mockFrontNegotiationJpaRepository);
-        inOrder.verify(mockFrontNegotiationJpaRepository).findOneNegotiation(frontNegotiationEntity);
+        inOrder.verify(mockFrontNegotiationJpaRepository).findOneNegotiation(frontNegotiationEntity.getIdx());
     }
 
     @Test
@@ -242,8 +242,8 @@ class FrontNegotiationJpaRepositoryTest {
         frontNegotiationJpaRepository.insertModelNegotiation(frontNegotiationEntity);
 
         // when
-        given(mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity)).willReturn(frontNegotiationDTO);
-        FrontNegotiationDTO negotiationInfo = mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity);
+        given(mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity.getIdx())).willReturn(frontNegotiationDTO);
+        FrontNegotiationDTO negotiationInfo = mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity.getIdx());
 
         // then
         assertThat(negotiationInfo.getModelIdx()).isEqualTo(frontModelEntity.getIdx());
@@ -251,8 +251,8 @@ class FrontNegotiationJpaRepositoryTest {
         assertThat(negotiationInfo.getModelNegotiationDesc()).isNotNull();
 
         // verify
-        then(mockFrontNegotiationJpaRepository).should(times(1)).findOneNegotiation(frontNegotiationEntity);
-        then(mockFrontNegotiationJpaRepository).should(atLeastOnce()).findOneNegotiation(frontNegotiationEntity);
+        then(mockFrontNegotiationJpaRepository).should(times(1)).findOneNegotiation(frontNegotiationEntity.getIdx());
+        then(mockFrontNegotiationJpaRepository).should(atLeastOnce()).findOneNegotiation(frontNegotiationEntity.getIdx());
         then(mockFrontNegotiationJpaRepository).shouldHaveNoMoreInteractions();
     }
 
@@ -279,20 +279,20 @@ class FrontNegotiationJpaRepositoryTest {
         frontNegotiationJpaRepository.updateModelNegotiation(frontNegotiationEntity);
 
         // when
-        when(mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity)).thenReturn(frontNegotiationDTO);
-        FrontNegotiationDTO negotiationInfo = mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity);
+        when(mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity.getIdx())).thenReturn(frontNegotiationDTO);
+        FrontNegotiationDTO negotiationInfo = mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity.getIdx());
 
         // then
         assertThat(negotiationInfo.getModelIdx()).isEqualTo(frontModelEntity.getIdx());
         assertThat(negotiationInfo.getModelNegotiationDesc()).isEqualTo("섭외 수정 테스트");
 
         // verify
-        verify(mockFrontNegotiationJpaRepository, times(1)).findOneNegotiation(frontNegotiationEntity);
-        verify(mockFrontNegotiationJpaRepository, atLeastOnce()).findOneNegotiation(frontNegotiationEntity);
+        verify(mockFrontNegotiationJpaRepository, times(1)).findOneNegotiation(frontNegotiationEntity.getIdx());
+        verify(mockFrontNegotiationJpaRepository, atLeastOnce()).findOneNegotiation(frontNegotiationEntity.getIdx());
         verifyNoMoreInteractions(mockFrontNegotiationJpaRepository);
 
         InOrder inOrder = inOrder(mockFrontNegotiationJpaRepository);
-        inOrder.verify(mockFrontNegotiationJpaRepository).findOneNegotiation(frontNegotiationEntity);
+        inOrder.verify(mockFrontNegotiationJpaRepository).findOneNegotiation(frontNegotiationEntity.getIdx());
     }
 
     @Test
@@ -318,16 +318,16 @@ class FrontNegotiationJpaRepositoryTest {
         frontNegotiationJpaRepository.updateModelNegotiation(frontNegotiationEntity);
 
         // when
-        given(mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity)).willReturn(frontNegotiationDTO);
-        FrontNegotiationDTO negotiationInfo = mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity);
+        given(mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity.getIdx())).willReturn(frontNegotiationDTO);
+        FrontNegotiationDTO negotiationInfo = mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity.getIdx());
 
         // then
         assertThat(negotiationInfo.getModelIdx()).isEqualTo(frontModelEntity.getIdx());
         assertThat(negotiationInfo.getModelNegotiationDesc()).isEqualTo("섭외 수정 테스트");
 
         // verify
-        then(mockFrontNegotiationJpaRepository).should(times(1)).findOneNegotiation(frontNegotiationEntity);
-        then(mockFrontNegotiationJpaRepository).should(atLeastOnce()).findOneNegotiation(frontNegotiationEntity);
+        then(mockFrontNegotiationJpaRepository).should(times(1)).findOneNegotiation(frontNegotiationEntity.getIdx());
+        then(mockFrontNegotiationJpaRepository).should(atLeastOnce()).findOneNegotiation(frontNegotiationEntity.getIdx());
         then(mockFrontNegotiationJpaRepository).shouldHaveNoMoreInteractions();
     }
 
@@ -339,19 +339,19 @@ class FrontNegotiationJpaRepositoryTest {
         frontNegotiationDTO = FrontNegotiationEntity.toDto(frontNegotiationEntity);
 
         // when
-        when(mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity)).thenReturn(frontNegotiationDTO);
+        when(mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity.getIdx())).thenReturn(frontNegotiationDTO);
         Long deleteIdx = frontNegotiationJpaRepository.deleteModelNegotiation(frontNegotiationEntity.getIdx());
 
         // then
-        assertThat(mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity).getIdx()).isEqualTo(deleteIdx);
+        assertThat(mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity.getIdx()).getIdx()).isEqualTo(deleteIdx);
 
         // verify
-        verify(mockFrontNegotiationJpaRepository, times(1)).findOneNegotiation(frontNegotiationEntity);
-        verify(mockFrontNegotiationJpaRepository, atLeastOnce()).findOneNegotiation(frontNegotiationEntity);
+        verify(mockFrontNegotiationJpaRepository, times(1)).findOneNegotiation(frontNegotiationEntity.getIdx());
+        verify(mockFrontNegotiationJpaRepository, atLeastOnce()).findOneNegotiation(frontNegotiationEntity.getIdx());
         verifyNoMoreInteractions(mockFrontNegotiationJpaRepository);
 
         InOrder inOrder = inOrder(mockFrontNegotiationJpaRepository);
-        inOrder.verify(mockFrontNegotiationJpaRepository).findOneNegotiation(frontNegotiationEntity);
+        inOrder.verify(mockFrontNegotiationJpaRepository).findOneNegotiation(frontNegotiationEntity.getIdx());
     }
 
     @Test
@@ -362,15 +362,15 @@ class FrontNegotiationJpaRepositoryTest {
         frontNegotiationDTO = FrontNegotiationEntity.toDto(frontNegotiationEntity);
 
         // when
-        given(mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity)).willReturn(frontNegotiationDTO);
+        given(mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity.getIdx())).willReturn(frontNegotiationDTO);
         Long deleteIdx = frontNegotiationJpaRepository.deleteModelNegotiation(frontNegotiationEntity.getIdx());
 
         // then
-        assertThat(mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity).getIdx()).isEqualTo(deleteIdx);
+        assertThat(mockFrontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity.getIdx()).getIdx()).isEqualTo(deleteIdx);
 
         // verify
-        then(mockFrontNegotiationJpaRepository).should(times(1)).findOneNegotiation(frontNegotiationEntity);
-        then(mockFrontNegotiationJpaRepository).should(atLeastOnce()).findOneNegotiation(frontNegotiationEntity);
+        then(mockFrontNegotiationJpaRepository).should(times(1)).findOneNegotiation(frontNegotiationEntity.getIdx());
+        then(mockFrontNegotiationJpaRepository).should(atLeastOnce()).findOneNegotiation(frontNegotiationEntity.getIdx());
         then(mockFrontNegotiationJpaRepository).shouldHaveNoMoreInteractions();
     }
 }

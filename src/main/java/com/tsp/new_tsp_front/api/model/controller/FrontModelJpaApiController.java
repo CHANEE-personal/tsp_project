@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -49,13 +50,13 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists/main")
-    public Map<String, Object> findMainModelList() {
+    public ResponseEntity<Map<String, Object>> findMainModelList() {
         Map<String, Object> mainModelMap = new HashMap<>();
 
         // 전체 아이템 수
         mainModelMap.put("modelListTotalCnt", this.frontModelJpaApiService.findMainModelList().size());
         mainModelMap.put("modelList", this.frontModelJpaApiService.findMainModelList());
-        return mainModelMap;
+        return ResponseEntity.ok().body(mainModelMap);
     }
 
     /**
@@ -76,8 +77,8 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists/{categoryCd}")
-    public Map<String, Object> findModelList(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
-                                            @RequestParam(required = false) Map<String, Object> paramMap, Page page) {
+    public ResponseEntity<Map<String, Object>> findModelList(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
+                                                             @RequestParam(required = false) Map<String, Object> paramMap, Page page) {
         Map<String, Object> resultMap = new HashMap<>();
         // 페이징 및 검색
         Map<String, Object> modelMap = searchCommon.searchCommon(page, paramMap);
@@ -91,7 +92,7 @@ public class FrontModelJpaApiController {
         resultMap.put("modelListTotalCnt", this.frontModelJpaApiService.findModelCount(modelMap));
         resultMap.put("modelList", this.frontModelJpaApiService.findModelList(modelMap));
 
-        return resultMap;
+        return ResponseEntity.ok().body(resultMap);
     }
 
     /**
@@ -105,16 +106,15 @@ public class FrontModelJpaApiController {
      */
     @ApiOperation(value = "모델 상세 조회", notes = "모델을 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "모델 상세 조회 성공", response = Map.class),
+            @ApiResponse(code = 200, message = "모델 상세 조회 성공", response = FrontModelDTO.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/{categoryCd}/{idx}")
-    public FrontModelDTO findOneModel(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
-                                      @PathVariable Long idx) {
-        return this.frontModelJpaApiService.findOneModel(idx);
+    public ResponseEntity<FrontModelDTO> findOneModel(@PathVariable Long idx) {
+        return ResponseEntity.ok(frontModelJpaApiService.findOneModel(idx));
     }
 
     /**
@@ -128,16 +128,16 @@ public class FrontModelJpaApiController {
      */
     @ApiOperation(value = "이전 모델 상세 조회", notes = "이전 모델을 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "이전 모델 상세조회 성공", response = Map.class),
+            @ApiResponse(code = 200, message = "이전 모델 상세조회 성공", response = FrontModelDTO.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{categoryCd}/{idx}/prev")
-    public FrontModelDTO findPrevOneModel(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
-                                          @PathVariable Long idx) {
-        return this.frontModelJpaApiService.findPrevOneModel(FrontModelEntity.builder().idx(idx).categoryCd(categoryCd).build());
+    public ResponseEntity<FrontModelDTO> findPrevOneModel(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
+                                                          @PathVariable Long idx) {
+        return ResponseEntity.ok(frontModelJpaApiService.findPrevOneModel(FrontModelEntity.builder().idx(idx).categoryCd(categoryCd).build()));
     }
 
     /**
@@ -151,16 +151,16 @@ public class FrontModelJpaApiController {
      */
     @ApiOperation(value = "다음 모델 상세 조회", notes = "다음 모델을 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "다음 모델 상세조회 성공", response = Map.class),
+            @ApiResponse(code = 200, message = "다음 모델 상세조회 성공", response = FrontModelDTO.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{categoryCd}/{idx}/next")
-    public FrontModelDTO findNextOneModel(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
-                                          @PathVariable Long idx) {
-        return this.frontModelJpaApiService.findNextOneModel(FrontModelEntity.builder().idx(idx).categoryCd(categoryCd).build());
+    public ResponseEntity<FrontModelDTO> findNextOneModel(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
+                                                          @PathVariable Long idx) {
+        return ResponseEntity.ok(frontModelJpaApiService.findNextOneModel(FrontModelEntity.builder().idx(idx).categoryCd(categoryCd).build()));
     }
 
     /**
@@ -174,20 +174,23 @@ public class FrontModelJpaApiController {
      */
     @ApiOperation(value = "모델 좋아요 처리", notes = "모델을 좋아요 처리한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "모델 좋아요 성공", response = Map.class),
+            @ApiResponse(code = 200, message = "모델 좋아요 성공", response = Integer.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PutMapping(value = "/{idx}/like")
-    public int favoriteModel(@PathVariable Long idx) {
-        return this.frontModelJpaApiService.favoriteModel(idx);
+    public ResponseEntity<Integer> favoriteModel(@PathVariable Long idx) {
+        if (frontModelJpaApiService.findOneModel(idx) == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(frontModelJpaApiService.favoriteModel(idx));
     }
 
     /**
      * <pre>
-     * 1. MethodName : getNewModelList
+     * 1. MethodName : findNewModelList
      * 2. ClassName  : FrontModelJpaApiController.java
      * 3. Comment    : 프론트 > 새로운 모델 조회
      * 4. 작성자      : CHO
@@ -203,8 +206,8 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists/new/{categoryCd}")
-    public Map<String, Object> findNewModelList(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
-                                            @RequestParam(required = false) Map<String, Object> paramMap, Page page) {
+    public ResponseEntity<Map<String, Object>> findNewModelList(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
+                                                                @RequestParam(required = false) Map<String, Object> paramMap, Page page) {
         Map<String, Object> resultMap = new HashMap<>();
         // 페이징 및 검색
         Map<String, Object> newModelMap = searchCommon.searchCommon(page, paramMap);
@@ -219,6 +222,6 @@ public class FrontModelJpaApiController {
         resultMap.put("newModelListTotalCnt", this.frontModelJpaApiService.findModelList(newModelMap));
         resultMap.put("newModelList", this.frontModelJpaApiService.findModelList(newModelMap));
 
-        return resultMap;
+        return ResponseEntity.ok().body(resultMap);
     }
 }

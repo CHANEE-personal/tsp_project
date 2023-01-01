@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,8 +36,8 @@ public class FrontScheduleJpaApiController {
      * 1. MethodName : findScheduleList
      * 2. ClassName  : FrontScheduleJpaApiController.java
      * 3. Comment    : 프론트 > 모델 스케줄 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 01.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 01.
      * </pre>
      */
     @ApiOperation(value = "모델 스케줄 조회", notes = "모델 스케줄을 조회한다.")
@@ -48,10 +49,10 @@ public class FrontScheduleJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists")
-    public Map<String, Object> findScheduleList(@RequestParam(required = false) Map<String, Object> paramMap,
-                                                @RequestParam(value = "searchStartTime", required = false) String searchStartTime,
-                                                @RequestParam(value = "searchEndTime", required = false) String searchEndTime,
-                                                Page page) {
+    public ResponseEntity<Map<String, Object>> findScheduleList(@RequestParam(required = false) Map<String, Object> paramMap,
+                                                                @RequestParam(value = "searchStartTime", required = false) String searchStartTime,
+                                                                @RequestParam(value = "searchEndTime", required = false) String searchEndTime,
+                                                                Page page) {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> scheduleMap = searchCommon.searchCommon(page, paramMap);
 
@@ -63,11 +64,11 @@ public class FrontScheduleJpaApiController {
         // 리스트 수
         resultMap.put("pageSize", page.getSize());
         // 전체 페이지 수
-        resultMap.put("perPageListCnt", ceil((double)this.frontScheduleJpaApiService.findScheduleCount(scheduleMap) / page.getSize()));
+        resultMap.put("perPageListCnt", ceil((double) this.frontScheduleJpaApiService.findScheduleCount(scheduleMap) / page.getSize()));
         // 전체 아이템 수
         resultMap.put("scheduleListTotalCnt", this.frontScheduleJpaApiService.findModelScheduleList(scheduleMap));
         resultMap.put("scheduleList", this.frontScheduleJpaApiService.findModelScheduleList(scheduleMap));
 
-        return resultMap;
+        return ResponseEntity.ok().body(resultMap);
     }
 }

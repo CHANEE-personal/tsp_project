@@ -52,13 +52,13 @@ public class FrontNoticeJpaRepository {
      * 1. MethodName : findNoticeCount
      * 2. ClassName  : AdminNoticeJpaRepository.java
      * 3. Comment    : 공지사항 리스트 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 16.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 08. 16.
      * </pre>
      */
     public int findNoticeCount(Map<String, Object> noticeMap) {
         return queryFactory.selectFrom(frontNoticeEntity)
-                .where(searchNotice(noticeMap) ,fixedNotice(noticeMap)).fetch().size();
+                .where(searchNotice(noticeMap), fixedNotice(noticeMap)).fetch().size();
     }
 
     /**
@@ -66,8 +66,8 @@ public class FrontNoticeJpaRepository {
      * 1. MethodName : findNoticeList
      * 2. ClassName  : AdminNoticeJpaRepository.java
      * 3. Comment    : 공지사항 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 16.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 08. 16.
      * </pre>
      */
     public List<FrontNoticeDTO> findNoticeList(Map<String, Object> noticeMap) {
@@ -87,15 +87,15 @@ public class FrontNoticeJpaRepository {
      * 1. MethodName : findOneNotice
      * 2. ClassName  : AdminNoticeJpaRepository.java
      * 3. Comment    : 공지사항 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 16.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 08. 16.
      * </pre>
      */
-    FrontNoticeDTO findOneNotice(FrontNoticeEntity existFrontNoticeEntity) {
+    FrontNoticeDTO findOneNotice(Long idx) {
         FrontNoticeEntity findOneNotice = Optional.ofNullable(queryFactory
                 .selectFrom(frontNoticeEntity)
                 .orderBy(frontNoticeEntity.idx.desc())
-                .where(frontNoticeEntity.idx.eq(existFrontNoticeEntity.getIdx())
+                .where(frontNoticeEntity.idx.eq(idx)
                         .and(frontNoticeEntity.visible.eq("Y")))
                 .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_NOTICE, new Throwable()));
 
@@ -107,16 +107,16 @@ public class FrontNoticeJpaRepository {
      * 1. MethodName : findPrevOneNotice
      * 2. ClassName  : FrontNoticeJpaRepository.java
      * 3. Comment    : 이전 공지사항 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
-    public FrontNoticeDTO findPrevOneNotice(FrontNoticeEntity existFrontNoticeEntity) {
+    public FrontNoticeDTO findPrevOneNotice(Long idx) {
         // 이전 공지사항 조회
         FrontNoticeEntity findPrevOneNotice = Optional.ofNullable(queryFactory
                 .selectFrom(frontNoticeEntity)
                 .orderBy(frontNoticeEntity.idx.desc())
-                .where(frontNoticeEntity.idx.lt(existFrontNoticeEntity.getIdx())
+                .where(frontNoticeEntity.idx.lt(idx)
                         .and(frontNoticeEntity.visible.eq("Y")))
                 .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_NOTICE, new Throwable()));
 
@@ -128,16 +128,16 @@ public class FrontNoticeJpaRepository {
      * 1. MethodName : findNextOneNotice
      * 2. ClassName  : FrontNoticeJpaRepository.java
      * 3. Comment    : 다음 공지사항 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
-    public FrontNoticeDTO findNextOneNotice(FrontNoticeEntity existFrontNoticeEntity) {
+    public FrontNoticeDTO findNextOneNotice(Long idx) {
         // 다음 공지사항 조회
         FrontNoticeEntity findNextOneNotice = Optional.ofNullable(queryFactory
                 .selectFrom(frontNoticeEntity)
                 .orderBy(frontNoticeEntity.idx.desc())
-                .where(frontNoticeEntity.idx.gt(existFrontNoticeEntity.getIdx())
+                .where(frontNoticeEntity.idx.gt(idx)
                         .and(frontNoticeEntity.visible.eq("Y")))
                 .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_NOTICE, new Throwable()));
 

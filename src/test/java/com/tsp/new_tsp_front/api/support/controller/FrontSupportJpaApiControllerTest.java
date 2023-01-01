@@ -44,7 +44,6 @@ class FrontSupportJpaApiControllerTest {
 	public void setup() {
 		this.mockMvc = webAppContextSetup(wac)
 				.addFilters(new CharacterEncodingFilter("UTF-8", true))  // 필터 추가
-				.alwaysExpect(status().isOk())
 				.alwaysDo(print())
 				.build();
 	}
@@ -66,7 +65,7 @@ class FrontSupportJpaApiControllerTest {
 				.contentType(APPLICATION_JSON_VALUE)
 				.content(objectMapper.writeValueAsString(frontSupportEntity)))
                 .andDo(print())
-				.andExpect(status().isOk())
+				.andExpect(status().isCreated())
 				.andExpect(content().contentType("application/json;charset=utf-8"))
 				.andExpect(jsonPath("$.supportName").value("조찬희"))
 				.andExpect(jsonPath("$.supportMessage").value("조찬희"))
