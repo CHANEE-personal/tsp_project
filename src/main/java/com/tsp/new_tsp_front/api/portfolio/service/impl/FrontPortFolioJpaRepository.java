@@ -47,8 +47,8 @@ public class FrontPortFolioJpaRepository {
      * 1. MethodName : findPortfolioCount
      * 2. ClassName  : FrontPortFolioJpaRepository.java
      * 3. Comment    : 포트폴리오 리스트 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 11.
      * </pre>
      */
     public int findPortfolioCount(Map<String, Object> portfolioMap) {

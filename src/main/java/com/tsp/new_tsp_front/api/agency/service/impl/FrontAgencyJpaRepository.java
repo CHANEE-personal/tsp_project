@@ -47,7 +47,7 @@ public class FrontAgencyJpaRepository {
      * <pre>
      * 1. MethodName : findAgencyCount
      * 2. ClassName  : FrontAgencyJpaRepository.java
-     * 3. Comment    : 관리자 Agency 리스트 갯수 조회
+     * 3. Comment    : Agency 리스트 갯수 조회
      * 4. 작성자      : CHO
      * 5. 작성일      : 2022. 08. 24.
      * </pre>
@@ -60,7 +60,7 @@ public class FrontAgencyJpaRepository {
      * <pre>
      * 1. MethodName : findAgencyList
      * 2. ClassName  : FrontAgencyJpaRepository.java
-     * 3. Comment    : 관리자 Agency 리스트 조회
+     * 3. Comment    : Agency 리스트 조회
      * 4. 작성자      : CHO
      * 5. 작성일      : 2022. 08. 24.
      * </pre>
@@ -81,7 +81,7 @@ public class FrontAgencyJpaRepository {
      * <pre>
      * 1. MethodName : findOneAgency
      * 2. ClassName  : FrontAgencyJpaRepository.java
-     * 3. Comment    : 관리자 Agency 상세 조회
+     * 3. Comment    : Agency 상세 조회
      * 4. 작성자      : CHO
      * 5. 작성일      : 2022. 08. 24.
      * </pre>
@@ -99,7 +99,7 @@ public class FrontAgencyJpaRepository {
      * <pre>
      * 1. MethodName : favoriteAgency
      * 2. ClassName  : FrontAgencyJpaRepository.java
-     * 3. Comment    : 프론트 Agency 좋아요
+     * 3. Comment    : Agency 좋아요
      * 4. 작성자      : CHO
      * 5. 작성일      : 2022. 08. 24.
      * </pre>
@@ -123,8 +123,8 @@ public class FrontAgencyJpaRepository {
      * 1. MethodName : findPrevOneAgency
      * 2. ClassName  : FrontAgencyJpaRepository.java
      * 3. Comment    : 이전 소속사 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
     public FrontAgencyDTO findPrevOneAgency(Long idx) {
@@ -144,8 +144,8 @@ public class FrontAgencyJpaRepository {
      * 1. MethodName : findNextOneAgency
      * 2. ClassName  : FrontAgencyJpaRepository.java
      * 3. Comment    : 다음 소속사 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
     public FrontAgencyDTO findNextOneAgency(Long idx) {

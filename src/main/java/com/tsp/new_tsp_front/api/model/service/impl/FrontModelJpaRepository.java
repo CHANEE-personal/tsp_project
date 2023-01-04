@@ -8,6 +8,7 @@ import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -64,8 +65,8 @@ public class FrontModelJpaRepository {
      * 1. MethodName : findMainModelList
      * 2. ClassName  : FrontModelJpaRepository.java
      * 3. Comment    : 프론트 메인 모델 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 03. 27.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 03. 27.
      * </pre>
      */
     public List<FrontModelDTO> findMainModelList() {
@@ -89,8 +90,8 @@ public class FrontModelJpaRepository {
      * 1. MethodName : findModelCount
      * 2. ClassName  : FrontModelJpaRepository.java
      * 3. Comment    : 프론트 모델 리스트 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 03. 27.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 03. 27.
      * </pre>
      */
     public int findModelCount(Map<String, Object> modelMap) {
@@ -106,8 +107,8 @@ public class FrontModelJpaRepository {
      * 1. MethodName : findModelList
      * 2. ClassName  : FrontModelJpaRepository.java
      * 3. Comment    : 프론트 모델 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 02.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 02.
      * </pre>
      */
     public List<FrontModelDTO> findModelList(Map<String, Object> modelMap) {
@@ -130,8 +131,8 @@ public class FrontModelJpaRepository {
      * 1. MethodName : findOneModel
      * 2. ClassName  : FrontModelJpaRepository.java
      * 3. Comment    : 프론트 모델 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 09.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 09.
      * </pre>
      */
     public FrontModelDTO findOneModel(Long idx) {
@@ -146,8 +147,7 @@ public class FrontModelJpaRepository {
                 .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
                 .fetchJoin()
                 .where(frontModelEntity.idx.eq(idx)
-                        .and(frontModelEntity.visible.eq("Y"))
-                        .and(commonImageEntity.typeName.eq("model")))
+                        .and(frontModelEntity.visible.eq("Y")))
                 .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_MODEL, new Throwable()));
 
         return toDto(findOneModel);
@@ -158,8 +158,8 @@ public class FrontModelJpaRepository {
      * 1. MethodName : findPrevOneModel
      * 2. ClassName  : FrontModelJpaRepository.java
      * 3. Comment    : 이전 모델 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
     public FrontModelDTO findPrevOneModel(FrontModelEntity existFrontModelEntity) {
@@ -183,8 +183,8 @@ public class FrontModelJpaRepository {
      * 1. MethodName : findNextOneModel
      * 2. ClassName  : FrontModelJpaRepository.java
      * 3. Comment    : 다음 모델 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
     public FrontModelDTO findNextOneModel(FrontModelEntity existFrontModelEntity) {
@@ -208,8 +208,8 @@ public class FrontModelJpaRepository {
      * 1. MethodName : updateModelViewCount
      * 2. ClassName  : FrontModelJpaRepository.java
      * 3. Comment    : 프론트 모델 조회 수 증가
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 09.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 09.
      * </pre>
      */
     public int updateModelViewCount(Long idx) {
@@ -232,8 +232,8 @@ public class FrontModelJpaRepository {
      * 1. MethodName : favoriteModel
      * 2. ClassName  : FrontModelJpaRepository.java
      * 3. Comment    : 프론트 모델 좋아요
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 09.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 09.
      * </pre>
      */
     public int favoriteModel(Long idx) {

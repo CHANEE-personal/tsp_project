@@ -6,6 +6,8 @@ import com.tsp.new_tsp_front.api.common.domain.NewCommonMappedClass;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -51,6 +53,8 @@ public class FrontAgencyEntity extends NewCommonMappedClass {
     private String visible;
 
     @JsonIgnore
+    @BatchSize(size = 5)
+    @Where(clause = "type_name = 'agency'")
     @OneToMany(mappedBy = "frontAgencyEntity")
     private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 
@@ -75,6 +79,7 @@ public class FrontAgencyEntity extends NewCommonMappedClass {
                 .createTime(entity.getCreateTime())
                 .updater(entity.getUpdater())
                 .updateTime(entity.getUpdateTime())
+                .agencyImage(CommonImageEntity.toDtoList(entity.getCommonImageEntityList()))
                 .build();
     }
 

@@ -6,6 +6,8 @@ import com.tsp.new_tsp_front.api.common.domain.NewCodeEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonMappedClass;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -69,6 +71,8 @@ public class FrontPortFolioEntity extends NewCommonMappedClass {
     private NewCodeEntity newPortFolioJpaDTO;
 
     @JsonIgnore
+    @BatchSize(size = 5)
+    @Where(clause = "type_name = 'portfolio'")
     @OneToMany(mappedBy = "frontPortFolioEntity", fetch = LAZY)
     private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 

@@ -5,6 +5,8 @@ import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonMappedClass;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -49,6 +51,8 @@ public class FrontProductionEntity extends NewCommonMappedClass {
     private String visible;
 
     @JsonIgnore
+    @BatchSize(size = 5)
+    @Where(clause = "type_name = 'production'")
     @OneToMany(mappedBy = "frontProductionEntity", fetch = LAZY)
     private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 

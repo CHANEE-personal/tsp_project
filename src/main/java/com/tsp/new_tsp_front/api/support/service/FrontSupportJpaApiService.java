@@ -27,7 +27,6 @@ public class FrontSupportJpaApiService {
      * </pre>
      */
     @CachePut("support")
-    @Modifying(clearAutomatically = true)
     @Transactional
     public FrontSupportDTO insertSupportModel(FrontSupportEntity frontSupportEntity) {
         try {

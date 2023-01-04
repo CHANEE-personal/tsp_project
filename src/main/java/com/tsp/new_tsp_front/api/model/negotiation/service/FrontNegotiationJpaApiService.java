@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,8 +26,8 @@ public class FrontNegotiationJpaApiService {
      * 1. MethodName : findNegotiationCount
      * 2. ClassName  : FrontNegotiationJpaServiceImpl.java
      * 3. Comment    : 모델 섭외 리스트 수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
     @Transactional(readOnly = true)
@@ -41,8 +40,8 @@ public class FrontNegotiationJpaApiService {
      * 1. MethodName : findModelNegotiationList
      * 2. ClassName  : FrontNegotiationJpaServiceImpl.java
      * 3. Comment    : 모델 섭외 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
     @Cacheable(value = "negotiation", key = "#negotiationMap")
@@ -56,8 +55,8 @@ public class FrontNegotiationJpaApiService {
      * 1. MethodName : findOneNegotiation
      * 2. ClassName  : FrontNegotiationJpaServiceImpl.java
      * 3. Comment    : 모델 섭외 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
     @Cacheable(value = "negotiation", key = "#idx")
@@ -71,12 +70,11 @@ public class FrontNegotiationJpaApiService {
      * 1. MethodName : insertModelNegotiation
      * 2. ClassName  : FrontNegotiationJpaServiceImpl.java
      * 3. Comment    : 모델 섭외 등록
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
     @CachePut("negotiation")
-    @Modifying(clearAutomatically = true)
     @Transactional
     public FrontNegotiationDTO insertModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) {
         try {
@@ -91,12 +89,11 @@ public class FrontNegotiationJpaApiService {
      * 1. MethodName : updateModelNegotiation
      * 2. ClassName  : FrontNegotiationJpaServiceImpl.java
      * 3. Comment    : 모델 섭외 수정
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
     @CachePut(value = "negotiation", key = "#frontNegotiationEntity.idx")
-    @Modifying(clearAutomatically = true)
     @Transactional
     public FrontNegotiationDTO updateModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) {
         try {
@@ -111,12 +108,11 @@ public class FrontNegotiationJpaApiService {
      * 1. MethodName : deleteModelNegotiation
      * 2. ClassName  : FrontNegotiationJpaServiceImpl.java
      * 3. Comment    : 모델 섭외 삭제
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
     @CacheEvict(value = "negotiation", key = "#idx")
-    @Modifying(clearAutomatically = true)
     @Transactional
     public Long deleteModelNegotiation(Long idx) {
         try {
