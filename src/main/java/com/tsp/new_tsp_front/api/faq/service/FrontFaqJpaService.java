@@ -20,8 +20,8 @@ public class FrontFaqJpaService {
      * 1. MethodName : findFaqCount
      * 2. ClassName  : FrontFaqJpaService.java
      * 3. Comment    : 프론트 > FAQ 리스트 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 23.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 08. 23.
      * </pre>
      */
     @Transactional(readOnly = true)
@@ -34,8 +34,8 @@ public class FrontFaqJpaService {
      * 1. MethodName : findFaqList
      * 2. ClassName  : FrontFaqJpaService.java
      * 3. Comment    : 프론트 > FAQ 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 23.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 08. 23.
      * </pre>
      */
     @Cacheable(value = "faq", key = "#faqMap")
@@ -49,8 +49,8 @@ public class FrontFaqJpaService {
      * 1. MethodName : findOneFaq
      * 2. ClassName  : FrontFaqJpaService.java
      * 3. Comment    : 프론트 > FAQ 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 23.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 08. 23.
      * </pre>
      */
     @Cacheable(value = "faq", key = "#idx")
@@ -64,8 +64,8 @@ public class FrontFaqJpaService {
      * 1. MethodName : findPrevOneFaq
      * 2. ClassName  : FrontFaqJpaService.java
      * 3. Comment    : 프론트 > 이전 FAQ 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
     @Cacheable(value = "faq", key = "#idx")
@@ -79,8 +79,8 @@ public class FrontFaqJpaService {
      * 1. MethodName : findNextOneFaq
      * 2. ClassName  : FrontFaqJpaService.java
      * 3. Comment    : 프론트 > FAQ 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 23.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 08. 23.
      * </pre>
      */
     @Cacheable(value = "faq", key = "#idx")

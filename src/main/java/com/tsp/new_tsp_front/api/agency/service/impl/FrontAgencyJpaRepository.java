@@ -123,8 +123,8 @@ public class FrontAgencyJpaRepository {
      * 1. MethodName : findPrevOneAgency
      * 2. ClassName  : FrontAgencyJpaRepository.java
      * 3. Comment    : 이전 소속사 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
     public FrontAgencyDTO findPrevOneAgency(Long idx) {
@@ -144,8 +144,8 @@ public class FrontAgencyJpaRepository {
      * 1. MethodName : findNextOneAgency
      * 2. ClassName  : FrontAgencyJpaRepository.java
      * 3. Comment    : 다음 소속사 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
     public FrontAgencyDTO findNextOneAgency(Long idx) {

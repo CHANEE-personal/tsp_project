@@ -24,8 +24,8 @@ public class FrontAgencyJpaService {
      * 1. MethodName : findAgencyCount
      * 2. ClassName  : FrontAgencyJpaService.java
      * 3. Comment    : 프론트 > Agency 리스트 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 24.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 08. 24.
      * </pre>
      */
     @Transactional(readOnly = true)
@@ -38,8 +38,8 @@ public class FrontAgencyJpaService {
      * 1. MethodName : findAgencyList
      * 2. ClassName  : FrontAgencyJpaService.java
      * 3. Comment    : 프론트 > Agency 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 24.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 08. 24.
      * </pre>
      */
     @Cacheable(value = "agency", key = "#agencyMap")
@@ -83,8 +83,8 @@ public class FrontAgencyJpaService {
      * 1. MethodName : findNextOneAgency
      * 2. ClassName  : FrontAgencyJpaService.java
      * 3. Comment    : 프론트 > 다음 Agency 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
     @Cacheable(value = "agency", key = "#idx")
@@ -102,8 +102,8 @@ public class FrontAgencyJpaService {
      * 1. MethodName : favoriteAgency
      * 2. ClassName  : FrontAgencyJpaService.java
      * 3. Comment    : 프론트 > Agency 좋아요
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 24.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 08. 24.
      * </pre>
      */
     @CachePut(value = "agency", key = "#idx")

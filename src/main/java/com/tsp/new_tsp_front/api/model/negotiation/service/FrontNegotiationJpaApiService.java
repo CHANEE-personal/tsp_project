@@ -26,8 +26,8 @@ public class FrontNegotiationJpaApiService {
      * 1. MethodName : findNegotiationCount
      * 2. ClassName  : FrontNegotiationJpaServiceImpl.java
      * 3. Comment    : 모델 섭외 리스트 수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
     @Transactional(readOnly = true)
@@ -40,8 +40,8 @@ public class FrontNegotiationJpaApiService {
      * 1. MethodName : findModelNegotiationList
      * 2. ClassName  : FrontNegotiationJpaServiceImpl.java
      * 3. Comment    : 모델 섭외 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
     @Cacheable(value = "negotiation", key = "#negotiationMap")
@@ -55,8 +55,8 @@ public class FrontNegotiationJpaApiService {
      * 1. MethodName : findOneNegotiation
      * 2. ClassName  : FrontNegotiationJpaServiceImpl.java
      * 3. Comment    : 모델 섭외 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
     @Cacheable(value = "negotiation", key = "#idx")
@@ -70,8 +70,8 @@ public class FrontNegotiationJpaApiService {
      * 1. MethodName : insertModelNegotiation
      * 2. ClassName  : FrontNegotiationJpaServiceImpl.java
      * 3. Comment    : 모델 섭외 등록
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
     @CachePut("negotiation")
@@ -89,8 +89,8 @@ public class FrontNegotiationJpaApiService {
      * 1. MethodName : updateModelNegotiation
      * 2. ClassName  : FrontNegotiationJpaServiceImpl.java
      * 3. Comment    : 모델 섭외 수정
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
     @CachePut(value = "negotiation", key = "#frontNegotiationEntity.idx")
@@ -108,8 +108,8 @@ public class FrontNegotiationJpaApiService {
      * 1. MethodName : deleteModelNegotiation
      * 2. ClassName  : FrontNegotiationJpaServiceImpl.java
      * 3. Comment    : 모델 섭외 삭제
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
     @CacheEvict(value = "negotiation", key = "#idx")

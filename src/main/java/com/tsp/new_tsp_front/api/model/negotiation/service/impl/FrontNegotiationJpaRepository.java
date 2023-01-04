@@ -49,8 +49,8 @@ public class FrontNegotiationJpaRepository {
      * 1. MethodName : findModelNegotiationCount
      * 2. ClassName  : FrontNegotiationJpaRepository.java
      * 3. Comment    : 모델 섭외 리스트 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
     public int findNegotiationCount(Map<String, Object> negotiationMap) {
@@ -64,8 +64,8 @@ public class FrontNegotiationJpaRepository {
      * 1. MethodName : findModelNegotiationList
      * 2. ClassName  : FrontNegotiationJpaRepository.java
      * 3. Comment    : 모델 섭외 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
     public List<FrontNegotiationDTO> findModelNegotiationList(Map<String, Object> negotiationMap) {
@@ -86,8 +86,8 @@ public class FrontNegotiationJpaRepository {
      * 1. MethodName : findOneNegotiation
      * 2. ClassName  : FrontNegotiationJpaRepository.java
      * 3. Comment    : 모델 섭외 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
     public FrontNegotiationDTO findOneNegotiation(Long idx) {
@@ -106,8 +106,8 @@ public class FrontNegotiationJpaRepository {
      * 1. MethodName : findOneModelNegotiation
      * 2. ClassName  : FrontNegotiationJpaRepository.java
      * 3. Comment    : 모델 섭외 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
     public FrontModelDTO findOneModelNegotiation(FrontNegotiationEntity existFrontNegotiationEntity) {
@@ -129,8 +129,8 @@ public class FrontNegotiationJpaRepository {
      * 1. MethodName : insertModelNegotiation
      * 2. ClassName  : FrontNegotiationJpaRepository.java
      * 3. Comment    : 모델 섭외 등록
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
     public FrontNegotiationDTO insertModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) {
@@ -143,8 +143,8 @@ public class FrontNegotiationJpaRepository {
      * 1. MethodName : updateModelNegotiation
      * 2. ClassName  : FrontNegotiationJpaRepository.java
      * 3. Comment    : 모델 섭외 수정
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
     public FrontNegotiationDTO updateModelNegotiation(FrontNegotiationEntity existFrontNegotiationEntity) {
@@ -157,8 +157,8 @@ public class FrontNegotiationJpaRepository {
      * 1. MethodName : deleteModelNegotiation
      * 2. ClassName  : FrontNegotiationJpaRepository.java
      * 3. Comment    : 모델 섭외 삭제
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
     public Long deleteModelNegotiation(Long idx) {

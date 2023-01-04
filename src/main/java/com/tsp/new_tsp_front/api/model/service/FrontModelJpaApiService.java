@@ -7,7 +7,6 @@ import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,8 +25,8 @@ public class FrontModelJpaApiService {
      * 1. MethodName : findModelCount
      * 2. ClassName  : FrontModelJpaApiService.java
      * 3. Comment    : 프론트 > 모델 리스트 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 02.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 02.
      * </pre>
      */
     @Transactional(readOnly = true)
@@ -40,8 +39,8 @@ public class FrontModelJpaApiService {
      * 1. MethodName : findModelList
      * 2. ClassName  : FrontModelJpaApiService.java
      * 3. Comment    : 프론트 > 모델 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 02.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 02.
      * </pre>
      */
     @Cacheable(value = "model", key = "#modelMap")
@@ -55,8 +54,8 @@ public class FrontModelJpaApiService {
      * 1. MethodName : findOneModel
      * 2. ClassName  : FrontModelJpaApiService.java
      * 3. Comment    : 프론트 > 모델 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 09.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 09.
      * </pre>
      */
     @CachePut(value = "model", key = "#idx")
@@ -70,8 +69,8 @@ public class FrontModelJpaApiService {
      * 1. MethodName : findPrevOneModel
      * 2. ClassName  : FrontModelJpaServiceImpl.java
      * 3. Comment    : 이전 모델 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
     @CachePut(value = "model", key = "#frontModelEntity.idx")
@@ -85,8 +84,8 @@ public class FrontModelJpaApiService {
      * 1. MethodName : findPrevOneModel
      * 2. ClassName  : FrontModelJpaServiceImpl.java
      * 3. Comment    : 다음 모델 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
     @CachePut(value = "model", key = "#frontModelEntity.idx")
@@ -100,8 +99,8 @@ public class FrontModelJpaApiService {
      * 1. MethodName : findMainModelList
      * 2. ClassName  : FrontModelJpaApiService.java
      * 3. Comment    : 프론트 > 메인 모델 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 03. 27.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 03. 27.
      * </pre>
      */
     @Cacheable("mainModel")
@@ -112,25 +111,11 @@ public class FrontModelJpaApiService {
 
     /**
      * <pre>
-     * 1. MethodName : favoriteModelCount
-     * 2. ClassName  : FrontModelJpaApiService.java
-     * 3. Comment    : 프론트 > 메인 모델 좋아요 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 03. 27.
-     * </pre>
-     */
-    @Transactional(readOnly = true)
-    public int favoriteModelCount(Long idx) {
-        return frontModelJpaRepository.findOneModel(idx).getModelFavoriteCount();
-    }
-
-    /**
-     * <pre>
      * 1. MethodName : favoriteModel
      * 2. ClassName  : FrontModelJpaApiService.java
      * 3. Comment    : 프론트 > 메인 모델 좋아요
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 03. 27.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 03. 27.
      * </pre>
      */
     @CachePut(value = "model", key = "#idx")
