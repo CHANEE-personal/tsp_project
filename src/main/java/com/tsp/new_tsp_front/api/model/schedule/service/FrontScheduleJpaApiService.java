@@ -21,8 +21,8 @@ public class FrontScheduleJpaApiService {
      * 1. MethodName : findScheduleCount
      * 2. ClassName  : FrontScheduleJpaApiService.java
      * 3. Comment    : 모델 스케줄 리스트 수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 01.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 01.
      * </pre>
      */
     public int findScheduleCount(Map<String, Object> scheduleMap) {
@@ -34,8 +34,8 @@ public class FrontScheduleJpaApiService {
      * 1. MethodName : findScheduleList
      * 2. ClassName  : FrontScheduleJpaApiService.java
      * 3. Comment    : 모델 스케줄 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 01.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 01.
      * </pre>
      */
     @Cacheable(value = "schedule", key = "#scheduleMap")
@@ -49,8 +49,8 @@ public class FrontScheduleJpaApiService {
      * 1. MethodName : findModelScheduleList
      * 2. ClassName  : FrontScheduleJpaApiService.java
      * 3. Comment    : 모델 스케줄 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 03.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 03.
      * </pre>
      */
     @Cacheable(value = "model", key = "#scheduleMap")

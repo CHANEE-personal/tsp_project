@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -76,7 +75,6 @@ public class FrontNegotiationJpaApiService {
      * </pre>
      */
     @CachePut("negotiation")
-    @Modifying(clearAutomatically = true)
     @Transactional
     public FrontNegotiationDTO insertModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) {
         try {
@@ -96,7 +94,6 @@ public class FrontNegotiationJpaApiService {
      * </pre>
      */
     @CachePut(value = "negotiation", key = "#frontNegotiationEntity.idx")
-    @Modifying(clearAutomatically = true)
     @Transactional
     public FrontNegotiationDTO updateModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) {
         try {
@@ -116,7 +113,6 @@ public class FrontNegotiationJpaApiService {
      * </pre>
      */
     @CacheEvict(value = "negotiation", key = "#idx")
-    @Modifying(clearAutomatically = true)
     @Transactional
     public Long deleteModelNegotiation(Long idx) {
         try {

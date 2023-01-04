@@ -134,7 +134,6 @@ public class FrontModelJpaApiService {
      * </pre>
      */
     @CachePut(value = "model", key = "#idx")
-    @Modifying(clearAutomatically = true)
     @Transactional
     public int favoriteModel(Long idx) {
         try {

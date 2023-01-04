@@ -149,8 +149,6 @@ public class FrontNegotiationJpaRepository {
      */
     public FrontNegotiationDTO updateModelNegotiation(FrontNegotiationEntity existFrontNegotiationEntity) {
         em.merge(existFrontNegotiationEntity);
-        em.flush();
-        em.clear();
         return toDto(existFrontNegotiationEntity);
     }
 
@@ -165,8 +163,6 @@ public class FrontNegotiationJpaRepository {
      */
     public Long deleteModelNegotiation(Long idx) {
         em.remove(em.find(FrontNegotiationEntity.class, idx));
-        em.flush();
-        em.clear();
         return idx;
     }
 }
