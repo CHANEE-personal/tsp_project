@@ -231,4 +231,29 @@ public class FrontModelJpaApiController {
 
         return ResponseEntity.ok().body(resultMap);
     }
+
+    /**
+     * <pre>
+     * 1. MethodName : findRecommendList
+     * 2. ClassName  : FrontModelJpaApiController.java
+     * 3. Comment    : 프론트 > 추천 검색어 리스트 조회
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2023. 01. 05.
+     * </pre>
+     */
+    @ApiOperation(value = "추천 검색어 리스트 조회", notes = "추천 검색어 리스트를 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "추천 검색어 리스트 조회 성공", response = Map.class),
+            @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
+            @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
+            @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+            @ApiResponse(code = 404, message = "존재 하지 않음", response = HttpClientErrorException.NotFound.class),
+            @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+    })
+    @GetMapping(value = "/recommend")
+    public ResponseEntity<Map<String, Object>> findRecommendList() {
+        Map<String, Object> recommendMap = new HashMap<>();
+        recommendMap.put("recommendList", frontModelJpaApiService.findRecommendList());
+        return ResponseEntity.ok().body(recommendMap);
+    }
 }
