@@ -6,6 +6,7 @@ import com.tsp.new_tsp_front.api.common.domain.CommonImageDTO;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
+import com.tsp.new_tsp_front.api.model.domain.recommend.FrontRecommendEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -734,5 +735,25 @@ class FrontModelJpaRepositoryTest {
         then(mockFrontModelJpaRepository).should(times(1)).findModelList(newModelMap);
         then(mockFrontModelJpaRepository).should(atLeastOnce()).findModelList(newModelMap);
         then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("추천 검색어 리스트 조회 테스트")
+    void 추천검색어리스트조회테스트() {
+        Map<String, Object> recommendMap = new HashMap<>();
+        recommendMap.put("jpaStartPage", 0);
+        recommendMap.put("size", 3);
+
+        List<String> list = new ArrayList<>();
+        list.add("모델1");
+        list.add("모델2");
+
+        FrontRecommendEntity frontRecommendEntity = FrontRecommendEntity.builder()
+                .recommendKeyword(list)
+                .build();
+
+        em.persist(frontRecommendEntity);
+
+        assertThat(frontModelJpaRepository.findRecommendList()).isNotEmpty();
     }
 }

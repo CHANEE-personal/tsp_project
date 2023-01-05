@@ -5,10 +5,12 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
+import com.tsp.new_tsp_front.api.model.domain.recommend.FrontRecommendDTO;
+import com.tsp.new_tsp_front.api.model.domain.recommend.FrontRecommendEntity;
+import com.tsp.new_tsp_front.api.model.domain.recommend.QFrontRecommendEntity;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -248,5 +250,23 @@ public class FrontModelJpaRepository {
         em.clear();
 
         return em.find(FrontModelEntity.class, idx).getModelFavoriteCount();
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : findRecommendList
+     * 2. ClassName  : FrontModelJpaRepository.java
+     * 3. Comment    : 프론트 모델 추천 검색어 리스트 조회
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2023. 01. 05.
+     * </pre>
+     */
+    public List<FrontRecommendDTO> findRecommendList() {
+        List<FrontRecommendEntity> recommendList = queryFactory
+                .selectFrom(QFrontRecommendEntity.frontRecommendEntity)
+                .orderBy(QFrontRecommendEntity.frontRecommendEntity.idx.desc())
+                .fetch();
+
+        return recommendList != null ? FrontRecommendEntity.toDtoList(recommendList) : emptyList();
     }
 }
