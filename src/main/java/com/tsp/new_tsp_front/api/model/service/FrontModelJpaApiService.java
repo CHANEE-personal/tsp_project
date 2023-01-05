@@ -2,6 +2,7 @@ package com.tsp.new_tsp_front.api.model.service;
 
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
+import com.tsp.new_tsp_front.api.model.domain.recommend.FrontRecommendDTO;
 import com.tsp.new_tsp_front.api.model.service.impl.FrontModelJpaRepository;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -126,5 +127,20 @@ public class FrontModelJpaApiService {
         } catch (Exception e) {
             throw new TspException(ERROR_MODEL_LIKE, e);
         }
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : findRecommendList
+     * 2. ClassName  : FrontModelJpaApiService.java
+     * 3. Comment    : 프론트 > 추천 검색어 리스트 조회
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2023. 01. 05.
+     * </pre>
+     */
+    @Cacheable(value = "recommend")
+    @Transactional(readOnly = true)
+    public List<FrontRecommendDTO> findRecommendList() {
+        return frontModelJpaRepository.findRecommendList();
     }
 }

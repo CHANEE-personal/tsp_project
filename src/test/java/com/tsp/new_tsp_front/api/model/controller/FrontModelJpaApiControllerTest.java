@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_front.api.model.controller;
 
+import com.tsp.new_tsp_front.api.model.domain.recommend.FrontRecommendEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
@@ -27,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @SpringBootTest
+@Transactional
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-local.properties")
 @TestConstructor(autowireMode = ALL)
@@ -36,6 +42,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 class FrontModelJpaApiControllerTest {
     private MockMvc mockMvc;
     private final WebApplicationContext wac;
+    private final EntityManager em;
 
     @BeforeEach
     @EventListener(ApplicationReadyEvent.class)
@@ -197,5 +204,25 @@ class FrontModelJpaApiControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.newModelList.length()", greaterThan(0)));
+    }
+
+    @Test
+    @DisplayName("추천 검색어 리스트 조회 테스트")
+    void 추천검색어리스트조회테스트() throws Exception {
+        List<String> recommendList = new ArrayList<>();
+        recommendList.add("모델1");
+        recommendList.add("모델2");
+
+        FrontRecommendEntity frontRecommendEntity = FrontRecommendEntity.builder()
+                .recommendKeyword(recommendList)
+                .build();
+
+        em.persist(frontRecommendEntity);
+
+        mockMvc.perform(get("/api/model/recommend"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
+                .andExpect(jsonPath("$.recommendList.length()", greaterThan(0)));
     }
 }
