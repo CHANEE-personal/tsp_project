@@ -7,6 +7,7 @@ import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.domain.recommend.FrontRecommendEntity;
+import com.tsp.new_tsp_front.api.model.domain.search.FrontSearchEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -755,5 +756,23 @@ class FrontModelJpaRepositoryTest {
         em.persist(frontRecommendEntity);
 
         assertThat(frontModelJpaRepository.findRecommendList()).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("검색어 랭킹 리스트 조회 테스트")
+    void 검색어랭킹리스트조회테스트() {
+        em.persist(FrontSearchEntity.builder().searchKeyword("모델1").build());
+        em.persist(FrontSearchEntity.builder().searchKeyword("모델1").build());
+        em.persist(FrontSearchEntity.builder().searchKeyword("모델1").build());
+        em.persist(FrontSearchEntity.builder().searchKeyword("모델2").build());
+
+        assertThat(frontModelJpaRepository.rankingKeywordList().get(0).getSearchKeyword()).isEqualTo("모델1");
+        assertThat(frontModelJpaRepository.rankingKeywordList().get(1).getSearchKeyword()).isEqualTo("모델2");
+    }
+
+    @Test
+    @DisplayName("추천 검색어 or 검색어 랭킹을 통한 모델 검색 조회")
+    void 추천검색어or검색어랭킹을통한모델검색조회() {
+        assertThat(frontModelJpaRepository.findModelKeyword("김예영").get(0).getModelKorName()).isEqualTo("김예영");
     }
 }

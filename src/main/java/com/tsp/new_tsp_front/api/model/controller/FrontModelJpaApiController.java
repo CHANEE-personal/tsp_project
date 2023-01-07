@@ -256,4 +256,54 @@ public class FrontModelJpaApiController {
         recommendMap.put("recommendList", frontModelJpaApiService.findRecommendList());
         return ResponseEntity.ok().body(recommendMap);
     }
+
+    /**
+     * <pre>
+     * 1. MethodName : rankingKeywordList
+     * 2. ClassName  : TravelController.java
+     * 3. Comment    : 모델 검색어 랭킹 조회
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2023. 01. 07.
+     * </pre>
+     */
+    @ApiOperation(value = "모델 검색어 랭킹 조회", notes = "모델 검색어 랭킹을 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "모델 검색어 랭킹 조회 성공", response = Map.class),
+            @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
+            @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
+            @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+            @ApiResponse(code = 404, message = "존재 하지 않음", response = HttpClientErrorException.NotFound.class),
+            @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+    })
+    @GetMapping(value = "/rank")
+    public ResponseEntity<Map<String, Object>> rankingKeywordList() {
+        Map<String, Object> rankMap = new HashMap<>();
+        rankMap.put("rankList", frontModelJpaApiService.rankingKeywordList());
+        return ResponseEntity.ok().body(rankMap);
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : findModelKeyword
+     * 2. ClassName  : TravelController.java
+     * 3. Comment    : 추천 검색어 or 랭킹 검색어를 통한 모델 조회
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2023. 01. 07.
+     * </pre>
+     */
+    @ApiOperation(value = "추천 or 랭킹 검색어를 통한 모델 조회", notes = "추천 or 랭킹 검색어를 통해 모델을 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "모델 검색 조회 성공", response = Map.class),
+            @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
+            @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
+            @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+            @ApiResponse(code = 404, message = "존재 하지 않음", response = HttpClientErrorException.NotFound.class),
+            @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+    })
+    @GetMapping("/keyword")
+    public ResponseEntity<Map<String, Object>> findModelKeyword(@RequestParam String keyword) {
+        Map<String, Object> travelMap = new HashMap<>();
+        travelMap.put("modelList", frontModelJpaApiService.findModelKeyword(keyword));
+        return ResponseEntity.ok().body(travelMap);
+    }
 }

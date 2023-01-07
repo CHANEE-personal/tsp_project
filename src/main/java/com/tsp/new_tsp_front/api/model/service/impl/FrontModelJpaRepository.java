@@ -8,6 +8,9 @@ import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.domain.recommend.FrontRecommendDTO;
 import com.tsp.new_tsp_front.api.model.domain.recommend.FrontRecommendEntity;
 import com.tsp.new_tsp_front.api.model.domain.recommend.QFrontRecommendEntity;
+import com.tsp.new_tsp_front.api.model.domain.search.FrontSearchDTO;
+import com.tsp.new_tsp_front.api.model.domain.search.FrontSearchEntity;
+import com.tsp.new_tsp_front.api.model.domain.search.QFrontSearchEntity;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.*;
 
+import static com.querydsl.core.types.Projections.fields;
 import static com.tsp.new_tsp_front.api.agency.domain.QFrontAgencyEntity.frontAgencyEntity;
 import static com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity.commonImageEntity;
 import static com.tsp.new_tsp_front.api.model.domain.FrontModelEntity.toDto;
@@ -268,5 +272,52 @@ public class FrontModelJpaRepository {
                 .fetch();
 
         return recommendList != null ? FrontRecommendEntity.toDtoList(recommendList) : emptyList();
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : rankingKeywordList
+     * 2. ClassName  : FrontModelJpaRepository.java
+     * 3. Comment    : 프론트 모델 검색어 랭킹 리스트 조회
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2023. 01. 07.
+     * </pre>
+     */
+    public List<FrontSearchDTO> rankingKeywordList() {
+        List<FrontSearchEntity> rankingList = queryFactory
+                .select(fields(FrontSearchEntity.class,
+                        QFrontSearchEntity.frontSearchEntity.searchKeyword,
+                        QFrontSearchEntity.frontSearchEntity.searchKeyword.count().as("count")))
+                .from(QFrontSearchEntity.frontSearchEntity)
+                .groupBy(QFrontSearchEntity.frontSearchEntity.searchKeyword)
+                .orderBy(QFrontSearchEntity.frontSearchEntity.searchKeyword.count().desc())
+                .offset(0)
+                .limit(10)
+                .fetch();
+
+        return rankingList != null ? FrontSearchEntity.toDtoList(rankingList) : Collections.emptyList();
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : findModelKeyword
+     * 2. ClassName  : FrontModelJpaRepository.java
+     * 3. Comment    : 추천 검색어 or 검색어 랭킹을 통한 모델 검색
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2023. 01. 07.
+     * </pre>
+     */
+    public List<FrontModelDTO> findModelKeyword(String keyword) {
+        List<FrontModelEntity> modelList = queryFactory
+                .selectFrom(frontModelEntity)
+                .orderBy(frontModelEntity.idx.desc())
+                .leftJoin(frontModelEntity.commonImageEntityList, commonImageEntity)
+                .fetchJoin()
+                .where(frontModelEntity.modelKorName.contains(keyword)
+                        .or(frontModelEntity.modelEngName.contains(keyword))
+                        .or(frontModelEntity.modelDescription.contains(keyword)))
+                .fetch();
+
+        return modelList != null ? toDtoList(modelList) : Collections.emptyList();
     }
 }

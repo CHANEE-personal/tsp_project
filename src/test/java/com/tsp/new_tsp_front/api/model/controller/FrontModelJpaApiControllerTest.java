@@ -1,6 +1,7 @@
 package com.tsp.new_tsp_front.api.model.controller;
 
 import com.tsp.new_tsp_front.api.model.domain.recommend.FrontRecommendEntity;
+import com.tsp.new_tsp_front.api.model.domain.search.FrontSearchEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -224,5 +225,29 @@ class FrontModelJpaApiControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.recommendList.length()", greaterThan(0)));
+    }
+
+    @Test
+    @DisplayName("검색어 랭킹 리스트 조회 테스트")
+    void 검색어랭킹리스트조회테스트() throws Exception {
+        em.persist(FrontSearchEntity.builder().searchKeyword("모델1").build());
+        em.persist(FrontSearchEntity.builder().searchKeyword("모델1").build());
+        em.persist(FrontSearchEntity.builder().searchKeyword("모델2").build());
+
+        mockMvc.perform(get("/api/model/rank"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
+                .andExpect(jsonPath("$.rankList.length()", greaterThan(0)));
+    }
+
+    @Test
+    @DisplayName("검색어를 통한 여행지 조회 테스트")
+    void 검색어를통한여행지조회테스트() throws Exception {
+        mockMvc.perform(get("/api/model/keyword").param("keyword", "김예영"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8"))
+                .andExpect(jsonPath("$.modelList.length()", greaterThan(0)));
     }
 }
