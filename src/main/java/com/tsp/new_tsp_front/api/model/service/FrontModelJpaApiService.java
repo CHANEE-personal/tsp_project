@@ -3,6 +3,7 @@ package com.tsp.new_tsp_front.api.model.service;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.domain.recommend.FrontRecommendDTO;
+import com.tsp.new_tsp_front.api.model.domain.search.FrontSearchDTO;
 import com.tsp.new_tsp_front.api.model.service.impl.FrontModelJpaRepository;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -142,5 +143,35 @@ public class FrontModelJpaApiService {
     @Transactional(readOnly = true)
     public List<FrontRecommendDTO> findRecommendList() {
         return frontModelJpaRepository.findRecommendList();
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : rankingKeywordList
+     * 2. ClassName  : FrontModelJpaService.java
+     * 3. Comment    : 프론트 모델 검색어 랭킹 리스트 조회
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2023. 01. 07.
+     * </pre>
+     */
+    @Cacheable(value = "rankKeyword")
+    @Transactional(readOnly = true)
+    public List<FrontSearchDTO> rankingKeywordList() {
+        return frontModelJpaRepository.rankingKeywordList();
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : findModelKeyword
+     * 2. ClassName  : FrontModelJpaRepository.java
+     * 3. Comment    : 추천 검색어 or 검색어 랭킹을 통한 모델 검색
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2023. 01. 07.
+     * </pre>
+     */
+    @Cacheable(value = "searchKeyword")
+    @Transactional(readOnly = true)
+    public List<FrontModelDTO> findModelKeyword(String keyword) {
+        return frontModelJpaRepository.findModelKeyword(keyword);
     }
 }
