@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.new_tsp_front.api.notice.service.impl.NoticeMapper.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -55,7 +54,7 @@ class FrontNoticeJpaRepositoryTest {
                 .viewCount(1)
                 .build();
 
-        frontNoticeDTO = INSTANCE.toDto(frontNoticeEntity);
+        frontNoticeDTO = FrontNoticeEntity.toDto(frontNoticeEntity);
     }
 
     @BeforeEach
@@ -75,7 +74,7 @@ class FrontNoticeJpaRepositoryTest {
         noticeMap.put("searchKeyword", "하하");
 
         // then
-        assertThat(frontNoticeJpaRepository.findNoticesList(noticeMap)).isNotEmpty();
+        assertThat(frontNoticeJpaRepository.findNoticeList(noticeMap)).isNotEmpty();
     }
 
     @Test
@@ -90,8 +89,8 @@ class FrontNoticeJpaRepositoryTest {
         noticeList.add(FrontNoticeDTO.builder().idx(1L).title("공지사항").description("공지사항").visible("Y").build());
 
         // when
-        when(mockFrontNoticeJpaRepository.findNoticesList(noticeMap)).thenReturn(noticeList);
-        List<FrontNoticeDTO> newNoticeList = mockFrontNoticeJpaRepository.findNoticesList(noticeMap);
+        when(mockFrontNoticeJpaRepository.findNoticeList(noticeMap)).thenReturn(noticeList);
+        List<FrontNoticeDTO> newNoticeList = mockFrontNoticeJpaRepository.findNoticeList(noticeMap);
 
         // then
         assertThat(newNoticeList.get(0).getIdx()).isEqualTo(noticeList.get(0).getIdx());
@@ -99,12 +98,12 @@ class FrontNoticeJpaRepositoryTest {
         assertThat(newNoticeList.get(0).getDescription()).isEqualTo(noticeList.get(0).getDescription());
 
         // verify
-        verify(mockFrontNoticeJpaRepository, times(1)).findNoticesList(noticeMap);
-        verify(mockFrontNoticeJpaRepository, atLeastOnce()).findNoticesList(noticeMap);
+        verify(mockFrontNoticeJpaRepository, times(1)).findNoticeList(noticeMap);
+        verify(mockFrontNoticeJpaRepository, atLeastOnce()).findNoticeList(noticeMap);
         verifyNoMoreInteractions(mockFrontNoticeJpaRepository);
 
         InOrder inOrder = inOrder(mockFrontNoticeJpaRepository);
-        inOrder.verify(mockFrontNoticeJpaRepository).findNoticesList(noticeMap);
+        inOrder.verify(mockFrontNoticeJpaRepository).findNoticeList(noticeMap);
     }
 
     @Test
@@ -119,8 +118,8 @@ class FrontNoticeJpaRepositoryTest {
         noticeList.add(FrontNoticeDTO.builder().idx(1L).title("공지사항").description("공지사항").visible("Y").build());
 
         // when
-        given(mockFrontNoticeJpaRepository.findNoticesList(noticeMap)).willReturn(noticeList);
-        List<FrontNoticeDTO> newNoticeList = mockFrontNoticeJpaRepository.findNoticesList(noticeMap);
+        given(mockFrontNoticeJpaRepository.findNoticeList(noticeMap)).willReturn(noticeList);
+        List<FrontNoticeDTO> newNoticeList = mockFrontNoticeJpaRepository.findNoticeList(noticeMap);
 
         // then
         assertThat(newNoticeList.get(0).getIdx()).isEqualTo(noticeList.get(0).getIdx());
@@ -128,8 +127,8 @@ class FrontNoticeJpaRepositoryTest {
         assertThat(newNoticeList.get(0).getDescription()).isEqualTo(noticeList.get(0).getDescription());
 
         // verify
-        then(mockFrontNoticeJpaRepository).should(times(1)).findNoticesList(noticeMap);
-        then(mockFrontNoticeJpaRepository).should(atLeastOnce()).findNoticesList(noticeMap);
+        then(mockFrontNoticeJpaRepository).should(times(1)).findNoticeList(noticeMap);
+        then(mockFrontNoticeJpaRepository).should(atLeastOnce()).findNoticeList(noticeMap);
         then(mockFrontNoticeJpaRepository).shouldHaveNoMoreInteractions();
     }
 
@@ -140,13 +139,14 @@ class FrontNoticeJpaRepositoryTest {
         Map<String, Object> noticeMap = new HashMap<>();
         noticeMap.put("jpaStartPage", 1);
         noticeMap.put("size", 3);
+        noticeMap.put("topFixed", true);
 
         List<FrontNoticeDTO> noticeList = new ArrayList<>();
         noticeList.add(FrontNoticeDTO.builder().idx(1L).title("공지사항").description("공지사항").visible("Y").topFixed(Boolean.TRUE.toString()).build());
 
         // when
-        when(mockFrontNoticeJpaRepository.findFixedNoticesList(noticeMap)).thenReturn(noticeList);
-        List<FrontNoticeDTO> newNoticeList = mockFrontNoticeJpaRepository.findFixedNoticesList(noticeMap);
+        when(mockFrontNoticeJpaRepository.findNoticeList(noticeMap)).thenReturn(noticeList);
+        List<FrontNoticeDTO> newNoticeList = mockFrontNoticeJpaRepository.findNoticeList(noticeMap);
 
         // then
         assertThat(newNoticeList.get(0).getIdx()).isEqualTo(noticeList.get(0).getIdx());
@@ -155,12 +155,12 @@ class FrontNoticeJpaRepositoryTest {
         assertThat(newNoticeList.get(0).getTopFixed()).isEqualTo(noticeList.get(0).getTopFixed());
 
         // verify
-        verify(mockFrontNoticeJpaRepository, times(1)).findFixedNoticesList(noticeMap);
-        verify(mockFrontNoticeJpaRepository, atLeastOnce()).findFixedNoticesList(noticeMap);
+        verify(mockFrontNoticeJpaRepository, times(1)).findNoticeList(noticeMap);
+        verify(mockFrontNoticeJpaRepository, atLeastOnce()).findNoticeList(noticeMap);
         verifyNoMoreInteractions(mockFrontNoticeJpaRepository);
 
         InOrder inOrder = inOrder(mockFrontNoticeJpaRepository);
-        inOrder.verify(mockFrontNoticeJpaRepository).findFixedNoticesList(noticeMap);
+        inOrder.verify(mockFrontNoticeJpaRepository).findNoticeList(noticeMap);
     }
 
     @Test
@@ -170,13 +170,14 @@ class FrontNoticeJpaRepositoryTest {
         Map<String, Object> noticeMap = new HashMap<>();
         noticeMap.put("jpaStartPage", 1);
         noticeMap.put("size", 3);
+        noticeMap.put("topFixed", true);
 
         List<FrontNoticeDTO> noticeList = new ArrayList<>();
         noticeList.add(FrontNoticeDTO.builder().idx(1L).title("공지사항").description("공지사항").visible("Y").topFixed(Boolean.TRUE.toString()).build());
 
         // when
-        given(mockFrontNoticeJpaRepository.findFixedNoticesList(noticeMap)).willReturn(noticeList);
-        List<FrontNoticeDTO> newNoticeList = mockFrontNoticeJpaRepository.findFixedNoticesList(noticeMap);
+        given(mockFrontNoticeJpaRepository.findNoticeList(noticeMap)).willReturn(noticeList);
+        List<FrontNoticeDTO> newNoticeList = mockFrontNoticeJpaRepository.findNoticeList(noticeMap);
 
         // then
         assertThat(newNoticeList.get(0).getIdx()).isEqualTo(noticeList.get(0).getIdx());
@@ -185,8 +186,8 @@ class FrontNoticeJpaRepositoryTest {
         assertThat(newNoticeList.get(0).getTopFixed()).isEqualTo(noticeList.get(0).getTopFixed());
 
         // verify
-        then(mockFrontNoticeJpaRepository).should(times(1)).findFixedNoticesList(noticeMap);
-        then(mockFrontNoticeJpaRepository).should(atLeastOnce()).findFixedNoticesList(noticeMap);
+        then(mockFrontNoticeJpaRepository).should(times(1)).findNoticeList(noticeMap);
+        then(mockFrontNoticeJpaRepository).should(atLeastOnce()).findNoticeList(noticeMap);
         then(mockFrontNoticeJpaRepository).shouldHaveNoMoreInteractions();
     }
 
@@ -201,11 +202,11 @@ class FrontNoticeJpaRepositoryTest {
                 .visible("Y")
                 .build();
 
-        frontNoticeDTO = INSTANCE.toDto(frontNoticeEntity);
+        frontNoticeDTO = FrontNoticeEntity.toDto(frontNoticeEntity);
 
         // when
-        when(mockFrontNoticeJpaRepository.findOneNotice(frontNoticeEntity)).thenReturn(frontNoticeDTO);
-        FrontNoticeDTO noticeInfo = mockFrontNoticeJpaRepository.findOneNotice(frontNoticeEntity);
+        when(mockFrontNoticeJpaRepository.findOneNotice(frontNoticeEntity.getIdx())).thenReturn(frontNoticeDTO);
+        FrontNoticeDTO noticeInfo = mockFrontNoticeJpaRepository.findOneNotice(frontNoticeEntity.getIdx());
 
         // then
         assertThat(noticeInfo.getIdx()).isEqualTo(1);
@@ -214,12 +215,12 @@ class FrontNoticeJpaRepositoryTest {
         assertThat(noticeInfo.getVisible()).isEqualTo("Y");
 
         // verify
-        verify(mockFrontNoticeJpaRepository, times(1)).findOneNotice(frontNoticeEntity);
-        verify(mockFrontNoticeJpaRepository, atLeastOnce()).findOneNotice(frontNoticeEntity);
+        verify(mockFrontNoticeJpaRepository, times(1)).findOneNotice(frontNoticeEntity.getIdx());
+        verify(mockFrontNoticeJpaRepository, atLeastOnce()).findOneNotice(frontNoticeEntity.getIdx());
         verifyNoMoreInteractions(mockFrontNoticeJpaRepository);
 
         InOrder inOrder = inOrder(mockFrontNoticeJpaRepository);
-        inOrder.verify(mockFrontNoticeJpaRepository).findOneNotice(frontNoticeEntity);
+        inOrder.verify(mockFrontNoticeJpaRepository).findOneNotice(frontNoticeEntity.getIdx());
     }
 
     @Test
@@ -233,11 +234,11 @@ class FrontNoticeJpaRepositoryTest {
                 .visible("Y")
                 .build();
 
-        frontNoticeDTO = INSTANCE.toDto(frontNoticeEntity);
+        frontNoticeDTO = FrontNoticeEntity.toDto(frontNoticeEntity);
 
         // when
-        given(mockFrontNoticeJpaRepository.findOneNotice(frontNoticeEntity)).willReturn(frontNoticeDTO);
-        FrontNoticeDTO noticeInfo = mockFrontNoticeJpaRepository.findOneNotice(frontNoticeEntity);
+        given(mockFrontNoticeJpaRepository.findOneNotice(frontNoticeEntity.getIdx())).willReturn(frontNoticeDTO);
+        FrontNoticeDTO noticeInfo = mockFrontNoticeJpaRepository.findOneNotice(frontNoticeEntity.getIdx());
 
         // then
         assertThat(noticeInfo.getIdx()).isEqualTo(1);
@@ -246,8 +247,8 @@ class FrontNoticeJpaRepositoryTest {
         assertThat(noticeInfo.getVisible()).isEqualTo("Y");
 
         // verify
-        then(mockFrontNoticeJpaRepository).should(times(1)).findOneNotice(frontNoticeEntity);
-        then(mockFrontNoticeJpaRepository).should(atLeastOnce()).findOneNotice(frontNoticeEntity);
+        then(mockFrontNoticeJpaRepository).should(times(1)).findOneNotice(frontNoticeEntity.getIdx());
+        then(mockFrontNoticeJpaRepository).should(atLeastOnce()).findOneNotice(frontNoticeEntity.getIdx());
         then(mockFrontNoticeJpaRepository).shouldHaveNoMoreInteractions();
     }
 
@@ -258,12 +259,12 @@ class FrontNoticeJpaRepositoryTest {
         frontNoticeEntity = FrontNoticeEntity.builder().idx(2L).build();
 
         // when
-        frontNoticeDTO = frontNoticeJpaRepository.findOneNotice(frontNoticeEntity);
+        frontNoticeDTO = frontNoticeJpaRepository.findOneNotice(frontNoticeEntity.getIdx());
 
         // 이전 프로덕션
-        assertThat(frontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity).getIdx()).isEqualTo(1);
+        assertThat(frontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity.getIdx()).getIdx()).isEqualTo(1);
         // 다음 프로덕션
-        assertThat(frontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity).getIdx()).isEqualTo(3);
+        assertThat(frontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity.getIdx()).getIdx()).isEqualTo(3);
     }
 
     @Test
@@ -273,21 +274,21 @@ class FrontNoticeJpaRepositoryTest {
         frontNoticeEntity = FrontNoticeEntity.builder().idx(2L).build();
 
         // when
-        frontNoticeDTO = frontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity);
+        frontNoticeDTO = frontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity.getIdx());
 
-        when(mockFrontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity)).thenReturn(frontNoticeDTO);
-        FrontNoticeDTO noticeInfo = mockFrontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity);
+        when(mockFrontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity.getIdx())).thenReturn(frontNoticeDTO);
+        FrontNoticeDTO noticeInfo = mockFrontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity.getIdx());
 
         // then
         assertThat(noticeInfo.getIdx()).isEqualTo(1);
 
         // verify
-        verify(mockFrontNoticeJpaRepository, times(1)).findPrevOneNotice(frontNoticeEntity);
-        verify(mockFrontNoticeJpaRepository, atLeastOnce()).findPrevOneNotice(frontNoticeEntity);
+        verify(mockFrontNoticeJpaRepository, times(1)).findPrevOneNotice(frontNoticeEntity.getIdx());
+        verify(mockFrontNoticeJpaRepository, atLeastOnce()).findPrevOneNotice(frontNoticeEntity.getIdx());
         verifyNoMoreInteractions(mockFrontNoticeJpaRepository);
 
         InOrder inOrder = inOrder(mockFrontNoticeJpaRepository);
-        inOrder.verify(mockFrontNoticeJpaRepository).findPrevOneNotice(frontNoticeEntity);
+        inOrder.verify(mockFrontNoticeJpaRepository).findPrevOneNotice(frontNoticeEntity.getIdx());
     }
 
     @Test
@@ -297,17 +298,17 @@ class FrontNoticeJpaRepositoryTest {
         frontNoticeEntity = FrontNoticeEntity.builder().idx(2L).build();
 
         // when
-        frontNoticeDTO = frontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity);
+        frontNoticeDTO = frontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity.getIdx());
 
-        given(mockFrontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity)).willReturn(frontNoticeDTO);
-        FrontNoticeDTO noticeInfo = mockFrontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity);
+        given(mockFrontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity.getIdx())).willReturn(frontNoticeDTO);
+        FrontNoticeDTO noticeInfo = mockFrontNoticeJpaRepository.findPrevOneNotice(frontNoticeEntity.getIdx());
 
         // then
         assertThat(noticeInfo.getIdx()).isEqualTo(1);
 
         // verify
-        then(mockFrontNoticeJpaRepository).should(times(1)).findPrevOneNotice(frontNoticeEntity);
-        then(mockFrontNoticeJpaRepository).should(atLeastOnce()).findPrevOneNotice(frontNoticeEntity);
+        then(mockFrontNoticeJpaRepository).should(times(1)).findPrevOneNotice(frontNoticeEntity.getIdx());
+        then(mockFrontNoticeJpaRepository).should(atLeastOnce()).findPrevOneNotice(frontNoticeEntity.getIdx());
         then(mockFrontNoticeJpaRepository).shouldHaveNoMoreInteractions();
     }
 
@@ -318,21 +319,21 @@ class FrontNoticeJpaRepositoryTest {
         frontNoticeEntity = FrontNoticeEntity.builder().idx(2L).build();
 
         // when
-        frontNoticeDTO = frontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity);
+        frontNoticeDTO = frontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity.getIdx());
 
-        when(mockFrontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity)).thenReturn(frontNoticeDTO);
-        FrontNoticeDTO noticeInfo = mockFrontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity);
+        when(mockFrontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity.getIdx())).thenReturn(frontNoticeDTO);
+        FrontNoticeDTO noticeInfo = mockFrontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity.getIdx());
 
         // then
         assertThat(noticeInfo.getIdx()).isEqualTo(3);
 
         // verify
-        verify(mockFrontNoticeJpaRepository, times(1)).findNextOneNotice(frontNoticeEntity);
-        verify(mockFrontNoticeJpaRepository, atLeastOnce()).findNextOneNotice(frontNoticeEntity);
+        verify(mockFrontNoticeJpaRepository, times(1)).findNextOneNotice(frontNoticeEntity.getIdx());
+        verify(mockFrontNoticeJpaRepository, atLeastOnce()).findNextOneNotice(frontNoticeEntity.getIdx());
         verifyNoMoreInteractions(mockFrontNoticeJpaRepository);
 
         InOrder inOrder = inOrder(mockFrontNoticeJpaRepository);
-        inOrder.verify(mockFrontNoticeJpaRepository).findNextOneNotice(frontNoticeEntity);
+        inOrder.verify(mockFrontNoticeJpaRepository).findNextOneNotice(frontNoticeEntity.getIdx());
     }
 
     @Test
@@ -342,17 +343,17 @@ class FrontNoticeJpaRepositoryTest {
         frontNoticeEntity = FrontNoticeEntity.builder().idx(2L).build();
 
         // when
-        frontNoticeDTO = frontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity);
+        frontNoticeDTO = frontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity.getIdx());
 
-        given(mockFrontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity)).willReturn(frontNoticeDTO);
-        FrontNoticeDTO noticeInfo = mockFrontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity);
+        given(mockFrontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity.getIdx())).willReturn(frontNoticeDTO);
+        FrontNoticeDTO noticeInfo = mockFrontNoticeJpaRepository.findNextOneNotice(frontNoticeEntity.getIdx());
 
         // then
         assertThat(noticeInfo.getIdx()).isEqualTo(3);
 
         // verify
-        then(mockFrontNoticeJpaRepository).should(times(1)).findNextOneNotice(frontNoticeEntity);
-        then(mockFrontNoticeJpaRepository).should(atLeastOnce()).findNextOneNotice(frontNoticeEntity);
+        then(mockFrontNoticeJpaRepository).should(times(1)).findNextOneNotice(frontNoticeEntity.getIdx());
+        then(mockFrontNoticeJpaRepository).should(atLeastOnce()).findNextOneNotice(frontNoticeEntity.getIdx());
         then(mockFrontNoticeJpaRepository).shouldHaveNoMoreInteractions();
     }
 }

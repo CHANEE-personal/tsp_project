@@ -2,14 +2,15 @@ package com.tsp.new_tsp_front.api.model.service;
 
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
+import com.tsp.new_tsp_front.api.model.domain.recommend.FrontRecommendDTO;
+import com.tsp.new_tsp_front.api.model.domain.search.FrontSearchDTO;
 import com.tsp.new_tsp_front.api.model.service.impl.FrontModelJpaRepository;
-import com.tsp.new_tsp_front.api.model.service.impl.ModelMapper;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.ModelMap;
 
 import java.util.List;
 import java.util.Map;
@@ -23,57 +24,46 @@ public class FrontModelJpaApiService {
 
     /**
      * <pre>
-     * 1. MethodName : getModelCount
+     * 1. MethodName : findModelCount
      * 2. ClassName  : FrontModelJpaApiService.java
      * 3. Comment    : 프론트 > 모델 리스트 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 02.
-     * </pre>
-     */
-    public int getModelCount(Map<String, Object> modelMap) throws TspException {
-        try {
-            return frontModelJpaRepository.getModelCount(modelMap);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL_LIST, e);
-        }
-    }
-
-    /**
-     * <pre>
-     * 1. MethodName : getModelList
-     * 2. ClassName  : FrontModelJpaApiService.java
-     * 3. Comment    : 프론트 > 모델 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 02.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 02.
      * </pre>
      */
     @Transactional(readOnly = true)
-    public List<FrontModelDTO> getModelList(Map<String, Object> modelMap) throws TspException {
-        try {
-            return frontModelJpaRepository.getModelList(modelMap);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL_LIST, e);
-        }
+    public int findModelCount(Map<String, Object> modelMap) {
+        return frontModelJpaRepository.findModelCount(modelMap);
     }
 
     /**
      * <pre>
-     * 1. MethodName : getModelInfo
+     * 1. MethodName : findModelList
      * 2. ClassName  : FrontModelJpaApiService.java
-     * 3. Comment    : 프론트 > 모델 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 09.
+     * 3. Comment    : 프론트 > 모델 리스트 조회
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 02.
      * </pre>
      */
+    @Cacheable(value = "model", key = "#modelMap")
+    @Transactional(readOnly = true)
+    public List<FrontModelDTO> findModelList(Map<String, Object> modelMap) {
+        return frontModelJpaRepository.findModelList(modelMap);
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : findOneModel
+     * 2. ClassName  : FrontModelJpaApiService.java
+     * 3. Comment    : 프론트 > 모델 상세 조회
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 09.
+     * </pre>
+     */
+    @CachePut(value = "model", key = "#idx")
     @Transactional
-    public FrontModelDTO getModelInfo(Long idx) throws TspException {
-        try {
-            FrontModelEntity oneModel = frontModelJpaRepository.getModelInfo(idx);
-            oneModel.updateViewCount();
-            return ModelMapper.INSTANCE.toDto(oneModel);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL, e);
-        }
+    public FrontModelDTO findOneModel(Long idx) {
+        return frontModelJpaRepository.findOneModel(idx);
     }
 
     /**
@@ -81,17 +71,14 @@ public class FrontModelJpaApiService {
      * 1. MethodName : findPrevOneModel
      * 2. ClassName  : FrontModelJpaServiceImpl.java
      * 3. Comment    : 이전 모델 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
-    @Transactional(readOnly = true)
-    public FrontModelDTO findPrevOneModel(FrontModelEntity frontModelEntity) throws TspException {
-        try {
-            return frontModelJpaRepository.findPrevOneModel(frontModelEntity);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL, e);
-        }
+    @CachePut(value = "model", key = "#frontModelEntity.idx")
+    @Transactional
+    public FrontModelDTO findPrevOneModel(FrontModelEntity frontModelEntity) {
+        return frontModelJpaRepository.findPrevOneModel(frontModelEntity);
     }
 
     /**
@@ -99,53 +86,29 @@ public class FrontModelJpaApiService {
      * 1. MethodName : findPrevOneModel
      * 2. ClassName  : FrontModelJpaServiceImpl.java
      * 3. Comment    : 다음 모델 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
-    @Transactional(readOnly = true)
-    public FrontModelDTO findNextOneModel(FrontModelEntity frontModelEntity) throws TspException {
-        try {
-            return frontModelJpaRepository.findNextOneModel(frontModelEntity);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL, e);
-        }
+    @CachePut(value = "model", key = "#frontModelEntity.idx")
+    @Transactional
+    public FrontModelDTO findNextOneModel(FrontModelEntity frontModelEntity) {
+        return frontModelJpaRepository.findNextOneModel(frontModelEntity);
     }
 
     /**
      * <pre>
-     * 1. MethodName : getMainModelList
+     * 1. MethodName : findMainModelList
      * 2. ClassName  : FrontModelJpaApiService.java
      * 3. Comment    : 프론트 > 메인 모델 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 03. 27.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 03. 27.
      * </pre>
      */
+    @Cacheable("mainModel")
     @Transactional(readOnly = true)
-    public List<FrontModelDTO> getMainModelList() throws TspException {
-        try {
-            return this.frontModelJpaRepository.getMainModelList();
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL_LIST, e);
-        }
-    }
-
-    /**
-     * <pre>
-     * 1. MethodName : favoriteModelCount
-     * 2. ClassName  : FrontModelJpaApiService.java
-     * 3. Comment    : 프론트 > 메인 모델 좋아요 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 03. 27.
-     * </pre>
-     */
-    @Transactional(readOnly = true)
-    public Integer favoriteModelCount(Long idx) throws TspException {
-        try {
-            return this.frontModelJpaRepository.favoriteModelCount(idx);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL, e);
-        }
+    public List<FrontModelDTO> findMainModelList() {
+        return this.frontModelJpaRepository.findMainModelList();
     }
 
     /**
@@ -153,17 +116,15 @@ public class FrontModelJpaApiService {
      * 1. MethodName : favoriteModel
      * 2. ClassName  : FrontModelJpaApiService.java
      * 3. Comment    : 프론트 > 메인 모델 좋아요
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 03. 27.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 03. 27.
      * </pre>
      */
-    @Modifying(clearAutomatically = true)
+    @CachePut(value = "model", key = "#idx")
     @Transactional
-    public Integer favoriteModel(Long idx) throws TspException {
+    public int favoriteModel(Long idx) {
         try {
-            FrontModelEntity oneModel = frontModelJpaRepository.getModelInfo(idx);
-            oneModel.updateFavoriteCount();
-            return oneModel.getModelFavoriteCount();
+            return frontModelJpaRepository.favoriteModel(idx);
         } catch (Exception e) {
             throw new TspException(ERROR_MODEL_LIKE, e);
         }
@@ -171,36 +132,46 @@ public class FrontModelJpaApiService {
 
     /**
      * <pre>
-     * 1. MethodName : getNewModelCount
+     * 1. MethodName : findRecommendList
      * 2. ClassName  : FrontModelJpaApiService.java
-     * 3. Comment    : 프론트 > 새로운 모델 리스트 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 29.
+     * 3. Comment    : 프론트 > 추천 검색어 리스트 조회
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2023. 01. 05.
      * </pre>
      */
-    public int getNewModelCount(Map<String, Object> newModelMap) throws TspException {
-        try {
-            return frontModelJpaRepository.getNewModelCount(newModelMap);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL_LIST, e);
-        }
+    @Cacheable(value = "recommend")
+    @Transactional(readOnly = true)
+    public List<FrontRecommendDTO> findRecommendList() {
+        return frontModelJpaRepository.findRecommendList();
     }
 
     /**
      * <pre>
-     * 1. MethodName : getNewModelList
-     * 2. ClassName  : FrontModelJpaApiService.java
-     * 3. Comment    : 프론트 > 새로운 모델 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 29.
+     * 1. MethodName : rankingKeywordList
+     * 2. ClassName  : FrontModelJpaService.java
+     * 3. Comment    : 프론트 모델 검색어 랭킹 리스트 조회
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2023. 01. 07.
      * </pre>
      */
+    @Cacheable(value = "rankKeyword")
     @Transactional(readOnly = true)
-    public List<FrontModelDTO> getNewModelList(Map<String, Object> newModelMap) throws TspException {
-        try {
-            return frontModelJpaRepository.getNewModelList(newModelMap);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL_LIST, e);
-        }
+    public List<FrontSearchDTO> rankingKeywordList() {
+        return frontModelJpaRepository.rankingKeywordList();
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : findModelKeyword
+     * 2. ClassName  : FrontModelJpaRepository.java
+     * 3. Comment    : 추천 검색어 or 검색어 랭킹을 통한 모델 검색
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2023. 01. 07.
+     * </pre>
+     */
+    @Cacheable(value = "searchKeyword")
+    @Transactional(readOnly = true)
+    public List<FrontModelDTO> findModelKeyword(String keyword) {
+        return frontModelJpaRepository.findModelKeyword(keyword);
     }
 }

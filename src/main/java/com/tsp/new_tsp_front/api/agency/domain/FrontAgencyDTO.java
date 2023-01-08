@@ -19,8 +19,8 @@ import java.util.List;
 @AllArgsConstructor
 @ApiModel(value = "소속사 관련 변수")
 public class FrontAgencyDTO extends NewCommonDTO {
-    @ApiModelProperty(required = true, value = "rnum", hidden = true)
-    private Integer rnum;
+    @ApiModelProperty(required = true, value = "rowNum", hidden = true)
+    private Integer rowNum;
 
     @ApiModelProperty(required = true, value = "idx", hidden = true)
     private Long idx;
@@ -34,7 +34,7 @@ public class FrontAgencyDTO extends NewCommonDTO {
     private String agencyDescription;
 
     @ApiModelProperty(value = "favoriteCount")
-    private Integer favoriteCount;
+    private int favoriteCount;
 
     @NotEmpty(message = "소속사 노출 여부 선택은 필수입니다.")
     @ApiModelProperty(required = true, value = "visible")

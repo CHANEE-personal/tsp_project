@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_front.api.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.common.domain.NewCodeEntity;
@@ -9,7 +10,9 @@ import com.tsp.new_tsp_front.api.model.domain.schedule.FrontScheduleEntity;
 import com.tsp.new_tsp_front.common.CustomConverter;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
@@ -19,8 +22,10 @@ import javax.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.CascadeType.REMOVE;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.*;
 
@@ -35,7 +40,7 @@ import static javax.persistence.GenerationType.*;
 @Table(name = "tsp_model")
 public class FrontModelEntity extends NewCommonMappedClass {
     @Transient
-    private Integer rnum;
+    private Integer rowNum;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -123,21 +128,28 @@ public class FrontModelEntity extends NewCommonMappedClass {
     @Convert(converter = CustomConverter.class)
     private ArrayList<CareerJson> careerList;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "category_cd", insertable = false, updatable = false)
     private NewCodeEntity newModelCodeJpaDTO;
 
-    @OneToMany(mappedBy = "frontModelEntity")
+    @JsonIgnore
+    @BatchSize(size = 5)
+    @Where(clause = "type_name = 'model'")
+    @OneToMany(mappedBy = "frontModelEntity", fetch = LAZY, cascade = REMOVE)
     private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 
+    @JsonIgnore
     @OneToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn(name = "agency_idx", referencedColumnName = "idx", insertable = false, updatable = false)
     private FrontAgencyEntity frontAgencyEntity;
 
-    @OneToMany(mappedBy = "frontModelEntity")
+    @JsonIgnore
+    @OneToMany(mappedBy = "frontModelEntity", fetch = LAZY)
     private List<FrontScheduleEntity> modelScheduleList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "frontModelEntity")
+    @JsonIgnore
+    @OneToMany(mappedBy = "frontModelEntity", fetch = LAZY)
     private List<FrontNegotiationEntity> modelNegotiationList = new ArrayList<>();
 
     public void updateViewCount() {
@@ -145,5 +157,45 @@ public class FrontModelEntity extends NewCommonMappedClass {
     }
     public void updateFavoriteCount() {
         this.modelFavoriteCount++;
+    }
+
+    public static FrontModelDTO toDto(FrontModelEntity entity) {
+        if (entity == null) return null;
+        return FrontModelDTO.builder()
+                .idx(entity.getIdx())
+                .rowNum(entity.getRowNum())
+                .categoryCd(entity.getCategoryCd())
+                .agencyIdx(entity.getAgencyIdx())
+                .modelKorName(entity.getModelKorName())
+                .modelEngName(entity.getModelEngName())
+                .modelDescription(entity.getModelDescription())
+                .visible(entity.getVisible())
+                .height(entity.getHeight())
+                .shoes(entity.getShoes())
+                .size3(entity.getSize3())
+                .categoryAge(entity.getCategoryAge())
+                .modelMainYn(entity.getModelMainYn())
+                .modelFirstName(entity.getModelFirstName())
+                .modelSecondName(entity.getModelSecondName())
+                .modelKorFirstName(entity.getModelKorFirstName())
+                .modelKorSecondName(entity.getModelKorSecondName())
+                .modelFavoriteCount(entity.getModelFavoriteCount())
+                .modelViewCount(entity.getModelViewCount())
+                .newYn(entity.getNewYn())
+                .careerList(entity.getCareerList())
+                .creator(entity.getCreator())
+                .createTime(entity.getCreateTime())
+                .updater(entity.getUpdater())
+                .updateTime(entity.getUpdateTime())
+                .modelAgency(FrontAgencyEntity.toDto(entity.getFrontAgencyEntity()))
+                .modelImage(CommonImageEntity.toDtoList(entity.getCommonImageEntityList()))
+                .build();
+    }
+
+    public static List<FrontModelDTO> toDtoList(List<FrontModelEntity> entityList) {
+        if (entityList == null) return null;
+        return entityList.stream()
+                .map(FrontModelEntity::toDto)
+                .collect(Collectors.toList());
     }
 }

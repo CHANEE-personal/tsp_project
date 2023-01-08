@@ -1,6 +1,7 @@
 package com.tsp.new_tsp_front.api.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -70,10 +71,12 @@ public class FrontModelImageEntity {
     @ApiModelProperty(value = "등록일자", hidden = true)
     private LocalDateTime regDate;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "type_idx", insertable = false, updatable = false)
     private FrontModelEntity modelEntity;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "idx", referencedColumnName = "type_idx", insertable = false, updatable = false)
     private CommonImageEntity imageEntity;

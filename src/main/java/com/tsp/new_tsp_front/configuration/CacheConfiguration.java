@@ -11,8 +11,8 @@ import java.util.List;
 
 import static java.util.List.of;
 
-@Configuration
-@EnableCaching
+/*@Configuration
+@EnableCaching*/
 public class CacheConfiguration {
 
     /**
@@ -24,15 +24,15 @@ public class CacheConfiguration {
      * 5. 작성일       : 2021. 02. 09.
      * </pre>
      */
-    @Bean
-    public CacheManager cacheManager() {
-        SimpleCacheManager cacheManager = new SimpleCacheManager();
-        cacheManager.setCaches(of(
-                new ConcurrentMapCache("model"),
-                new ConcurrentMapCache("production"),
-                new ConcurrentMapCache("portfolio"),
-                new ConcurrentMapCache("schedule"),
-                new ConcurrentMapCache("negotiation")));
-        return cacheManager;
-    }
+//    @Bean
+//    public CacheManager cacheManager() {
+//        SimpleCacheManager cacheManager = new SimpleCacheManager();
+//        cacheManager.setCaches(of(
+//                new ConcurrentMapCache("model"),
+//                new ConcurrentMapCache("production"),
+//                new ConcurrentMapCache("portfolio"),
+//                new ConcurrentMapCache("schedule"),
+//                new ConcurrentMapCache("negotiation")));
+//        return cacheManager;
+//    }
 }

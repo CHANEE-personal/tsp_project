@@ -4,18 +4,21 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tsp.new_tsp_front.api.notice.domain.FrontNoticeDTO;
 import com.tsp.new_tsp_front.api.notice.domain.FrontNoticeEntity;
+import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import static com.tsp.new_tsp_front.api.notice.domain.FrontNoticeEntity.toDto;
+import static com.tsp.new_tsp_front.api.notice.domain.FrontNoticeEntity.toDtoList;
 import static com.tsp.new_tsp_front.api.notice.domain.QFrontNoticeEntity.frontNoticeEntity;
-import static com.tsp.new_tsp_front.api.notice.service.impl.NoticeMapper.INSTANCE;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
+import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_NOTICE;
 import static java.lang.Boolean.TRUE;
+import static java.util.Collections.emptyList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,14 +30,21 @@ public class FrontNoticeJpaRepository {
         String searchType = getString(noticeMap.get("searchType"), "");
         String searchKeyword = getString(noticeMap.get("searchKeyword"), "");
 
-        if ("0".equals(searchType)) {
-            return frontNoticeEntity.title.contains(searchKeyword)
-                    .or(frontNoticeEntity.description.contains(searchKeyword));
-        } else if ("1".equals(searchType)) {
-            return frontNoticeEntity.title.contains(searchKeyword);
+        if (!Objects.equals(searchKeyword, "")) {
+            return "0".equals(searchType) ?
+                    frontNoticeEntity.title.contains(searchKeyword)
+                            .or(frontNoticeEntity.description.contains(searchKeyword)) :
+                    "1".equals(searchType) ?
+                            frontNoticeEntity.title.contains(searchKeyword) :
+                            frontNoticeEntity.description.contains(searchKeyword);
         } else {
-            return frontNoticeEntity.description.contains(searchKeyword);
+            return null;
         }
+    }
+
+    private BooleanExpression fixedNotice(Map<String, Object> noticeMap) {
+        String topFixed = !"".equals(getString(noticeMap.get("topFixed"), "")) ? TRUE.toString() : null;
+        return Objects.equals(topFixed, TRUE.toString()) ? frontNoticeEntity.topFixed.eq(topFixed) : null;
     }
 
     /**
@@ -42,76 +52,34 @@ public class FrontNoticeJpaRepository {
      * 1. MethodName : findNoticeCount
      * 2. ClassName  : AdminNoticeJpaRepository.java
      * 3. Comment    : 공지사항 리스트 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 16.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 08. 16.
      * </pre>
      */
-    public Integer findNoticeCount(Map<String, Object> noticeMap) {
-        return queryFactory.selectFrom(frontNoticeEntity).where(searchNotice(noticeMap)).fetch().size();
+    public int findNoticeCount(Map<String, Object> noticeMap) {
+        return queryFactory.selectFrom(frontNoticeEntity)
+                .where(searchNotice(noticeMap), fixedNotice(noticeMap)).fetch().size();
     }
 
     /**
      * <pre>
-     * 1. MethodName : findNoticesList
+     * 1. MethodName : findNoticeList
      * 2. ClassName  : AdminNoticeJpaRepository.java
      * 3. Comment    : 공지사항 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 16.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 08. 16.
      * </pre>
      */
-    public List<FrontNoticeDTO> findNoticesList(Map<String, Object> noticeMap) {
+    public List<FrontNoticeDTO> findNoticeList(Map<String, Object> noticeMap) {
         List<FrontNoticeEntity> noticeList = queryFactory
                 .selectFrom(frontNoticeEntity)
                 .orderBy(frontNoticeEntity.idx.desc())
-                .where(searchNotice(noticeMap))
+                .where(searchNotice(noticeMap), fixedNotice(noticeMap))
                 .offset(getInt(noticeMap.get("jpaStartPage"), 0))
                 .limit(getInt(noticeMap.get("size"), 0))
                 .fetch();
 
-        noticeList.forEach(list -> noticeList.get(noticeList.indexOf(list))
-                .setRnum(getInt(noticeMap.get("startPage"), 1) * (getInt(noticeMap.get("size"), 1)) - (2 - noticeList.indexOf(list))));
-
-        return INSTANCE.toDtoList(noticeList);
-    }
-
-    /**
-     * <pre>
-     * 1. MethodName : findFixedNoticeCount
-     * 2. ClassName  : AdminNoticeJpaRepository.java
-     * 3. Comment    : 상단고정 공지사항 리스트 갯수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 24.
-     * </pre>
-     */
-    public Integer findFixedNoticeCount(Map<String, Object> noticeMap) {
-        return queryFactory.selectFrom(frontNoticeEntity)
-                .where(searchNotice(noticeMap)
-                        .and(frontNoticeEntity.topFixed.eq(TRUE.toString()))).fetch().size();
-    }
-
-    /**
-     * <pre>
-     * 1. MethodName : findFixedNoticesList
-     * 2. ClassName  : AdminNoticeJpaRepository.java
-     * 3. Comment    : 상단 고정 공지사항 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 24.
-     * </pre>
-     */
-    public List<FrontNoticeDTO> findFixedNoticesList(Map<String, Object> noticeMap) {
-        List<FrontNoticeEntity> noticeList = queryFactory
-                .selectFrom(frontNoticeEntity)
-                .orderBy(frontNoticeEntity.idx.desc())
-                .where(searchNotice(noticeMap)
-                        .and(frontNoticeEntity.topFixed.eq(TRUE.toString())))
-                .offset(getInt(noticeMap.get("jpaStartPage"), 0))
-                .limit(getInt(noticeMap.get("size"), 0))
-                .fetch();
-
-        noticeList.forEach(list -> noticeList.get(noticeList.indexOf(list))
-                .setRnum(getInt(noticeMap.get("startPage"), 1) * (getInt(noticeMap.get("size"), 1)) - (2 - noticeList.indexOf(list))));
-
-        return INSTANCE.toDtoList(noticeList);
+        return noticeList != null ? toDtoList(noticeList) : emptyList();
     }
 
     /**
@@ -119,19 +87,19 @@ public class FrontNoticeJpaRepository {
      * 1. MethodName : findOneNotice
      * 2. ClassName  : AdminNoticeJpaRepository.java
      * 3. Comment    : 공지사항 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 16.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 08. 16.
      * </pre>
      */
-    FrontNoticeDTO findOneNotice(FrontNoticeEntity existFrontNoticeEntity) {
-        FrontNoticeEntity findOneNotice = queryFactory
+    FrontNoticeDTO findOneNotice(Long idx) {
+        FrontNoticeEntity findOneNotice = Optional.ofNullable(queryFactory
                 .selectFrom(frontNoticeEntity)
                 .orderBy(frontNoticeEntity.idx.desc())
-                .where(frontNoticeEntity.idx.eq(existFrontNoticeEntity.getIdx())
+                .where(frontNoticeEntity.idx.eq(idx)
                         .and(frontNoticeEntity.visible.eq("Y")))
-                .fetchOne();
+                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_NOTICE, new Throwable()));
 
-        return INSTANCE.toDto(findOneNotice);
+        return toDto(findOneNotice);
     }
 
     /**
@@ -139,20 +107,20 @@ public class FrontNoticeJpaRepository {
      * 1. MethodName : findPrevOneNotice
      * 2. ClassName  : FrontNoticeJpaRepository.java
      * 3. Comment    : 이전 공지사항 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
-    public FrontNoticeDTO findPrevOneNotice(FrontNoticeEntity existFrontNoticeEntity) {
+    public FrontNoticeDTO findPrevOneNotice(Long idx) {
         // 이전 공지사항 조회
-        FrontNoticeEntity findPrevOneNotice = queryFactory
+        FrontNoticeEntity findPrevOneNotice = Optional.ofNullable(queryFactory
                 .selectFrom(frontNoticeEntity)
                 .orderBy(frontNoticeEntity.idx.desc())
-                .where(frontNoticeEntity.idx.lt(existFrontNoticeEntity.getIdx())
+                .where(frontNoticeEntity.idx.lt(idx)
                         .and(frontNoticeEntity.visible.eq("Y")))
-                .fetchFirst();
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_NOTICE, new Throwable()));
 
-        return INSTANCE.toDto(findPrevOneNotice);
+        return toDto(findPrevOneNotice);
     }
 
     /**
@@ -160,19 +128,19 @@ public class FrontNoticeJpaRepository {
      * 1. MethodName : findNextOneNotice
      * 2. ClassName  : FrontNoticeJpaRepository.java
      * 3. Comment    : 다음 공지사항 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
-    public FrontNoticeDTO findNextOneNotice(FrontNoticeEntity existFrontNoticeEntity) {
+    public FrontNoticeDTO findNextOneNotice(Long idx) {
         // 다음 공지사항 조회
-        FrontNoticeEntity findNextOneNotice = queryFactory
+        FrontNoticeEntity findNextOneNotice = Optional.ofNullable(queryFactory
                 .selectFrom(frontNoticeEntity)
                 .orderBy(frontNoticeEntity.idx.desc())
-                .where(frontNoticeEntity.idx.gt(existFrontNoticeEntity.getIdx())
+                .where(frontNoticeEntity.idx.gt(idx)
                         .and(frontNoticeEntity.visible.eq("Y")))
-                .fetchFirst();
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_NOTICE, new Throwable()));
 
-        return INSTANCE.toDto(findNextOneNotice);
+        return toDto(findNextOneNotice);
     }
 }

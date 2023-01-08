@@ -1,4 +1,4 @@
-package com.tsp.new_tsp_front.api.faq.domain;
+package com.tsp.new_tsp_front.api.model.domain.search;
 
 import com.tsp.new_tsp_front.api.common.domain.NewCommonMappedClass;
 import lombok.*;
@@ -6,21 +6,20 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-@Entity
 @Getter
 @Setter
+@Entity
 @SuperBuilder
 @EqualsAndHashCode(of = "idx", callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tsp_faq")
-public class FrontFaqEntity extends NewCommonMappedClass {
+@Table(name = "tsp_search")
+public class FrontSearchEntity extends NewCommonMappedClass {
     @Transient
     private Integer rowNum;
 
@@ -29,29 +28,16 @@ public class FrontFaqEntity extends NewCommonMappedClass {
     @Column(name = "idx")
     private Long idx;
 
-    @Column(name = "title")
-    @NotEmpty(message = "제목 입력은 필수입니다.")
-    private String title;
+    @Column(name = "search_keyword")
+    @NotEmpty(message = "검색 키워드는 필수입니다.")
+    private String searchKeyword;
 
-    @Column(name = "description")
-    @Lob
-    @NotEmpty(message = "FAQ 내용 입력은 필수입니다.")
-    private String description;
-
-    @Column(name = "view_count")
-    private int viewCount;
-
-    @Column(name = "visible")
-    @NotEmpty(message = "FAQ 노출 여부 선택은 필수입니다.")
-    private String visible;
-
-    public static FrontFaqDTO toDto(FrontFaqEntity entity) {
+    public static FrontSearchDTO toDto(FrontSearchEntity entity) {
         if (entity == null) return null;
-        return FrontFaqDTO.builder().idx(entity.getIdx())
+        return FrontSearchDTO.builder()
                 .rowNum(entity.getRowNum())
-                .title(entity.getTitle())
-                .description(entity.getDescription())
-                .visible(entity.getVisible())
+                .idx(entity.getIdx())
+                .searchKeyword(entity.getSearchKeyword())
                 .creator(entity.getCreator())
                 .createTime(entity.getCreateTime())
                 .updater(entity.getUpdater())
@@ -59,10 +45,10 @@ public class FrontFaqEntity extends NewCommonMappedClass {
                 .build();
     }
 
-    public static List<FrontFaqDTO> toDtoList(List<FrontFaqEntity> entityList) {
+    public static List<FrontSearchDTO> toDtoList(List<FrontSearchEntity> entityList) {
         if (entityList == null) return null;
         return entityList.stream()
-                .map(FrontFaqEntity::toDto)
+                .map(FrontSearchEntity::toDto)
                 .collect(Collectors.toList());
     }
 }

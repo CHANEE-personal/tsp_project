@@ -2,12 +2,10 @@ package com.tsp.new_tsp_front.api.production.service;
 
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
-import com.tsp.new_tsp_front.api.production.service.impl.FrontProductionJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -57,8 +55,8 @@ class FrontProductionJpaApiServiceTest {
         returnProductionList.add(FrontProductionDTO.builder().idx(2L).title("productionTest").description("productionTest").visible("Y").build());
 
         // when
-        when(mockFrontProductionJpaApiService.getProductionList(productionMap)).thenReturn(returnProductionList);
-        List<FrontProductionDTO> productionList = mockFrontProductionJpaApiService.getProductionList(productionMap);
+        when(mockFrontProductionJpaApiService.findProductionList(productionMap)).thenReturn(returnProductionList);
+        List<FrontProductionDTO> productionList = mockFrontProductionJpaApiService.findProductionList(productionMap);
 
         // then
         assertAll(
@@ -72,12 +70,12 @@ class FrontProductionJpaApiServiceTest {
         assertThat(productionList.get(0).getVisible()).isEqualTo(returnProductionList.get(0).getVisible());
 
         // verify
-        verify(mockFrontProductionJpaApiService, times(1)).getProductionList(productionMap);
-        verify(mockFrontProductionJpaApiService, atLeastOnce()).getProductionList(productionMap);
+        verify(mockFrontProductionJpaApiService, times(1)).findProductionList(productionMap);
+        verify(mockFrontProductionJpaApiService, atLeastOnce()).findProductionList(productionMap);
         verifyNoMoreInteractions(mockFrontProductionJpaApiService);
 
         InOrder inOrder = inOrder(mockFrontProductionJpaApiService);
-        inOrder.verify(mockFrontProductionJpaApiService).getProductionList(productionMap);
+        inOrder.verify(mockFrontProductionJpaApiService).findProductionList(productionMap);
     }
 
     @Test
@@ -94,8 +92,8 @@ class FrontProductionJpaApiServiceTest {
         returnProductionList.add(FrontProductionDTO.builder().idx(2L).title("productionTest").description("productionTest").visible("Y").build());
 
         // when
-        given(mockFrontProductionJpaApiService.getProductionList(productionMap)).willReturn(returnProductionList);
-        List<FrontProductionDTO> productionList = mockFrontProductionJpaApiService.getProductionList(productionMap);
+        given(mockFrontProductionJpaApiService.findProductionList(productionMap)).willReturn(returnProductionList);
+        List<FrontProductionDTO> productionList = mockFrontProductionJpaApiService.findProductionList(productionMap);
 
         // then
         assertAll(
@@ -109,8 +107,8 @@ class FrontProductionJpaApiServiceTest {
         assertThat(productionList.get(0).getVisible()).isEqualTo(returnProductionList.get(0).getVisible());
 
         // verify
-        then(mockFrontProductionJpaApiService).should(times(1)).getProductionList(productionMap);
-        then(mockFrontProductionJpaApiService).should(atLeastOnce()).getProductionList(productionMap);
+        then(mockFrontProductionJpaApiService).should(times(1)).findProductionList(productionMap);
+        then(mockFrontProductionJpaApiService).should(atLeastOnce()).findProductionList(productionMap);
         then(mockFrontProductionJpaApiService).shouldHaveNoMoreInteractions();
     }
 
@@ -122,8 +120,8 @@ class FrontProductionJpaApiServiceTest {
         FrontProductionDTO frontProductionDTO = FrontProductionDTO.builder().idx(1L).title("productionTest").description("productionTest").build();
 
         // when
-        when(mockFrontProductionJpaApiService.getProductionInfo(frontProductionEntity)).thenReturn(frontProductionDTO);
-        FrontProductionDTO productionInfo = mockFrontProductionJpaApiService.getProductionInfo(frontProductionEntity);
+        when(mockFrontProductionJpaApiService.findOneProduction(frontProductionEntity.getIdx())).thenReturn(frontProductionDTO);
+        FrontProductionDTO productionInfo = mockFrontProductionJpaApiService.findOneProduction(frontProductionEntity.getIdx());
 
         // then
         assertThat(productionInfo.getIdx()).isEqualTo(frontProductionDTO.getIdx());
@@ -132,12 +130,12 @@ class FrontProductionJpaApiServiceTest {
         assertThat(productionInfo.getVisible()).isEqualTo(frontProductionDTO.getVisible());
 
         // verify
-        verify(mockFrontProductionJpaApiService, times(1)).getProductionInfo(frontProductionEntity);
-        verify(mockFrontProductionJpaApiService, atLeastOnce()).getProductionInfo(frontProductionEntity);
+        verify(mockFrontProductionJpaApiService, times(1)).findOneProduction(frontProductionEntity.getIdx());
+        verify(mockFrontProductionJpaApiService, atLeastOnce()).findOneProduction(frontProductionEntity.getIdx());
         verifyNoMoreInteractions(mockFrontProductionJpaApiService);
 
         InOrder inOrder = inOrder(mockFrontProductionJpaApiService);
-        inOrder.verify(mockFrontProductionJpaApiService).getProductionInfo(frontProductionEntity);
+        inOrder.verify(mockFrontProductionJpaApiService).findOneProduction(frontProductionEntity.getIdx());
     }
 
     @Test
@@ -148,8 +146,8 @@ class FrontProductionJpaApiServiceTest {
         FrontProductionDTO frontProductionDTO = FrontProductionDTO.builder().idx(1L).title("productionTest").description("productionTest").build();
 
         // when
-        given(mockFrontProductionJpaApiService.getProductionInfo(frontProductionEntity)).willReturn(frontProductionDTO);
-        FrontProductionDTO productionInfo = mockFrontProductionJpaApiService.getProductionInfo(frontProductionEntity);
+        given(mockFrontProductionJpaApiService.findOneProduction(frontProductionEntity.getIdx())).willReturn(frontProductionDTO);
+        FrontProductionDTO productionInfo = mockFrontProductionJpaApiService.findOneProduction(frontProductionEntity.getIdx());
 
         // then
         assertThat(productionInfo.getIdx()).isEqualTo(frontProductionDTO.getIdx());
@@ -158,8 +156,8 @@ class FrontProductionJpaApiServiceTest {
         assertThat(productionInfo.getVisible()).isEqualTo(frontProductionDTO.getVisible());
 
         // verify
-        then(mockFrontProductionJpaApiService).should(times(1)).getProductionInfo(frontProductionEntity);
-        then(mockFrontProductionJpaApiService).should(atLeastOnce()).getProductionInfo(frontProductionEntity);
+        then(mockFrontProductionJpaApiService).should(times(1)).findOneProduction(frontProductionEntity.getIdx());
+        then(mockFrontProductionJpaApiService).should(atLeastOnce()).findOneProduction(frontProductionEntity.getIdx());
         then(mockFrontProductionJpaApiService).shouldHaveNoMoreInteractions();
     }
 
@@ -170,12 +168,12 @@ class FrontProductionJpaApiServiceTest {
         FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(118L).build();
 
         // when
-        FrontProductionDTO frontProductionDTO = frontProductionJpaApiService.getProductionInfo(frontProductionEntity);
+        FrontProductionDTO frontProductionDTO = frontProductionJpaApiService.findOneProduction(frontProductionEntity.getIdx());
 
         // 이전 프로덕션
-        assertThat(frontProductionJpaApiService.findPrevOneProduction(frontProductionEntity).getIdx()).isEqualTo(117);
+        assertThat(frontProductionJpaApiService.findPrevOneProduction(frontProductionEntity.getIdx()).getIdx()).isEqualTo(117);
         // 다음 프로덕션
-        assertThat(frontProductionJpaApiService.findNextOneProduction(frontProductionEntity).getIdx()).isEqualTo(119);
+        assertThat(frontProductionJpaApiService.findNextOneProduction(frontProductionEntity.getIdx()).getIdx()).isEqualTo(119);
     }
 
     @Test
@@ -185,21 +183,21 @@ class FrontProductionJpaApiServiceTest {
         FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(118L).build();
 
         // when
-        FrontProductionDTO frontProductionDTO = frontProductionJpaApiService.findPrevOneProduction(frontProductionEntity);
+        FrontProductionDTO frontProductionDTO = frontProductionJpaApiService.findPrevOneProduction(frontProductionEntity.getIdx());
 
-        when(mockFrontProductionJpaApiService.findPrevOneProduction(frontProductionEntity)).thenReturn(frontProductionDTO);
-        FrontProductionDTO productionInfo = mockFrontProductionJpaApiService.findPrevOneProduction(frontProductionEntity);
+        when(mockFrontProductionJpaApiService.findPrevOneProduction(frontProductionEntity.getIdx())).thenReturn(frontProductionDTO);
+        FrontProductionDTO productionInfo = mockFrontProductionJpaApiService.findPrevOneProduction(frontProductionEntity.getIdx());
 
         // then
         assertThat(productionInfo.getIdx()).isEqualTo(117);
 
         // verify
-        verify(mockFrontProductionJpaApiService, times(1)).findPrevOneProduction(frontProductionEntity);
-        verify(mockFrontProductionJpaApiService, atLeastOnce()).findPrevOneProduction(frontProductionEntity);
+        verify(mockFrontProductionJpaApiService, times(1)).findPrevOneProduction(frontProductionEntity.getIdx());
+        verify(mockFrontProductionJpaApiService, atLeastOnce()).findPrevOneProduction(frontProductionEntity.getIdx());
         verifyNoMoreInteractions(mockFrontProductionJpaApiService);
 
         InOrder inOrder = inOrder(mockFrontProductionJpaApiService);
-        inOrder.verify(mockFrontProductionJpaApiService).findPrevOneProduction(frontProductionEntity);
+        inOrder.verify(mockFrontProductionJpaApiService).findPrevOneProduction(frontProductionEntity.getIdx());
     }
 
     @Test
@@ -209,17 +207,17 @@ class FrontProductionJpaApiServiceTest {
         FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(118L).build();
 
         // when
-        FrontProductionDTO frontProductionDTO = frontProductionJpaApiService.findPrevOneProduction(frontProductionEntity);
+        FrontProductionDTO frontProductionDTO = frontProductionJpaApiService.findPrevOneProduction(frontProductionEntity.getIdx());
 
-        given(mockFrontProductionJpaApiService.findPrevOneProduction(frontProductionEntity)).willReturn(frontProductionDTO);
-        FrontProductionDTO productionInfo = mockFrontProductionJpaApiService.findPrevOneProduction(frontProductionEntity);
+        given(mockFrontProductionJpaApiService.findPrevOneProduction(frontProductionEntity.getIdx())).willReturn(frontProductionDTO);
+        FrontProductionDTO productionInfo = mockFrontProductionJpaApiService.findPrevOneProduction(frontProductionEntity.getIdx());
 
         // then
         assertThat(productionInfo.getIdx()).isEqualTo(117);
 
         // verify
-        then(mockFrontProductionJpaApiService).should(times(1)).findPrevOneProduction(frontProductionEntity);
-        then(mockFrontProductionJpaApiService).should(atLeastOnce()).findPrevOneProduction(frontProductionEntity);
+        then(mockFrontProductionJpaApiService).should(times(1)).findPrevOneProduction(frontProductionEntity.getIdx());
+        then(mockFrontProductionJpaApiService).should(atLeastOnce()).findPrevOneProduction(frontProductionEntity.getIdx());
         then(mockFrontProductionJpaApiService).shouldHaveNoMoreInteractions();
     }
 
@@ -230,21 +228,21 @@ class FrontProductionJpaApiServiceTest {
         FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(118L).build();
 
         // when
-        FrontProductionDTO frontProductionDTO = frontProductionJpaApiService.findNextOneProduction(frontProductionEntity);
+        FrontProductionDTO frontProductionDTO = frontProductionJpaApiService.findNextOneProduction(frontProductionEntity.getIdx());
 
-        when(mockFrontProductionJpaApiService.findNextOneProduction(frontProductionEntity)).thenReturn(frontProductionDTO);
-        FrontProductionDTO productionInfo = mockFrontProductionJpaApiService.findNextOneProduction(frontProductionEntity);
+        when(mockFrontProductionJpaApiService.findNextOneProduction(frontProductionEntity.getIdx())).thenReturn(frontProductionDTO);
+        FrontProductionDTO productionInfo = mockFrontProductionJpaApiService.findNextOneProduction(frontProductionEntity.getIdx());
 
         // then
         assertThat(productionInfo.getIdx()).isEqualTo(119);
 
         // verify
-        verify(mockFrontProductionJpaApiService, times(1)).findNextOneProduction(frontProductionEntity);
-        verify(mockFrontProductionJpaApiService, atLeastOnce()).findNextOneProduction(frontProductionEntity);
+        verify(mockFrontProductionJpaApiService, times(1)).findNextOneProduction(frontProductionEntity.getIdx());
+        verify(mockFrontProductionJpaApiService, atLeastOnce()).findNextOneProduction(frontProductionEntity.getIdx());
         verifyNoMoreInteractions(mockFrontProductionJpaApiService);
 
         InOrder inOrder = inOrder(mockFrontProductionJpaApiService);
-        inOrder.verify(mockFrontProductionJpaApiService).findNextOneProduction(frontProductionEntity);
+        inOrder.verify(mockFrontProductionJpaApiService).findNextOneProduction(frontProductionEntity.getIdx());
     }
 
     @Test
@@ -254,17 +252,17 @@ class FrontProductionJpaApiServiceTest {
         FrontProductionEntity frontProductionEntity = FrontProductionEntity.builder().idx(118L).build();
 
         // when
-        FrontProductionDTO frontProductionDTO = frontProductionJpaApiService.findNextOneProduction(frontProductionEntity);
+        FrontProductionDTO frontProductionDTO = frontProductionJpaApiService.findNextOneProduction(frontProductionEntity.getIdx());
 
-        given(mockFrontProductionJpaApiService.findNextOneProduction(frontProductionEntity)).willReturn(frontProductionDTO);
-        FrontProductionDTO productionInfo = mockFrontProductionJpaApiService.findNextOneProduction(frontProductionEntity);
+        given(mockFrontProductionJpaApiService.findNextOneProduction(frontProductionEntity.getIdx())).willReturn(frontProductionDTO);
+        FrontProductionDTO productionInfo = mockFrontProductionJpaApiService.findNextOneProduction(frontProductionEntity.getIdx());
 
         // then
         assertThat(productionInfo.getIdx()).isEqualTo(119);
 
         // verify
-        then(mockFrontProductionJpaApiService).should(times(1)).findNextOneProduction(frontProductionEntity);
-        then(mockFrontProductionJpaApiService).should(atLeastOnce()).findNextOneProduction(frontProductionEntity);
+        then(mockFrontProductionJpaApiService).should(times(1)).findNextOneProduction(frontProductionEntity.getIdx());
+        then(mockFrontProductionJpaApiService).should(atLeastOnce()).findNextOneProduction(frontProductionEntity.getIdx());
         then(mockFrontProductionJpaApiService).shouldHaveNoMoreInteractions();
     }
 }

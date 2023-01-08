@@ -1,6 +1,7 @@
 package com.tsp.new_tsp_front.api.common.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
@@ -12,6 +13,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 import static javax.persistence.FetchType.LAZY;
@@ -26,7 +29,7 @@ import static javax.persistence.FetchType.LAZY;
 @Table(name = "tsp_image")
 public class CommonImageEntity implements Serializable {
     @Transient
-    private Integer rnum;
+    private Integer rowNum;
 
     @Id
     @GeneratedValue
@@ -76,19 +79,47 @@ public class CommonImageEntity implements Serializable {
     @ApiModelProperty(value = "등록일자", hidden = true)
     private LocalDateTime regDate;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "type_idx", referencedColumnName = "idx", insertable = false, updatable = false)
     private FrontModelEntity frontModelEntity;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "type_idx", referencedColumnName = "idx", insertable = false, updatable = false)
     private FrontProductionEntity frontProductionEntity;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "type_idx", referencedColumnName = "idx", insertable = false, updatable = false)
     private FrontPortFolioEntity frontPortFolioEntity;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "type_idx", referencedColumnName = "idx", insertable = false, updatable = false)
     private FrontAgencyEntity frontAgencyEntity;
+
+    public static CommonImageDTO toDto(CommonImageEntity entity) {
+        if (entity == null) return null;
+        return CommonImageDTO.builder()
+                .idx(entity.getIdx())
+                .typeIdx(entity.getTypeIdx())
+                .typeName(entity.getTypeName())
+                .fileMask(entity.getFileMask())
+                .fileSize(entity.getFileSize())
+                .fileName(entity.getFileName())
+                .fileNum(entity.getFileNum())
+                .filePath(entity.getFilePath())
+                .imageType(entity.getImageType())
+                .visible(entity.getVisible())
+                .regDate(entity.getRegDate())
+                .build();
+    }
+
+    public static List<CommonImageDTO> toDtoList(List<CommonImageEntity> entityList) {
+        if (entityList == null) return null;
+        return entityList.stream()
+                .map(CommonImageEntity::toDto)
+                .collect(Collectors.toList());
+    }
 }

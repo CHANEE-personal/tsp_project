@@ -1,6 +1,5 @@
 package com.tsp.new_tsp_front.api.model.negotiation.service;
 
-import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.negotiation.FrontNegotiationDTO;
 import com.tsp.new_tsp_front.api.model.domain.negotiation.FrontNegotiationEntity;
 import com.tsp.new_tsp_front.api.model.negotiation.service.impl.FrontNegotiationJpaRepository;
@@ -9,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,17 +26,13 @@ public class FrontNegotiationJpaApiService {
      * 1. MethodName : findNegotiationCount
      * 2. ClassName  : FrontNegotiationJpaServiceImpl.java
      * 3. Comment    : 모델 섭외 리스트 수 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
     @Transactional(readOnly = true)
-    public Integer findNegotiationCount(Map<String, Object> negotiationMap) throws TspException {
-        try {
-            return frontNegotiationJpaRepository.findNegotiationCount(negotiationMap);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL_NEGOTIATION_LIST, e);
-        }
+    public int findNegotiationCount(Map<String, Object> negotiationMap) {
+        return frontNegotiationJpaRepository.findNegotiationCount(negotiationMap);
     }
 
     /**
@@ -46,18 +40,14 @@ public class FrontNegotiationJpaApiService {
      * 1. MethodName : findModelNegotiationList
      * 2. ClassName  : FrontNegotiationJpaServiceImpl.java
      * 3. Comment    : 모델 섭외 리스트 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
-    @Cacheable("model")
+    @Cacheable(value = "negotiation", key = "#negotiationMap")
     @Transactional(readOnly = true)
-    public List<FrontModelDTO> findModelNegotiationList(Map<String, Object> negotiationMap) throws TspException {
-        try {
-            return frontNegotiationJpaRepository.findModelNegotiationList(negotiationMap);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL_NEGOTIATION_LIST, e);
-        }
+    public List<FrontNegotiationDTO> findModelNegotiationList(Map<String, Object> negotiationMap) {
+        return frontNegotiationJpaRepository.findModelNegotiationList(negotiationMap);
     }
 
     /**
@@ -65,18 +55,14 @@ public class FrontNegotiationJpaApiService {
      * 1. MethodName : findOneNegotiation
      * 2. ClassName  : FrontNegotiationJpaServiceImpl.java
      * 3. Comment    : 모델 섭외 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
-    @Cacheable("negotiation")
+    @Cacheable(value = "negotiation", key = "#idx")
     @Transactional(readOnly = true)
-    public FrontNegotiationDTO findOneNegotiation(FrontNegotiationEntity frontNegotiationEntity) throws TspException {
-        try {
-            return frontNegotiationJpaRepository.findOneNegotiation(frontNegotiationEntity);
-        } catch (Exception e) {
-            throw new TspException(NOT_FOUND_MODEL_NEGOTIATION, e);
-        }
+    public FrontNegotiationDTO findOneNegotiation(Long idx) {
+        return frontNegotiationJpaRepository.findOneNegotiation(idx);
     }
 
     /**
@@ -84,14 +70,13 @@ public class FrontNegotiationJpaApiService {
      * 1. MethodName : insertModelNegotiation
      * 2. ClassName  : FrontNegotiationJpaServiceImpl.java
      * 3. Comment    : 모델 섭외 등록
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
     @CachePut("negotiation")
-    @Modifying(clearAutomatically = true)
     @Transactional
-    public FrontNegotiationDTO insertModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) throws TspException {
+    public FrontNegotiationDTO insertModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) {
         try {
             return frontNegotiationJpaRepository.insertModelNegotiation(frontNegotiationEntity);
         } catch (Exception e) {
@@ -104,14 +89,13 @@ public class FrontNegotiationJpaApiService {
      * 1. MethodName : updateModelNegotiation
      * 2. ClassName  : FrontNegotiationJpaServiceImpl.java
      * 3. Comment    : 모델 섭외 수정
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
-    @CachePut("negotiation")
-    @Modifying(clearAutomatically = true)
+    @CachePut(value = "negotiation", key = "#frontNegotiationEntity.idx")
     @Transactional
-    public FrontNegotiationDTO updateModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) throws TspException {
+    public FrontNegotiationDTO updateModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) {
         try {
             return frontNegotiationJpaRepository.updateModelNegotiation(frontNegotiationEntity);
         } catch (Exception e) {
@@ -124,14 +108,13 @@ public class FrontNegotiationJpaApiService {
      * 1. MethodName : deleteModelNegotiation
      * 2. ClassName  : FrontNegotiationJpaServiceImpl.java
      * 3. Comment    : 모델 섭외 삭제
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 11.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
-    @CacheEvict("negotiation")
-    @Modifying(clearAutomatically = true)
+    @CacheEvict(value = "negotiation", key = "#idx")
     @Transactional
-    public Long deleteModelNegotiation(Long idx) throws TspException {
+    public Long deleteModelNegotiation(Long idx) {
         try {
             return frontNegotiationJpaRepository.deleteModelNegotiation(idx);
         } catch (Exception e) {
