@@ -2,10 +2,8 @@ package com.tsp.new_tsp_front.common.aop;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
@@ -21,8 +19,8 @@ public class TspCommonAop {
      * 1. MethodName : cut
      * 2. ClassName  : TspCommonAop.java
      * 3. Comment    : com.tsp.new_tsp_front..api 이하 패키지의 모든 클래스 이하 모든 메서드에 적용
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 16.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 16.
      * </pre>
      */
     @Pointcut("execution(* com.tsp.new_tsp_front..api..*.*(..))")
@@ -34,8 +32,8 @@ public class TspCommonAop {
      * 1. MethodName : beforeParameterLog
      * 2. ClassName  : TspCommonAop.java
      * 3. Comment    : Pointcut에 의해 필터링된 경로로 들어오는 경우 메서드 호출 전에 적용
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 16.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 16.
      * </pre>
      */
     @Before("cut()")
@@ -46,7 +44,7 @@ public class TspCommonAop {
 
         // 파라미터 받아오기
         Object[] args = joinPoint.getArgs();
-        if (args.length <= 0) log.info("no parameter");
+        if (args.length == 0) log.info("no parameter");
         for (Object arg : args) {
             log.info("parameter type = {}", arg.getClass().getSimpleName());
             log.info("parameter value = {}", arg);
@@ -57,9 +55,9 @@ public class TspCommonAop {
      * <pre>
      * 1. MethodName : afterReturnLog
      * 2. ClassName  : TspCommonAop.java
-     * 3. Comment    : Poincut에 의해 필터링된 경로로 들어오는 경우 메서드 리턴 후에 적용
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 16.
+     * 3. Comment    : Pointcut에 의해 필터링된 경로로 들어오는 경우 메서드 리턴 후에 적용
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 16.
      * </pre>
      */
     @AfterReturning(value = "cut()", returning = "returnObj")
@@ -78,5 +76,19 @@ public class TspCommonAop {
     private Method getMethod(JoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         return signature.getMethod();
+    }
+
+    @Around("execution(* com.tsp.new_tsp_front..api..*.*(..))")
+    public Object execute(ProceedingJoinPoint joinPoint) throws Throwable {
+        long start = System.currentTimeMillis();
+        log.info("START: {}", joinPoint.toString());
+
+        try {
+            return joinPoint.proceed();
+        } finally {
+            long finish = System.currentTimeMillis();
+            long timeMs = finish - start;
+            log.info("END: {}", joinPoint + " " + timeMs+"ms");
+        }
     }
 }
