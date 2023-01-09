@@ -91,7 +91,7 @@ public class FrontNoticeJpaRepository {
      * 5. 작성일      : 2022. 08. 16.
      * </pre>
      */
-    FrontNoticeDTO findOneNotice(Long idx) {
+    public FrontNoticeDTO findOneNotice(Long idx) {
         FrontNoticeEntity findOneNotice = Optional.ofNullable(queryFactory
                 .selectFrom(frontNoticeEntity)
                 .orderBy(frontNoticeEntity.idx.desc())
