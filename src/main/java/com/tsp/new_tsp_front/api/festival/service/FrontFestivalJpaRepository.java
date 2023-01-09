@@ -62,11 +62,12 @@ public class FrontFestivalJpaRepository {
      * 5. 작성일      : 2023. 01. 09.
      * </pre>
      */
-    public List<FrontFestivalDTO> findFestivalList(Map<String, Object> festivalMap) {
+    public List<FrontFestivalDTO> findFestivalList(FrontFestivalEntity existFrontFestivalEntity) {
         List<FrontFestivalEntity> festivalList = queryFactory
                 .selectFrom(frontFestivalEntity)
                 .orderBy(frontFestivalEntity.idx.desc())
-                .where(searchFestival(festivalMap))
+                .where(frontFestivalEntity.festivalMonth.eq(existFrontFestivalEntity.getFestivalMonth())
+                        .and(frontFestivalEntity.festivalDay.eq(existFrontFestivalEntity.getFestivalDay())))
                 .fetch();
 
         return festivalList != null ? FrontFestivalEntity.toDtoList(festivalList) : Collections.emptyList();
