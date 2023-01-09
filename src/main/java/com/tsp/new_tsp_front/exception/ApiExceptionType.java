@@ -64,8 +64,10 @@ public enum ApiExceptionType implements BaseExceptionType {
     ERROR_UPDATE_MODEL_NEGOTIATION("ERROR_UPDATE_MODEL_NEGOTIATION", 500, "모델섭외 수정 에러"),
     ERROR_DELETE_MODEL_NEGOTIATION("ERROR_DELETE_MODEL_NEGOTIATION", 500, "모델섭외 삭제 에러"),
     NOT_FOUND_MODEL_NEGOTIATION("NOT_FOUND_MODEL_NEGOTIATION", 404, "모델섭외 없음"),
-    NOT_FOUND_MODEL_NEGOTIATION_LIST("NOT_FOUND_MODEL_NEGOTIATION_LIST", 404, "모델섭외 리스트 없음");
+    NOT_FOUND_MODEL_NEGOTIATION_LIST("NOT_FOUND_MODEL_NEGOTIATION_LIST", 404, "모델섭외 리스트 없음"),
 
+    // 행사 관련 Type
+    NOT_FOUND_FESTIVAL("NOT_FOUND_FESTIVAL", 404, "행사 상세 없음");
     private final String errorCode;
     private final int httpStatus;
     private final String errorMessage;

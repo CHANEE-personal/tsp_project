@@ -47,6 +47,9 @@ public class FrontModelJpaRepository {
         String searchType = getString(modelMap.get("searchType"), "");
         String searchKeyword = getString(modelMap.get("searchKeyword"), "");
 
+        // 검색어 저장
+        em.persist(FrontSearchEntity.builder().searchKeyword(searchKeyword).build());
+
         if (!Objects.equals(searchKeyword, "")) {
             return "0".equals(searchType) ?
                     frontModelEntity.modelKorName.contains(searchKeyword)
