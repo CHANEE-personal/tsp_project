@@ -28,8 +28,8 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @AutoConfigureTestDatabase(replace = NONE)
 @ExtendWith(MockitoExtension.class)
 @DisplayName("지원 모델 Repository Test")
-class FrontSupportJpaRepositoryTest {
-    private final FrontSupportJpaRepository frontSupportJpaRepository;
+class FrontSupportJpaQueryRepositoryTest {
+    private final FrontSupportJpaQueryRepository frontSupportJpaQueryRepository;
     private FrontSupportEntity frontSupportEntity;
 
     private void createSupportModel() {
@@ -53,6 +53,6 @@ class FrontSupportJpaRepositoryTest {
     @Test
     @DisplayName("모델 지원하기 테스트")
     void 모델지원하기테스트() {
-        assertThat(frontSupportJpaRepository.insertSupportModel(frontSupportEntity)).isNotNull();
+        assertThat(frontSupportJpaQueryRepository.insertSupportModel(frontSupportEntity)).isNotNull();
     }
 }

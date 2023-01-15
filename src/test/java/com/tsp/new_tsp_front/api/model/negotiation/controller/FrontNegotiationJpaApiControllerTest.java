@@ -1,6 +1,8 @@
 package com.tsp.new_tsp_front.api.model.negotiation.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
+import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.domain.negotiation.FrontNegotiationEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -62,6 +64,8 @@ class FrontNegotiationJpaApiControllerTest {
     private final ObjectMapper objectMapper;
     private final WebApplicationContext wac;
     private final EntityManager em;
+    private FrontModelEntity frontModelEntity;
+    private FrontModelDTO frontModelDTO;
 
     @BeforeEach
     @EventListener(ApplicationReadyEvent.class)
@@ -71,15 +75,41 @@ class FrontNegotiationJpaApiControllerTest {
                 .apply(documentationConfiguration(restDocumentationContextProvider))
                 .alwaysDo(print())
                 .build();
+
+        createModel();
+    }
+
+    private void createModel() {
+        frontModelEntity = FrontModelEntity.builder()
+                .categoryCd(1)
+                .categoryAge(2)
+                .agencyIdx(1L)
+                .modelKorFirstName("조")
+                .modelKorSecondName("찬희")
+                .modelKorName("조찬희")
+                .modelFirstName("CHO")
+                .modelSecondName("CHANHEE")
+                .modelEngName("CHOCHANHEE")
+                .modelDescription("chaneeCho")
+                .modelMainYn("Y")
+                .height(170)
+                .size3("34-24-34")
+                .shoes(270)
+                .newYn("N")
+                .modelFavoriteCount(1)
+                .visible("Y")
+                .build();
+
+        em.persist(frontModelEntity);
+
+        frontModelDTO = FrontModelEntity.toDto(frontModelEntity);
     }
 
     @Test
     @DisplayName("모델 섭외 조회 테스트")
     void 모델섭외조회Api테스트() throws Exception {
         LinkedMultiValueMap<String, String> negotiationMap = new LinkedMultiValueMap<>();
-        negotiationMap.add("jpaStartPage", "1");
-        negotiationMap.add("size", "3");
-        mockMvc.perform(get("/api/jpa-negotiation/lists")
+        mockMvc.perform(get("/api/jpa-negotiation/lists").param("pageNum", "1").param("size", "3")
                         .queryParams(negotiationMap)
                         .queryParam("searchStartTime", of(now().getYear(), LocalDate.now().getMonth(), 1, 0, 0, 0, 0).format(ofPattern("yyyyMMdd")))
                         .queryParam("searchEndTime", of(now().getYear(), LocalDate.now().getMonth(), 30, 23, 59, 59).format(ofPattern("yyyyMMdd"))))
@@ -106,7 +136,7 @@ class FrontNegotiationJpaApiControllerTest {
     @DisplayName("모델 섭외 등록 테스트")
     void 모델섭외등록Api테스트() throws Exception {
         FrontNegotiationEntity frontNegotiationEntity = FrontNegotiationEntity.builder()
-                .modelIdx(1L)
+                .frontModelEntity(frontModelEntity)
                 .modelKorName("조찬희")
                 .modelNegotiationDesc("영화 프로젝트 참여")
                 .modelNegotiationDate(now())
@@ -116,7 +146,7 @@ class FrontNegotiationJpaApiControllerTest {
                 .visible("Y")
                 .build();
 
-        mockMvc.perform(post("/api/negotiation")
+        mockMvc.perform(post("/api/model/{idx}/negotiation", frontModelEntity.getIdx())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(frontNegotiationEntity)))
                 .andDo(print())
@@ -124,16 +154,13 @@ class FrontNegotiationJpaApiControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         relaxedRequestFields(
-                                fieldWithPath("modelIdx").type(NUMBER).description(1),
                                 fieldWithPath("modelNegotiationDesc").type(STRING).description("영화 프로젝트 참여")
                         ),
                         relaxedResponseFields(
-                                fieldWithPath("modelIdx").type(NUMBER).description(1),
                                 fieldWithPath("modelNegotiationDesc").type(STRING).description("영화 프로젝트 참여")
                         )))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.modelIdx").value(1))
                 .andExpect(jsonPath("$.modelNegotiationDesc").value("영화 프로젝트 참여"));
     }
 
@@ -141,7 +168,7 @@ class FrontNegotiationJpaApiControllerTest {
     @DisplayName("모델 섭외 수정 테스트")
     void 모델섭외수정Api테스트() throws Exception {
         FrontNegotiationEntity frontNegotiationEntity = FrontNegotiationEntity.builder()
-                .modelIdx(1L)
+                .frontModelEntity(frontModelEntity)
                 .modelKorName("조찬희")
                 .modelNegotiationDesc("영화 프로젝트 참여")
                 .modelNegotiationDate(now())
@@ -155,7 +182,7 @@ class FrontNegotiationJpaApiControllerTest {
 
         FrontNegotiationEntity newFrontNegotiationEntity = FrontNegotiationEntity.builder()
                 .idx(frontNegotiationEntity.getIdx())
-                .modelIdx(1L)
+                .frontModelEntity(frontModelEntity)
                 .modelKorName("테스트")
                 .modelNegotiationDesc("섭외 수정 테스트")
                 .modelNegotiationDate(LocalDateTime.now())
@@ -165,7 +192,7 @@ class FrontNegotiationJpaApiControllerTest {
                 .visible("Y")
                 .build();
 
-        mockMvc.perform(put("/api/negotiation/{idx}", frontNegotiationEntity.getIdx())
+        mockMvc.perform(put("/api/negotiation/{idx}", newFrontNegotiationEntity.getIdx())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(newFrontNegotiationEntity)))
                 .andDo(print())
@@ -173,16 +200,13 @@ class FrontNegotiationJpaApiControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         relaxedRequestFields(
-                                fieldWithPath("modelIdx").type(NUMBER).description(1),
                                 fieldWithPath("modelNegotiationDesc").type(STRING).description("섭외 수정 테스트")
                         ),
                         relaxedResponseFields(
-                                fieldWithPath("modelIdx").type(NUMBER).description(1),
                                 fieldWithPath("modelNegotiationDesc").type(STRING).description("섭외 수정 테스트")
                         )))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.modelIdx").value(1))
                 .andExpect(jsonPath("$.modelNegotiationDesc").value("섭외 수정 테스트"));
     }
 
@@ -190,7 +214,7 @@ class FrontNegotiationJpaApiControllerTest {
     @DisplayName("모델 섭외 삭제 테스트")
     void 모델섭외삭제Api테스트() throws Exception {
         FrontNegotiationEntity frontNegotiationEntity = FrontNegotiationEntity.builder()
-                .modelIdx(1L)
+                .frontModelEntity(frontModelEntity)
                 .modelKorName("조찬희")
                 .modelNegotiationDesc("영화 프로젝트 참여")
                 .modelNegotiationDate(now())

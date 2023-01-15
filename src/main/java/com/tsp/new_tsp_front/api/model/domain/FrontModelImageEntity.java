@@ -21,7 +21,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @SuperBuilder
 @EqualsAndHashCode(of = "idx", callSuper = false)
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tsp_model_image")
 public class FrontModelImageEntity {
     @Id
@@ -71,12 +71,10 @@ public class FrontModelImageEntity {
     @ApiModelProperty(value = "등록일자", hidden = true)
     private LocalDateTime regDate;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "type_idx", insertable = false, updatable = false)
     private FrontModelEntity modelEntity;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "idx", referencedColumnName = "type_idx", insertable = false, updatable = false)
     private CommonImageEntity imageEntity;

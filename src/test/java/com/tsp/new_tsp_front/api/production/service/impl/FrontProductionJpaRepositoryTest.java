@@ -16,6 +16,9 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 
@@ -26,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -101,12 +105,11 @@ class FrontProductionJpaRepositoryTest {
     void 프로덕션리스트조회테스트() {
         // given
         Map<String, Object> productionMap = new HashMap<>();
-        productionMap.put("jpaStartPage", 0);
-        productionMap.put("size", 3);
         productionMap.put("searchType", 0);
         productionMap.put("searchKeyword", "하하");
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
-        assertThat(frontProductionJpaRepository.findProductionList(productionMap)).isNotEmpty();
+        assertThat(frontProductionJpaRepository.findProductionList(productionMap, pageRequest)).isNotEmpty();
         // then
     }
 
@@ -115,8 +118,7 @@ class FrontProductionJpaRepositoryTest {
     void 프로덕션리스트조회Mockito테스트() {
         // given
         Map<String, Object> productionMap = new HashMap<>();
-        productionMap.put("jpaStartPage", 1);
-        productionMap.put("size", 3);
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
         commonImageDtoList.add(commonImageDTO);
@@ -124,25 +126,27 @@ class FrontProductionJpaRepositoryTest {
         List<FrontProductionDTO> productionList = new ArrayList<>();
         productionList.add(FrontProductionDTO.builder().idx(1L).title("프로덕션").description("프로덕션").visible("Y")
                 .productionImage(commonImageDtoList).build());
+        Page<FrontProductionDTO> resultProduction = new PageImpl<>(productionList, pageRequest, productionList.size());
 
         // when
-        when(mockFrontProductionJpaRepository.findProductionList(productionMap)).thenReturn(productionList);
-        List<FrontProductionDTO> newProductionList = mockFrontProductionJpaRepository.findProductionList(productionMap);
+        when(mockFrontProductionJpaRepository.findProductionList(productionMap, pageRequest)).thenReturn(resultProduction);
+        Page<FrontProductionDTO> newProductionList = mockFrontProductionJpaRepository.findProductionList(productionMap, pageRequest);
+        List<FrontProductionDTO> findProductionList = newProductionList.stream().collect(Collectors.toList());
 
         // then
-        assertThat(newProductionList.get(0).getIdx()).isEqualTo(productionList.get(0).getIdx());
-        assertThat(newProductionList.get(0).getTitle()).isEqualTo(productionList.get(0).getTitle());
-        assertThat(newProductionList.get(0).getDescription()).isEqualTo(productionList.get(0).getDescription());
-        assertThat(newProductionList.get(0).getProductionImage().get(0).getFileName()).isEqualTo(productionList.get(0).getProductionImage().get(0).getFileName());
-        assertThat(newProductionList.get(0).getProductionImage().get(0).getTypeName()).isEqualTo(productionList.get(0).getProductionImage().get(0).getTypeName());
+        assertThat(findProductionList.get(0).getIdx()).isEqualTo(productionList.get(0).getIdx());
+        assertThat(findProductionList.get(0).getTitle()).isEqualTo(productionList.get(0).getTitle());
+        assertThat(findProductionList.get(0).getDescription()).isEqualTo(productionList.get(0).getDescription());
+        assertThat(findProductionList.get(0).getProductionImage().get(0).getFileName()).isEqualTo(productionList.get(0).getProductionImage().get(0).getFileName());
+        assertThat(findProductionList.get(0).getProductionImage().get(0).getTypeName()).isEqualTo(productionList.get(0).getProductionImage().get(0).getTypeName());
 
         // verify
-        verify(mockFrontProductionJpaRepository, times(1)).findProductionList(productionMap);
-        verify(mockFrontProductionJpaRepository, atLeastOnce()).findProductionList(productionMap);
+        verify(mockFrontProductionJpaRepository, times(1)).findProductionList(productionMap, pageRequest);
+        verify(mockFrontProductionJpaRepository, atLeastOnce()).findProductionList(productionMap, pageRequest);
         verifyNoMoreInteractions(mockFrontProductionJpaRepository);
 
         InOrder inOrder = inOrder(mockFrontProductionJpaRepository);
-        inOrder.verify(mockFrontProductionJpaRepository).findProductionList(productionMap);
+        inOrder.verify(mockFrontProductionJpaRepository).findProductionList(productionMap, pageRequest);
     }
 
     @Test
@@ -150,8 +154,7 @@ class FrontProductionJpaRepositoryTest {
     void 프로덕션리스트조회BDD테스트() {
         // given
         Map<String, Object> productionMap = new HashMap<>();
-        productionMap.put("jpaStartPage", 1);
-        productionMap.put("size", 3);
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
         commonImageDtoList.add(commonImageDTO);
@@ -159,21 +162,23 @@ class FrontProductionJpaRepositoryTest {
         List<FrontProductionDTO> productionList = new ArrayList<>();
         productionList.add(FrontProductionDTO.builder().idx(1L).title("프로덕션").description("프로덕션").visible("Y")
                 .productionImage(commonImageDtoList).build());
+        Page<FrontProductionDTO> resultProduction = new PageImpl<>(productionList, pageRequest, productionList.size());
 
         // when
-        given(mockFrontProductionJpaRepository.findProductionList(productionMap)).willReturn(productionList);
-        List<FrontProductionDTO> newProductionList = mockFrontProductionJpaRepository.findProductionList(productionMap);
+        given(mockFrontProductionJpaRepository.findProductionList(productionMap, pageRequest)).willReturn(resultProduction);
+        Page<FrontProductionDTO> newProductionList = mockFrontProductionJpaRepository.findProductionList(productionMap, pageRequest);
+        List<FrontProductionDTO> findProductionList = newProductionList.stream().collect(Collectors.toList());
 
         // then
-        assertThat(newProductionList.get(0).getIdx()).isEqualTo(productionList.get(0).getIdx());
-        assertThat(newProductionList.get(0).getTitle()).isEqualTo(productionList.get(0).getTitle());
-        assertThat(newProductionList.get(0).getDescription()).isEqualTo(productionList.get(0).getDescription());
-        assertThat(newProductionList.get(0).getProductionImage().get(0).getFileName()).isEqualTo(productionList.get(0).getProductionImage().get(0).getFileName());
-        assertThat(newProductionList.get(0).getProductionImage().get(0).getTypeName()).isEqualTo(productionList.get(0).getProductionImage().get(0).getTypeName());
+        assertThat(findProductionList.get(0).getIdx()).isEqualTo(productionList.get(0).getIdx());
+        assertThat(findProductionList.get(0).getTitle()).isEqualTo(productionList.get(0).getTitle());
+        assertThat(findProductionList.get(0).getDescription()).isEqualTo(productionList.get(0).getDescription());
+        assertThat(findProductionList.get(0).getProductionImage().get(0).getFileName()).isEqualTo(productionList.get(0).getProductionImage().get(0).getFileName());
+        assertThat(findProductionList.get(0).getProductionImage().get(0).getTypeName()).isEqualTo(productionList.get(0).getProductionImage().get(0).getTypeName());
 
         // verify
-        then(mockFrontProductionJpaRepository).should(times(1)).findProductionList(productionMap);
-        then(mockFrontProductionJpaRepository).should(atLeastOnce()).findProductionList(productionMap);
+        then(mockFrontProductionJpaRepository).should(times(1)).findProductionList(productionMap, pageRequest);
+        then(mockFrontProductionJpaRepository).should(atLeastOnce()).findProductionList(productionMap, pageRequest);
         then(mockFrontProductionJpaRepository).shouldHaveNoMoreInteractions();
     }
 

@@ -14,6 +14,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 
@@ -24,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -92,11 +96,10 @@ class FrontPortFolioJpaRepositoryTest {
     void 포트폴리오조회테스트() {
         // given
         Map<String, Object> portfolioMap = new HashMap<>();
-        portfolioMap.put("jpaStartPage", 1);
-        portfolioMap.put("size", 3);
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
         // then
-        assertThat(frontPortFolioJpaRepository.findPortfolioList(portfolioMap)).isNotEmpty();
+        assertThat(frontPortFolioJpaRepository.findPortfolioList(portfolioMap, pageRequest)).isNotEmpty();
     }
 
     @Test
@@ -104,8 +107,7 @@ class FrontPortFolioJpaRepositoryTest {
     void 포트폴리오리스트조회Mockito테스트() {
         // given
         Map<String, Object> portfolioMap = new HashMap<>();
-        portfolioMap.put("jpaStartPage", 1);
-        portfolioMap.put("size", 3);
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
         commonImageDtoList.add(commonImageDTO);
@@ -113,26 +115,28 @@ class FrontPortFolioJpaRepositoryTest {
         List<FrontPortFolioDTO> portfolioList = new ArrayList<>();
         portfolioList.add(FrontPortFolioDTO.builder().idx(1L).title("포트폴리오").description("포트폴리오")
                 .hashTag("#test").portfolioImage(commonImageDtoList).visible("Y").build());
+        Page<FrontPortFolioDTO> resultPortfolio = new PageImpl<>(portfolioList, pageRequest, portfolioList.size());
 
         // when
-        when(mockFrontPortFolioJpaRepository.findPortfolioList(portfolioMap)).thenReturn(portfolioList);
-        List<FrontPortFolioDTO> newPortfolioList = mockFrontPortFolioJpaRepository.findPortfolioList(portfolioMap);
+        when(mockFrontPortFolioJpaRepository.findPortfolioList(portfolioMap, pageRequest)).thenReturn(resultPortfolio);
+        Page<FrontPortFolioDTO> newPortfolioList = mockFrontPortFolioJpaRepository.findPortfolioList(portfolioMap, pageRequest);
+        List<FrontPortFolioDTO> findPortfolioList = newPortfolioList.stream().collect(Collectors.toList());
 
         // then
-        assertThat(newPortfolioList.get(0).getIdx()).isEqualTo(portfolioList.get(0).getIdx());
-        assertThat(newPortfolioList.get(0).getTitle()).isEqualTo(portfolioList.get(0).getTitle());
-        assertThat(newPortfolioList.get(0).getDescription()).isEqualTo(portfolioList.get(0).getDescription());
-        assertThat(newPortfolioList.get(0).getHashTag()).isEqualTo(portfolioList.get(0).getHashTag());
-        assertThat(newPortfolioList.get(0).getPortfolioImage().get(0).getFileName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getFileName());
-        assertThat(newPortfolioList.get(0).getPortfolioImage().get(0).getTypeName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getTypeName());
+        assertThat(findPortfolioList.get(0).getIdx()).isEqualTo(portfolioList.get(0).getIdx());
+        assertThat(findPortfolioList.get(0).getTitle()).isEqualTo(portfolioList.get(0).getTitle());
+        assertThat(findPortfolioList.get(0).getDescription()).isEqualTo(portfolioList.get(0).getDescription());
+        assertThat(findPortfolioList.get(0).getHashTag()).isEqualTo(portfolioList.get(0).getHashTag());
+        assertThat(findPortfolioList.get(0).getPortfolioImage().get(0).getFileName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getFileName());
+        assertThat(findPortfolioList.get(0).getPortfolioImage().get(0).getTypeName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getTypeName());
 
         // verify
-        verify(mockFrontPortFolioJpaRepository, times(1)).findPortfolioList(portfolioMap);
-        verify(mockFrontPortFolioJpaRepository, atLeastOnce()).findPortfolioList(portfolioMap);
+        verify(mockFrontPortFolioJpaRepository, times(1)).findPortfolioList(portfolioMap, pageRequest);
+        verify(mockFrontPortFolioJpaRepository, atLeastOnce()).findPortfolioList(portfolioMap, pageRequest);
         verifyNoMoreInteractions(mockFrontPortFolioJpaRepository);
 
         InOrder inOrder = inOrder(mockFrontPortFolioJpaRepository);
-        inOrder.verify(mockFrontPortFolioJpaRepository).findPortfolioList(portfolioMap);
+        inOrder.verify(mockFrontPortFolioJpaRepository).findPortfolioList(portfolioMap, pageRequest);
     }
 
     @Test
@@ -140,8 +144,7 @@ class FrontPortFolioJpaRepositoryTest {
     void 포트폴리오리스트조회BDD테스트() {
         // given
         Map<String, Object> portfolioMap = new HashMap<>();
-        portfolioMap.put("jpaStartPage", 1);
-        portfolioMap.put("size", 3);
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
         commonImageDtoList.add(commonImageDTO);
@@ -149,22 +152,24 @@ class FrontPortFolioJpaRepositoryTest {
         List<FrontPortFolioDTO> portfolioList = new ArrayList<>();
         portfolioList.add(FrontPortFolioDTO.builder().idx(1L).title("포트폴리오").description("포트폴리오")
                 .hashTag("#test").portfolioImage(commonImageDtoList).visible("Y").build());
+        Page<FrontPortFolioDTO> resultPortfolio = new PageImpl<>(portfolioList, pageRequest, portfolioList.size());
 
         // when
-        given(mockFrontPortFolioJpaRepository.findPortfolioList(portfolioMap)).willReturn(portfolioList);
-        List<FrontPortFolioDTO> newPortfolioList = mockFrontPortFolioJpaRepository.findPortfolioList(portfolioMap);
+        given(mockFrontPortFolioJpaRepository.findPortfolioList(portfolioMap, pageRequest)).willReturn(resultPortfolio);
+        Page<FrontPortFolioDTO> newPortfolioList = mockFrontPortFolioJpaRepository.findPortfolioList(portfolioMap, pageRequest);
+        List<FrontPortFolioDTO> findPortfolioList = newPortfolioList.stream().collect(Collectors.toList());
 
         // then
-        assertThat(newPortfolioList.get(0).getIdx()).isEqualTo(portfolioList.get(0).getIdx());
-        assertThat(newPortfolioList.get(0).getTitle()).isEqualTo(portfolioList.get(0).getTitle());
-        assertThat(newPortfolioList.get(0).getDescription()).isEqualTo(portfolioList.get(0).getDescription());
-        assertThat(newPortfolioList.get(0).getHashTag()).isEqualTo(portfolioList.get(0).getHashTag());
-        assertThat(newPortfolioList.get(0).getPortfolioImage().get(0).getFileName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getFileName());
-        assertThat(newPortfolioList.get(0).getPortfolioImage().get(0).getTypeName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getTypeName());
+        assertThat(findPortfolioList.get(0).getIdx()).isEqualTo(portfolioList.get(0).getIdx());
+        assertThat(findPortfolioList.get(0).getTitle()).isEqualTo(portfolioList.get(0).getTitle());
+        assertThat(findPortfolioList.get(0).getDescription()).isEqualTo(portfolioList.get(0).getDescription());
+        assertThat(findPortfolioList.get(0).getHashTag()).isEqualTo(portfolioList.get(0).getHashTag());
+        assertThat(findPortfolioList.get(0).getPortfolioImage().get(0).getFileName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getFileName());
+        assertThat(findPortfolioList.get(0).getPortfolioImage().get(0).getTypeName()).isEqualTo(portfolioList.get(0).getPortfolioImage().get(0).getTypeName());
 
         // verify
-        then(mockFrontPortFolioJpaRepository).should(times(1)).findPortfolioList(portfolioMap);
-        then(mockFrontPortFolioJpaRepository).should(atLeastOnce()).findPortfolioList(portfolioMap);
+        then(mockFrontPortFolioJpaRepository).should(times(1)).findPortfolioList(portfolioMap, pageRequest);
+        then(mockFrontPortFolioJpaRepository).should(atLeastOnce()).findPortfolioList(portfolioMap, pageRequest);
         then(mockFrontPortFolioJpaRepository).shouldHaveNoMoreInteractions();
     }
 

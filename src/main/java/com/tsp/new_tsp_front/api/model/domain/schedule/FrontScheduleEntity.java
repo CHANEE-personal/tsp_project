@@ -1,6 +1,5 @@
 package com.tsp.new_tsp_front.api.model.domain.schedule;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonMappedClass;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,11 +11,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -26,7 +23,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @SuperBuilder
 @EqualsAndHashCode(of = "idx", callSuper = false)
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tsp_model_schedule")
 public class FrontScheduleEntity extends NewCommonMappedClass {
     @Transient
@@ -55,7 +52,6 @@ public class FrontScheduleEntity extends NewCommonMappedClass {
     @NotEmpty(message = "모델 스케줄 노출 여부 선택은 필수입니다.")
     private String visible;
 
-    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "model_idx", referencedColumnName = "idx", insertable = false, updatable = false)
     private FrontModelEntity frontModelEntity;

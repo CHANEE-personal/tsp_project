@@ -1,9 +1,7 @@
 package com.tsp.new_tsp_front.api.model.domain.negotiation;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonMappedClass;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -25,7 +23,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @SuperBuilder
 @EqualsAndHashCode(of = "idx", callSuper = false)
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tsp_model_negotiation")
 public class FrontNegotiationEntity extends NewCommonMappedClass {
     @Transient
@@ -35,10 +33,6 @@ public class FrontNegotiationEntity extends NewCommonMappedClass {
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "idx")
     private Long idx;
-
-    @Column(name = "model_idx")
-    @ApiModelProperty(value = "모델 idx", required = true)
-    private Long modelIdx;
 
     @Column(name = "model_kor_name")
     @NotEmpty(message = "모델 국문 이름 입력은 필수입니다.")
@@ -71,17 +65,26 @@ public class FrontNegotiationEntity extends NewCommonMappedClass {
     @NotEmpty(message = "모델 섭외 노출 여부 선택은 필수입니다.")
     private String visible;
 
-    @JsonIgnore
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "model_idx", referencedColumnName = "idx", insertable = false, updatable = false)
+    @JoinColumn(name = "model_idx", referencedColumnName = "idx", nullable = false)
     private FrontModelEntity frontModelEntity;
+
+    public void update(FrontNegotiationEntity frontNegotiationEntity) {
+        this.modelKorName = frontNegotiationEntity.modelKorName;
+        this.modelNegotiationDesc = frontNegotiationEntity.modelNegotiationDesc;
+        this.modelNegotiationDate = frontNegotiationEntity.modelNegotiationDate;
+        this.name = frontNegotiationEntity.name;
+        this.email = frontNegotiationEntity.email;
+        this.phone = frontNegotiationEntity.phone;
+        this.visible = frontNegotiationEntity.visible;
+    }
 
     public static FrontNegotiationDTO toDto(FrontNegotiationEntity entity) {
         if (entity == null) return null;
         return FrontNegotiationDTO.builder()
                 .idx(entity.getIdx())
                 .rowNum(entity.getRowNum())
-                .modelIdx(entity.getModelIdx())
+                .modelIdx(entity.frontModelEntity.getIdx())
                 .modelKorName(entity.getModelKorName())
                 .modelNegotiationDesc(entity.getModelNegotiationDesc())
                 .modelNegotiationDate(entity.getModelNegotiationDate())

@@ -1,5 +1,9 @@
 package com.tsp.new_tsp_front.api.model.controller;
 
+import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
+import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
+import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
+import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.domain.recommend.FrontRecommendEntity;
 import com.tsp.new_tsp_front.api.model.domain.search.FrontSearchEntity;
 import lombok.RequiredArgsConstructor;
@@ -58,11 +62,11 @@ class FrontModelJpaApiControllerTest {
     @Test
     @DisplayName("모델 조회 테스트")
     void 모델조회() throws Exception {
-        mockMvc.perform(get("/api/model/lists/1").param("page", "1").param("size", "100"))
+        mockMvc.perform(get("/api/model/lists/1").param("pageNum", "1").param("size", "100"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.modelList.length()", greaterThan(0)));
+                .andExpect(jsonPath("$.content").isNotEmpty());
     }
 
     @Test
@@ -204,7 +208,7 @@ class FrontModelJpaApiControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.newModelList.length()", greaterThan(0)));
+                .andExpect(jsonPath("$.content").isNotEmpty());
     }
 
     @Test
@@ -224,7 +228,7 @@ class FrontModelJpaApiControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.recommendList.length()", greaterThan(0)));
+                .andExpect(jsonPath("$.content").isNotEmpty());
     }
 
     @Test
@@ -238,7 +242,7 @@ class FrontModelJpaApiControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.rankList.length()", greaterThan(0)));
+                .andExpect(jsonPath("$.content").isNotEmpty());
     }
 
     @Test
@@ -248,6 +252,6 @@ class FrontModelJpaApiControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.modelList.length()", greaterThan(0)));
+                .andExpect(jsonPath("$.content").isNotEmpty());
     }
 }

@@ -3,21 +3,21 @@ package com.tsp.new_tsp_front.api.notice.controller;
 import com.tsp.new_tsp_front.api.notice.domain.FrontNoticeDTO;
 import com.tsp.new_tsp_front.api.notice.service.impl.FrontNoticeJpaService;
 import com.tsp.new_tsp_front.common.SearchCommon;
-import com.tsp.new_tsp_front.common.paging.Page;
+import com.tsp.new_tsp_front.common.paging.Paging;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.rmi.ServerError;
-import java.util.HashMap;
 import java.util.Map;
 
-import static java.lang.Math.ceil;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,7 +25,6 @@ import static java.lang.Math.ceil;
 @RequestMapping("/api/notice")
 public class FrontNoticeJpaApiController {
     private final FrontNoticeJpaService frontNoticeJpaService;
-    private final SearchCommon searchCommon;
 
     /**
      * <pre>
@@ -46,21 +45,8 @@ public class FrontNoticeJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists")
-    public ResponseEntity<Map<String, Object>> findNoticeList(@RequestParam(required = false) Map<String, Object> paramMap, Page page) {
-        Map<String, Object> resultMap = new HashMap<>();
-        Map<String, Object> noticeMap = searchCommon.searchCommon(page, paramMap);
-
-        int count = this.frontNoticeJpaService.findFixedNoticeCount(noticeMap) + this.frontNoticeJpaService.findNoticeCount(noticeMap);
-        // 리스트 수
-        resultMap.put("pageSize", page.getSize());
-        // 전체 페이지 수
-        resultMap.put("perPageListCnt", ceil((double) count / page.getSize()));
-        // 전체 아이템 수
-        resultMap.put("noticeListTotalCnt", count);
-        resultMap.put("noticeList", this.frontNoticeJpaService.findNoticeList(noticeMap));
-        resultMap.put("fixedNoticeList", this.frontNoticeJpaService.findFixedNoticeList(noticeMap));
-
-        return ResponseEntity.ok().body(resultMap);
+    public ResponseEntity<Page<FrontNoticeDTO>> findNoticeList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
+        return ResponseEntity.ok().body(frontNoticeJpaService.findNoticeList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }
 
     /**

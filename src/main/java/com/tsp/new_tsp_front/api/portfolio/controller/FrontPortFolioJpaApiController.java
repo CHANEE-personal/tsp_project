@@ -3,12 +3,14 @@ package com.tsp.new_tsp_front.api.portfolio.controller;
 import com.tsp.new_tsp_front.api.portfolio.FrontPortFolioJpaApiService;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO;
 import com.tsp.new_tsp_front.common.SearchCommon;
-import com.tsp.new_tsp_front.common.paging.Page;
+import com.tsp.new_tsp_front.common.paging.Paging;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -47,18 +49,8 @@ public class FrontPortFolioJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists")
-    public ResponseEntity<Map<String, Object>> findPortfolioList(@RequestParam(required = false) Map<String, Object> paramMap, Page page) {
-        Map<String, Object> resultMap = new HashMap<>();
-        Map<String, Object> portfolioMap = searchCommon.searchCommon(page, paramMap);
-
-        // 리스트 수
-        resultMap.put("pageSize", page.getSize());
-        // 전체 페이지 수
-        resultMap.put("perPageListCnt", ceil((double) this.frontPortFolioJpaApiService.findPortfolioCount(portfolioMap) / page.getSize()));
-        // 전체 아이템 수
-        resultMap.put("portFolioListTotalCnt", this.frontPortFolioJpaApiService.findPortfolioList(portfolioMap).size());
-        resultMap.put("portFolioList", this.frontPortFolioJpaApiService.findPortfolioList(portfolioMap));
-        return ResponseEntity.ok().body(resultMap);
+    public ResponseEntity<Page<FrontPortFolioDTO>> findPortfolioList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
+        return ResponseEntity.ok().body(frontPortFolioJpaApiService.findPortfolioList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }
 
     /**

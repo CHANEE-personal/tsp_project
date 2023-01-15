@@ -6,6 +6,9 @@ import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioDTO;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -15,10 +18,8 @@ import static com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity.commonI
 import static com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity.toDto;
 import static com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity.toDtoList;
 import static com.tsp.new_tsp_front.api.portfolio.domain.QFrontPortFolioEntity.frontPortFolioEntity;
-import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
 import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_PORTFOLIO;
-import static java.util.Collections.emptyList;
 
 @Repository
 @RequiredArgsConstructor
@@ -44,23 +45,6 @@ public class FrontPortFolioJpaRepository {
 
     /**
      * <pre>
-     * 1. MethodName : findPortfolioCount
-     * 2. ClassName  : FrontPortFolioJpaRepository.java
-     * 3. Comment    : 포트폴리오 리스트 갯수 조회
-     * 4. 작성자      : CHO
-     * 5. 작성일      : 2022. 01. 11.
-     * </pre>
-     */
-    public int findPortfolioCount(Map<String, Object> portfolioMap) {
-        return queryFactory
-                .selectFrom(frontPortFolioEntity)
-                .where(searchPortFolio(portfolioMap))
-                .where(frontPortFolioEntity.visible.eq("Y"))
-                .fetch().size();
-    }
-
-    /**
-     * <pre>
      * 1. MethodName : findPortfolioList
      * 2. ClassName  : FrontPortFolioList.java
      * 3. Comment    : 포트폴리오 리스트 조회
@@ -68,17 +52,17 @@ public class FrontPortFolioJpaRepository {
      * 5. 작성일      : 2022. 01. 11.
      * </pre>
      */
-    public List<FrontPortFolioDTO> findPortfolioList(Map<String, Object> portFolioMap) {
+    public Page<FrontPortFolioDTO> findPortfolioList(Map<String, Object> portFolioMap, PageRequest pageRequest) {
         List<FrontPortFolioEntity> portFolioList = queryFactory
                 .selectFrom(frontPortFolioEntity)
                 .where(searchPortFolio(portFolioMap))
                 .where(frontPortFolioEntity.visible.eq("Y"))
                 .orderBy(frontPortFolioEntity.idx.desc())
-                .offset(getInt(portFolioMap.get("jpaStartPage"), 0))
-                .limit(getInt(portFolioMap.get("size"), 0))
+                .offset(pageRequest.getOffset())
+                .limit(pageRequest.getPageSize())
                 .fetch();
 
-        return portFolioList != null ? toDtoList(portFolioList) : emptyList();
+        return new PageImpl<>(toDtoList(portFolioList), pageRequest, portFolioList.size());
     }
 
     /**
@@ -101,7 +85,7 @@ public class FrontPortFolioJpaRepository {
                 .where(frontPortFolioEntity.idx.eq(idx)
                         .and(frontPortFolioEntity.visible.eq("Y"))
                         .and(commonImageEntity.typeName.eq("portfolio")))
-                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_PORTFOLIO, new Throwable()));
+                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_PORTFOLIO));
 
         return toDto(getPortFolioInfo);
     }
@@ -111,8 +95,8 @@ public class FrontPortFolioJpaRepository {
      * 1. MethodName : findPrevOnePortfolio
      * 2. ClassName  : FrontPortfolioJpaRepository.java
      * 3. Comment    : 이전 포트폴리오 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
     public FrontPortFolioDTO findPrevOnePortfolio(Long idx) {
@@ -125,7 +109,7 @@ public class FrontPortFolioJpaRepository {
                 .orderBy(frontPortFolioEntity.idx.desc())
                 .where(frontPortFolioEntity.idx.lt(idx)
                         .and(frontPortFolioEntity.visible.eq("Y")))
-                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_PORTFOLIO, new Throwable()));
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_PORTFOLIO));
 
         return toDto(findPrevOnePortfolio);
     }
@@ -135,8 +119,8 @@ public class FrontPortFolioJpaRepository {
      * 1. MethodName : findNextOnePortfolio
      * 2. ClassName  : FrontPortfolioJpaRepository.java
      * 3. Comment    : 다음 포트폴리오 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
     public FrontPortFolioDTO findNextOnePortfolio(Long idx) {
@@ -149,7 +133,7 @@ public class FrontPortFolioJpaRepository {
                 .orderBy(frontPortFolioEntity.idx.desc())
                 .where(frontPortFolioEntity.idx.gt(idx)
                         .and(frontPortFolioEntity.visible.eq("Y")))
-                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_PORTFOLIO, new Throwable()));
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_PORTFOLIO));
 
         return toDto(findNextOnePortfolio);
     }
@@ -159,8 +143,8 @@ public class FrontPortFolioJpaRepository {
      * 1. MethodName : updatePortfolioViewCount
      * 2. ClassName  : FrontPortFolioJpaRepository.java
      * 3. Comment    : 프론트 포트폴리오 조회 수 증가
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 12.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 12.
      * </pre>
      */
     public int updatePortfolioViewCount(Long idx) {

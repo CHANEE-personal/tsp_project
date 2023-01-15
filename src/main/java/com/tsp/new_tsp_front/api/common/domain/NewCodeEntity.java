@@ -19,7 +19,7 @@ import static javax.persistence.GenerationType.*;
 @Entity
 @SuperBuilder
 @EqualsAndHashCode(of = "idx", callSuper = false)
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "tsp_cmm_code")
 public class NewCodeEntity extends NewCommonMappedClass {
@@ -40,7 +40,6 @@ public class NewCodeEntity extends NewCommonMappedClass {
     @Column(name = "cmm_type")
     private String cmmType;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "newModelCodeJpaDTO", cascade = MERGE, fetch = LAZY)
     private List<FrontModelEntity> frontModelEntityList = new ArrayList<>();
 }

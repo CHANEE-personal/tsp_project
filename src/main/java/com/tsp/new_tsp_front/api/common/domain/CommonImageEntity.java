@@ -1,7 +1,6 @@
 package com.tsp.new_tsp_front.api.common.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.portfolio.domain.FrontPortFolioEntity;
@@ -24,7 +23,7 @@ import static javax.persistence.FetchType.LAZY;
 @Setter
 @Builder
 @EqualsAndHashCode(of = "idx", callSuper = false)
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "tsp_image")
 public class CommonImageEntity implements Serializable {
@@ -79,22 +78,18 @@ public class CommonImageEntity implements Serializable {
     @ApiModelProperty(value = "등록일자", hidden = true)
     private LocalDateTime regDate;
 
-    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "type_idx", referencedColumnName = "idx", insertable = false, updatable = false)
     private FrontModelEntity frontModelEntity;
 
-    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "type_idx", referencedColumnName = "idx", insertable = false, updatable = false)
     private FrontProductionEntity frontProductionEntity;
 
-    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "type_idx", referencedColumnName = "idx", insertable = false, updatable = false)
     private FrontPortFolioEntity frontPortFolioEntity;
 
-    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "type_idx", referencedColumnName = "idx", insertable = false, updatable = false)
     private FrontAgencyEntity frontAgencyEntity;

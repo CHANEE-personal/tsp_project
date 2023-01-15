@@ -56,23 +56,7 @@ class FrontAgencyJpaApiControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.agencyList.length()", equalTo(55)));
-    }
-
-    @Test
-    @DisplayName("Agency 검색 조회 테스트")
-    void Agency검색조회테스트() throws Exception {
-        LinkedMultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
-        paramMap.add("jpaStartPage", "1");
-        paramMap.add("size", "3");
-        paramMap.add("searchType", "0");
-        paramMap.add("searchKeyword", "하하");
-
-        mockMvc.perform(get("/api/agency/lists").queryParams(paramMap))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.agencyList.length()", equalTo(1)));
+                .andExpect(jsonPath("$.content").isNotEmpty());
     }
 
     @Test

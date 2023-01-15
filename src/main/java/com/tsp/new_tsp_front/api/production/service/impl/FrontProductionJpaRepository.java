@@ -6,6 +6,9 @@ import com.tsp.new_tsp_front.api.production.domain.FrontProductionDTO;
 import com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -15,10 +18,8 @@ import static com.tsp.new_tsp_front.api.common.domain.QCommonImageEntity.commonI
 import static com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity.toDto;
 import static com.tsp.new_tsp_front.api.production.domain.FrontProductionEntity.toDtoList;
 import static com.tsp.new_tsp_front.api.production.domain.QFrontProductionEntity.frontProductionEntity;
-import static com.tsp.new_tsp_front.common.utils.StringUtil.getInt;
 import static com.tsp.new_tsp_front.common.utils.StringUtil.getString;
 import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_PRODUCTION;
-import static java.util.Collections.emptyList;
 
 @Repository
 @RequiredArgsConstructor
@@ -44,23 +45,6 @@ public class FrontProductionJpaRepository {
 
     /**
      * <pre>
-     * 1. MethodName : findProductionCount
-     * 2. ClassName  : FrontModelJpaRepository.java
-     * 3. Comment    : 프로덕션 리스트 갯수 조회
-     * 4. 작성자      : CHO
-     * 5. 작성일      : 2022. 01. 06.
-     * </pre>
-     */
-    public int findProductionCount(Map<String, Object> productionMap) {
-        return queryFactory
-                .selectFrom(frontProductionEntity)
-                .where(searchProduction(productionMap))
-                .where(frontProductionEntity.visible.eq("Y"))
-                .fetch().size();
-    }
-
-    /**
-     * <pre>
      * 1. MethodName : findProductionList
      * 2. ClassName  : FrontProductionJpaRepository.java
      * 3. Comment    : 프로덕션 리스트 조회
@@ -68,17 +52,18 @@ public class FrontProductionJpaRepository {
      * 5. 작성일      : 2022. 01. 06.
      * </pre>
      */
-    public List<FrontProductionDTO> findProductionList(Map<String, Object> productionMap) {
+    public Page<FrontProductionDTO> findProductionList(Map<String, Object> productionMap, PageRequest pageRequest) {
         List<FrontProductionEntity> productionList = queryFactory
                 .selectFrom(frontProductionEntity)
                 .where(searchProduction(productionMap))
                 .where(frontProductionEntity.visible.eq("Y"))
                 .orderBy(frontProductionEntity.idx.desc())
-                .offset(getInt(productionMap.get("jpaStartPage"), 0))
-                .limit(getInt(productionMap.get("size"), 0))
+                .offset(pageRequest.getOffset())
+                .limit(pageRequest.getPageSize())
                 .fetch();
 
-        return productionList != null ? toDtoList(productionList) : emptyList();
+        return new PageImpl<>(toDtoList(productionList), pageRequest, productionList.size());
+
     }
 
     /**
@@ -102,7 +87,7 @@ public class FrontProductionJpaRepository {
                 .where(frontProductionEntity.idx.eq(idx)
                         .and(frontProductionEntity.visible.eq("Y"))
                         .and(commonImageEntity.typeName.eq("production")))
-                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_PRODUCTION, new Throwable()));
+                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_PRODUCTION));
 
         return toDto(findOneProduction);
     }
@@ -126,7 +111,7 @@ public class FrontProductionJpaRepository {
                 .orderBy(frontProductionEntity.idx.desc())
                 .where(frontProductionEntity.idx.lt(idx)
                         .and(frontProductionEntity.visible.eq("Y")))
-                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_PRODUCTION, new Throwable()));
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_PRODUCTION));
 
         return toDto(findPrevOneProduction);
     }
@@ -150,7 +135,7 @@ public class FrontProductionJpaRepository {
                 .orderBy(frontProductionEntity.idx.asc())
                 .where(frontProductionEntity.idx.gt(idx)
                         .and(frontProductionEntity.visible.eq("Y")))
-                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_PRODUCTION, new Throwable()));
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_PRODUCTION));
 
         return toDto(findNextOneProduction);
     }

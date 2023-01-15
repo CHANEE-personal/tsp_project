@@ -10,6 +10,9 @@ import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,130 +46,59 @@ class FrontNoticeJpaServiceTest {
     private final FrontNoticeJpaService frontNoticeJpaService;
 
     @Test
-    @DisplayName("공지사항리스트조회Mockito테스트")
+    @DisplayName("공지사항 리스트 조회 Mockito 테스트")
     void 공지사항리스트조회Mockito테스트() {
         // given
         Map<String, Object> noticeMap = new HashMap<>();
-        noticeMap.put("jpaStartPage", 1);
-        noticeMap.put("size", 3);
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<FrontNoticeDTO> returnNoticeList = new ArrayList<>();
-
-        returnNoticeList.add(FrontNoticeDTO.builder().idx(1L).title("공지사항테스트").description("공지사항테스트").visible("Y").build());
-        returnNoticeList.add(FrontNoticeDTO.builder().idx(2L).title("noticeTest").description("noticeTest").visible("Y").build());
+        List<FrontNoticeDTO> noticeList = new ArrayList<>();
+        noticeList.add(FrontNoticeDTO.builder().idx(1L).title("공지사항").description("공지사항").visible("Y").build());
+        Page<FrontNoticeDTO> resultNotice = new PageImpl<>(noticeList, pageRequest, noticeList.size());
 
         // when
-        when(mockFrontNoticeJpaService.findNoticeList(noticeMap)).thenReturn(returnNoticeList);
-        List<FrontNoticeDTO> noticeList = mockFrontNoticeJpaService.findNoticeList(noticeMap);
+        when(mockFrontNoticeJpaService.findNoticeList(noticeMap, pageRequest)).thenReturn(resultNotice);
+        Page<FrontNoticeDTO> newNoticeList = mockFrontNoticeJpaService.findNoticeList(noticeMap, pageRequest);
+        List<FrontNoticeDTO> findNoticeList = newNoticeList.stream().collect(Collectors.toList());
 
         // then
-        assertAll(
-                () -> assertThat(noticeList).isNotEmpty(),
-                () -> assertThat(noticeList).hasSize(2)
-        );
-
-        assertThat(noticeList.get(0).getIdx()).isEqualTo(returnNoticeList.get(0).getIdx());
-        assertThat(noticeList.get(0).getTitle()).isEqualTo(returnNoticeList.get(0).getTitle());
-        assertThat(noticeList.get(0).getDescription()).isEqualTo(returnNoticeList.get(0).getDescription());
-        assertThat(noticeList.get(0).getVisible()).isEqualTo(returnNoticeList.get(0).getVisible());
+        assertThat(findNoticeList.get(0).getIdx()).isEqualTo(noticeList.get(0).getIdx());
+        assertThat(findNoticeList.get(0).getTitle()).isEqualTo(noticeList.get(0).getTitle());
+        assertThat(findNoticeList.get(0).getDescription()).isEqualTo(noticeList.get(0).getDescription());
 
         // verify
-        verify(mockFrontNoticeJpaService, times(1)).findNoticeList(noticeMap);
-        verify(mockFrontNoticeJpaService, atLeastOnce()).findNoticeList(noticeMap);
+        verify(mockFrontNoticeJpaService, times(1)).findNoticeList(noticeMap, pageRequest);
+        verify(mockFrontNoticeJpaService, atLeastOnce()).findNoticeList(noticeMap, pageRequest);
         verifyNoMoreInteractions(mockFrontNoticeJpaService);
 
         InOrder inOrder = inOrder(mockFrontNoticeJpaService);
-        inOrder.verify(mockFrontNoticeJpaService).findNoticeList(noticeMap);
+        inOrder.verify(mockFrontNoticeJpaService).findNoticeList(noticeMap, pageRequest);
     }
 
     @Test
-    @DisplayName("공지사항리스트조회BDD테스트")
+    @DisplayName("공지사항 리스트 조회 BDD 테스트")
     void 공지사항리스트조회BDD테스트() {
         // given
         Map<String, Object> noticeMap = new HashMap<>();
-        noticeMap.put("jpaStartPage", 1);
-        noticeMap.put("size", 3);
-
-        List<FrontNoticeDTO> returnNoticeList = new ArrayList<>();
-
-        returnNoticeList.add(FrontNoticeDTO.builder().idx(1L).title("공지사항테스트").description("공지사항테스트").visible("Y").build());
-        returnNoticeList.add(FrontNoticeDTO.builder().idx(2L).title("noticeTest").description("noticeTest").visible("Y").build());
-
-        // when
-        given(mockFrontNoticeJpaService.findNoticeList(noticeMap)).willReturn(returnNoticeList);
-        List<FrontNoticeDTO> noticeList = mockFrontNoticeJpaService.findNoticeList(noticeMap);
-
-        // then
-        assertAll(
-                () -> assertThat(noticeList).isNotEmpty(),
-                () -> assertThat(noticeList).hasSize(2)
-        );
-
-        assertThat(noticeList.get(0).getIdx()).isEqualTo(returnNoticeList.get(0).getIdx());
-        assertThat(noticeList.get(0).getTitle()).isEqualTo(returnNoticeList.get(0).getTitle());
-        assertThat(noticeList.get(0).getDescription()).isEqualTo(returnNoticeList.get(0).getDescription());
-        assertThat(noticeList.get(0).getVisible()).isEqualTo(returnNoticeList.get(0).getVisible());
-
-        // verify
-        then(mockFrontNoticeJpaService).should(times(1)).findNoticeList(noticeMap);
-        then(mockFrontNoticeJpaService).should(atLeastOnce()).findNoticeList(noticeMap);
-        then(mockFrontNoticeJpaService).shouldHaveNoMoreInteractions();
-    }
-
-    @Test
-    @DisplayName("상단 고정 공지사항 리스트 조회 Mockito 테스트")
-    void 상단고정공지사항리스트조회Mockito테스트() {
-        // given
-        Map<String, Object> noticeMap = new HashMap<>();
-        noticeMap.put("jpaStartPage", 1);
-        noticeMap.put("size", 3);
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<FrontNoticeDTO> noticeList = new ArrayList<>();
-        noticeList.add(FrontNoticeDTO.builder().idx(1L).title("공지사항").description("공지사항").visible("Y").topFixed(Boolean.TRUE.toString()).build());
+        noticeList.add(FrontNoticeDTO.builder().idx(1L).title("공지사항").description("공지사항").visible("Y").build());
+        Page<FrontNoticeDTO> resultNotice = new PageImpl<>(noticeList, pageRequest, noticeList.size());
 
         // when
-        when(mockFrontNoticeJpaService.findFixedNoticeList(noticeMap)).thenReturn(noticeList);
-        List<FrontNoticeDTO> newNoticeList = mockFrontNoticeJpaService.findFixedNoticeList(noticeMap);
+        given(mockFrontNoticeJpaService.findNoticeList(noticeMap, pageRequest)).willReturn(resultNotice);
+        Page<FrontNoticeDTO> newNoticeList = mockFrontNoticeJpaService.findNoticeList(noticeMap, pageRequest);
+        List<FrontNoticeDTO> findNoticeList = newNoticeList.stream().collect(Collectors.toList());
 
         // then
-        assertThat(newNoticeList.get(0).getIdx()).isEqualTo(noticeList.get(0).getIdx());
-        assertThat(newNoticeList.get(0).getTitle()).isEqualTo(noticeList.get(0).getTitle());
-        assertThat(newNoticeList.get(0).getDescription()).isEqualTo(noticeList.get(0).getDescription());
-        assertThat(newNoticeList.get(0).getTopFixed()).isEqualTo(noticeList.get(0).getTopFixed());
+        assertThat(findNoticeList.get(0).getIdx()).isEqualTo(noticeList.get(0).getIdx());
+        assertThat(findNoticeList.get(0).getTitle()).isEqualTo(noticeList.get(0).getTitle());
+        assertThat(findNoticeList.get(0).getDescription()).isEqualTo(noticeList.get(0).getDescription());
 
         // verify
-        verify(mockFrontNoticeJpaService, times(1)).findFixedNoticeList(noticeMap);
-        verify(mockFrontNoticeJpaService, atLeastOnce()).findFixedNoticeList(noticeMap);
-        verifyNoMoreInteractions(mockFrontNoticeJpaService);
-
-        InOrder inOrder = inOrder(mockFrontNoticeJpaService);
-        inOrder.verify(mockFrontNoticeJpaService).findFixedNoticeList(noticeMap);
-    }
-
-    @Test
-    @DisplayName("상단 고정 공지사항 리스트 조회 BDD 테스트")
-    void 상단고정공지사항리스트조회BDD테스트() {
-        // given
-        Map<String, Object> noticeMap = new HashMap<>();
-        noticeMap.put("jpaStartPage", 1);
-        noticeMap.put("size", 3);
-
-        List<FrontNoticeDTO> noticeList = new ArrayList<>();
-        noticeList.add(FrontNoticeDTO.builder().idx(1L).title("공지사항").description("공지사항").visible("Y").topFixed(Boolean.TRUE.toString()).build());
-
-        // when
-        given(mockFrontNoticeJpaService.findFixedNoticeList(noticeMap)).willReturn(noticeList);
-        List<FrontNoticeDTO> newNoticeList = mockFrontNoticeJpaService.findFixedNoticeList(noticeMap);
-
-        // then
-        assertThat(newNoticeList.get(0).getIdx()).isEqualTo(noticeList.get(0).getIdx());
-        assertThat(newNoticeList.get(0).getTitle()).isEqualTo(noticeList.get(0).getTitle());
-        assertThat(newNoticeList.get(0).getDescription()).isEqualTo(noticeList.get(0).getDescription());
-        assertThat(newNoticeList.get(0).getTopFixed()).isEqualTo(noticeList.get(0).getTopFixed());
-
-        // verify
-        then(mockFrontNoticeJpaService).should(times(1)).findFixedNoticeList(noticeMap);
-        then(mockFrontNoticeJpaService).should(atLeastOnce()).findFixedNoticeList(noticeMap);
+        then(mockFrontNoticeJpaService).should(times(1)).findNoticeList(noticeMap, pageRequest);
+        then(mockFrontNoticeJpaService).should(atLeastOnce()).findNoticeList(noticeMap, pageRequest);
         then(mockFrontNoticeJpaService).shouldHaveNoMoreInteractions();
     }
 

@@ -50,7 +50,6 @@ public class FrontProductionEntity extends NewCommonMappedClass {
     @NotEmpty(message = "프로덕션 노출 여부 선택은 필수입니다.")
     private String visible;
 
-    @JsonIgnore
     @BatchSize(size = 5)
     @Where(clause = "type_name = 'production'")
     @OneToMany(mappedBy = "frontProductionEntity", fetch = LAZY)

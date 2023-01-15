@@ -20,7 +20,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @SuperBuilder
 @EqualsAndHashCode(of = "idx", callSuper = false)
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @TypeDef(name = "json", typeClass = JsonStringType.class)
 @Table(name = "tsp_recommend")
 public class FrontRecommendEntity extends NewCommonMappedClass {
