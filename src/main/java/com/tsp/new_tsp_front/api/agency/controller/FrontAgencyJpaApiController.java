@@ -9,15 +9,15 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.rmi.ServerError;
-import java.util.HashMap;
 import java.util.Map;
 
-import static java.lang.Math.ceil;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,19 +46,8 @@ public class FrontAgencyJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists")
-    public ResponseEntity<Map<String, Object>> findAgencyList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
-        Map<String, Object> resultMap = new HashMap<>();
-        Map<String, Object> agencyMap = searchCommon.searchCommon(paging, paramMap);
-
-        // 리스트 수
-        resultMap.put("pageSize", paging.getSize());
-        // 전체 페이지 수
-        resultMap.put("perPageListCnt", ceil((double)this.frontAgencyJpaService.findAgencyCount(agencyMap) / paging.getSize()));
-        // 전체 아이템 수
-        resultMap.put("agencyListTotalCnt", this.frontAgencyJpaService.findAgencyList(agencyMap));
-        resultMap.put("agencyList", this.frontAgencyJpaService.findAgencyList(agencyMap));
-
-        return ResponseEntity.ok().body(resultMap);
+    public ResponseEntity<Page<FrontAgencyDTO>> findAgencyList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
+        return ResponseEntity.ok().body(frontAgencyJpaService.findAgencyList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }
 
     /**
@@ -70,7 +59,7 @@ public class FrontAgencyJpaApiController {
      * 5. 작성일      : 2022. 08. 24.
      * </pre>
      */
-    @ApiOperation(value = "Agency 상세 조회", notes = "Agency를 상세 조회한다.")
+    @ApiOperation(value = "Agency 상세 조회", notes = "Agency 상세 조회한다.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Agency 상세 조회 성공", response = FrontAgencyDTO.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
@@ -93,7 +82,7 @@ public class FrontAgencyJpaApiController {
      * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
-    @ApiOperation(value = "이전 Agency 상세 조회", notes = "이전 Agency를 상세 조회한다.")
+    @ApiOperation(value = "이전 Agency 상세 조회", notes = "이전 Agency 상세 조회한다.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "이전 Agency 상세 조회 성공", response = FrontAgencyDTO.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
@@ -116,7 +105,7 @@ public class FrontAgencyJpaApiController {
      * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
-    @ApiOperation(value = "다음 Agency 상세 조회", notes = "다음 Agency를 상세 조회한다.")
+    @ApiOperation(value = "다음 Agency 상세 조회", notes = "다음 Agency 상세 조회한다.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "다음 Agency 상세 조회 성공", response = FrontAgencyDTO.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
@@ -139,7 +128,7 @@ public class FrontAgencyJpaApiController {
      * 5. 작성일      : 2022. 08. 24.
      * </pre>
      */
-    @ApiOperation(value = "Agency 좋아요 처리", notes = "Agency를 좋아요 처리한다.")
+    @ApiOperation(value = "Agency 좋아요 처리", notes = "Agency 좋아요 처리한다.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Agency 좋아요 성공", response = Integer.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
@@ -150,9 +139,6 @@ public class FrontAgencyJpaApiController {
     })
     @PutMapping(value = "/{idx}/like")
     public ResponseEntity<Integer> favoriteAgency(@PathVariable Long idx) {
-        if (frontAgencyJpaService.findOneAgency(idx) == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(frontAgencyJpaService.favoriteAgency(idx));
     }
 }
