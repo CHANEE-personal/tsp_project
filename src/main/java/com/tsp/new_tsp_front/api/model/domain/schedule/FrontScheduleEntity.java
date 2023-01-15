@@ -1,6 +1,5 @@
 package com.tsp.new_tsp_front.api.model.domain.schedule;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tsp.new_tsp_front.api.common.domain.NewCommonMappedClass;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,11 +11,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 

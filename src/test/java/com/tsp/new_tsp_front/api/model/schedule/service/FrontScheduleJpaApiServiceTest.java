@@ -9,6 +9,9 @@ import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 
@@ -16,6 +19,7 @@ import javax.transaction.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.time.LocalDateTime.now;
 import static java.time.LocalDateTime.of;
@@ -74,30 +78,31 @@ class FrontScheduleJpaApiServiceTest {
     void 모델스케줄Mockito조회테스트() {
         // given
         Map<String, Object> scheduleMap = new HashMap<>();
-        scheduleMap.put("jpaStartPage", 1);
-        scheduleMap.put("size", 3);
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<FrontScheduleDTO> scheduleList = new ArrayList<>();
         scheduleList.add(FrontScheduleDTO.builder().idx(1L).modelIdx(1L)
                 .modelSchedule("스케줄 테스트").modelScheduleTime(now()).build());
 
+        Page<FrontScheduleDTO> resultSchedule = new PageImpl<>(scheduleList, pageRequest, scheduleList.size());
         // when
-        when(mockFrontScheduleJpaApiService.findScheduleList(scheduleMap)).thenReturn(scheduleList);
-        List<FrontScheduleDTO> newScheduleList = mockFrontScheduleJpaApiService.findScheduleList(scheduleMap);
+        when(mockFrontScheduleJpaApiService.findScheduleList(scheduleMap, pageRequest)).thenReturn(resultSchedule);
+        Page<FrontScheduleDTO> newScheduleList = mockFrontScheduleJpaApiService.findScheduleList(scheduleMap, pageRequest);
+        List<FrontScheduleDTO> findScheduleList = newScheduleList.stream().collect(Collectors.toList());
 
         // then
-        assertThat(newScheduleList.get(0).getIdx()).isEqualTo(scheduleList.get(0).getIdx());
-        assertThat(newScheduleList.get(0).getModelIdx()).isEqualTo(scheduleList.get(0).getModelIdx());
-        assertThat(newScheduleList.get(0).getModelSchedule()).isEqualTo(scheduleList.get(0).getModelSchedule());
-        assertThat(newScheduleList.get(0).getModelScheduleTime()).isEqualTo(scheduleList.get(0).getModelScheduleTime());
+        assertThat(findScheduleList.get(0).getIdx()).isEqualTo(scheduleList.get(0).getIdx());
+        assertThat(findScheduleList.get(0).getModelIdx()).isEqualTo(scheduleList.get(0).getModelIdx());
+        assertThat(findScheduleList.get(0).getModelSchedule()).isEqualTo(scheduleList.get(0).getModelSchedule());
+        assertThat(findScheduleList.get(0).getModelScheduleTime()).isEqualTo(scheduleList.get(0).getModelScheduleTime());
 
         // verify
-        verify(mockFrontScheduleJpaApiService, times(1)).findScheduleList(scheduleMap);
-        verify(mockFrontScheduleJpaApiService, atLeastOnce()).findScheduleList(scheduleMap);
+        verify(mockFrontScheduleJpaApiService, times(1)).findScheduleList(scheduleMap, pageRequest);
+        verify(mockFrontScheduleJpaApiService, atLeastOnce()).findScheduleList(scheduleMap, pageRequest);
         verifyNoMoreInteractions(mockFrontScheduleJpaApiService);
 
         InOrder inOrder = inOrder(mockFrontScheduleJpaApiService);
-        inOrder.verify(mockFrontScheduleJpaApiService).findScheduleList(scheduleMap);
+        inOrder.verify(mockFrontScheduleJpaApiService).findScheduleList(scheduleMap, pageRequest);
     }
 
     @Test
@@ -105,26 +110,27 @@ class FrontScheduleJpaApiServiceTest {
     void 모델스케줄BDD조회테스트() {
         // given
         Map<String, Object> scheduleMap = new HashMap<>();
-        scheduleMap.put("jpaStartPage", 1);
-        scheduleMap.put("size", 3);
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<FrontScheduleDTO> scheduleList = new ArrayList<>();
         scheduleList.add(FrontScheduleDTO.builder().idx(1L).modelIdx(1L)
                 .modelSchedule("스케줄 테스트").modelScheduleTime(now()).build());
 
+        Page<FrontScheduleDTO> resultSchedule = new PageImpl<>(scheduleList, pageRequest, scheduleList.size());
         // when
-        given(mockFrontScheduleJpaApiService.findScheduleList(scheduleMap)).willReturn(scheduleList);
-        List<FrontScheduleDTO> newScheduleList = mockFrontScheduleJpaApiService.findScheduleList(scheduleMap);
+        given(mockFrontScheduleJpaApiService.findScheduleList(scheduleMap, pageRequest)).willReturn(resultSchedule);
+        Page<FrontScheduleDTO> newScheduleList = mockFrontScheduleJpaApiService.findScheduleList(scheduleMap, pageRequest);
+        List<FrontScheduleDTO> findScheduleList = newScheduleList.stream().collect(Collectors.toList());
 
         // then
-        assertThat(newScheduleList.get(0).getIdx()).isEqualTo(scheduleList.get(0).getIdx());
-        assertThat(newScheduleList.get(0).getModelIdx()).isEqualTo(scheduleList.get(0).getModelIdx());
-        assertThat(newScheduleList.get(0).getModelSchedule()).isEqualTo(scheduleList.get(0).getModelSchedule());
-        assertThat(newScheduleList.get(0).getModelScheduleTime()).isEqualTo(scheduleList.get(0).getModelScheduleTime());
+        assertThat(findScheduleList.get(0).getIdx()).isEqualTo(scheduleList.get(0).getIdx());
+        assertThat(findScheduleList.get(0).getModelIdx()).isEqualTo(scheduleList.get(0).getModelIdx());
+        assertThat(findScheduleList.get(0).getModelSchedule()).isEqualTo(scheduleList.get(0).getModelSchedule());
+        assertThat(findScheduleList.get(0).getModelScheduleTime()).isEqualTo(scheduleList.get(0).getModelScheduleTime());
 
         // verify
-        then(mockFrontScheduleJpaApiService).should(times(1)).findScheduleList(scheduleMap);
-        then(mockFrontScheduleJpaApiService).should(atLeastOnce()).findScheduleList(scheduleMap);
+        then(mockFrontScheduleJpaApiService).should(times(1)).findScheduleList(scheduleMap, pageRequest);
+        then(mockFrontScheduleJpaApiService).should(atLeastOnce()).findScheduleList(scheduleMap, pageRequest);
         then(mockFrontScheduleJpaApiService).shouldHaveNoMoreInteractions();
     }
 }

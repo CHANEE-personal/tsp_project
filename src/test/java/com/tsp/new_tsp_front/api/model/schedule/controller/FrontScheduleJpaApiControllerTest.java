@@ -24,7 +24,6 @@ import java.time.LocalDate;
 
 import static java.time.LocalDateTime.*;
 import static java.time.format.DateTimeFormatter.*;
-import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -59,16 +58,14 @@ class FrontScheduleJpaApiControllerTest {
     @DisplayName("모델 스케줄 조회 테스트")
     void 모델스케줄조회테스트() throws Exception {
         LinkedMultiValueMap<String, String> scheduleMap = new LinkedMultiValueMap<>();
-        scheduleMap.add("jpaStartPage", "1");
-        scheduleMap.add("size", "3");
 
         mockMvc.perform(get("/api/schedule/lists")
-                .queryParams(scheduleMap)
+                .queryParams(scheduleMap).param("pageNum", "1").param("size", "3")
                 .queryParam("searchStartTime", of(now().getYear(), LocalDate.now().getMonth(), 1, 0, 0, 0, 0).format(ofPattern("yyyyMMdd")))
                 .queryParam("searchEndTime", of(now().getYear(), LocalDate.now().getMonth(), 30, 23, 59, 59).format(ofPattern("yyyyMMdd"))))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.scheduleList.length()", equalTo(55)));
+                .andExpect(jsonPath("$.content").isNotEmpty());
     }
 }

@@ -1,5 +1,6 @@
 package com.tsp.new_tsp_front.api.model.schedule.controller;
 
+import com.tsp.new_tsp_front.api.model.domain.schedule.FrontScheduleDTO;
 import com.tsp.new_tsp_front.api.model.schedule.service.FrontScheduleJpaApiService;
 import com.tsp.new_tsp_front.common.SearchCommon;
 import com.tsp.new_tsp_front.common.paging.Paging;
@@ -8,6 +9,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,26 +53,15 @@ public class FrontScheduleJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists")
-    public ResponseEntity<Map<String, Object>> findScheduleList(@RequestParam(required = false) Map<String, Object> paramMap,
-                                                                @RequestParam(value = "searchStartTime", required = false) String searchStartTime,
-                                                                @RequestParam(value = "searchEndTime", required = false) String searchEndTime,
-                                                                Paging paging) {
-        Map<String, Object> resultMap = new HashMap<>();
-        Map<String, Object> scheduleMap = searchCommon.searchCommon(paging, paramMap);
-
+    public ResponseEntity<Page<FrontScheduleDTO>> findScheduleList(@RequestParam(required = false) Map<String, Object> paramMap,
+                                                                   @RequestParam(value = "searchStartTime", required = false) String searchStartTime,
+                                                                   @RequestParam(value = "searchEndTime", required = false) String searchEndTime,
+                                                                   Paging paging) {
         if (searchStartTime != null && searchEndTime != null) {
-            scheduleMap.put("searchStartTime", searchStartTime);
-            scheduleMap.put("searchEndTime", searchEndTime);
+            paramMap.put("searchStartTime", searchStartTime);
+            paramMap.put("searchEndTime", searchEndTime);
         }
 
-        // 리스트 수
-        resultMap.put("pageSize", paging.getSize());
-        // 전체 페이지 수
-        resultMap.put("perPageListCnt", ceil((double) this.frontScheduleJpaApiService.findScheduleCount(scheduleMap) / paging.getSize()));
-        // 전체 아이템 수
-        resultMap.put("scheduleListTotalCnt", this.frontScheduleJpaApiService.findModelScheduleList(scheduleMap));
-        resultMap.put("scheduleList", this.frontScheduleJpaApiService.findModelScheduleList(scheduleMap));
-
-        return ResponseEntity.ok().body(resultMap);
+        return ResponseEntity.ok().body(frontScheduleJpaApiService.findScheduleList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }
 }
