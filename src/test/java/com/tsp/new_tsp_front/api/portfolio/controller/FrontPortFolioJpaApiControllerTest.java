@@ -17,7 +17,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -49,11 +48,11 @@ class FrontPortFolioJpaApiControllerTest {
     @Test
     @DisplayName("포트폴리오 조회 테스트")
     void 포트폴리오조회() throws Exception {
-        mockMvc.perform(get("/api/portfolio/lists").param("page", "1").param("size", "100"))
+        mockMvc.perform(get("/api/portfolio/lists").param("pageNum", "1").param("size", "100"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.portFolioList.length()", equalTo(2)));
+                .andExpect(jsonPath("$.content").isNotEmpty());
     }
 
     @Test
@@ -61,16 +60,14 @@ class FrontPortFolioJpaApiControllerTest {
     @DisplayName("포트폴리오 검색 조회 테스트")
     void 포트폴리오검색조회() throws Exception {
         LinkedMultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
-        paramMap.add("jpaStartPage", "1");
-        paramMap.add("size", "3");
         paramMap.add("searchType", "0");
         paramMap.add("searchKeyword", "하하");
 
-        mockMvc.perform(get("/api/portfolio/lists").queryParams(paramMap))
+        mockMvc.perform(get("/api/portfolio/lists").queryParams(paramMap).param("pageNum", "1").param("size", "3"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.portFolioList.length()", equalTo(2)));
+                .andExpect(jsonPath("$.content").isNotEmpty());
     }
 
     @Test

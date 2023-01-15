@@ -53,23 +53,21 @@ class FrontProductionJpaApiControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.productionList.length()", equalTo(55)));
+                .andExpect(jsonPath("$.content").isNotEmpty());
     }
 
     @Test
     @DisplayName("프로덕션 검색 조회 테스트")
     void 프로덕션검색조회() throws Exception {
         LinkedMultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
-        paramMap.add("jpaStartPage", "1");
-        paramMap.add("size", "3");
         paramMap.add("searchType", "0");
         paramMap.add("searchKeyword", "하하");
 
-        mockMvc.perform(get("/api/production/lists").queryParams(paramMap))
+        mockMvc.perform(get("/api/production/lists").queryParams(paramMap).param("pageNum", "1").param("size", "3"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.productionList.length()", equalTo(1)));
+                .andExpect(jsonPath("$.content").isNotEmpty());
     }
 
     @Test

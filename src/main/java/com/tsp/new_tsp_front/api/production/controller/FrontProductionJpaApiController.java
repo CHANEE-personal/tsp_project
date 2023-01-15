@@ -9,6 +9,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -47,19 +49,8 @@ public class FrontProductionJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists")
-    public ResponseEntity<Map<String, Object>> findProductionList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
-        Map<String, Object> resultMap = new HashMap<>();
-        Map<String, Object> productionMap = searchCommon.searchCommon(paging, paramMap);
-
-        // 리스트 수
-        resultMap.put("pageSize", paging.getSize());
-        // 전체 페이지 수
-        resultMap.put("perPageListCnt", ceil((double) this.frontProductionJpaApiService.findProductionCount(productionMap) / paging.getSize()));
-        // 전체 아이템 수
-        resultMap.put("productionListTotalCnt", this.frontProductionJpaApiService.findProductionList(productionMap));
-        resultMap.put("productionList", this.frontProductionJpaApiService.findProductionList(productionMap));
-
-        return ResponseEntity.ok().body(resultMap);
+    public ResponseEntity<Page<FrontProductionDTO>> findProductionList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
+        return ResponseEntity.ok().body(frontProductionJpaApiService.findProductionList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }
 
     /**

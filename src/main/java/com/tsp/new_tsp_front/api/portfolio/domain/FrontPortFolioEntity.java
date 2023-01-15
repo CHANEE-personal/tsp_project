@@ -25,7 +25,7 @@ import static javax.persistence.GenerationType.*;
 @Setter
 @SuperBuilder
 @EqualsAndHashCode(of = "idx", callSuper = false)
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "tsp_portfolio")
 public class FrontPortFolioEntity extends NewCommonMappedClass {
