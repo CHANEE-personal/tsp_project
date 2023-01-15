@@ -1,13 +1,15 @@
 package com.tsp.new_tsp_front.api.model.negotiation.service;
 
+import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.domain.negotiation.FrontNegotiationDTO;
 import com.tsp.new_tsp_front.api.model.domain.negotiation.FrontNegotiationEntity;
+import com.tsp.new_tsp_front.api.model.negotiation.service.impl.FrontNegotiationJpaQueryRepository;
 import com.tsp.new_tsp_front.api.model.negotiation.service.impl.FrontNegotiationJpaRepository;
+import com.tsp.new_tsp_front.api.model.service.impl.FrontModelJpaRepository;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,20 +21,18 @@ import static com.tsp.new_tsp_front.exception.ApiExceptionType.*;
 @Service
 @RequiredArgsConstructor
 public class FrontNegotiationJpaApiService {
+    private final FrontNegotiationJpaQueryRepository frontNegotiationJpaQueryRepository;
     private final FrontNegotiationJpaRepository frontNegotiationJpaRepository;
+    private final FrontModelJpaRepository frontModelJpaRepository;
 
-    /**
-     * <pre>
-     * 1. MethodName : findNegotiationCount
-     * 2. ClassName  : FrontNegotiationJpaServiceImpl.java
-     * 3. Comment    : 모델 섭외 리스트 수 조회
-     * 4. 작성자      : CHO
-     * 5. 작성일      : 2022. 09. 11.
-     * </pre>
-     */
-    @Transactional(readOnly = true)
-    public int findNegotiationCount(Map<String, Object> negotiationMap) {
-        return frontNegotiationJpaRepository.findNegotiationCount(negotiationMap);
+    private FrontModelEntity oneModel(Long idx) {
+        return frontModelJpaRepository.findById(idx)
+                .orElseThrow(() -> new TspException(NOT_FOUND_MODEL));
+    }
+
+    private FrontNegotiationEntity oneNegotiation(Long idx) {
+        return frontNegotiationJpaRepository.findById(idx)
+                .orElseThrow(() -> new TspException(NOT_FOUND_MODEL_NEGOTIATION));
     }
 
     /**
@@ -44,10 +44,9 @@ public class FrontNegotiationJpaApiService {
      * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
-    @Cacheable(value = "negotiation", key = "#negotiationMap")
     @Transactional(readOnly = true)
-    public List<FrontNegotiationDTO> findModelNegotiationList(Map<String, Object> negotiationMap) {
-        return frontNegotiationJpaRepository.findModelNegotiationList(negotiationMap);
+    public Page<FrontNegotiationDTO> findModelNegotiationList(Map<String, Object> negotiationMap, PageRequest pageRequest) {
+        return frontNegotiationJpaQueryRepository.findModelNegotiationList(negotiationMap, pageRequest);
     }
 
     /**
@@ -59,10 +58,9 @@ public class FrontNegotiationJpaApiService {
      * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
-    @Cacheable(value = "negotiation", key = "#idx")
     @Transactional(readOnly = true)
     public FrontNegotiationDTO findOneNegotiation(Long idx) {
-        return frontNegotiationJpaRepository.findOneNegotiation(idx);
+        return FrontNegotiationEntity.toDto(oneNegotiation(idx));
     }
 
     /**
@@ -74,11 +72,11 @@ public class FrontNegotiationJpaApiService {
      * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
-    @CachePut("negotiation")
     @Transactional
-    public FrontNegotiationDTO insertModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) {
+    public FrontNegotiationDTO insertModelNegotiation(Long modelIdx, FrontNegotiationEntity frontNegotiationEntity) {
         try {
-            return frontNegotiationJpaRepository.insertModelNegotiation(frontNegotiationEntity);
+            oneModel(modelIdx).addNegotiation(frontNegotiationEntity);
+            return FrontNegotiationEntity.toDto(frontNegotiationJpaRepository.save(frontNegotiationEntity));
         } catch (Exception e) {
             throw new TspException(ERROR_MODEL_NEGOTIATION);
         }
@@ -93,11 +91,13 @@ public class FrontNegotiationJpaApiService {
      * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
-    @CachePut(value = "negotiation", key = "#frontNegotiationEntity.idx")
     @Transactional
-    public FrontNegotiationDTO updateModelNegotiation(FrontNegotiationEntity frontNegotiationEntity) {
+    public FrontNegotiationDTO updateModelNegotiation(Long idx, FrontNegotiationEntity frontNegotiationEntity) {
         try {
-            return frontNegotiationJpaRepository.updateModelNegotiation(frontNegotiationEntity);
+            System.out.println("===front===");
+            System.out.println(frontNegotiationEntity.getFrontModelEntity().getIdx());
+            oneNegotiation(idx).update(frontNegotiationEntity);
+            return FrontNegotiationEntity.toDto(frontNegotiationJpaRepository.save(frontNegotiationEntity));
         } catch (Exception e) {
             throw new TspException(ERROR_UPDATE_MODEL_NEGOTIATION);
         }
@@ -112,11 +112,11 @@ public class FrontNegotiationJpaApiService {
      * 5. 작성일      : 2022. 09. 11.
      * </pre>
      */
-    @CacheEvict(value = "negotiation", key = "#idx")
     @Transactional
     public Long deleteModelNegotiation(Long idx) {
         try {
-            return frontNegotiationJpaRepository.deleteModelNegotiation(idx);
+            frontNegotiationJpaRepository.deleteById(idx);
+            return idx;
         } catch (Exception e) {
             throw new TspException(ERROR_DELETE_MODEL_NEGOTIATION);
         }

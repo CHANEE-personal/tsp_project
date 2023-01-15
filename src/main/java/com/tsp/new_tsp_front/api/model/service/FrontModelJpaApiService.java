@@ -4,7 +4,7 @@ import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.domain.recommend.FrontRecommendDTO;
 import com.tsp.new_tsp_front.api.model.domain.search.FrontSearchDTO;
-import com.tsp.new_tsp_front.api.model.service.impl.FrontModelJpaRepository;
+import com.tsp.new_tsp_front.api.model.service.impl.FrontModelJpaQueryRepository;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,7 +20,7 @@ import static com.tsp.new_tsp_front.exception.ApiExceptionType.*;
 @Service
 @RequiredArgsConstructor
 public class FrontModelJpaApiService {
-    private final FrontModelJpaRepository frontModelJpaRepository;
+    private final FrontModelJpaQueryRepository frontModelJpaQueryRepository;
 
     /**
      * <pre>
@@ -33,7 +33,7 @@ public class FrontModelJpaApiService {
      */
     @Transactional(readOnly = true)
     public Page<FrontModelDTO> findModelList(Map<String, Object> modelMap, PageRequest pageRequest) {
-        return frontModelJpaRepository.findModelList(modelMap, pageRequest);
+        return frontModelJpaQueryRepository.findModelList(modelMap, pageRequest);
     }
 
     /**
@@ -47,7 +47,7 @@ public class FrontModelJpaApiService {
      */
     @Transactional
     public FrontModelDTO findOneModel(Long idx) {
-        return frontModelJpaRepository.findOneModel(idx);
+        return frontModelJpaQueryRepository.findOneModel(idx);
     }
 
     /**
@@ -61,7 +61,7 @@ public class FrontModelJpaApiService {
      */
     @Transactional
     public FrontModelDTO findPrevOneModel(FrontModelEntity frontModelEntity) {
-        return frontModelJpaRepository.findPrevOneModel(frontModelEntity);
+        return frontModelJpaQueryRepository.findPrevOneModel(frontModelEntity);
     }
 
     /**
@@ -75,7 +75,7 @@ public class FrontModelJpaApiService {
      */
     @Transactional
     public FrontModelDTO findNextOneModel(FrontModelEntity frontModelEntity) {
-        return frontModelJpaRepository.findNextOneModel(frontModelEntity);
+        return frontModelJpaQueryRepository.findNextOneModel(frontModelEntity);
     }
 
     /**
@@ -89,7 +89,7 @@ public class FrontModelJpaApiService {
      */
     @Transactional(readOnly = true)
     public List<FrontModelDTO> findMainModelList() {
-        return this.frontModelJpaRepository.findMainModelList();
+        return this.frontModelJpaQueryRepository.findMainModelList();
     }
 
     /**
@@ -104,7 +104,7 @@ public class FrontModelJpaApiService {
     @Transactional
     public int favoriteModel(Long idx) {
         try {
-            return frontModelJpaRepository.favoriteModel(idx);
+            return frontModelJpaQueryRepository.favoriteModel(idx);
         } catch (Exception e) {
             throw new TspException(ERROR_MODEL_LIKE);
         }
@@ -121,7 +121,7 @@ public class FrontModelJpaApiService {
      */
     @Transactional(readOnly = true)
     public Page<FrontRecommendDTO> findRecommendList(PageRequest pageRequest) {
-        return frontModelJpaRepository.findRecommendList(pageRequest);
+        return frontModelJpaQueryRepository.findRecommendList(pageRequest);
     }
 
     /**
@@ -135,7 +135,7 @@ public class FrontModelJpaApiService {
      */
     @Transactional(readOnly = true)
     public Page<FrontSearchDTO> rankingKeywordList(PageRequest pageRequest) {
-        return frontModelJpaRepository.rankingKeywordList(pageRequest);
+        return frontModelJpaQueryRepository.rankingKeywordList(pageRequest);
     }
 
     /**
@@ -149,6 +149,6 @@ public class FrontModelJpaApiService {
      */
     @Transactional(readOnly = true)
     public List<FrontModelDTO> findModelKeyword(String keyword) {
-        return frontModelJpaRepository.findModelKeyword(keyword);
+        return frontModelJpaQueryRepository.findModelKeyword(keyword);
     }
 }

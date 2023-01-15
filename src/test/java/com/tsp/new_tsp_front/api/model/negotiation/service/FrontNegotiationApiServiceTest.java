@@ -18,6 +18,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 
@@ -29,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.time.LocalDateTime.now;
 import static java.time.LocalDateTime.of;
@@ -100,7 +104,7 @@ class FrontNegotiationApiServiceTest {
         frontModelDTO = FrontModelEntity.toDto(frontModelEntity);
 
         frontNegotiationEntity = FrontNegotiationEntity.builder()
-                .modelIdx(frontModelEntity.getIdx())
+                .frontModelEntity(frontModelEntity)
                 .modelKorName(frontModelEntity.getModelKorName())
                 .modelNegotiationDesc("영화 프로젝트 참여")
                 .modelNegotiationDate(now())
@@ -125,29 +129,26 @@ class FrontNegotiationApiServiceTest {
         // given
         Map<String, Object> negotiationMap = new HashMap<>();
         negotiationMap.put("searchKeyword", "김예영");
-        negotiationMap.put("jpaStartPage", 0);
-        negotiationMap.put("size", 100);
+        PageRequest pageRequest = PageRequest.of(1, 100);
 
         // then
-        assertThat(frontNegotiationJpaApiService.findModelNegotiationList(negotiationMap)).isNotEmpty();
+        assertThat(frontNegotiationJpaApiService.findModelNegotiationList(negotiationMap, pageRequest)).isNotEmpty();
 
         Map<String, Object> lastMonthNegotiationMap = new HashMap<>();
         lastMonthNegotiationMap.put("searchStartTime", of(now().getYear(), LocalDate.now().minusMonths(1).getMonth(), 1, 0, 0, 0, 0));
         lastMonthNegotiationMap.put("searchEndTime", of(now().getYear(), LocalDate.now().minusMonths(1).getMonth(), 30, 23, 59, 59));
-        lastMonthNegotiationMap.put("jpaStartPage", 0);
-        lastMonthNegotiationMap.put("size", 100);
+        PageRequest pageRequest2 = PageRequest.of(1, 100);
 
         // then
-        assertThat(frontNegotiationJpaApiService.findModelNegotiationList(negotiationMap)).isNotEmpty();
+        assertThat(frontNegotiationJpaApiService.findModelNegotiationList(negotiationMap, pageRequest2)).isNotEmpty();
 
         Map<String, Object> currentNegotiationMap = new HashMap<>();
         currentNegotiationMap.put("searchStartTime", of(now().getYear(), LocalDate.now().getMonth(), 1, 0, 0, 0, 0));
         currentNegotiationMap.put("searchEndTime", of(now().getYear(), LocalDate.now().getMonth(), 30, 23, 59, 59));
-        currentNegotiationMap.put("jpaStartPage", 0);
-        currentNegotiationMap.put("size", 100);
+        PageRequest pageRequest3 = PageRequest.of(1, 100);
 
         // then
-        assertThat(frontNegotiationJpaApiService.findModelNegotiationList(negotiationMap)).isNotEmpty();
+        assertThat(frontNegotiationJpaApiService.findModelNegotiationList(negotiationMap, pageRequest3)).isNotEmpty();
     }
 
     @Test
@@ -155,8 +156,7 @@ class FrontNegotiationApiServiceTest {
     void 모델섭외Mockito조회테스트() {
         // given
         Map<String, Object> negotiationMap = new HashMap<>();
-        negotiationMap.put("jpaStartPage", 1);
-        negotiationMap.put("size", 3);
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<FrontNegotiationDTO> negotiationList = new ArrayList<>();
         negotiationList.add(FrontNegotiationDTO.builder().modelIdx(frontModelEntity.getIdx())
@@ -164,21 +164,23 @@ class FrontNegotiationApiServiceTest {
         negotiationList.add(FrontNegotiationDTO.builder().modelIdx(frontModelEntity.getIdx())
                 .modelNegotiationDesc("영화 프로젝트 참여 테스트 두번째").modelNegotiationDate(now()).build());
 
+        Page<FrontNegotiationDTO> resultNegotiation = new PageImpl<>(negotiationList, pageRequest, negotiationList.size());
         // when
-        when(mockFrontNegotiationJpaApiService.findModelNegotiationList(negotiationMap)).thenReturn(negotiationList);
-        List<FrontNegotiationDTO> newModelNegotiationList = mockFrontNegotiationJpaApiService.findModelNegotiationList(negotiationMap);
+        when(mockFrontNegotiationJpaApiService.findModelNegotiationList(negotiationMap, pageRequest)).thenReturn(resultNegotiation);
+        Page<FrontNegotiationDTO> newModelNegotiationList = mockFrontNegotiationJpaApiService.findModelNegotiationList(negotiationMap, pageRequest);
+        List<FrontNegotiationDTO> findNegotiationList = newModelNegotiationList.stream().collect(Collectors.toList());
 
         // then
-        assertThat(newModelNegotiationList.get(0).getIdx()).isEqualTo(negotiationList.get(0).getIdx());
-        assertThat(newModelNegotiationList.get(0).getModelNegotiationDesc()).isEqualTo(negotiationList.get(0).getModelNegotiationDesc());
+        assertThat(findNegotiationList.get(0).getIdx()).isEqualTo(negotiationList.get(0).getIdx());
+        assertThat(findNegotiationList.get(0).getModelNegotiationDesc()).isEqualTo(negotiationList.get(0).getModelNegotiationDesc());
 
         // verify
-        verify(mockFrontNegotiationJpaApiService, times(1)).findModelNegotiationList(negotiationMap);
-        verify(mockFrontNegotiationJpaApiService, atLeastOnce()).findModelNegotiationList(negotiationMap);
+        verify(mockFrontNegotiationJpaApiService, times(1)).findModelNegotiationList(negotiationMap, pageRequest);
+        verify(mockFrontNegotiationJpaApiService, atLeastOnce()).findModelNegotiationList(negotiationMap, pageRequest);
         verifyNoMoreInteractions(mockFrontNegotiationJpaApiService);
 
         InOrder inOrder = inOrder(mockFrontNegotiationJpaApiService);
-        inOrder.verify(mockFrontNegotiationJpaApiService).findModelNegotiationList(negotiationMap);
+        inOrder.verify(mockFrontNegotiationJpaApiService).findModelNegotiationList(negotiationMap, pageRequest);
     }
 
     @Test
@@ -186,8 +188,7 @@ class FrontNegotiationApiServiceTest {
     void 모델섭외BDD조회테스트() {
         // given
         Map<String, Object> negotiationMap = new HashMap<>();
-        negotiationMap.put("jpaStartPage", 1);
-        negotiationMap.put("size", 3);
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<FrontNegotiationDTO> negotiationList = new ArrayList<>();
         negotiationList.add(FrontNegotiationDTO.builder().modelIdx(frontModelEntity.getIdx())
@@ -195,17 +196,19 @@ class FrontNegotiationApiServiceTest {
         negotiationList.add(FrontNegotiationDTO.builder().modelIdx(frontModelEntity.getIdx())
                 .modelNegotiationDesc("영화 프로젝트 참여 테스트 두번째").modelNegotiationDate(now()).build());
 
+        Page<FrontNegotiationDTO> resultNegotiation = new PageImpl<>(negotiationList, pageRequest, negotiationList.size());
         // when
-        given(mockFrontNegotiationJpaApiService.findModelNegotiationList(negotiationMap)).willReturn(negotiationList);
-        List<FrontNegotiationDTO> newModelNegotiationList = mockFrontNegotiationJpaApiService.findModelNegotiationList(negotiationMap);
+        given(mockFrontNegotiationJpaApiService.findModelNegotiationList(negotiationMap, pageRequest)).willReturn(resultNegotiation);
+        Page<FrontNegotiationDTO> newModelNegotiationList = mockFrontNegotiationJpaApiService.findModelNegotiationList(negotiationMap, pageRequest);
+        List<FrontNegotiationDTO> findNegotiationList = newModelNegotiationList.stream().collect(Collectors.toList());
 
         // then
-        assertThat(newModelNegotiationList.get(0).getIdx()).isEqualTo(negotiationList.get(0).getIdx());
-        assertThat(newModelNegotiationList.get(0).getModelNegotiationDesc()).isEqualTo(negotiationList.get(0).getModelNegotiationDesc());
+        assertThat(findNegotiationList.get(0).getIdx()).isEqualTo(negotiationList.get(0).getIdx());
+        assertThat(findNegotiationList.get(0).getModelNegotiationDesc()).isEqualTo(negotiationList.get(0).getModelNegotiationDesc());
 
         // verify
-        then(mockFrontNegotiationJpaApiService).should(times(1)).findModelNegotiationList(negotiationMap);
-        then(mockFrontNegotiationJpaApiService).should(atLeastOnce()).findModelNegotiationList(negotiationMap);
+        then(mockFrontNegotiationJpaApiService).should(times(1)).findModelNegotiationList(negotiationMap, pageRequest);
+        then(mockFrontNegotiationJpaApiService).should(atLeastOnce()).findModelNegotiationList(negotiationMap, pageRequest);
         then(mockFrontNegotiationJpaApiService).shouldHaveNoMoreInteractions();
     }
 
@@ -213,7 +216,7 @@ class FrontNegotiationApiServiceTest {
     @DisplayName("모델섭외등록Mockito테스트")
     void 모델섭외등록Mockito테스트() {
         // given
-        frontNegotiationJpaApiService.insertModelNegotiation(frontNegotiationEntity);
+        frontNegotiationJpaApiService.insertModelNegotiation(frontModelDTO.getIdx(), frontNegotiationEntity);
 
         // when
         when(mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity.getIdx())).thenReturn(frontNegotiationDTO);
@@ -237,7 +240,7 @@ class FrontNegotiationApiServiceTest {
     @DisplayName("모델섭외등록BDD테스트")
     void 모델섭외등록BDD테스트() {
         // given
-        frontNegotiationJpaApiService.insertModelNegotiation(frontNegotiationEntity);
+        frontNegotiationJpaApiService.insertModelNegotiation(frontModelDTO.getIdx(), frontNegotiationEntity);
 
         // when
         given(mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity.getIdx())).willReturn(frontNegotiationDTO);
@@ -258,11 +261,11 @@ class FrontNegotiationApiServiceTest {
     @DisplayName("모델섭외수정Mockito테스트")
     void 모델섭외수정Mockito테스트() {
         // given
-        Long idx = frontNegotiationJpaApiService.insertModelNegotiation(frontNegotiationEntity).getIdx();
+        Long idx = frontNegotiationJpaApiService.insertModelNegotiation(frontModelDTO.getIdx(), frontNegotiationEntity).getIdx();
 
         frontNegotiationEntity = FrontNegotiationEntity.builder()
                 .idx(idx)
-                .modelIdx(frontModelEntity.getIdx())
+                .frontModelEntity(frontModelEntity)
                 .modelKorName(frontModelEntity.getModelKorName())
                 .modelNegotiationDesc("섭외 수정 테스트")
                 .modelNegotiationDate(now())
@@ -274,7 +277,7 @@ class FrontNegotiationApiServiceTest {
 
         FrontNegotiationDTO frontNegotiationDTO = FrontNegotiationEntity.toDto(frontNegotiationEntity);
 
-        frontNegotiationJpaApiService.updateModelNegotiation(frontNegotiationEntity);
+        frontNegotiationJpaApiService.updateModelNegotiation(frontNegotiationDTO.getIdx(), frontNegotiationEntity);
 
         // when
         when(mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity.getIdx())).thenReturn(frontNegotiationDTO);
@@ -297,11 +300,11 @@ class FrontNegotiationApiServiceTest {
     @DisplayName("모델섭외수정BDD테스트")
     void 모델섭외수정BDD테스트() {
         // given
-        Long idx = frontNegotiationJpaApiService.insertModelNegotiation(frontNegotiationEntity).getIdx();
+        Long idx = frontNegotiationJpaApiService.insertModelNegotiation(frontModelDTO.getIdx(), frontNegotiationEntity).getIdx();
 
         frontNegotiationEntity = FrontNegotiationEntity.builder()
                 .idx(idx)
-                .modelIdx(frontModelEntity.getIdx())
+                .frontModelEntity(frontModelEntity)
                 .modelKorName(frontModelEntity.getModelKorName())
                 .modelNegotiationDesc("섭외 수정 테스트")
                 .modelNegotiationDate(now())
@@ -313,7 +316,7 @@ class FrontNegotiationApiServiceTest {
 
         FrontNegotiationDTO frontNegotiationDTO = FrontNegotiationEntity.toDto(frontNegotiationEntity);
 
-        frontNegotiationJpaApiService.updateModelNegotiation(frontNegotiationEntity);
+        frontNegotiationJpaApiService.updateModelNegotiation(frontNegotiationDTO.getIdx(), frontNegotiationEntity);
 
         // when
         given(mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity.getIdx())).willReturn(frontNegotiationDTO);

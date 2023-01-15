@@ -55,7 +55,6 @@ public class FrontScheduleEntity extends NewCommonMappedClass {
     @NotEmpty(message = "모델 스케줄 노출 여부 선택은 필수입니다.")
     private String visible;
 
-    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "model_idx", referencedColumnName = "idx", insertable = false, updatable = false)
     private FrontModelEntity frontModelEntity;

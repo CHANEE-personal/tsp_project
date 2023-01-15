@@ -2,8 +2,11 @@ package com.tsp.new_tsp_front.api.model.controller;
 
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
+import com.tsp.new_tsp_front.api.model.domain.negotiation.FrontNegotiationDTO;
+import com.tsp.new_tsp_front.api.model.domain.negotiation.FrontNegotiationEntity;
 import com.tsp.new_tsp_front.api.model.domain.recommend.FrontRecommendDTO;
 import com.tsp.new_tsp_front.api.model.domain.search.FrontSearchDTO;
+import com.tsp.new_tsp_front.api.model.negotiation.service.FrontNegotiationJpaApiService;
 import com.tsp.new_tsp_front.api.model.service.FrontModelJpaApiService;
 import com.tsp.new_tsp_front.common.paging.Paging;
 import io.swagger.annotations.Api;
@@ -19,6 +22,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
+import javax.validation.Valid;
+import java.net.URI;
 import java.rmi.ServerError;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +37,7 @@ import static org.springframework.web.client.HttpClientErrorException.*;
 @RequestMapping("/api/model")
 public class FrontModelJpaApiController {
     private final FrontModelJpaApiService frontModelJpaApiService;
+    private final FrontNegotiationJpaApiService frontNegotiationJpaApiService;
 
     /**
      * <pre>
@@ -275,5 +281,28 @@ public class FrontModelJpaApiController {
         Map<String, Object> travelMap = new HashMap<>();
         travelMap.put("modelList", frontModelJpaApiService.findModelKeyword(keyword));
         return ResponseEntity.ok().body(travelMap);
+    }
+
+    /**
+     * <pre>
+     * 1. MethodName : insertModelNegotiation
+     * 2. ClassName  : FrontModelJpaApiController.java
+     * 3. Comment    : 모델 섭외 저장
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 11.
+     * </pre>
+     */
+    @ApiOperation(value = "모델 섭외 저장", notes = "모델 섭외를 저장한다.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "모델 섭외 등록성공", response = FrontNegotiationDTO.class),
+            @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
+            @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
+            @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
+            @ApiResponse(code = 404, message = "존재 하지 않음", response = HttpClientErrorException.NotFound.class),
+            @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
+    })
+    @PostMapping("/{idx}/negotiation")
+    public ResponseEntity<FrontNegotiationDTO> insertModelNegotiation(@PathVariable Long idx, @Valid @RequestBody FrontNegotiationEntity frontNegotiationEntity) {
+        return ResponseEntity.created(URI.create("")).body(frontNegotiationJpaApiService.insertModelNegotiation(idx, frontNegotiationEntity));
     }
 }

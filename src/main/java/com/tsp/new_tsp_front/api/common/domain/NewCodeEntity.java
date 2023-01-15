@@ -40,7 +40,6 @@ public class NewCodeEntity extends NewCommonMappedClass {
     @Column(name = "cmm_type")
     private String cmmType;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "newModelCodeJpaDTO", cascade = MERGE, fetch = LAZY)
     private List<FrontModelEntity> frontModelEntityList = new ArrayList<>();
 }

@@ -10,6 +10,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +33,6 @@ import static java.lang.Math.ceil;
 @RequiredArgsConstructor
 public class FrontNegotiationJpaApiController {
     private final FrontNegotiationJpaApiService frontNegotiationJpaApiService;
-    private final SearchCommon searchCommon;
 
     /**
      * <pre>
@@ -52,35 +53,16 @@ public class FrontNegotiationJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists")
-    public ResponseEntity<Map<String, Object>> findModelNegotiationList(@RequestParam(required = false) Map<String, Object> paramMap,
-                                                                        @RequestParam(value = "searchStartTime", required = false) String searchStartTime,
-                                                                        @RequestParam(value = "searchEndTime", required = false) String searchEndTime,
-                                                                        Paging paging) {
-        // 페이징 및 검색
-        Map<String, Object> negotiationMap = searchCommon.searchCommon(paging, paramMap);
-
+    public ResponseEntity<Page<FrontNegotiationDTO>> findModelNegotiationList(@RequestParam(required = false) Map<String, Object> paramMap,
+                                                         @RequestParam(value = "searchStartTime", required = false) String searchStartTime,
+                                                         @RequestParam(value = "searchEndTime", required = false) String searchEndTime,
+                                                         Paging paging) {
         if (searchStartTime != null && searchEndTime != null) {
-            negotiationMap.put("searchStartTime", searchStartTime);
-            negotiationMap.put("searchEndTime", searchEndTime);
+            paramMap.put("searchStartTime", searchStartTime);
+            paramMap.put("searchEndTime", searchEndTime);
         }
 
-        int negotiationCount = this.frontNegotiationJpaApiService.findNegotiationCount(negotiationMap);
-        List<FrontNegotiationDTO> negotiationList = new ArrayList<>();
-
-        if (negotiationCount > 0) {
-            negotiationList = this.frontNegotiationJpaApiService.findModelNegotiationList(negotiationMap);
-        }
-
-        // 리스트 수
-        negotiationMap.put("pageSize", paging.getSize());
-        // 전체 페이지 수
-        negotiationMap.put("perPageListCnt", ceil((double) negotiationCount / paging.getSize()));
-        // 전체 아이템 수
-        negotiationMap.put("negotiationListTotalCnt", negotiationCount);
-
-        negotiationMap.put("negotiationList", negotiationList);
-
-        return ResponseEntity.ok().body(negotiationMap);
+        return ResponseEntity.ok().body(frontNegotiationJpaApiService.findModelNegotiationList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }
 
     /**
@@ -108,29 +90,6 @@ public class FrontNegotiationJpaApiController {
 
     /**
      * <pre>
-     * 1. MethodName : insertModelNegotiation
-     * 2. ClassName  : FrontNegotiationJpaController.java
-     * 3. Comment    : 모델 섭외 저장
-     * 4. 작성자      : CHO
-     * 5. 작성일      : 2022. 09. 11.
-     * </pre>
-     */
-    @ApiOperation(value = "모델 섭외 저장", notes = "모델 섭외를 저장한다.")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "모델 섭외 등록성공", response = FrontNegotiationDTO.class),
-            @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
-            @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
-            @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
-            @ApiResponse(code = 404, message = "존재 하지 않음", response = HttpClientErrorException.NotFound.class),
-            @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
-    })
-    @PostMapping
-    public ResponseEntity<FrontNegotiationDTO> insertModelNegotiation(@Valid @RequestBody FrontNegotiationEntity frontNegotiationEntity) {
-        return ResponseEntity.created(URI.create("")).body(frontNegotiationJpaApiService.insertModelNegotiation(frontNegotiationEntity));
-    }
-
-    /**
-     * <pre>
      * 1. MethodName : updateModelNegotiation
      * 2. ClassName  : FrontNegotiationJpaController.java
      * 3. Comment    : 모델 섭외 수정
@@ -149,10 +108,7 @@ public class FrontNegotiationJpaApiController {
     })
     @PutMapping("/{idx}")
     public ResponseEntity<FrontNegotiationDTO> updateModelNegotiation(@PathVariable Long idx, @Valid @RequestBody FrontNegotiationEntity frontNegotiationEntity) {
-        if (frontNegotiationJpaApiService.findOneNegotiation(idx) == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(frontNegotiationJpaApiService.updateModelNegotiation(frontNegotiationEntity));
+        return ResponseEntity.ok(frontNegotiationJpaApiService.updateModelNegotiation(idx, frontNegotiationEntity));
     }
 
     /**
@@ -175,9 +131,6 @@ public class FrontNegotiationJpaApiController {
     })
     @DeleteMapping("/{idx}")
     public ResponseEntity<Long> deleteModelNegotiation(@PathVariable Long idx) {
-        if (frontNegotiationJpaApiService.findOneNegotiation(idx) == null) {
-            return ResponseEntity.notFound().build();
-        }
         frontNegotiationJpaApiService.deleteModelNegotiation(idx);
         return ResponseEntity.noContent().build();
     }

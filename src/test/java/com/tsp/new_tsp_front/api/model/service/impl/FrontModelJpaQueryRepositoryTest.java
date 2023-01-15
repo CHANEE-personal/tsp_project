@@ -48,9 +48,9 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @AutoConfigureTestDatabase(replace = NONE)
 @ExtendWith(MockitoExtension.class)
 @DisplayName("모델 Repository Test")
-class FrontModelJpaRepositoryTest {
-    @Mock private FrontModelJpaRepository mockFrontModelJpaRepository;
-    private final FrontModelJpaRepository frontModelJpaRepository;
+class FrontModelJpaQueryRepositoryTest {
+    @Mock private FrontModelJpaQueryRepository mockFrontModelJpaQueryRepository;
+    private final FrontModelJpaQueryRepository frontModelJpaQueryRepository;
 
     private FrontModelEntity frontModelEntity;
     private FrontModelDTO frontModelDTO;
@@ -123,7 +123,7 @@ class FrontModelJpaRepositoryTest {
         PageRequest pageRequest = PageRequest.of(1, 3);
 
         // then
-        assertThat(frontModelJpaRepository.findModelList(modelMap, pageRequest)).isNotEmpty();
+        assertThat(frontModelJpaQueryRepository.findModelList(modelMap, pageRequest)).isNotEmpty();
     }
 
     @Test
@@ -132,7 +132,7 @@ class FrontModelJpaRepositoryTest {
         // given
         FrontModelEntity menFrontModelEntity = FrontModelEntity.builder().idx(4L).agencyIdx(1L).build();
 
-        FrontModelDTO menModelInfo = frontModelJpaRepository.findOneModel(menFrontModelEntity.getIdx());
+        FrontModelDTO menModelInfo = frontModelJpaQueryRepository.findOneModel(menFrontModelEntity.getIdx());
         assertThat(menModelInfo.getIdx()).isEqualTo(4L);
         assertThat(menModelInfo.getModelKorFirstName()).isEqualTo("선");
         assertThat(menModelInfo.getModelKorSecondName()).isEqualTo("소연");
@@ -144,7 +144,7 @@ class FrontModelJpaRepositoryTest {
 
         FrontModelEntity womenFrontModelEntity = FrontModelEntity.builder().idx(2L).agencyIdx(1L).build();
 
-        FrontModelDTO womenModelInfo = frontModelJpaRepository.findOneModel(womenFrontModelEntity.getIdx());
+        FrontModelDTO womenModelInfo = frontModelJpaQueryRepository.findOneModel(womenFrontModelEntity.getIdx());
 
         // then
         assertThat(womenModelInfo.getIdx()).isEqualTo(2L);
@@ -175,8 +175,8 @@ class FrontModelJpaRepositoryTest {
 
         Page<FrontModelDTO> resultPage = new PageImpl<>(modelList, pageRequest, modelList.size());
         // when
-        when(mockFrontModelJpaRepository.findModelList(modelMap, pageRequest)).thenReturn(resultPage);
-        Page<FrontModelDTO> newModelList = mockFrontModelJpaRepository.findModelList(modelMap, pageRequest);
+        when(mockFrontModelJpaQueryRepository.findModelList(modelMap, pageRequest)).thenReturn(resultPage);
+        Page<FrontModelDTO> newModelList = mockFrontModelJpaQueryRepository.findModelList(modelMap, pageRequest);
         List<FrontModelDTO> findModelList = newModelList.stream().collect(Collectors.toList());
 
         // then
@@ -188,12 +188,12 @@ class FrontModelJpaRepositoryTest {
         assertThat(findModelList.get(0).getModelImage().get(0).getFileName()).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
 
         // verify
-        verify(mockFrontModelJpaRepository, times(1)).findModelList(modelMap, pageRequest);
-        verify(mockFrontModelJpaRepository, atLeastOnce()).findModelList(modelMap, pageRequest);
-        verifyNoMoreInteractions(mockFrontModelJpaRepository);
+        verify(mockFrontModelJpaQueryRepository, times(1)).findModelList(modelMap, pageRequest);
+        verify(mockFrontModelJpaQueryRepository, atLeastOnce()).findModelList(modelMap, pageRequest);
+        verifyNoMoreInteractions(mockFrontModelJpaQueryRepository);
 
-        InOrder inOrder = inOrder(mockFrontModelJpaRepository);
-        inOrder.verify(mockFrontModelJpaRepository).findModelList(modelMap, pageRequest);
+        InOrder inOrder = inOrder(mockFrontModelJpaQueryRepository);
+        inOrder.verify(mockFrontModelJpaQueryRepository).findModelList(modelMap, pageRequest);
     }
 
     @Test
@@ -214,8 +214,8 @@ class FrontModelJpaRepositoryTest {
 
         Page<FrontModelDTO> resultPage = new PageImpl<>(modelList, pageRequest, modelList.size());
         // when
-        given(mockFrontModelJpaRepository.findModelList(modelMap, pageRequest)).willReturn(resultPage);
-        Page<FrontModelDTO> newModelList = mockFrontModelJpaRepository.findModelList(modelMap, pageRequest);
+        given(mockFrontModelJpaQueryRepository.findModelList(modelMap, pageRequest)).willReturn(resultPage);
+        Page<FrontModelDTO> newModelList = mockFrontModelJpaQueryRepository.findModelList(modelMap, pageRequest);
         List<FrontModelDTO> findModelList = newModelList.stream().collect(Collectors.toList());
 
         // then
@@ -227,9 +227,9 @@ class FrontModelJpaRepositoryTest {
         assertThat(findModelList.get(0).getModelImage().get(0).getFileName()).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
 
         // verify
-        then(mockFrontModelJpaRepository).should(times(1)).findModelList(modelMap, pageRequest);
-        then(mockFrontModelJpaRepository).should(atLeastOnce()).findModelList(modelMap, pageRequest);
-        then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
+        then(mockFrontModelJpaQueryRepository).should(times(1)).findModelList(modelMap, pageRequest);
+        then(mockFrontModelJpaQueryRepository).should(atLeastOnce()).findModelList(modelMap, pageRequest);
+        then(mockFrontModelJpaQueryRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
@@ -256,8 +256,8 @@ class FrontModelJpaRepositoryTest {
                 .build();
 
         // when
-        when(mockFrontModelJpaRepository.findOneModel(frontModelEntity.getIdx())).thenReturn(frontModelDTO);
-        FrontModelDTO modelInfo = mockFrontModelJpaRepository.findOneModel(frontModelEntity.getIdx());
+        when(mockFrontModelJpaQueryRepository.findOneModel(frontModelEntity.getIdx())).thenReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaQueryRepository.findOneModel(frontModelEntity.getIdx());
 
         // then
         assertThat(modelInfo.getIdx()).isEqualTo(1);
@@ -279,12 +279,12 @@ class FrontModelJpaRepositoryTest {
         assertThat(modelInfo.getModelImage().get(0).getTypeName()).isEqualTo("model");
 
         // verify
-        verify(mockFrontModelJpaRepository, times(1)).findOneModel(frontModelEntity.getIdx());
-        verify(mockFrontModelJpaRepository, atLeastOnce()).findOneModel(frontModelEntity.getIdx());
-        verifyNoMoreInteractions(mockFrontModelJpaRepository);
+        verify(mockFrontModelJpaQueryRepository, times(1)).findOneModel(frontModelEntity.getIdx());
+        verify(mockFrontModelJpaQueryRepository, atLeastOnce()).findOneModel(frontModelEntity.getIdx());
+        verifyNoMoreInteractions(mockFrontModelJpaQueryRepository);
 
-        InOrder inOrder = inOrder(mockFrontModelJpaRepository);
-        inOrder.verify(mockFrontModelJpaRepository).findOneModel(frontModelEntity.getIdx());
+        InOrder inOrder = inOrder(mockFrontModelJpaQueryRepository);
+        inOrder.verify(mockFrontModelJpaQueryRepository).findOneModel(frontModelEntity.getIdx());
     }
 
     @Test
@@ -311,8 +311,8 @@ class FrontModelJpaRepositoryTest {
                 .build();
 
         // when
-        given(mockFrontModelJpaRepository.findOneModel(frontModelEntity.getIdx())).willReturn(frontModelDTO);
-        FrontModelDTO modelInfo = mockFrontModelJpaRepository.findOneModel(frontModelEntity.getIdx());
+        given(mockFrontModelJpaQueryRepository.findOneModel(frontModelEntity.getIdx())).willReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaQueryRepository.findOneModel(frontModelEntity.getIdx());
 
         // then
         assertThat(modelInfo.getIdx()).isEqualTo(1);
@@ -334,9 +334,9 @@ class FrontModelJpaRepositoryTest {
         assertThat(modelInfo.getModelImage().get(0).getTypeName()).isEqualTo("model");
 
         // verify
-        then(mockFrontModelJpaRepository).should(times(1)).findOneModel(frontModelEntity.getIdx());
-        then(mockFrontModelJpaRepository).should(atLeastOnce()).findOneModel(frontModelEntity.getIdx());
-        then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
+        then(mockFrontModelJpaQueryRepository).should(times(1)).findOneModel(frontModelEntity.getIdx());
+        then(mockFrontModelJpaQueryRepository).should(atLeastOnce()).findOneModel(frontModelEntity.getIdx());
+        then(mockFrontModelJpaQueryRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
@@ -346,9 +346,9 @@ class FrontModelJpaRepositoryTest {
         frontModelEntity = FrontModelEntity.builder().idx(145L).categoryCd(2).build();
 
         // 이전 모델
-        assertThat(frontModelJpaRepository.findPrevOneModel(frontModelEntity).getIdx()).isEqualTo(144);
+        assertThat(frontModelJpaQueryRepository.findPrevOneModel(frontModelEntity).getIdx()).isEqualTo(144);
         // 다음 모델
-        assertThat(frontModelJpaRepository.findNextOneModel(frontModelEntity).getIdx()).isEqualTo(147);
+        assertThat(frontModelJpaQueryRepository.findNextOneModel(frontModelEntity).getIdx()).isEqualTo(147);
     }
 
     @Test
@@ -357,21 +357,21 @@ class FrontModelJpaRepositoryTest {
         // given
         frontModelEntity = FrontModelEntity.builder().idx(145L).categoryCd(2).build();
         // when
-        frontModelDTO = frontModelJpaRepository.findPrevOneModel(frontModelEntity);
+        frontModelDTO = frontModelJpaQueryRepository.findPrevOneModel(frontModelEntity);
 
-        when(mockFrontModelJpaRepository.findPrevOneModel(frontModelEntity)).thenReturn(frontModelDTO);
-        FrontModelDTO modelInfo = mockFrontModelJpaRepository.findPrevOneModel(frontModelEntity);
+        when(mockFrontModelJpaQueryRepository.findPrevOneModel(frontModelEntity)).thenReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaQueryRepository.findPrevOneModel(frontModelEntity);
 
         // then
         assertThat(modelInfo.getIdx()).isEqualTo(144);
 
         // verify
-        verify(mockFrontModelJpaRepository, times(1)).findPrevOneModel(frontModelEntity);
-        verify(mockFrontModelJpaRepository, atLeastOnce()).findPrevOneModel(frontModelEntity);
-        verifyNoMoreInteractions(mockFrontModelJpaRepository);
+        verify(mockFrontModelJpaQueryRepository, times(1)).findPrevOneModel(frontModelEntity);
+        verify(mockFrontModelJpaQueryRepository, atLeastOnce()).findPrevOneModel(frontModelEntity);
+        verifyNoMoreInteractions(mockFrontModelJpaQueryRepository);
 
-        InOrder inOrder = inOrder(mockFrontModelJpaRepository);
-        inOrder.verify(mockFrontModelJpaRepository).findPrevOneModel(frontModelEntity);
+        InOrder inOrder = inOrder(mockFrontModelJpaQueryRepository);
+        inOrder.verify(mockFrontModelJpaQueryRepository).findPrevOneModel(frontModelEntity);
     }
 
     @Test
@@ -380,18 +380,18 @@ class FrontModelJpaRepositoryTest {
         // given
         frontModelEntity = FrontModelEntity.builder().idx(145L).categoryCd(2).build();
         // when
-        frontModelDTO = frontModelJpaRepository.findPrevOneModel(frontModelEntity);
+        frontModelDTO = frontModelJpaQueryRepository.findPrevOneModel(frontModelEntity);
 
-        given(mockFrontModelJpaRepository.findPrevOneModel(frontModelEntity)).willReturn(frontModelDTO);
-        FrontModelDTO modelInfo = mockFrontModelJpaRepository.findPrevOneModel(frontModelEntity);
+        given(mockFrontModelJpaQueryRepository.findPrevOneModel(frontModelEntity)).willReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaQueryRepository.findPrevOneModel(frontModelEntity);
 
         // then
         assertThat(modelInfo.getIdx()).isEqualTo(144);
 
         // verify
-        then(mockFrontModelJpaRepository).should(times(1)).findPrevOneModel(frontModelEntity);
-        then(mockFrontModelJpaRepository).should(atLeastOnce()).findPrevOneModel(frontModelEntity);
-        then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
+        then(mockFrontModelJpaQueryRepository).should(times(1)).findPrevOneModel(frontModelEntity);
+        then(mockFrontModelJpaQueryRepository).should(atLeastOnce()).findPrevOneModel(frontModelEntity);
+        then(mockFrontModelJpaQueryRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
@@ -400,21 +400,21 @@ class FrontModelJpaRepositoryTest {
         // given
         frontModelEntity = FrontModelEntity.builder().idx(145L).categoryCd(2).build();
         // when
-        frontModelDTO = frontModelJpaRepository.findNextOneModel(frontModelEntity);
+        frontModelDTO = frontModelJpaQueryRepository.findNextOneModel(frontModelEntity);
 
-        when(mockFrontModelJpaRepository.findNextOneModel(frontModelEntity)).thenReturn(frontModelDTO);
-        FrontModelDTO modelInfo = mockFrontModelJpaRepository.findNextOneModel(frontModelEntity);
+        when(mockFrontModelJpaQueryRepository.findNextOneModel(frontModelEntity)).thenReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaQueryRepository.findNextOneModel(frontModelEntity);
 
         // then
         assertThat(modelInfo.getIdx()).isEqualTo(147);
 
         // verify
-        verify(mockFrontModelJpaRepository, times(1)).findNextOneModel(frontModelEntity);
-        verify(mockFrontModelJpaRepository, atLeastOnce()).findNextOneModel(frontModelEntity);
-        verifyNoMoreInteractions(mockFrontModelJpaRepository);
+        verify(mockFrontModelJpaQueryRepository, times(1)).findNextOneModel(frontModelEntity);
+        verify(mockFrontModelJpaQueryRepository, atLeastOnce()).findNextOneModel(frontModelEntity);
+        verifyNoMoreInteractions(mockFrontModelJpaQueryRepository);
 
-        InOrder inOrder = inOrder(mockFrontModelJpaRepository);
-        inOrder.verify(mockFrontModelJpaRepository).findNextOneModel(frontModelEntity);
+        InOrder inOrder = inOrder(mockFrontModelJpaQueryRepository);
+        inOrder.verify(mockFrontModelJpaQueryRepository).findNextOneModel(frontModelEntity);
     }
 
     @Test
@@ -423,27 +423,27 @@ class FrontModelJpaRepositoryTest {
         // given
         frontModelEntity = FrontModelEntity.builder().idx(145L).categoryCd(2).build();
         // when
-        frontModelDTO = frontModelJpaRepository.findNextOneModel(frontModelEntity);
+        frontModelDTO = frontModelJpaQueryRepository.findNextOneModel(frontModelEntity);
 
-        given(mockFrontModelJpaRepository.findNextOneModel(frontModelEntity)).willReturn(frontModelDTO);
-        FrontModelDTO modelInfo = mockFrontModelJpaRepository.findNextOneModel(frontModelEntity);
+        given(mockFrontModelJpaQueryRepository.findNextOneModel(frontModelEntity)).willReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaQueryRepository.findNextOneModel(frontModelEntity);
 
         // then
         assertThat(modelInfo.getIdx()).isEqualTo(147);
 
         // verify
-        then(mockFrontModelJpaRepository).should(times(1)).findNextOneModel(frontModelEntity);
-        then(mockFrontModelJpaRepository).should(atLeastOnce()).findNextOneModel(frontModelEntity);
-        then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
+        then(mockFrontModelJpaQueryRepository).should(times(1)).findNextOneModel(frontModelEntity);
+        then(mockFrontModelJpaQueryRepository).should(atLeastOnce()).findNextOneModel(frontModelEntity);
+        then(mockFrontModelJpaQueryRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
     @DisplayName("모델 메인 배너 조회 테스트")
     void 모델메인배너리스트조회테스트() {
         // when
-        List<FrontModelDTO> mainModelList = frontModelJpaRepository.findMainModelList();
+        List<FrontModelDTO> mainModelList = frontModelJpaQueryRepository.findMainModelList();
 
-        Optional<FrontModelDTO> mainModelFirstInfo = frontModelJpaRepository.findMainModelList().stream().findFirst();
+        Optional<FrontModelDTO> mainModelFirstInfo = frontModelJpaQueryRepository.findMainModelList().stream().findFirst();
 
         // then
         assertThat(mainModelList).isNotEmpty();
@@ -465,8 +465,8 @@ class FrontModelJpaRepositoryTest {
         returnModelList.add(FrontModelDTO.builder().idx(3L).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").modelMainYn("Y").build());
 
         // when
-        when(mockFrontModelJpaRepository.findMainModelList()).thenReturn(returnModelList);
-        List<FrontModelDTO> modelList = mockFrontModelJpaRepository.findMainModelList();
+        when(mockFrontModelJpaQueryRepository.findMainModelList()).thenReturn(returnModelList);
+        List<FrontModelDTO> modelList = mockFrontModelJpaQueryRepository.findMainModelList();
 
         // then
         assertAll(
@@ -480,12 +480,12 @@ class FrontModelJpaRepositoryTest {
         assertThat(modelList.get(0).getModelMainYn()).isEqualTo(returnModelList.get(0).getModelMainYn());
 
         // verify
-        verify(mockFrontModelJpaRepository, times(1)).findMainModelList();
-        verify(mockFrontModelJpaRepository, atLeastOnce()).findMainModelList();
-        verifyNoMoreInteractions(mockFrontModelJpaRepository);
+        verify(mockFrontModelJpaQueryRepository, times(1)).findMainModelList();
+        verify(mockFrontModelJpaQueryRepository, atLeastOnce()).findMainModelList();
+        verifyNoMoreInteractions(mockFrontModelJpaQueryRepository);
 
-        InOrder inOrder = inOrder(mockFrontModelJpaRepository);
-        inOrder.verify(mockFrontModelJpaRepository).findMainModelList();
+        InOrder inOrder = inOrder(mockFrontModelJpaQueryRepository);
+        inOrder.verify(mockFrontModelJpaQueryRepository).findMainModelList();
     }
 
     @Test
@@ -502,8 +502,8 @@ class FrontModelJpaRepositoryTest {
         returnModelList.add(FrontModelDTO.builder().idx(3L).categoryCd(3).modelKorName("시니어모델").modelEngName("seniorModel").modelMainYn("Y").build());
 
         // when
-        given(mockFrontModelJpaRepository.findMainModelList()).willReturn(returnModelList);
-        List<FrontModelDTO> modelList = mockFrontModelJpaRepository.findMainModelList();
+        given(mockFrontModelJpaQueryRepository.findMainModelList()).willReturn(returnModelList);
+        List<FrontModelDTO> modelList = mockFrontModelJpaQueryRepository.findMainModelList();
 
         // then
         assertAll(
@@ -517,9 +517,9 @@ class FrontModelJpaRepositoryTest {
         assertThat(modelList.get(0).getModelMainYn()).isEqualTo(returnModelList.get(0).getModelMainYn());
 
         // verify
-        then(mockFrontModelJpaRepository).should(times(1)).findMainModelList();
-        then(mockFrontModelJpaRepository).should(atLeastOnce()).findMainModelList();
-        then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
+        then(mockFrontModelJpaQueryRepository).should(times(1)).findMainModelList();
+        then(mockFrontModelJpaQueryRepository).should(atLeastOnce()).findMainModelList();
+        then(mockFrontModelJpaQueryRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
@@ -530,16 +530,16 @@ class FrontModelJpaRepositoryTest {
         frontModelDTO = FrontModelEntity.toDto(frontModelEntity);
 
         // when
-        when(mockFrontModelJpaRepository.findOneModel(frontModelEntity.getIdx())).thenReturn(frontModelDTO);
-        FrontModelDTO modelInfo = mockFrontModelJpaRepository.findOneModel(frontModelEntity.getIdx());
+        when(mockFrontModelJpaQueryRepository.findOneModel(frontModelEntity.getIdx())).thenReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaQueryRepository.findOneModel(frontModelEntity.getIdx());
 
         // then
         assertThat(modelInfo.getModelFavoriteCount()).isEqualTo(frontModelEntity.getModelFavoriteCount());
 
         // verify
-        verify(mockFrontModelJpaRepository, times(1)).findOneModel(frontModelEntity.getIdx());
-        verify(mockFrontModelJpaRepository, atLeastOnce()).findOneModel(frontModelEntity.getIdx());
-        verifyNoMoreInteractions(mockFrontModelJpaRepository);
+        verify(mockFrontModelJpaQueryRepository, times(1)).findOneModel(frontModelEntity.getIdx());
+        verify(mockFrontModelJpaQueryRepository, atLeastOnce()).findOneModel(frontModelEntity.getIdx());
+        verifyNoMoreInteractions(mockFrontModelJpaQueryRepository);
     }
 
     @Test
@@ -550,16 +550,16 @@ class FrontModelJpaRepositoryTest {
         frontModelDTO = FrontModelEntity.toDto(frontModelEntity);
 
         // when
-        given(mockFrontModelJpaRepository.findOneModel(frontModelEntity.getIdx())).willReturn(frontModelDTO);
-        FrontModelDTO modelInfo = mockFrontModelJpaRepository.findOneModel(frontModelEntity.getIdx());
+        given(mockFrontModelJpaQueryRepository.findOneModel(frontModelEntity.getIdx())).willReturn(frontModelDTO);
+        FrontModelDTO modelInfo = mockFrontModelJpaQueryRepository.findOneModel(frontModelEntity.getIdx());
 
         // then
         assertThat(modelInfo.getModelFavoriteCount()).isEqualTo(frontModelEntity.getModelFavoriteCount());
 
         // verify
-        then(mockFrontModelJpaRepository).should(times(1)).findOneModel(frontModelEntity.getIdx());
-        then(mockFrontModelJpaRepository).should(atLeastOnce()).findOneModel(frontModelEntity.getIdx());
-        then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
+        then(mockFrontModelJpaQueryRepository).should(times(1)).findOneModel(frontModelEntity.getIdx());
+        then(mockFrontModelJpaQueryRepository).should(atLeastOnce()).findOneModel(frontModelEntity.getIdx());
+        then(mockFrontModelJpaQueryRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
@@ -569,22 +569,22 @@ class FrontModelJpaRepositoryTest {
         em.persist(frontModelEntity);
         frontModelDTO = FrontModelEntity.toDto(frontModelEntity);
 
-        Integer favoriteCount = frontModelJpaRepository.favoriteModel(frontModelEntity.getIdx());
+        Integer favoriteCount = frontModelJpaQueryRepository.favoriteModel(frontModelEntity.getIdx());
 
         // when
-        when(mockFrontModelJpaRepository.favoriteModel(frontModelEntity.getIdx())).thenReturn(favoriteCount);
-        Integer newFavoriteCount = mockFrontModelJpaRepository.favoriteModel(frontModelEntity.getIdx());
+        when(mockFrontModelJpaQueryRepository.favoriteModel(frontModelEntity.getIdx())).thenReturn(favoriteCount);
+        Integer newFavoriteCount = mockFrontModelJpaQueryRepository.favoriteModel(frontModelEntity.getIdx());
 
         // then
         assertThat(newFavoriteCount).isEqualTo(favoriteCount);
 
         // verify
-        verify(mockFrontModelJpaRepository, times(1)).favoriteModel(frontModelEntity.getIdx());
-        verify(mockFrontModelJpaRepository, atLeastOnce()).favoriteModel(frontModelEntity.getIdx());
-        verifyNoMoreInteractions(mockFrontModelJpaRepository);
+        verify(mockFrontModelJpaQueryRepository, times(1)).favoriteModel(frontModelEntity.getIdx());
+        verify(mockFrontModelJpaQueryRepository, atLeastOnce()).favoriteModel(frontModelEntity.getIdx());
+        verifyNoMoreInteractions(mockFrontModelJpaQueryRepository);
 
-        InOrder inOrder = inOrder(mockFrontModelJpaRepository);
-        inOrder.verify(mockFrontModelJpaRepository).favoriteModel(frontModelEntity.getIdx());
+        InOrder inOrder = inOrder(mockFrontModelJpaQueryRepository);
+        inOrder.verify(mockFrontModelJpaQueryRepository).favoriteModel(frontModelEntity.getIdx());
     }
 
     @Test
@@ -594,19 +594,19 @@ class FrontModelJpaRepositoryTest {
         em.persist(frontModelEntity);
         frontModelDTO = FrontModelEntity.toDto(frontModelEntity);
 
-        Integer favoriteCount = frontModelJpaRepository.favoriteModel(frontModelEntity.getIdx());
+        Integer favoriteCount = frontModelJpaQueryRepository.favoriteModel(frontModelEntity.getIdx());
 
         // when
-        given(mockFrontModelJpaRepository.favoriteModel(frontModelEntity.getIdx())).willReturn(favoriteCount);
-        Integer newFavoriteCount = mockFrontModelJpaRepository.favoriteModel(frontModelEntity.getIdx());
+        given(mockFrontModelJpaQueryRepository.favoriteModel(frontModelEntity.getIdx())).willReturn(favoriteCount);
+        Integer newFavoriteCount = mockFrontModelJpaQueryRepository.favoriteModel(frontModelEntity.getIdx());
 
         // then
         assertThat(newFavoriteCount).isEqualTo(favoriteCount);
 
         // verify
-        then(mockFrontModelJpaRepository).should(times(1)).favoriteModel(frontModelEntity.getIdx());
-        then(mockFrontModelJpaRepository).should(atLeastOnce()).favoriteModel(frontModelEntity.getIdx());
-        then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
+        then(mockFrontModelJpaQueryRepository).should(times(1)).favoriteModel(frontModelEntity.getIdx());
+        then(mockFrontModelJpaQueryRepository).should(atLeastOnce()).favoriteModel(frontModelEntity.getIdx());
+        then(mockFrontModelJpaQueryRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
@@ -628,8 +628,8 @@ class FrontModelJpaRepositoryTest {
 
         Page<FrontModelDTO> resultPage = new PageImpl<>(modelList, pageRequest, modelList.size());
         // when
-        when(mockFrontModelJpaRepository.findModelList(newModelMap, pageRequest)).thenReturn(resultPage);
-        Page<FrontModelDTO> newModelList = mockFrontModelJpaRepository.findModelList(newModelMap, pageRequest);
+        when(mockFrontModelJpaQueryRepository.findModelList(newModelMap, pageRequest)).thenReturn(resultPage);
+        Page<FrontModelDTO> newModelList = mockFrontModelJpaQueryRepository.findModelList(newModelMap, pageRequest);
         List<FrontModelDTO> findModelList = newModelList.stream().collect(Collectors.toList());
 
         // then
@@ -642,12 +642,12 @@ class FrontModelJpaRepositoryTest {
         assertThat(findModelList.get(0).getModelImage().get(0).getFileName()).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
 
         // verify
-        verify(mockFrontModelJpaRepository, times(1)).findModelList(newModelMap, pageRequest);
-        verify(mockFrontModelJpaRepository, atLeastOnce()).findModelList(newModelMap, pageRequest);
-        verifyNoMoreInteractions(mockFrontModelJpaRepository);
+        verify(mockFrontModelJpaQueryRepository, times(1)).findModelList(newModelMap, pageRequest);
+        verify(mockFrontModelJpaQueryRepository, atLeastOnce()).findModelList(newModelMap, pageRequest);
+        verifyNoMoreInteractions(mockFrontModelJpaQueryRepository);
 
-        InOrder inOrder = inOrder(mockFrontModelJpaRepository);
-        inOrder.verify(mockFrontModelJpaRepository).findModelList(newModelMap, pageRequest);
+        InOrder inOrder = inOrder(mockFrontModelJpaQueryRepository);
+        inOrder.verify(mockFrontModelJpaQueryRepository).findModelList(newModelMap, pageRequest);
     }
 
     @Test
@@ -669,8 +669,8 @@ class FrontModelJpaRepositoryTest {
 
         Page<FrontModelDTO> resultPage = new PageImpl<>(modelList, pageRequest, modelList.size());
         // when
-        given(mockFrontModelJpaRepository.findModelList(newModelMap, pageRequest)).willReturn(resultPage);
-        Page<FrontModelDTO> newModelList = mockFrontModelJpaRepository.findModelList(newModelMap, pageRequest);
+        given(mockFrontModelJpaQueryRepository.findModelList(newModelMap, pageRequest)).willReturn(resultPage);
+        Page<FrontModelDTO> newModelList = mockFrontModelJpaQueryRepository.findModelList(newModelMap, pageRequest);
         List<FrontModelDTO> findModelList = newModelList.stream().collect(Collectors.toList());
 
         // then
@@ -683,9 +683,9 @@ class FrontModelJpaRepositoryTest {
         assertThat(findModelList.get(0).getModelImage().get(0).getFileName()).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
 
         // verify
-        then(mockFrontModelJpaRepository).should(times(1)).findModelList(newModelMap, pageRequest);
-        then(mockFrontModelJpaRepository).should(atLeastOnce()).findModelList(newModelMap, pageRequest);
-        then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
+        then(mockFrontModelJpaQueryRepository).should(times(1)).findModelList(newModelMap, pageRequest);
+        then(mockFrontModelJpaQueryRepository).should(atLeastOnce()).findModelList(newModelMap, pageRequest);
+        then(mockFrontModelJpaQueryRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
@@ -705,7 +705,7 @@ class FrontModelJpaRepositoryTest {
 
         em.persist(frontRecommendEntity);
 
-        assertThat(frontModelJpaRepository.findRecommendList(PageRequest.of(1, 10))).isNotEmpty();
+        assertThat(frontModelJpaQueryRepository.findRecommendList(PageRequest.of(1, 10))).isNotEmpty();
     }
 
     @Test
@@ -716,7 +716,7 @@ class FrontModelJpaRepositoryTest {
         em.persist(FrontSearchEntity.builder().searchKeyword("모델1").build());
         em.persist(FrontSearchEntity.builder().searchKeyword("모델2").build());
 
-        Page<FrontSearchDTO> searchResult = frontModelJpaRepository.rankingKeywordList(PageRequest.of(1, 10));
+        Page<FrontSearchDTO> searchResult = frontModelJpaQueryRepository.rankingKeywordList(PageRequest.of(1, 10));
         List<FrontSearchDTO> searchList = searchResult.stream().collect(Collectors.toList());
 
         assertThat(searchList.get(0).getSearchKeyword()).isEqualTo("모델1");
@@ -726,6 +726,6 @@ class FrontModelJpaRepositoryTest {
     @Test
     @DisplayName("추천 검색어 or 검색어 랭킹을 통한 모델 검색 조회")
     void 추천검색어or검색어랭킹을통한모델검색조회() {
-        assertThat(frontModelJpaRepository.findModelKeyword("김예영").get(0).getModelKorName()).isEqualTo("김예영");
+        assertThat(frontModelJpaQueryRepository.findModelKeyword("김예영").get(0).getModelKorName()).isEqualTo("김예영");
     }
 }

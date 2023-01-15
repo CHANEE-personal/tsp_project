@@ -1,5 +1,9 @@
 package com.tsp.new_tsp_front.api.model.controller;
 
+import com.tsp.new_tsp_front.api.agency.domain.FrontAgencyEntity;
+import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
+import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
+import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.domain.recommend.FrontRecommendEntity;
 import com.tsp.new_tsp_front.api.model.domain.search.FrontSearchEntity;
 import lombok.RequiredArgsConstructor;

@@ -71,12 +71,10 @@ public class FrontModelImageEntity {
     @ApiModelProperty(value = "등록일자", hidden = true)
     private LocalDateTime regDate;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "type_idx", insertable = false, updatable = false)
     private FrontModelEntity modelEntity;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "idx", referencedColumnName = "type_idx", insertable = false, updatable = false)
     private CommonImageEntity imageEntity;

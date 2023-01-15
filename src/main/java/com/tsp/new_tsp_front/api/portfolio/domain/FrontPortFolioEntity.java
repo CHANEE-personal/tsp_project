@@ -65,12 +65,10 @@ public class FrontPortFolioEntity extends NewCommonMappedClass {
     @NotEmpty(message = "포트폴리오 노출 여부 선택은 필수입니다.")
     private String visible;
 
-    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "category_cd", insertable = false, updatable = false)
     private NewCodeEntity newPortFolioJpaDTO;
 
-    @JsonIgnore
     @BatchSize(size = 5)
     @Where(clause = "type_name = 'portfolio'")
     @OneToMany(mappedBy = "frontPortFolioEntity", fetch = LAZY)

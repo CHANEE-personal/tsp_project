@@ -3,11 +3,14 @@ package com.tsp.new_tsp_front.api.festival.controller;
 import com.tsp.new_tsp_front.api.festival.domain.FrontFestivalDTO;
 import com.tsp.new_tsp_front.api.festival.domain.FrontFestivalEntity;
 import com.tsp.new_tsp_front.api.festival.service.FrontFestivalJpaService;
+import com.tsp.new_tsp_front.common.paging.Paging;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -68,11 +71,9 @@ public class FrontFestivalJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/list/{month}/{day}")
-    public ResponseEntity<Map<String, Object>> findFestivalList(@PathVariable Integer month, @PathVariable Integer day) {
-        Map<String, Object> festivalMap = new HashMap<>();
-        festivalMap.put("festivalList", frontFestivalJpaService.findFestivalList(FrontFestivalEntity.builder()
-                .festivalMonth(month).festivalDay(day).build()));
-        return ResponseEntity.ok().body(festivalMap);
+    public ResponseEntity<Page<FrontFestivalDTO>> findFestivalList(@PathVariable Integer month, @PathVariable Integer day, Paging paging) {
+        return ResponseEntity.ok().body(frontFestivalJpaService.findFestivalList(FrontFestivalEntity.builder()
+                .festivalMonth(month).festivalDay(day).build(), PageRequest.of(paging.getPageNum(), paging.getSize())));
     }
 
     /**
