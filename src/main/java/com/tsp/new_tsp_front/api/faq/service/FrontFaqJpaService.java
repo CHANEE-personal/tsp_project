@@ -1,32 +1,29 @@
 package com.tsp.new_tsp_front.api.faq.service;
 
 import com.tsp.new_tsp_front.api.faq.domain.FrontFaqDTO;
+import com.tsp.new_tsp_front.api.faq.domain.FrontFaqEntity;
+import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
 
+import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_FAQ;
+
 
 @Service
 @RequiredArgsConstructor
 public class FrontFaqJpaService {
+    private final FrontFaqJpaQueryRepository frontFaqJpaQueryRepository;
     private final FrontFaqJpaRepository frontFaqJpaRepository;
 
-    /**
-     * <pre>
-     * 1. MethodName : findFaqCount
-     * 2. ClassName  : FrontFaqJpaService.java
-     * 3. Comment    : 프론트 > FAQ 리스트 갯수 조회
-     * 4. 작성자      : CHO
-     * 5. 작성일      : 2022. 08. 23.
-     * </pre>
-     */
-    @Transactional(readOnly = true)
-    public int findFaqCount(Map<String, Object> faqMap) {
-        return frontFaqJpaRepository.findFaqCount(faqMap);
+    private FrontFaqEntity oneFaq(Long idx) {
+        return frontFaqJpaRepository.findById(idx)
+                .orElseThrow(() -> new TspException(NOT_FOUND_FAQ));
     }
 
     /**
@@ -38,10 +35,9 @@ public class FrontFaqJpaService {
      * 5. 작성일      : 2022. 08. 23.
      * </pre>
      */
-    @Cacheable(value = "faq", key = "#faqMap")
     @Transactional(readOnly = true)
-    public List<FrontFaqDTO> findFaqList(Map<String, Object> faqMap) {
-        return frontFaqJpaRepository.findFaqList(faqMap);
+    public Page<FrontFaqDTO> findFaqList(Map<String, Object> faqMap, PageRequest pageRequest) {
+        return frontFaqJpaQueryRepository.findFaqList(faqMap, pageRequest);
     }
 
     /**
@@ -53,10 +49,9 @@ public class FrontFaqJpaService {
      * 5. 작성일      : 2022. 08. 23.
      * </pre>
      */
-    @Cacheable(value = "faq", key = "#idx")
     @Transactional(readOnly = true)
     public FrontFaqDTO findOneFaq(Long idx) {
-        return this.frontFaqJpaRepository.findOneFaq(idx);
+        return FrontFaqEntity.toDto(oneFaq(idx));
     }
 
     /**
@@ -68,10 +63,9 @@ public class FrontFaqJpaService {
      * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
-    @Cacheable(value = "faq", key = "#idx")
     @Transactional(readOnly = true)
     public FrontFaqDTO findPrevOneFaq(Long idx) {
-        return this.frontFaqJpaRepository.findPrevOneFaq(idx);
+        return this.frontFaqJpaQueryRepository.findPrevOneFaq(idx);
     }
 
     /**
@@ -83,9 +77,8 @@ public class FrontFaqJpaService {
      * 5. 작성일      : 2022. 08. 23.
      * </pre>
      */
-    @Cacheable(value = "faq", key = "#idx")
     @Transactional(readOnly = true)
     public FrontFaqDTO findNextOneFaq(Long idx) {
-        return this.frontFaqJpaRepository.findNextOneFaq(idx);
+        return this.frontFaqJpaQueryRepository.findNextOneFaq(idx);
     }
 }

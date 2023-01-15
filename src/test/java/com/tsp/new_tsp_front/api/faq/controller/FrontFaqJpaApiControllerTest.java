@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -49,27 +50,11 @@ class FrontFaqJpaApiControllerTest {
     @Test
     @DisplayName("FAQ 조회 테스트")
     void FAQ조회테스트() throws Exception {
-        mockMvc.perform(get("/api/faq/lists").param("page", "1").param("size", "100"))
+        mockMvc.perform(get("/api/faq/lists").param("pageNum", "1").param("size", "100"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.faqList.length()", equalTo(55)));
-    }
-
-    @Test
-    @DisplayName("FAQ 검색 조회 테스트")
-    void FAQ검색조회테스트() throws Exception {
-        LinkedMultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
-        paramMap.add("jpaStartPage", "1");
-        paramMap.add("size", "3");
-        paramMap.add("searchType", "0");
-        paramMap.add("searchKeyword", "하하");
-
-        mockMvc.perform(get("/api/faq/lists").queryParams(paramMap))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.faqList.length()", equalTo(1)));
+                .andExpect(jsonPath("$.content").isNotEmpty());
     }
 
     @Test

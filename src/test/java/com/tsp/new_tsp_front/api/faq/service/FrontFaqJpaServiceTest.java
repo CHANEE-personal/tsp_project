@@ -10,6 +10,9 @@ import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,36 +49,35 @@ class FrontFaqJpaServiceTest {
     void FAQ리스트조회Mockito테스트() {
         // given
         Map<String, Object> faqMap = new HashMap<>();
-        faqMap.put("jpaStartPage", 1);
-        faqMap.put("size", 3);
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<FrontFaqDTO> returnFaqList = new ArrayList<>();
-
-        returnFaqList.add(FrontFaqDTO.builder().idx(1L).title("FAQ테스트").description("FAQ테스트").visible("Y").build());
-        returnFaqList.add(FrontFaqDTO.builder().idx(2L).title("FAQTest").description("FAQTest").visible("Y").build());
+        List<FrontFaqDTO> faqList = new ArrayList<>();
+        faqList.add(FrontFaqDTO.builder().idx(1L).title("FAQ").description("FAQ").visible("Y").build());
+        Page<FrontFaqDTO> resultFaq = new PageImpl<>(faqList, pageRequest, faqList.size());
 
         // when
-        when(mockFrontFaqJpaService.findFaqList(faqMap)).thenReturn(returnFaqList);
-        List<FrontFaqDTO> faqList = mockFrontFaqJpaService.findFaqList(faqMap);
+        when(mockFrontFaqJpaService.findFaqList(faqMap, pageRequest)).thenReturn(resultFaq);
+        Page<FrontFaqDTO> newFaqList = mockFrontFaqJpaService.findFaqList(faqMap, pageRequest);
+        List<FrontFaqDTO> findFaqList = newFaqList.stream().collect(Collectors.toList());
 
         // then
         assertAll(
-                () -> assertThat(faqList).isNotEmpty(),
-                () -> assertThat(faqList).hasSize(2)
+                () -> assertThat(findFaqList).isNotEmpty(),
+                () -> assertThat(findFaqList).hasSize(2)
         );
 
-        assertThat(faqList.get(0).getIdx()).isEqualTo(returnFaqList.get(0).getIdx());
-        assertThat(faqList.get(0).getTitle()).isEqualTo(returnFaqList.get(0).getTitle());
-        assertThat(faqList.get(0).getDescription()).isEqualTo(returnFaqList.get(0).getDescription());
-        assertThat(faqList.get(0).getVisible()).isEqualTo(returnFaqList.get(0).getVisible());
+        assertThat(findFaqList.get(0).getIdx()).isEqualTo(faqList.get(0).getIdx());
+        assertThat(findFaqList.get(0).getTitle()).isEqualTo(faqList.get(0).getTitle());
+        assertThat(findFaqList.get(0).getDescription()).isEqualTo(faqList.get(0).getDescription());
+        assertThat(findFaqList.get(0).getVisible()).isEqualTo(faqList.get(0).getVisible());
 
         // verify
-        verify(mockFrontFaqJpaService, times(1)).findFaqList(faqMap);
-        verify(mockFrontFaqJpaService, atLeastOnce()).findFaqList(faqMap);
+        verify(mockFrontFaqJpaService, times(1)).findFaqList(faqMap, pageRequest);
+        verify(mockFrontFaqJpaService, atLeastOnce()).findFaqList(faqMap, pageRequest);
         verifyNoMoreInteractions(mockFrontFaqJpaService);
 
         InOrder inOrder = inOrder(mockFrontFaqJpaService);
-        inOrder.verify(mockFrontFaqJpaService).findFaqList(faqMap);
+        inOrder.verify(mockFrontFaqJpaService).findFaqList(faqMap, pageRequest);
     }
 
     @Test
@@ -82,32 +85,31 @@ class FrontFaqJpaServiceTest {
     void FAQ리스트조회BDD테스트() {
         // given
         Map<String, Object> faqMap = new HashMap<>();
-        faqMap.put("jpaStartPage", 1);
-        faqMap.put("size", 3);
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<FrontFaqDTO> returnFaqList = new ArrayList<>();
-
-        returnFaqList.add(FrontFaqDTO.builder().idx(1L).title("FAQ테스트").description("FAQ테스트").visible("Y").build());
-        returnFaqList.add(FrontFaqDTO.builder().idx(2L).title("FAQTest").description("FAQTest").visible("Y").build());
+        List<FrontFaqDTO> faqList = new ArrayList<>();
+        faqList.add(FrontFaqDTO.builder().idx(1L).title("FAQ").description("FAQ").visible("Y").build());
+        Page<FrontFaqDTO> resultFaq = new PageImpl<>(faqList, pageRequest, faqList.size());
 
         // when
-        given(mockFrontFaqJpaService.findFaqList(faqMap)).willReturn(returnFaqList);
-        List<FrontFaqDTO> faqList = mockFrontFaqJpaService.findFaqList(faqMap);
+        given(mockFrontFaqJpaService.findFaqList(faqMap, pageRequest)).willReturn(resultFaq);
+        Page<FrontFaqDTO> newFaqList = mockFrontFaqJpaService.findFaqList(faqMap, pageRequest);
+        List<FrontFaqDTO> findFaqList = newFaqList.stream().collect(Collectors.toList());
 
         // then
         assertAll(
-                () -> assertThat(faqList).isNotEmpty(),
-                () -> assertThat(faqList).hasSize(2)
+                () -> assertThat(findFaqList).isNotEmpty(),
+                () -> assertThat(findFaqList).hasSize(2)
         );
 
-        assertThat(faqList.get(0).getIdx()).isEqualTo(returnFaqList.get(0).getIdx());
-        assertThat(faqList.get(0).getTitle()).isEqualTo(returnFaqList.get(0).getTitle());
-        assertThat(faqList.get(0).getDescription()).isEqualTo(returnFaqList.get(0).getDescription());
-        assertThat(faqList.get(0).getVisible()).isEqualTo(returnFaqList.get(0).getVisible());
+        assertThat(findFaqList.get(0).getIdx()).isEqualTo(faqList.get(0).getIdx());
+        assertThat(findFaqList.get(0).getTitle()).isEqualTo(faqList.get(0).getTitle());
+        assertThat(findFaqList.get(0).getDescription()).isEqualTo(faqList.get(0).getDescription());
+        assertThat(findFaqList.get(0).getVisible()).isEqualTo(faqList.get(0).getVisible());
 
         // verify
-        then(mockFrontFaqJpaService).should(times(1)).findFaqList(faqMap);
-        then(mockFrontFaqJpaService).should(atLeastOnce()).findFaqList(faqMap);
+        then(mockFrontFaqJpaService).should(times(1)).findFaqList(faqMap, pageRequest);
+        then(mockFrontFaqJpaService).should(atLeastOnce()).findFaqList(faqMap, pageRequest);
         then(mockFrontFaqJpaService).shouldHaveNoMoreInteractions();
     }
 
