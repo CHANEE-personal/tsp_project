@@ -7,8 +7,8 @@ import com.tsp.new_tsp_front.api.model.domain.search.FrontSearchDTO;
 import com.tsp.new_tsp_front.api.model.service.impl.FrontModelJpaRepository;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,20 +24,6 @@ public class FrontModelJpaApiService {
 
     /**
      * <pre>
-     * 1. MethodName : findModelCount
-     * 2. ClassName  : FrontModelJpaApiService.java
-     * 3. Comment    : 프론트 > 모델 리스트 갯수 조회
-     * 4. 작성자      : CHO
-     * 5. 작성일      : 2022. 01. 02.
-     * </pre>
-     */
-    @Transactional(readOnly = true)
-    public int findModelCount(Map<String, Object> modelMap) {
-        return frontModelJpaRepository.findModelCount(modelMap);
-    }
-
-    /**
-     * <pre>
      * 1. MethodName : findModelList
      * 2. ClassName  : FrontModelJpaApiService.java
      * 3. Comment    : 프론트 > 모델 리스트 조회
@@ -45,10 +31,9 @@ public class FrontModelJpaApiService {
      * 5. 작성일      : 2022. 01. 02.
      * </pre>
      */
-    @Cacheable(value = "model", key = "#modelMap")
     @Transactional(readOnly = true)
-    public List<FrontModelDTO> findModelList(Map<String, Object> modelMap) {
-        return frontModelJpaRepository.findModelList(modelMap);
+    public Page<FrontModelDTO> findModelList(Map<String, Object> modelMap, PageRequest pageRequest) {
+        return frontModelJpaRepository.findModelList(modelMap, pageRequest);
     }
 
     /**
@@ -60,7 +45,6 @@ public class FrontModelJpaApiService {
      * 5. 작성일      : 2022. 01. 09.
      * </pre>
      */
-    @CachePut(value = "model", key = "#idx")
     @Transactional
     public FrontModelDTO findOneModel(Long idx) {
         return frontModelJpaRepository.findOneModel(idx);
@@ -75,7 +59,6 @@ public class FrontModelJpaApiService {
      * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
-    @CachePut(value = "model", key = "#frontModelEntity.idx")
     @Transactional
     public FrontModelDTO findPrevOneModel(FrontModelEntity frontModelEntity) {
         return frontModelJpaRepository.findPrevOneModel(frontModelEntity);
@@ -90,7 +73,6 @@ public class FrontModelJpaApiService {
      * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
-    @CachePut(value = "model", key = "#frontModelEntity.idx")
     @Transactional
     public FrontModelDTO findNextOneModel(FrontModelEntity frontModelEntity) {
         return frontModelJpaRepository.findNextOneModel(frontModelEntity);
@@ -105,7 +87,6 @@ public class FrontModelJpaApiService {
      * 5. 작성일      : 2022. 03. 27.
      * </pre>
      */
-    @Cacheable("mainModel")
     @Transactional(readOnly = true)
     public List<FrontModelDTO> findMainModelList() {
         return this.frontModelJpaRepository.findMainModelList();
@@ -120,13 +101,12 @@ public class FrontModelJpaApiService {
      * 5. 작성일      : 2022. 03. 27.
      * </pre>
      */
-    @CachePut(value = "model", key = "#idx")
     @Transactional
     public int favoriteModel(Long idx) {
         try {
             return frontModelJpaRepository.favoriteModel(idx);
         } catch (Exception e) {
-            throw new TspException(ERROR_MODEL_LIKE, e);
+            throw new TspException(ERROR_MODEL_LIKE);
         }
     }
 
@@ -139,10 +119,9 @@ public class FrontModelJpaApiService {
      * 5. 작성일      : 2023. 01. 05.
      * </pre>
      */
-    @Cacheable(value = "recommend")
     @Transactional(readOnly = true)
-    public List<FrontRecommendDTO> findRecommendList() {
-        return frontModelJpaRepository.findRecommendList();
+    public Page<FrontRecommendDTO> findRecommendList(PageRequest pageRequest) {
+        return frontModelJpaRepository.findRecommendList(pageRequest);
     }
 
     /**
@@ -154,10 +133,9 @@ public class FrontModelJpaApiService {
      * 5. 작성일      : 2023. 01. 07.
      * </pre>
      */
-    @Cacheable(value = "rankKeyword")
     @Transactional(readOnly = true)
-    public List<FrontSearchDTO> rankingKeywordList() {
-        return frontModelJpaRepository.rankingKeywordList();
+    public Page<FrontSearchDTO> rankingKeywordList(PageRequest pageRequest) {
+        return frontModelJpaRepository.rankingKeywordList(pageRequest);
     }
 
     /**
@@ -169,7 +147,6 @@ public class FrontModelJpaApiService {
      * 5. 작성일      : 2023. 01. 07.
      * </pre>
      */
-    @Cacheable(value = "searchKeyword")
     @Transactional(readOnly = true)
     public List<FrontModelDTO> findModelKeyword(String keyword) {
         return frontModelJpaRepository.findModelKeyword(keyword);

@@ -2,7 +2,7 @@ package com.tsp.new_tsp_front.api.model.schedule.controller;
 
 import com.tsp.new_tsp_front.api.model.schedule.service.FrontScheduleJpaApiService;
 import com.tsp.new_tsp_front.common.SearchCommon;
-import com.tsp.new_tsp_front.common.paging.Page;
+import com.tsp.new_tsp_front.common.paging.Paging;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -53,9 +53,9 @@ public class FrontScheduleJpaApiController {
     public ResponseEntity<Map<String, Object>> findScheduleList(@RequestParam(required = false) Map<String, Object> paramMap,
                                                                 @RequestParam(value = "searchStartTime", required = false) String searchStartTime,
                                                                 @RequestParam(value = "searchEndTime", required = false) String searchEndTime,
-                                                                Page page) {
+                                                                Paging paging) {
         Map<String, Object> resultMap = new HashMap<>();
-        Map<String, Object> scheduleMap = searchCommon.searchCommon(page, paramMap);
+        Map<String, Object> scheduleMap = searchCommon.searchCommon(paging, paramMap);
 
         if (searchStartTime != null && searchEndTime != null) {
             scheduleMap.put("searchStartTime", searchStartTime);
@@ -63,9 +63,9 @@ public class FrontScheduleJpaApiController {
         }
 
         // 리스트 수
-        resultMap.put("pageSize", page.getSize());
+        resultMap.put("pageSize", paging.getSize());
         // 전체 페이지 수
-        resultMap.put("perPageListCnt", ceil((double) this.frontScheduleJpaApiService.findScheduleCount(scheduleMap) / page.getSize()));
+        resultMap.put("perPageListCnt", ceil((double) this.frontScheduleJpaApiService.findScheduleCount(scheduleMap) / paging.getSize()));
         // 전체 아이템 수
         resultMap.put("scheduleListTotalCnt", this.frontScheduleJpaApiService.findModelScheduleList(scheduleMap));
         resultMap.put("scheduleList", this.frontScheduleJpaApiService.findModelScheduleList(scheduleMap));

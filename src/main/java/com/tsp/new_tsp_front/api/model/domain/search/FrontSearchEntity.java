@@ -29,7 +29,6 @@ public class FrontSearchEntity extends NewCommonMappedClass {
     private Long idx;
 
     @Column(name = "search_keyword")
-    @NotEmpty(message = "검색 키워드는 필수입니다.")
     private String searchKeyword;
 
     public static FrontSearchDTO toDto(FrontSearchEntity entity) {

@@ -101,7 +101,7 @@ public class FrontPortFolioJpaRepository {
                 .where(frontPortFolioEntity.idx.eq(idx)
                         .and(frontPortFolioEntity.visible.eq("Y"))
                         .and(commonImageEntity.typeName.eq("portfolio")))
-                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_PORTFOLIO, new Throwable()));
+                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_PORTFOLIO));
 
         return toDto(getPortFolioInfo);
     }
@@ -125,7 +125,7 @@ public class FrontPortFolioJpaRepository {
                 .orderBy(frontPortFolioEntity.idx.desc())
                 .where(frontPortFolioEntity.idx.lt(idx)
                         .and(frontPortFolioEntity.visible.eq("Y")))
-                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_PORTFOLIO, new Throwable()));
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_PORTFOLIO));
 
         return toDto(findPrevOnePortfolio);
     }
@@ -149,7 +149,7 @@ public class FrontPortFolioJpaRepository {
                 .orderBy(frontPortFolioEntity.idx.desc())
                 .where(frontPortFolioEntity.idx.gt(idx)
                         .and(frontPortFolioEntity.visible.eq("Y")))
-                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_PORTFOLIO, new Throwable()));
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_PORTFOLIO));
 
         return toDto(findNextOnePortfolio);
     }

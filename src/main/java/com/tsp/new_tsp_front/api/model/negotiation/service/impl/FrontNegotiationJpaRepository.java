@@ -96,7 +96,7 @@ public class FrontNegotiationJpaRepository {
                 .orderBy(frontNegotiationEntity.idx.desc())
                 .where(frontNegotiationEntity.visible.eq("Y")
                         .and(frontNegotiationEntity.idx.eq(idx)))
-                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_MODEL_NEGOTIATION, new Throwable()));
+                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_MODEL_NEGOTIATION));
 
         return toDto(findOneNegotiation);
     }
@@ -119,7 +119,7 @@ public class FrontNegotiationJpaRepository {
                         .and(frontNegotiationEntity.visible.eq("Y"))
                         .and(frontModelEntity.idx.eq(existFrontNegotiationEntity.getModelIdx()))
                         .and(frontNegotiationEntity.idx.eq(existFrontNegotiationEntity.getIdx())))
-                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_MODEL_NEGOTIATION, new Throwable()));
+                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_MODEL_NEGOTIATION));
 
         return FrontModelEntity.toDto(findOneModelNegotiation);
     }

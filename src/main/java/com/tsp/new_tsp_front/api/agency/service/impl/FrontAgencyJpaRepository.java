@@ -90,7 +90,7 @@ public class FrontAgencyJpaRepository {
         FrontAgencyEntity oneAgency = Optional.ofNullable(queryFactory
                 .selectFrom(frontAgencyEntity)
                 .where(frontAgencyEntity.idx.eq(idx))
-                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_AGENCY, new Throwable()));
+                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_AGENCY));
 
         return toDto(oneAgency);
     }
@@ -134,7 +134,7 @@ public class FrontAgencyJpaRepository {
                 .orderBy(frontAgencyEntity.idx.desc())
                 .where(frontAgencyEntity.idx.lt(idx)
                         .and(frontAgencyEntity.visible.eq("Y")))
-                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_AGENCY, new Throwable()));
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_AGENCY));
 
         return toDto(findPrevOneAgency);
     }
@@ -155,7 +155,7 @@ public class FrontAgencyJpaRepository {
                 .orderBy(frontAgencyEntity.idx.desc())
                 .where(frontAgencyEntity.idx.gt(idx)
                         .and(frontAgencyEntity.visible.eq("Y")))
-                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_AGENCY, new Throwable()));
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_AGENCY));
 
         return toDto(findNextOneAgency);
     }

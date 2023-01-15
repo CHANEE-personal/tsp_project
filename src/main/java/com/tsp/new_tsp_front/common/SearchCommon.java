@@ -1,6 +1,6 @@
 package com.tsp.new_tsp_front.common;
 
-import com.tsp.new_tsp_front.common.paging.Page;
+import com.tsp.new_tsp_front.common.paging.Paging;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,20 +24,20 @@ public class SearchCommon {
      * 5. 작성일       : 2021. 08. 08.
      * </pre>
      */
-    public Map<String, Object> searchCommon(Page page, @RequestParam(required = false) Map<String, Object> paramMap) {
+    public Map<String, Object> searchCommon(Paging paging, @RequestParam(required = false) Map<String, Object> paramMap) {
 
         Map<String, Object> searchMap = new HashMap<>();
 
         // 페이징 처리
-        Integer pageCnt = getInt(page.getPage(), 1);
-        Integer pageSize = getInt(page.getSize(), 10);
-        page.setPage(pageCnt);
-        page.setSize(pageSize);
+        Integer pageCnt = getInt(paging.getPageNum(), 1);
+        Integer pageSize = getInt(paging.getSize(), 10);
+        paging.setPageNum(pageCnt);
+        paging.setSize(pageSize);
 
         // 검색 조건
         searchMap.put("searchType", getString(paramMap.get("searchType"), ""));
         searchMap.put("searchKeyword", getString(paramMap.get("searchKeyword"), ""));
-        searchMap.put("jpaStartPage", getInt(page.getStartPage(), 0));
+        searchMap.put("jpaStartPage", getInt(paging.getStartPage(), 0));
         searchMap.put("startPage", pageCnt);
         searchMap.put("size", pageSize);
 

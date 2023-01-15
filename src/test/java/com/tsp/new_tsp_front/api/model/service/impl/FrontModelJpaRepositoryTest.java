@@ -7,6 +7,7 @@ import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.domain.recommend.FrontRecommendEntity;
+import com.tsp.new_tsp_front.api.model.domain.search.FrontSearchDTO;
 import com.tsp.new_tsp_front.api.model.domain.search.FrontSearchEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,12 +21,16 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -110,27 +115,15 @@ class FrontModelJpaRepositoryTest {
     }
 
     @Test
-    @DisplayName("모델 리스트 갯수 조회 테스트")
-    void 모델리스트갯수조회테스트() {
-        // 정상
-        Map<String, Object> modelMap = new HashMap<>();
-        modelMap.put("categoryCd", 1);
-
-        // then
-        assertThat(frontModelJpaRepository.findModelCount(modelMap)).isPositive();
-    }
-
-    @Test
     @DisplayName("모델 리스트 조회 테스트")
     void 모델리스트조회테스트() {
         // given
         Map<String, Object> modelMap = new HashMap<>();
         modelMap.put("categoryCd", 1);
-        modelMap.put("jpaStartPage", 1);
-        modelMap.put("size", 3);
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
         // then
-        assertThat(frontModelJpaRepository.findModelList(modelMap)).isNotEmpty();
+        assertThat(frontModelJpaRepository.findModelList(modelMap, pageRequest)).isNotEmpty();
     }
 
     @Test
@@ -171,8 +164,7 @@ class FrontModelJpaRepositoryTest {
         // given
         Map<String, Object> modelMap = new HashMap<>();
         modelMap.put("categoryCd", 1);
-        modelMap.put("jpaStartPage", 1);
-        modelMap.put("size", 3);
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
         commonImageDtoList.add(commonImageDTO);
@@ -181,25 +173,27 @@ class FrontModelJpaRepositoryTest {
         modelList.add(FrontModelDTO.builder().idx(3L).categoryCd(1).modelKorName("테스트모델1").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
         modelList.add(FrontModelDTO.builder().idx(4L).categoryCd(2).modelKorName("테스트모델2").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
 
+        Page<FrontModelDTO> resultPage = new PageImpl<>(modelList, pageRequest, modelList.size());
         // when
-        when(mockFrontModelJpaRepository.findModelList(modelMap)).thenReturn(modelList);
-        List<FrontModelDTO> newModelList = mockFrontModelJpaRepository.findModelList(modelMap);
+        when(mockFrontModelJpaRepository.findModelList(modelMap, pageRequest)).thenReturn(resultPage);
+        Page<FrontModelDTO> newModelList = mockFrontModelJpaRepository.findModelList(modelMap, pageRequest);
+        List<FrontModelDTO> findModelList = newModelList.stream().collect(Collectors.toList());
 
         // then
-        assertThat(newModelList.get(0).getIdx()).isEqualTo(modelList.get(0).getIdx());
-        assertThat(newModelList.get(0).getCategoryCd()).isEqualTo(modelList.get(0).getCategoryCd());
-        assertThat(newModelList.get(0).getModelKorName()).isEqualTo(modelList.get(0).getModelKorName());
-        assertThat(newModelList.get(0).getModelAgency().getAgencyName()).isEqualTo(modelList.get(0).getModelAgency().getAgencyName());
-        assertThat(newModelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(modelList.get(0).getModelAgency().getAgencyDescription());
-        assertThat(newModelList.get(0).getModelImage().get(0).getFileName()).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
+        assertThat(findModelList.get(0).getIdx()).isEqualTo(modelList.get(0).getIdx());
+        assertThat(findModelList.get(0).getCategoryCd()).isEqualTo(modelList.get(0).getCategoryCd());
+        assertThat(findModelList.get(0).getModelKorName()).isEqualTo(modelList.get(0).getModelKorName());
+        assertThat(findModelList.get(0).getModelAgency().getAgencyName()).isEqualTo(modelList.get(0).getModelAgency().getAgencyName());
+        assertThat(findModelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(modelList.get(0).getModelAgency().getAgencyDescription());
+        assertThat(findModelList.get(0).getModelImage().get(0).getFileName()).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
 
         // verify
-        verify(mockFrontModelJpaRepository, times(1)).findModelList(modelMap);
-        verify(mockFrontModelJpaRepository, atLeastOnce()).findModelList(modelMap);
+        verify(mockFrontModelJpaRepository, times(1)).findModelList(modelMap, pageRequest);
+        verify(mockFrontModelJpaRepository, atLeastOnce()).findModelList(modelMap, pageRequest);
         verifyNoMoreInteractions(mockFrontModelJpaRepository);
 
         InOrder inOrder = inOrder(mockFrontModelJpaRepository);
-        inOrder.verify(mockFrontModelJpaRepository).findModelList(modelMap);
+        inOrder.verify(mockFrontModelJpaRepository).findModelList(modelMap, pageRequest);
     }
 
     @Test
@@ -209,8 +203,7 @@ class FrontModelJpaRepositoryTest {
         // given
         Map<String, Object> modelMap = new HashMap<>();
         modelMap.put("categoryCd", 1);
-        modelMap.put("jpaStartPage", 1);
-        modelMap.put("size", 3);
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
         commonImageDtoList.add(commonImageDTO);
@@ -219,21 +212,23 @@ class FrontModelJpaRepositoryTest {
         modelList.add(FrontModelDTO.builder().idx(3L).categoryCd(1).modelKorName("테스트모델1").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
         modelList.add(FrontModelDTO.builder().idx(4L).categoryCd(2).modelKorName("테스트모델2").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
 
+        Page<FrontModelDTO> resultPage = new PageImpl<>(modelList, pageRequest, modelList.size());
         // when
-        given(mockFrontModelJpaRepository.findModelList(modelMap)).willReturn(modelList);
-        List<FrontModelDTO> newModelList = mockFrontModelJpaRepository.findModelList(modelMap);
+        given(mockFrontModelJpaRepository.findModelList(modelMap, pageRequest)).willReturn(resultPage);
+        Page<FrontModelDTO> newModelList = mockFrontModelJpaRepository.findModelList(modelMap, pageRequest);
+        List<FrontModelDTO> findModelList = newModelList.stream().collect(Collectors.toList());
 
         // then
-        assertThat(newModelList.get(0).getIdx()).isEqualTo(modelList.get(0).getIdx());
-        assertThat(newModelList.get(0).getCategoryCd()).isEqualTo(modelList.get(0).getCategoryCd());
-        assertThat(newModelList.get(0).getModelKorName()).isEqualTo(modelList.get(0).getModelKorName());
-        assertThat(newModelList.get(0).getModelAgency().getAgencyName()).isEqualTo(modelList.get(0).getModelAgency().getAgencyName());
-        assertThat(newModelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(modelList.get(0).getModelAgency().getAgencyDescription());
-        assertThat(newModelList.get(0).getModelImage().get(0).getFileName()).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
+        assertThat(findModelList.get(0).getIdx()).isEqualTo(modelList.get(0).getIdx());
+        assertThat(findModelList.get(0).getCategoryCd()).isEqualTo(modelList.get(0).getCategoryCd());
+        assertThat(findModelList.get(0).getModelKorName()).isEqualTo(modelList.get(0).getModelKorName());
+        assertThat(findModelList.get(0).getModelAgency().getAgencyName()).isEqualTo(modelList.get(0).getModelAgency().getAgencyName());
+        assertThat(findModelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(modelList.get(0).getModelAgency().getAgencyDescription());
+        assertThat(findModelList.get(0).getModelImage().get(0).getFileName()).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
 
         // verify
-        then(mockFrontModelJpaRepository).should(times(1)).findModelList(modelMap);
-        then(mockFrontModelJpaRepository).should(atLeastOnce()).findModelList(modelMap);
+        then(mockFrontModelJpaRepository).should(times(1)).findModelList(modelMap, pageRequest);
+        then(mockFrontModelJpaRepository).should(atLeastOnce()).findModelList(modelMap, pageRequest);
         then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
     }
 
@@ -568,53 +563,6 @@ class FrontModelJpaRepositoryTest {
     }
 
     @Test
-    @DisplayName("모델 조회 수 Mockito 테스트")
-    void 모델조회수Mockito테스트() {
-        // given
-        em.persist(frontModelEntity);
-        frontModelDTO = FrontModelEntity.toDto(frontModelEntity);
-
-        Integer viewCount = frontModelJpaRepository.updateModelViewCount(frontModelEntity.getIdx());
-
-        // when
-        when(mockFrontModelJpaRepository.updateModelViewCount(frontModelEntity.getIdx())).thenReturn(viewCount);
-        Integer newViewCount = mockFrontModelJpaRepository.updateModelViewCount(frontModelEntity.getIdx());
-
-        // then
-        assertThat(newViewCount).isEqualTo(viewCount);
-
-        // verify
-        verify(mockFrontModelJpaRepository, times(1)).updateModelViewCount(frontModelEntity.getIdx());
-        verify(mockFrontModelJpaRepository, atLeastOnce()).updateModelViewCount(frontModelEntity.getIdx());
-        verifyNoMoreInteractions(mockFrontModelJpaRepository);
-
-        InOrder inOrder = inOrder(mockFrontModelJpaRepository);
-        inOrder.verify(mockFrontModelJpaRepository).updateModelViewCount(frontModelEntity.getIdx());
-    }
-
-    @Test
-    @DisplayName("모델 조회 수 BDD 테스트")
-    void 모델조회수BDD테스트() {
-        // given
-        em.persist(frontModelEntity);
-        frontModelDTO = FrontModelEntity.toDto(frontModelEntity);
-
-        Integer viewCount = frontModelJpaRepository.updateModelViewCount(frontModelEntity.getIdx());
-
-        // when
-        given(mockFrontModelJpaRepository.updateModelViewCount(frontModelEntity.getIdx())).willReturn(viewCount);
-        Integer newViewCount = mockFrontModelJpaRepository.updateModelViewCount(frontModelEntity.getIdx());
-
-        // then
-        assertThat(newViewCount).isEqualTo(viewCount);
-
-        // verify
-        then(mockFrontModelJpaRepository).should(times(1)).updateModelViewCount(frontModelEntity.getIdx());
-        then(mockFrontModelJpaRepository).should(atLeastOnce()).updateModelViewCount(frontModelEntity.getIdx());
-        then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
-    }
-
-    @Test
     @DisplayName("모델 좋아요 Mockito 테스트")
     void 모델좋아요Mockito테스트() {
         // given
@@ -668,9 +616,8 @@ class FrontModelJpaRepositoryTest {
         // given
         Map<String, Object> newModelMap = new HashMap<>();
         newModelMap.put("categoryCd", 1);
-        newModelMap.put("jpaStartPage", 1);
-        newModelMap.put("size", 3);
         newModelMap.put("newYn", "Y");
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
         commonImageDtoList.add(commonImageDTO);
@@ -679,26 +626,28 @@ class FrontModelJpaRepositoryTest {
         modelList.add(FrontModelDTO.builder().idx(3L).categoryCd(1).modelKorName("테스트모델1").newYn("Y").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
         modelList.add(FrontModelDTO.builder().idx(4L).categoryCd(2).modelKorName("테스트모델2").newYn("Y").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
 
+        Page<FrontModelDTO> resultPage = new PageImpl<>(modelList, pageRequest, modelList.size());
         // when
-        when(mockFrontModelJpaRepository.findModelList(newModelMap)).thenReturn(modelList);
-        List<FrontModelDTO> newModelList = mockFrontModelJpaRepository.findModelList(newModelMap);
+        when(mockFrontModelJpaRepository.findModelList(newModelMap, pageRequest)).thenReturn(resultPage);
+        Page<FrontModelDTO> newModelList = mockFrontModelJpaRepository.findModelList(newModelMap, pageRequest);
+        List<FrontModelDTO> findModelList = newModelList.stream().collect(Collectors.toList());
 
         // then
-        assertThat(newModelList.get(0).getIdx()).isEqualTo(modelList.get(0).getIdx());
-        assertThat(newModelList.get(0).getCategoryCd()).isEqualTo(modelList.get(0).getCategoryCd());
-        assertThat(newModelList.get(0).getModelKorName()).isEqualTo(modelList.get(0).getModelKorName());
-        assertThat(newModelList.get(0).getNewYn()).isEqualTo(modelList.get(0).getNewYn());
-        assertThat(newModelList.get(0).getModelAgency().getAgencyName()).isEqualTo(modelList.get(0).getModelAgency().getAgencyName());
-        assertThat(newModelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(modelList.get(0).getModelAgency().getAgencyDescription());
-        assertThat(newModelList.get(0).getModelImage().get(0).getFileName()).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
+        assertThat(findModelList.get(0).getIdx()).isEqualTo(modelList.get(0).getIdx());
+        assertThat(findModelList.get(0).getCategoryCd()).isEqualTo(modelList.get(0).getCategoryCd());
+        assertThat(findModelList.get(0).getModelKorName()).isEqualTo(modelList.get(0).getModelKorName());
+        assertThat(findModelList.get(0).getNewYn()).isEqualTo(modelList.get(0).getNewYn());
+        assertThat(findModelList.get(0).getModelAgency().getAgencyName()).isEqualTo(modelList.get(0).getModelAgency().getAgencyName());
+        assertThat(findModelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(modelList.get(0).getModelAgency().getAgencyDescription());
+        assertThat(findModelList.get(0).getModelImage().get(0).getFileName()).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
 
         // verify
-        verify(mockFrontModelJpaRepository, times(1)).findModelList(newModelMap);
-        verify(mockFrontModelJpaRepository, atLeastOnce()).findModelList(newModelMap);
+        verify(mockFrontModelJpaRepository, times(1)).findModelList(newModelMap, pageRequest);
+        verify(mockFrontModelJpaRepository, atLeastOnce()).findModelList(newModelMap, pageRequest);
         verifyNoMoreInteractions(mockFrontModelJpaRepository);
 
         InOrder inOrder = inOrder(mockFrontModelJpaRepository);
-        inOrder.verify(mockFrontModelJpaRepository).findModelList(newModelMap);
+        inOrder.verify(mockFrontModelJpaRepository).findModelList(newModelMap, pageRequest);
     }
 
     @Test
@@ -708,9 +657,8 @@ class FrontModelJpaRepositoryTest {
         // given
         Map<String, Object> newModelMap = new HashMap<>();
         newModelMap.put("categoryCd", 1);
-        newModelMap.put("jpaStartPage", 1);
-        newModelMap.put("size", 3);
         newModelMap.put("newYn", "Y");
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
         commonImageDtoList.add(commonImageDTO);
@@ -719,22 +667,24 @@ class FrontModelJpaRepositoryTest {
         modelList.add(FrontModelDTO.builder().idx(3L).categoryCd(1).modelKorName("테스트모델1").newYn("Y").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
         modelList.add(FrontModelDTO.builder().idx(4L).categoryCd(2).modelKorName("테스트모델2").newYn("Y").modelAgency(frontAgencyDTO).modelImage(commonImageDtoList).build());
 
+        Page<FrontModelDTO> resultPage = new PageImpl<>(modelList, pageRequest, modelList.size());
         // when
-        given(mockFrontModelJpaRepository.findModelList(newModelMap)).willReturn(modelList);
-        List<FrontModelDTO> newModelList = mockFrontModelJpaRepository.findModelList(newModelMap);
+        given(mockFrontModelJpaRepository.findModelList(newModelMap, pageRequest)).willReturn(resultPage);
+        Page<FrontModelDTO> newModelList = mockFrontModelJpaRepository.findModelList(newModelMap, pageRequest);
+        List<FrontModelDTO> findModelList = newModelList.stream().collect(Collectors.toList());
 
         // then
-        assertThat(newModelList.get(0).getIdx()).isEqualTo(modelList.get(0).getIdx());
-        assertThat(newModelList.get(0).getCategoryCd()).isEqualTo(modelList.get(0).getCategoryCd());
-        assertThat(newModelList.get(0).getModelKorName()).isEqualTo(modelList.get(0).getModelKorName());
-        assertThat(newModelList.get(0).getNewYn()).isEqualTo(modelList.get(0).getNewYn());
-        assertThat(newModelList.get(0).getModelAgency().getAgencyName()).isEqualTo(modelList.get(0).getModelAgency().getAgencyName());
-        assertThat(newModelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(modelList.get(0).getModelAgency().getAgencyDescription());
-        assertThat(newModelList.get(0).getModelImage().get(0).getFileName()).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
+        assertThat(findModelList.get(0).getIdx()).isEqualTo(modelList.get(0).getIdx());
+        assertThat(findModelList.get(0).getCategoryCd()).isEqualTo(modelList.get(0).getCategoryCd());
+        assertThat(findModelList.get(0).getModelKorName()).isEqualTo(modelList.get(0).getModelKorName());
+        assertThat(findModelList.get(0).getNewYn()).isEqualTo(modelList.get(0).getNewYn());
+        assertThat(findModelList.get(0).getModelAgency().getAgencyName()).isEqualTo(modelList.get(0).getModelAgency().getAgencyName());
+        assertThat(findModelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(modelList.get(0).getModelAgency().getAgencyDescription());
+        assertThat(findModelList.get(0).getModelImage().get(0).getFileName()).isEqualTo(modelList.get(0).getModelImage().get(0).getFileName());
 
         // verify
-        then(mockFrontModelJpaRepository).should(times(1)).findModelList(newModelMap);
-        then(mockFrontModelJpaRepository).should(atLeastOnce()).findModelList(newModelMap);
+        then(mockFrontModelJpaRepository).should(times(1)).findModelList(newModelMap, pageRequest);
+        then(mockFrontModelJpaRepository).should(atLeastOnce()).findModelList(newModelMap, pageRequest);
         then(mockFrontModelJpaRepository).shouldHaveNoMoreInteractions();
     }
 
@@ -755,7 +705,7 @@ class FrontModelJpaRepositoryTest {
 
         em.persist(frontRecommendEntity);
 
-        assertThat(frontModelJpaRepository.findRecommendList()).isNotEmpty();
+        assertThat(frontModelJpaRepository.findRecommendList(PageRequest.of(1, 10))).isNotEmpty();
     }
 
     @Test
@@ -766,8 +716,11 @@ class FrontModelJpaRepositoryTest {
         em.persist(FrontSearchEntity.builder().searchKeyword("모델1").build());
         em.persist(FrontSearchEntity.builder().searchKeyword("모델2").build());
 
-        assertThat(frontModelJpaRepository.rankingKeywordList().get(0).getSearchKeyword()).isEqualTo("모델1");
-        assertThat(frontModelJpaRepository.rankingKeywordList().get(1).getSearchKeyword()).isEqualTo("모델2");
+        Page<FrontSearchDTO> searchResult = frontModelJpaRepository.rankingKeywordList(PageRequest.of(1, 10));
+        List<FrontSearchDTO> searchList = searchResult.stream().collect(Collectors.toList());
+
+        assertThat(searchList.get(0).getSearchKeyword()).isEqualTo("모델1");
+        assertThat(searchList.get(1).getSearchKeyword()).isEqualTo("모델2");
     }
 
     @Test

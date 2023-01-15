@@ -7,6 +7,7 @@ import com.tsp.new_tsp_front.api.common.domain.CommonImageEntity;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
 import com.tsp.new_tsp_front.api.model.domain.recommend.FrontRecommendEntity;
+import com.tsp.new_tsp_front.api.model.domain.search.FrontSearchDTO;
 import com.tsp.new_tsp_front.api.model.domain.search.FrontSearchEntity;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 
@@ -30,6 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -69,6 +74,8 @@ class FrontModelJpaApiServiceTest {
                 .visible("Y")
                 .build();
 
+        em.persist(frontAgencyEntity);
+
         frontAgencyDTO = FrontAgencyEntity.toDto(frontAgencyEntity);
 
         frontModelEntity = FrontModelEntity.builder()
@@ -86,8 +93,10 @@ class FrontModelJpaApiServiceTest {
                 .height(170)
                 .size3("34-24-34")
                 .shoes(270)
+                .newYn("N")
                 .modelFavoriteCount(1)
                 .visible("Y")
+                .agencyIdx(frontAgencyDTO.getIdx())
                 .build();
 
         frontModelDTO = FrontModelEntity.toDto(frontModelEntity);
@@ -117,9 +126,10 @@ class FrontModelJpaApiServiceTest {
         // given
         Map<String, Object> modelMap = new HashMap<>();
         modelMap.put("categoryCd", -1);
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
         // then
-        assertThatThrownBy(() -> frontModelJpaApiService.findModelList(modelMap))
+        assertThatThrownBy(() -> frontModelJpaApiService.findModelList(modelMap, pageRequest))
                 .isInstanceOf(TspException.class);
     }
 
@@ -128,8 +138,7 @@ class FrontModelJpaApiServiceTest {
     void 모델리스트조회Mockito테스트() {
         Map<String, Object> modelMap = new HashMap<>();
         modelMap.put("categoryCd", "1");
-        modelMap.put("jpaStartPage", 1);
-        modelMap.put("size", 3);
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<FrontModelDTO> returnModelList = new ArrayList<>();
 
@@ -140,44 +149,48 @@ class FrontModelJpaApiServiceTest {
         // 시니어
         returnModelList.add(FrontModelDTO.builder().idx(3L).categoryCd(3).modelKorName("시니어모델").modelAgency(frontAgencyDTO).modelEngName("seniorModel").build());
 
+        Page<FrontModelDTO> resultPage = new PageImpl<>(returnModelList, pageRequest, returnModelList.size());
+
         // when
-        when(mockFrontModelJpaApiService.findModelList(modelMap)).thenReturn(returnModelList);
-        List<FrontModelDTO> modelList = mockFrontModelJpaApiService.findModelList(modelMap);
+        when(mockFrontModelJpaApiService.findModelList(modelMap, pageRequest)).thenReturn(resultPage);
+        Page<FrontModelDTO> modelList = mockFrontModelJpaApiService.findModelList(modelMap, pageRequest);
+
+        List<FrontModelDTO> findModelList = modelList.stream().collect(Collectors.toList());
 
         // then
         assertAll(
-                () -> assertThat(modelList).isNotEmpty(),
-                () -> assertThat(modelList).hasSize(3)
+                () -> assertThat(findModelList).isNotEmpty(),
+                () -> assertThat(findModelList).hasSize(3)
         );
 
-        assertThat(modelList.get(0).getIdx()).isEqualTo(returnModelList.get(0).getIdx());
-        assertThat(modelList.get(0).getCategoryCd()).isEqualTo(returnModelList.get(0).getIdx());
-        assertThat(modelList.get(0).getModelKorName()).isEqualTo(returnModelList.get(0).getModelKorName());
-        assertThat(modelList.get(0).getModelEngName()).isEqualTo(returnModelList.get(0).getModelEngName());
-        assertThat(modelList.get(0).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyName());
-        assertThat(modelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyDescription());
+        assertThat(findModelList.get(0).getIdx()).isEqualTo(returnModelList.get(0).getIdx());
+        assertThat(findModelList.get(0).getCategoryCd()).isEqualTo(returnModelList.get(0).getCategoryCd());
+        assertThat(findModelList.get(0).getModelKorName()).isEqualTo(returnModelList.get(0).getModelKorName());
+        assertThat(findModelList.get(0).getModelEngName()).isEqualTo(returnModelList.get(0).getModelEngName());
+        assertThat(findModelList.get(0).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyName());
+        assertThat(findModelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyDescription());
 
-        assertThat(modelList.get(1).getIdx()).isEqualTo(returnModelList.get(1).getIdx());
-        assertThat(modelList.get(1).getCategoryCd()).isEqualTo(returnModelList.get(1).getCategoryCd());
-        assertThat(modelList.get(1).getModelKorName()).isEqualTo(returnModelList.get(1).getModelKorName());
-        assertThat(modelList.get(1).getModelEngName()).isEqualTo(returnModelList.get(1).getModelEngName());
-        assertThat(modelList.get(1).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyName());
-        assertThat(modelList.get(1).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyDescription());
+        assertThat(findModelList.get(1).getIdx()).isEqualTo(returnModelList.get(1).getIdx());
+        assertThat(findModelList.get(1).getCategoryCd()).isEqualTo(returnModelList.get(1).getCategoryCd());
+        assertThat(findModelList.get(1).getModelKorName()).isEqualTo(returnModelList.get(1).getModelKorName());
+        assertThat(findModelList.get(1).getModelEngName()).isEqualTo(returnModelList.get(1).getModelEngName());
+        assertThat(findModelList.get(1).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyName());
+        assertThat(findModelList.get(1).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyDescription());
 
-        assertThat(modelList.get(2).getIdx()).isEqualTo(returnModelList.get(2).getIdx());
-        assertThat(modelList.get(2).getCategoryCd()).isEqualTo(returnModelList.get(2).getCategoryCd());
-        assertThat(modelList.get(2).getModelKorName()).isEqualTo(returnModelList.get(2).getModelKorName());
-        assertThat(modelList.get(2).getModelEngName()).isEqualTo(returnModelList.get(2).getModelEngName());
-        assertThat(modelList.get(2).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyName());
-        assertThat(modelList.get(2).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyDescription());
+        assertThat(findModelList.get(2).getIdx()).isEqualTo(returnModelList.get(2).getIdx());
+        assertThat(findModelList.get(2).getCategoryCd()).isEqualTo(returnModelList.get(2).getCategoryCd());
+        assertThat(findModelList.get(2).getModelKorName()).isEqualTo(returnModelList.get(2).getModelKorName());
+        assertThat(findModelList.get(2).getModelEngName()).isEqualTo(returnModelList.get(2).getModelEngName());
+        assertThat(findModelList.get(2).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyName());
+        assertThat(findModelList.get(2).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyDescription());
 
         // verify
-        verify(mockFrontModelJpaApiService, times(1)).findModelList(modelMap);
-        verify(mockFrontModelJpaApiService, atLeastOnce()).findModelList(modelMap);
+        verify(mockFrontModelJpaApiService, times(1)).findModelList(modelMap, pageRequest);
+        verify(mockFrontModelJpaApiService, atLeastOnce()).findModelList(modelMap, pageRequest);
         verifyNoMoreInteractions(mockFrontModelJpaApiService);
 
         InOrder inOrder = inOrder(mockFrontModelJpaApiService);
-        inOrder.verify(mockFrontModelJpaApiService).findModelList(modelMap);
+        inOrder.verify(mockFrontModelJpaApiService).findModelList(modelMap, pageRequest);
     }
 
     @Test
@@ -185,8 +198,7 @@ class FrontModelJpaApiServiceTest {
     void 모델리스트조회BDD테스트() {
         Map<String, Object> modelMap = new HashMap<>();
         modelMap.put("categoryCd", "1");
-        modelMap.put("jpaStartPage", 1);
-        modelMap.put("size", 3);
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<FrontModelDTO> returnModelList = new ArrayList<>();
 
@@ -197,40 +209,43 @@ class FrontModelJpaApiServiceTest {
         // 시니어
         returnModelList.add(FrontModelDTO.builder().idx(3L).categoryCd(3).modelKorName("시니어모델").modelAgency(frontAgencyDTO).modelEngName("seniorModel").build());
 
+        Page<FrontModelDTO> resultPage = new PageImpl<>(returnModelList, pageRequest, returnModelList.size());
         // when
-        given(mockFrontModelJpaApiService.findModelList(modelMap)).willReturn(returnModelList);
-        List<FrontModelDTO> modelList = mockFrontModelJpaApiService.findModelList(modelMap);
+        given(mockFrontModelJpaApiService.findModelList(modelMap, pageRequest)).willReturn(resultPage);
+        Page<FrontModelDTO> modelList = mockFrontModelJpaApiService.findModelList(modelMap, pageRequest);
+
+        List<FrontModelDTO> findModelList = modelList.stream().collect(Collectors.toList());
 
         // then
         assertAll(
-                () -> assertThat(modelList).isNotEmpty(),
-                () -> assertThat(modelList).hasSize(3)
+                () -> assertThat(findModelList).isNotEmpty(),
+                () -> assertThat(findModelList).hasSize(3)
         );
 
-        assertThat(modelList.get(0).getIdx()).isEqualTo(returnModelList.get(0).getIdx());
-        assertThat(modelList.get(0).getCategoryCd()).isEqualTo(returnModelList.get(0).getIdx());
-        assertThat(modelList.get(0).getModelKorName()).isEqualTo(returnModelList.get(0).getModelKorName());
-        assertThat(modelList.get(0).getModelEngName()).isEqualTo(returnModelList.get(0).getModelEngName());
-        assertThat(modelList.get(0).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyName());
-        assertThat(modelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyDescription());
+        assertThat(findModelList.get(0).getIdx()).isEqualTo(returnModelList.get(0).getIdx());
+        assertThat(findModelList.get(0).getCategoryCd()).isEqualTo(returnModelList.get(0).getCategoryCd());
+        assertThat(findModelList.get(0).getModelKorName()).isEqualTo(returnModelList.get(0).getModelKorName());
+        assertThat(findModelList.get(0).getModelEngName()).isEqualTo(returnModelList.get(0).getModelEngName());
+        assertThat(findModelList.get(0).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyName());
+        assertThat(findModelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyDescription());
 
-        assertThat(modelList.get(1).getIdx()).isEqualTo(returnModelList.get(1).getIdx());
-        assertThat(modelList.get(1).getCategoryCd()).isEqualTo(returnModelList.get(1).getIdx());
-        assertThat(modelList.get(1).getModelKorName()).isEqualTo(returnModelList.get(1).getModelKorName());
-        assertThat(modelList.get(1).getModelEngName()).isEqualTo(returnModelList.get(1).getModelEngName());
-        assertThat(modelList.get(1).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyName());
-        assertThat(modelList.get(1).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyDescription());
+        assertThat(findModelList.get(1).getIdx()).isEqualTo(returnModelList.get(1).getIdx());
+        assertThat(findModelList.get(1).getCategoryCd()).isEqualTo(returnModelList.get(1).getCategoryCd());
+        assertThat(findModelList.get(1).getModelKorName()).isEqualTo(returnModelList.get(1).getModelKorName());
+        assertThat(findModelList.get(1).getModelEngName()).isEqualTo(returnModelList.get(1).getModelEngName());
+        assertThat(findModelList.get(1).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyName());
+        assertThat(findModelList.get(1).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyDescription());
 
-        assertThat(modelList.get(2).getIdx()).isEqualTo(returnModelList.get(2).getIdx());
-        assertThat(modelList.get(2).getCategoryCd()).isEqualTo(returnModelList.get(2).getIdx());
-        assertThat(modelList.get(2).getModelKorName()).isEqualTo(returnModelList.get(2).getModelKorName());
-        assertThat(modelList.get(2).getModelEngName()).isEqualTo(returnModelList.get(2).getModelEngName());
-        assertThat(modelList.get(2).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyName());
-        assertThat(modelList.get(2).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyDescription());
+        assertThat(findModelList.get(2).getIdx()).isEqualTo(returnModelList.get(2).getIdx());
+        assertThat(findModelList.get(2).getCategoryCd()).isEqualTo(returnModelList.get(2).getCategoryCd());
+        assertThat(findModelList.get(2).getModelKorName()).isEqualTo(returnModelList.get(2).getModelKorName());
+        assertThat(findModelList.get(2).getModelEngName()).isEqualTo(returnModelList.get(2).getModelEngName());
+        assertThat(findModelList.get(2).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyName());
+        assertThat(findModelList.get(2).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyDescription());
 
         // verify
-        then(mockFrontModelJpaApiService).should(times(1)).findModelList(modelMap);
-        then(mockFrontModelJpaApiService).should(atLeastOnce()).findModelList(modelMap);
+        then(mockFrontModelJpaApiService).should(times(1)).findModelList(modelMap, pageRequest);
+        then(mockFrontModelJpaApiService).should(atLeastOnce()).findModelList(modelMap, pageRequest);
         then(mockFrontModelJpaApiService).shouldHaveNoMoreInteractions();
     }
 
@@ -339,7 +354,7 @@ class FrontModelJpaApiServiceTest {
     @DisplayName("모델상세조회Mockito테스트")
     void 모델상세조회Mockito테스트() {
         // given
-        FrontModelEntity frontModelEntity = FrontModelEntity.builder().idx(1L).categoryCd(1).agencyIdx(1L).build();
+        FrontModelEntity frontModelEntity = FrontModelEntity.builder().idx(1L).categoryCd(1).build();
         frontModelDTO = FrontModelDTO.builder()
                 .idx(1L)
                 .categoryCd(1)
@@ -351,15 +366,9 @@ class FrontModelJpaApiServiceTest {
                 .height(170)
                 .size3("34-24-34")
                 .shoes(270)
-                .modelViewCount(0)
-                .modelFavoriteCount(0)
                 .visible("Y")
                 .modelAgency(FrontAgencyEntity.toDto(frontAgencyEntity))
                 .build();
-
-        // 조회 수 관련 테스트
-        FrontModelDTO oneModel = frontModelJpaApiService.findOneModel(frontModelEntity.getIdx());
-        assertThat(frontModelDTO.getModelViewCount() + 1).isEqualTo(oneModel.getModelViewCount());
 
         // when
         when(mockFrontModelJpaApiService.findOneModel(frontModelEntity.getIdx())).thenReturn(frontModelDTO);
@@ -574,9 +583,8 @@ class FrontModelJpaApiServiceTest {
     void 새로운모델리스트조회Mockito테스트() {
         Map<String, Object> newModelMap = new HashMap<>();
         newModelMap.put("categoryCd", "1");
-        newModelMap.put("jpaStartPage", 1);
-        newModelMap.put("size", 3);
         newModelMap.put("newYn", "Y");
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<FrontModelDTO> returnModelList = new ArrayList<>();
 
@@ -587,47 +595,50 @@ class FrontModelJpaApiServiceTest {
         // 시니어
         returnModelList.add(FrontModelDTO.builder().idx(3L).categoryCd(3).modelKorName("시니어모델").newYn("Y").modelAgency(frontAgencyDTO).modelEngName("seniorModel").build());
 
+        Page<FrontModelDTO> resultPage = new PageImpl<>(returnModelList, pageRequest, returnModelList.size());
         // when
-        when(mockFrontModelJpaApiService.findModelList(newModelMap)).thenReturn(returnModelList);
-        List<FrontModelDTO> newModelList = mockFrontModelJpaApiService.findModelList(newModelMap);
+        when(mockFrontModelJpaApiService.findModelList(newModelMap, pageRequest)).thenReturn(resultPage);
+        Page<FrontModelDTO> newModelList = mockFrontModelJpaApiService.findModelList(newModelMap, pageRequest);
+
+        List<FrontModelDTO> findModelList = newModelList.stream().collect(Collectors.toList());
 
         // then
         assertAll(
-                () -> assertThat(newModelList).isNotEmpty(),
-                () -> assertThat(newModelList).hasSize(3)
+                () -> assertThat(findModelList).isNotEmpty(),
+                () -> assertThat(findModelList).hasSize(3)
         );
 
-        assertThat(newModelList.get(0).getIdx()).isEqualTo(returnModelList.get(0).getIdx());
-        assertThat(newModelList.get(0).getCategoryCd()).isEqualTo(returnModelList.get(0).getCategoryCd());
-        assertThat(newModelList.get(0).getModelKorName()).isEqualTo(returnModelList.get(0).getModelKorName());
-        assertThat(newModelList.get(0).getModelEngName()).isEqualTo(returnModelList.get(0).getModelEngName());
-        assertThat(newModelList.get(0).getNewYn()).isEqualTo(returnModelList.get(0).getNewYn());
-        assertThat(newModelList.get(0).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyName());
-        assertThat(newModelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyDescription());
+        assertThat(findModelList.get(0).getIdx()).isEqualTo(returnModelList.get(0).getIdx());
+        assertThat(findModelList.get(0).getCategoryCd()).isEqualTo(returnModelList.get(0).getCategoryCd());
+        assertThat(findModelList.get(0).getModelKorName()).isEqualTo(returnModelList.get(0).getModelKorName());
+        assertThat(findModelList.get(0).getModelEngName()).isEqualTo(returnModelList.get(0).getModelEngName());
+        assertThat(findModelList.get(0).getNewYn()).isEqualTo(returnModelList.get(0).getNewYn());
+        assertThat(findModelList.get(0).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyName());
+        assertThat(findModelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyDescription());
 
-        assertThat(newModelList.get(1).getIdx()).isEqualTo(returnModelList.get(1).getIdx());
-        assertThat(newModelList.get(1).getCategoryCd()).isEqualTo(returnModelList.get(1).getCategoryCd());
-        assertThat(newModelList.get(1).getModelKorName()).isEqualTo(returnModelList.get(1).getModelKorName());
-        assertThat(newModelList.get(1).getModelEngName()).isEqualTo(returnModelList.get(1).getModelEngName());
-        assertThat(newModelList.get(1).getNewYn()).isEqualTo(returnModelList.get(1).getNewYn());
-        assertThat(newModelList.get(1).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyName());
-        assertThat(newModelList.get(1).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyDescription());
+        assertThat(findModelList.get(1).getIdx()).isEqualTo(returnModelList.get(1).getIdx());
+        assertThat(findModelList.get(1).getCategoryCd()).isEqualTo(returnModelList.get(1).getCategoryCd());
+        assertThat(findModelList.get(1).getModelKorName()).isEqualTo(returnModelList.get(1).getModelKorName());
+        assertThat(findModelList.get(1).getModelEngName()).isEqualTo(returnModelList.get(1).getModelEngName());
+        assertThat(findModelList.get(1).getNewYn()).isEqualTo(returnModelList.get(1).getNewYn());
+        assertThat(findModelList.get(1).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyName());
+        assertThat(findModelList.get(1).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyDescription());
 
-        assertThat(newModelList.get(2).getIdx()).isEqualTo(returnModelList.get(2).getIdx());
-        assertThat(newModelList.get(2).getCategoryCd()).isEqualTo(returnModelList.get(2).getCategoryCd());
-        assertThat(newModelList.get(2).getModelKorName()).isEqualTo(returnModelList.get(2).getModelKorName());
-        assertThat(newModelList.get(2).getModelEngName()).isEqualTo(returnModelList.get(2).getModelEngName());
-        assertThat(newModelList.get(2).getNewYn()).isEqualTo(returnModelList.get(2).getNewYn());
-        assertThat(newModelList.get(2).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyName());
-        assertThat(newModelList.get(2).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyDescription());
+        assertThat(findModelList.get(2).getIdx()).isEqualTo(returnModelList.get(2).getIdx());
+        assertThat(findModelList.get(2).getCategoryCd()).isEqualTo(returnModelList.get(2).getCategoryCd());
+        assertThat(findModelList.get(2).getModelKorName()).isEqualTo(returnModelList.get(2).getModelKorName());
+        assertThat(findModelList.get(2).getModelEngName()).isEqualTo(returnModelList.get(2).getModelEngName());
+        assertThat(findModelList.get(2).getNewYn()).isEqualTo(returnModelList.get(2).getNewYn());
+        assertThat(findModelList.get(2).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyName());
+        assertThat(findModelList.get(2).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyDescription());
 
         // verify
-        verify(mockFrontModelJpaApiService, times(1)).findModelList(newModelMap);
-        verify(mockFrontModelJpaApiService, atLeastOnce()).findModelList(newModelMap);
+        verify(mockFrontModelJpaApiService, times(1)).findModelList(newModelMap, pageRequest);
+        verify(mockFrontModelJpaApiService, atLeastOnce()).findModelList(newModelMap, pageRequest);
         verifyNoMoreInteractions(mockFrontModelJpaApiService);
 
         InOrder inOrder = inOrder(mockFrontModelJpaApiService);
-        inOrder.verify(mockFrontModelJpaApiService).findModelList(newModelMap);
+        inOrder.verify(mockFrontModelJpaApiService).findModelList(newModelMap, pageRequest);
     }
 
     @Test
@@ -635,9 +646,8 @@ class FrontModelJpaApiServiceTest {
     void 새로운모델리스트조회BDD테스트() {
         Map<String, Object> newModelMap = new HashMap<>();
         newModelMap.put("categoryCd", "1");
-        newModelMap.put("jpaStartPage", 1);
-        newModelMap.put("size", 3);
         newModelMap.put("newYn", "Y");
+        PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<FrontModelDTO> returnModelList = new ArrayList<>();
 
@@ -648,43 +658,47 @@ class FrontModelJpaApiServiceTest {
         // 시니어
         returnModelList.add(FrontModelDTO.builder().idx(3L).categoryCd(3).modelKorName("시니어모델").newYn("Y").modelAgency(frontAgencyDTO).modelEngName("seniorModel").build());
 
+        Page<FrontModelDTO> resultPage = new PageImpl<>(returnModelList, pageRequest, returnModelList.size());
+
         // when
-        given(mockFrontModelJpaApiService.findModelList(newModelMap)).willReturn(returnModelList);
-        List<FrontModelDTO> newModelList = mockFrontModelJpaApiService.findModelList(newModelMap);
+        given(mockFrontModelJpaApiService.findModelList(newModelMap, pageRequest)).willReturn(resultPage);
+        Page<FrontModelDTO> newModelList = mockFrontModelJpaApiService.findModelList(newModelMap, pageRequest);
+
+        List<FrontModelDTO> findModelList = newModelList.stream().collect(Collectors.toList());
 
         // then
         assertAll(
-                () -> assertThat(newModelList).isNotEmpty(),
-                () -> assertThat(newModelList).hasSize(3)
+                () -> assertThat(findModelList).isNotEmpty(),
+                () -> assertThat(findModelList).hasSize(3)
         );
 
-        assertThat(newModelList.get(0).getIdx()).isEqualTo(returnModelList.get(0).getIdx());
-        assertThat(newModelList.get(0).getCategoryCd()).isEqualTo(returnModelList.get(0).getCategoryCd());
-        assertThat(newModelList.get(0).getModelKorName()).isEqualTo(returnModelList.get(0).getModelKorName());
-        assertThat(newModelList.get(0).getModelEngName()).isEqualTo(returnModelList.get(0).getModelEngName());
-        assertThat(newModelList.get(0).getNewYn()).isEqualTo(returnModelList.get(0).getNewYn());
-        assertThat(newModelList.get(0).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyName());
-        assertThat(newModelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyDescription());
+        assertThat(findModelList.get(0).getIdx()).isEqualTo(returnModelList.get(0).getIdx());
+        assertThat(findModelList.get(0).getCategoryCd()).isEqualTo(returnModelList.get(0).getCategoryCd());
+        assertThat(findModelList.get(0).getModelKorName()).isEqualTo(returnModelList.get(0).getModelKorName());
+        assertThat(findModelList.get(0).getModelEngName()).isEqualTo(returnModelList.get(0).getModelEngName());
+        assertThat(findModelList.get(0).getNewYn()).isEqualTo(returnModelList.get(0).getNewYn());
+        assertThat(findModelList.get(0).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyName());
+        assertThat(findModelList.get(0).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(0).getModelAgency().getAgencyDescription());
 
-        assertThat(newModelList.get(1).getIdx()).isEqualTo(returnModelList.get(1).getIdx());
-        assertThat(newModelList.get(1).getCategoryCd()).isEqualTo(returnModelList.get(1).getCategoryCd());
-        assertThat(newModelList.get(1).getModelKorName()).isEqualTo(returnModelList.get(1).getModelKorName());
-        assertThat(newModelList.get(1).getModelEngName()).isEqualTo(returnModelList.get(1).getModelEngName());
-        assertThat(newModelList.get(1).getNewYn()).isEqualTo(returnModelList.get(1).getNewYn());
-        assertThat(newModelList.get(1).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyName());
-        assertThat(newModelList.get(1).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyDescription());
+        assertThat(findModelList.get(1).getIdx()).isEqualTo(returnModelList.get(1).getIdx());
+        assertThat(findModelList.get(1).getCategoryCd()).isEqualTo(returnModelList.get(1).getCategoryCd());
+        assertThat(findModelList.get(1).getModelKorName()).isEqualTo(returnModelList.get(1).getModelKorName());
+        assertThat(findModelList.get(1).getModelEngName()).isEqualTo(returnModelList.get(1).getModelEngName());
+        assertThat(findModelList.get(1).getNewYn()).isEqualTo(returnModelList.get(1).getNewYn());
+        assertThat(findModelList.get(1).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyName());
+        assertThat(findModelList.get(1).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(1).getModelAgency().getAgencyDescription());
 
-        assertThat(newModelList.get(2).getIdx()).isEqualTo(returnModelList.get(2).getIdx());
-        assertThat(newModelList.get(2).getCategoryCd()).isEqualTo(returnModelList.get(2).getCategoryCd());
-        assertThat(newModelList.get(2).getModelKorName()).isEqualTo(returnModelList.get(2).getModelKorName());
-        assertThat(newModelList.get(2).getModelEngName()).isEqualTo(returnModelList.get(2).getModelEngName());
-        assertThat(newModelList.get(2).getNewYn()).isEqualTo(returnModelList.get(2).getNewYn());
-        assertThat(newModelList.get(2).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyName());
-        assertThat(newModelList.get(2).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyDescription());
+        assertThat(findModelList.get(2).getIdx()).isEqualTo(returnModelList.get(2).getIdx());
+        assertThat(findModelList.get(2).getCategoryCd()).isEqualTo(returnModelList.get(2).getCategoryCd());
+        assertThat(findModelList.get(2).getModelKorName()).isEqualTo(returnModelList.get(2).getModelKorName());
+        assertThat(findModelList.get(2).getModelEngName()).isEqualTo(returnModelList.get(2).getModelEngName());
+        assertThat(findModelList.get(2).getNewYn()).isEqualTo(returnModelList.get(2).getNewYn());
+        assertThat(findModelList.get(2).getModelAgency().getAgencyName()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyName());
+        assertThat(findModelList.get(2).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyDescription());
 
         // verify
-        then(mockFrontModelJpaApiService).should(times(1)).findModelList(newModelMap);
-        then(mockFrontModelJpaApiService).should(atLeastOnce()).findModelList(newModelMap);
+        then(mockFrontModelJpaApiService).should(times(1)).findModelList(newModelMap, pageRequest);
+        then(mockFrontModelJpaApiService).should(atLeastOnce()).findModelList(newModelMap, pageRequest);
         then(mockFrontModelJpaApiService).shouldHaveNoMoreInteractions();
     }
 
@@ -705,7 +719,7 @@ class FrontModelJpaApiServiceTest {
 
         em.persist(frontRecommendEntity);
 
-        assertThat(frontModelJpaApiService.findRecommendList()).isNotEmpty();
+        assertThat(frontModelJpaApiService.findRecommendList(PageRequest.of(1, 10))).isNotEmpty();
     }
 
     @Test
@@ -715,9 +729,11 @@ class FrontModelJpaApiServiceTest {
         em.persist(FrontSearchEntity.builder().searchKeyword("모델1").build());
         em.persist(FrontSearchEntity.builder().searchKeyword("모델1").build());
         em.persist(FrontSearchEntity.builder().searchKeyword("모델2").build());
+        Page<FrontSearchDTO> searchResult = frontModelJpaApiService.rankingKeywordList(PageRequest.of(1, 10));
+        List<FrontSearchDTO> searchList = searchResult.stream().collect(Collectors.toList());
 
-        assertThat(frontModelJpaApiService.rankingKeywordList().get(0).getSearchKeyword()).isEqualTo("모델1");
-        assertThat(frontModelJpaApiService.rankingKeywordList().get(1).getSearchKeyword()).isEqualTo("모델2");
+        assertThat(searchList.get(0).getSearchKeyword()).isEqualTo("모델1");
+        assertThat(searchList.get(1).getSearchKeyword()).isEqualTo("모델2");
     }
 
     @Test

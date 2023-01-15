@@ -93,7 +93,7 @@ public class FrontAgencyJpaService {
         try {
             return this.frontAgencyJpaRepository.findNextOneAgency(idx);
         } catch (Exception e) {
-            throw new TspException(NOT_FOUND_AGENCY, e);
+            throw new TspException(NOT_FOUND_AGENCY);
         }
     }
 
@@ -112,7 +112,7 @@ public class FrontAgencyJpaService {
         try {
             return frontAgencyJpaRepository.favoriteAgency(idx);
         } catch (Exception e) {
-            throw new TspException(ERROR_AGENCY_LIKE, e);
+            throw new TspException(ERROR_AGENCY_LIKE);
         }
     }
 }

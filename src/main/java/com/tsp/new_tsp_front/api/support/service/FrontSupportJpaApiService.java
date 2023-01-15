@@ -32,7 +32,7 @@ public class FrontSupportJpaApiService {
         try {
             return this.frontSupportJpaRepository.insertSupportModel(frontSupportEntity);
         } catch (Exception e) {
-            throw new TspException(ERROR_SUPPORT, e);
+            throw new TspException(ERROR_SUPPORT);
         }
     }
 }

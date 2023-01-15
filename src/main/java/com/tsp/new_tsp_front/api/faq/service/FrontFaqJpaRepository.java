@@ -90,7 +90,7 @@ public class FrontFaqJpaRepository {
                 .orderBy(frontFaqEntity.idx.desc())
                 .where(frontFaqEntity.idx.eq(idx)
                         .and(frontFaqEntity.visible.eq("Y")))
-                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_FAQ, new Throwable()));
+                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_FAQ));
 
         return toDto(findOneFaq);
     }
@@ -111,7 +111,7 @@ public class FrontFaqJpaRepository {
                 .orderBy(frontFaqEntity.idx.desc())
                 .where(frontFaqEntity.idx.lt(idx)
                         .and(frontFaqEntity.visible.eq("Y")))
-                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_FAQ, new Throwable()));
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_FAQ));
 
         return toDto(findPrevOneFaq);
     }
@@ -132,7 +132,7 @@ public class FrontFaqJpaRepository {
                 .orderBy(frontFaqEntity.idx.desc())
                 .where(frontFaqEntity.idx.gt(idx)
                         .and(frontFaqEntity.visible.eq("Y")))
-                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_FAQ, new Throwable()));
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_FAQ));
 
         return toDto(findNextOneFaq);
     }

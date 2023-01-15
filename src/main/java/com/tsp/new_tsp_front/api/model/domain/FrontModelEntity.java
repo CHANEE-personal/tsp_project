@@ -133,6 +133,7 @@ public class FrontModelEntity extends NewCommonMappedClass {
     @JoinColumn(name = "category_cd", insertable = false, updatable = false)
     private NewCodeEntity newModelCodeJpaDTO;
 
+    @Builder.Default
     @JsonIgnore
     @BatchSize(size = 5)
     @Where(clause = "type_name = 'model'")
@@ -144,10 +145,12 @@ public class FrontModelEntity extends NewCommonMappedClass {
     @JoinColumn(name = "agency_idx", referencedColumnName = "idx", insertable = false, updatable = false)
     private FrontAgencyEntity frontAgencyEntity;
 
+    @Builder.Default
     @JsonIgnore
     @OneToMany(mappedBy = "frontModelEntity", fetch = LAZY)
     private List<FrontScheduleEntity> modelScheduleList = new ArrayList<>();
 
+    @Builder.Default
     @JsonIgnore
     @OneToMany(mappedBy = "frontModelEntity", fetch = LAZY)
     private List<FrontNegotiationEntity> modelNegotiationList = new ArrayList<>();
@@ -187,8 +190,6 @@ public class FrontModelEntity extends NewCommonMappedClass {
                 .createTime(entity.getCreateTime())
                 .updater(entity.getUpdater())
                 .updateTime(entity.getUpdateTime())
-                .modelAgency(FrontAgencyEntity.toDto(entity.getFrontAgencyEntity()))
-                .modelImage(CommonImageEntity.toDtoList(entity.getCommonImageEntityList()))
                 .build();
     }
 

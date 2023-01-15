@@ -97,7 +97,7 @@ public class FrontNoticeJpaRepository {
                 .orderBy(frontNoticeEntity.idx.desc())
                 .where(frontNoticeEntity.idx.eq(idx)
                         .and(frontNoticeEntity.visible.eq("Y")))
-                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_NOTICE, new Throwable()));
+                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_NOTICE));
 
         return toDto(findOneNotice);
     }
@@ -118,7 +118,7 @@ public class FrontNoticeJpaRepository {
                 .orderBy(frontNoticeEntity.idx.desc())
                 .where(frontNoticeEntity.idx.lt(idx)
                         .and(frontNoticeEntity.visible.eq("Y")))
-                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_NOTICE, new Throwable()));
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_NOTICE));
 
         return toDto(findPrevOneNotice);
     }
@@ -139,7 +139,7 @@ public class FrontNoticeJpaRepository {
                 .orderBy(frontNoticeEntity.idx.desc())
                 .where(frontNoticeEntity.idx.gt(idx)
                         .and(frontNoticeEntity.visible.eq("Y")))
-                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_NOTICE, new Throwable()));
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_NOTICE));
 
         return toDto(findNextOneNotice);
     }

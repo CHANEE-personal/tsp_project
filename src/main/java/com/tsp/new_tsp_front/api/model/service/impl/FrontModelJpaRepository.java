@@ -14,6 +14,9 @@ import com.tsp.new_tsp_front.api.model.domain.search.QFrontSearchEntity;
 import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -47,10 +50,10 @@ public class FrontModelJpaRepository {
         String searchType = getString(modelMap.get("searchType"), "");
         String searchKeyword = getString(modelMap.get("searchKeyword"), "");
 
-        // 검색어 저장
-        em.persist(FrontSearchEntity.builder().searchKeyword(searchKeyword).build());
-
         if (!Objects.equals(searchKeyword, "")) {
+            // 검색어 저장
+            em.persist(FrontSearchEntity.builder().searchKeyword(searchKeyword).build());
+
             return "0".equals(searchType) ?
                     frontModelEntity.modelKorName.contains(searchKeyword)
                             .or(frontModelEntity.modelEngName.contains(searchKeyword)
@@ -96,23 +99,6 @@ public class FrontModelJpaRepository {
 
     /**
      * <pre>
-     * 1. MethodName : findModelCount
-     * 2. ClassName  : FrontModelJpaRepository.java
-     * 3. Comment    : 프론트 모델 리스트 갯수 조회
-     * 4. 작성자      : CHO
-     * 5. 작성일      : 2022. 03. 27.
-     * </pre>
-     */
-    public int findModelCount(Map<String, Object> modelMap) {
-        return queryFactory
-                .selectFrom(frontModelEntity)
-                .where(searchCategory(modelMap), searchModelInfo(modelMap), searchNewModel(modelMap))
-                .where(frontModelEntity.visible.eq("Y"))
-                .fetch().size();
-    }
-
-    /**
-     * <pre>
      * 1. MethodName : findModelList
      * 2. ClassName  : FrontModelJpaRepository.java
      * 3. Comment    : 프론트 모델 리스트 조회
@@ -120,7 +106,7 @@ public class FrontModelJpaRepository {
      * 5. 작성일      : 2022. 01. 02.
      * </pre>
      */
-    public List<FrontModelDTO> findModelList(Map<String, Object> modelMap) {
+    public Page<FrontModelDTO> findModelList(Map<String, Object> modelMap, PageRequest pageRequest) {
         List<FrontModelEntity> modelList = queryFactory
                 .selectFrom(frontModelEntity)
                 .orderBy(frontModelEntity.idx.desc())
@@ -128,11 +114,11 @@ public class FrontModelJpaRepository {
                 .fetchJoin()
                 .where(searchCategory(modelMap), searchModelInfo(modelMap), searchNewModel(modelMap))
                 .where(frontModelEntity.visible.eq("Y"))
-                .offset(getInt(modelMap.get("jpaStartPage"), 0))
-                .limit(getInt(modelMap.get("size"), 0))
+                .offset(pageRequest.getOffset())
+                .limit(pageRequest.getPageSize())
                 .fetch();
 
-        return modelList != null ? toDtoList(modelList) : emptyList();
+        return new PageImpl<>(toDtoList(modelList), pageRequest, modelList.size());
     }
 
     /**
@@ -157,7 +143,7 @@ public class FrontModelJpaRepository {
                 .fetchJoin()
                 .where(frontModelEntity.idx.eq(idx)
                         .and(frontModelEntity.visible.eq("Y")))
-                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_MODEL, new Throwable()));
+                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_MODEL));
 
         return toDto(findOneModel);
     }
@@ -182,7 +168,7 @@ public class FrontModelJpaRepository {
                 .where(frontModelEntity.idx.lt(existFrontModelEntity.getIdx())
                         .and(frontModelEntity.categoryCd.eq(existFrontModelEntity.getCategoryCd()))
                         .and(frontModelEntity.visible.eq("Y")))
-                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_MODEL, new Throwable()));
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_MODEL));
 
         return toDto(findPrevOneModel);
     }
@@ -207,7 +193,7 @@ public class FrontModelJpaRepository {
                 .where(frontModelEntity.idx.gt(existFrontModelEntity.getIdx())
                         .and(frontModelEntity.categoryCd.eq(existFrontModelEntity.getCategoryCd()))
                         .and(frontModelEntity.visible.eq("Y")))
-                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_MODEL, new Throwable()));
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_MODEL));
 
         return toDto(findNextOneModel);
     }
@@ -268,13 +254,15 @@ public class FrontModelJpaRepository {
      * 5. 작성일      : 2023. 01. 05.
      * </pre>
      */
-    public List<FrontRecommendDTO> findRecommendList() {
+    public Page<FrontRecommendDTO> findRecommendList(PageRequest pageRequest) {
         List<FrontRecommendEntity> recommendList = queryFactory
                 .selectFrom(QFrontRecommendEntity.frontRecommendEntity)
                 .orderBy(QFrontRecommendEntity.frontRecommendEntity.idx.desc())
+                .offset(pageRequest.getOffset())
+                .limit(pageRequest.getPageSize())
                 .fetch();
 
-        return recommendList != null ? FrontRecommendEntity.toDtoList(recommendList) : emptyList();
+        return new PageImpl<>(FrontRecommendEntity.toDtoList(recommendList), pageRequest, recommendList.size());
     }
 
     /**
@@ -286,7 +274,7 @@ public class FrontModelJpaRepository {
      * 5. 작성일      : 2023. 01. 07.
      * </pre>
      */
-    public List<FrontSearchDTO> rankingKeywordList() {
+    public Page<FrontSearchDTO> rankingKeywordList(PageRequest pageRequest) {
         List<FrontSearchEntity> rankingList = queryFactory
                 .select(fields(FrontSearchEntity.class,
                         QFrontSearchEntity.frontSearchEntity.searchKeyword,
@@ -294,11 +282,11 @@ public class FrontModelJpaRepository {
                 .from(QFrontSearchEntity.frontSearchEntity)
                 .groupBy(QFrontSearchEntity.frontSearchEntity.searchKeyword)
                 .orderBy(QFrontSearchEntity.frontSearchEntity.searchKeyword.count().desc())
-                .offset(0)
-                .limit(10)
+                .offset(pageRequest.getOffset())
+                .limit(pageRequest.getPageSize())
                 .fetch();
 
-        return rankingList != null ? FrontSearchEntity.toDtoList(rankingList) : Collections.emptyList();
+        return new PageImpl<>(FrontSearchEntity.toDtoList(rankingList), pageRequest, rankingList.size());
     }
 
     /**

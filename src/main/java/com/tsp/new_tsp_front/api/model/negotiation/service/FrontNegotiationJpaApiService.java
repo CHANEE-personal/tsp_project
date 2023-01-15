@@ -80,7 +80,7 @@ public class FrontNegotiationJpaApiService {
         try {
             return frontNegotiationJpaRepository.insertModelNegotiation(frontNegotiationEntity);
         } catch (Exception e) {
-            throw new TspException(ERROR_MODEL_NEGOTIATION, e);
+            throw new TspException(ERROR_MODEL_NEGOTIATION);
         }
     }
 
@@ -99,7 +99,7 @@ public class FrontNegotiationJpaApiService {
         try {
             return frontNegotiationJpaRepository.updateModelNegotiation(frontNegotiationEntity);
         } catch (Exception e) {
-            throw new TspException(ERROR_UPDATE_MODEL_NEGOTIATION, e);
+            throw new TspException(ERROR_UPDATE_MODEL_NEGOTIATION);
         }
     }
 
@@ -118,7 +118,7 @@ public class FrontNegotiationJpaApiService {
         try {
             return frontNegotiationJpaRepository.deleteModelNegotiation(idx);
         } catch (Exception e) {
-            throw new TspException(ERROR_DELETE_MODEL_NEGOTIATION, e);
+            throw new TspException(ERROR_DELETE_MODEL_NEGOTIATION);
         }
     }
 }

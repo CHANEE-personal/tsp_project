@@ -102,7 +102,7 @@ public class FrontProductionJpaRepository {
                 .where(frontProductionEntity.idx.eq(idx)
                         .and(frontProductionEntity.visible.eq("Y"))
                         .and(commonImageEntity.typeName.eq("production")))
-                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_PRODUCTION, new Throwable()));
+                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_PRODUCTION));
 
         return toDto(findOneProduction);
     }
@@ -126,7 +126,7 @@ public class FrontProductionJpaRepository {
                 .orderBy(frontProductionEntity.idx.desc())
                 .where(frontProductionEntity.idx.lt(idx)
                         .and(frontProductionEntity.visible.eq("Y")))
-                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_PRODUCTION, new Throwable()));
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_PRODUCTION));
 
         return toDto(findPrevOneProduction);
     }
@@ -150,7 +150,7 @@ public class FrontProductionJpaRepository {
                 .orderBy(frontProductionEntity.idx.asc())
                 .where(frontProductionEntity.idx.gt(idx)
                         .and(frontProductionEntity.visible.eq("Y")))
-                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_PRODUCTION, new Throwable()));
+                .fetchFirst()).orElseThrow(() -> new TspException(NOT_FOUND_PRODUCTION));
 
         return toDto(findNextOneProduction);
     }

@@ -4,7 +4,7 @@ import com.tsp.new_tsp_front.api.model.domain.negotiation.FrontNegotiationDTO;
 import com.tsp.new_tsp_front.api.model.domain.negotiation.FrontNegotiationEntity;
 import com.tsp.new_tsp_front.api.model.negotiation.service.FrontNegotiationJpaApiService;
 import com.tsp.new_tsp_front.common.SearchCommon;
-import com.tsp.new_tsp_front.common.paging.Page;
+import com.tsp.new_tsp_front.common.paging.Paging;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -55,9 +55,9 @@ public class FrontNegotiationJpaApiController {
     public ResponseEntity<Map<String, Object>> findModelNegotiationList(@RequestParam(required = false) Map<String, Object> paramMap,
                                                                         @RequestParam(value = "searchStartTime", required = false) String searchStartTime,
                                                                         @RequestParam(value = "searchEndTime", required = false) String searchEndTime,
-                                                                        Page page) {
+                                                                        Paging paging) {
         // 페이징 및 검색
-        Map<String, Object> negotiationMap = searchCommon.searchCommon(page, paramMap);
+        Map<String, Object> negotiationMap = searchCommon.searchCommon(paging, paramMap);
 
         if (searchStartTime != null && searchEndTime != null) {
             negotiationMap.put("searchStartTime", searchStartTime);
@@ -72,9 +72,9 @@ public class FrontNegotiationJpaApiController {
         }
 
         // 리스트 수
-        negotiationMap.put("pageSize", page.getSize());
+        negotiationMap.put("pageSize", paging.getSize());
         // 전체 페이지 수
-        negotiationMap.put("perPageListCnt", ceil((double) negotiationCount / page.getSize()));
+        negotiationMap.put("perPageListCnt", ceil((double) negotiationCount / paging.getSize()));
         // 전체 아이템 수
         negotiationMap.put("negotiationListTotalCnt", negotiationCount);
 

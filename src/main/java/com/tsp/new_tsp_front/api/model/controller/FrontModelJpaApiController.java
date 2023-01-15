@@ -2,15 +2,18 @@ package com.tsp.new_tsp_front.api.model.controller;
 
 import com.tsp.new_tsp_front.api.model.domain.FrontModelDTO;
 import com.tsp.new_tsp_front.api.model.domain.FrontModelEntity;
+import com.tsp.new_tsp_front.api.model.domain.recommend.FrontRecommendDTO;
+import com.tsp.new_tsp_front.api.model.domain.search.FrontSearchDTO;
 import com.tsp.new_tsp_front.api.model.service.FrontModelJpaApiService;
-import com.tsp.new_tsp_front.common.SearchCommon;
-import com.tsp.new_tsp_front.common.paging.Page;
+import com.tsp.new_tsp_front.common.paging.Paging;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +23,6 @@ import java.rmi.ServerError;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.lang.Math.ceil;
 import static org.springframework.web.client.HttpClientErrorException.*;
 
 @Validated
@@ -30,7 +32,6 @@ import static org.springframework.web.client.HttpClientErrorException.*;
 @RequestMapping("/api/model")
 public class FrontModelJpaApiController {
     private final FrontModelJpaApiService frontModelJpaApiService;
-    private final SearchCommon searchCommon;
 
     /**
      * <pre>
@@ -79,22 +80,10 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists/{categoryCd}")
-    public ResponseEntity<Map<String, Object>> findModelList(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
-                                                             @RequestParam(required = false) Map<String, Object> paramMap, Page page) {
-        Map<String, Object> resultMap = new HashMap<>();
-        // 페이징 및 검색
-        Map<String, Object> modelMap = searchCommon.searchCommon(page, paramMap);
-        modelMap.put("categoryCd", categoryCd);
-
-        // 리스트 수
-        resultMap.put("pageSize", page.getSize());
-        // 전체 페이지 수
-        resultMap.put("perPageListCnt", ceil((double) this.frontModelJpaApiService.findModelCount(modelMap) / page.getSize()));
-        // 전체 아이템 수
-        resultMap.put("modelListTotalCnt", this.frontModelJpaApiService.findModelCount(modelMap));
-        resultMap.put("modelList", this.frontModelJpaApiService.findModelList(modelMap));
-
-        return ResponseEntity.ok().body(resultMap);
+    public ResponseEntity<Page<FrontModelDTO>> findModelList(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
+                                                             @RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
+        paramMap.put("categoryCd", categoryCd);
+        return ResponseEntity.ok().body(frontModelJpaApiService.findModelList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }
 
     /**
@@ -115,7 +104,7 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 404, message = "존재 하지 않음", response = HttpClientErrorException.NotFound.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
-    @GetMapping(value = "/{categoryCd}/{idx}")
+    @GetMapping(value = "/{idx}")
     public ResponseEntity<FrontModelDTO> findOneModel(@PathVariable Long idx) {
         return ResponseEntity.ok(frontModelJpaApiService.findOneModel(idx));
     }
@@ -173,8 +162,8 @@ public class FrontModelJpaApiController {
      * 1. MethodName : favoriteModel
      * 2. ClassName  : FrontModelJpaApiController.java
      * 3. Comment    : 프론트 > 모델 좋아요 처리
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 09.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 09.
      * </pre>
      */
     @ApiOperation(value = "모델 좋아요 처리", notes = "모델을 좋아요 처리한다.")
@@ -188,9 +177,6 @@ public class FrontModelJpaApiController {
     })
     @PutMapping(value = "/{idx}/like")
     public ResponseEntity<Integer> favoriteModel(@PathVariable Long idx) {
-        if (frontModelJpaApiService.findOneModel(idx) == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(frontModelJpaApiService.favoriteModel(idx));
     }
 
@@ -213,23 +199,11 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/lists/new/{categoryCd}")
-    public ResponseEntity<Map<String, Object>> findNewModelList(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
-                                                                @RequestParam(required = false) Map<String, Object> paramMap, Page page) {
-        Map<String, Object> resultMap = new HashMap<>();
-        // 페이징 및 검색
-        Map<String, Object> newModelMap = searchCommon.searchCommon(page, paramMap);
-        newModelMap.put("categoryCd", categoryCd);
-        newModelMap.put("newYn", "Y");
-
-        // 리스트 수
-        resultMap.put("pageSize", page.getSize());
-        // 전체 페이지 수
-        resultMap.put("perPageListCnt", ceil((double) this.frontModelJpaApiService.findModelCount(newModelMap) / page.getSize()));
-        // 전체 아이템 수
-        resultMap.put("newModelListTotalCnt", this.frontModelJpaApiService.findModelList(newModelMap));
-        resultMap.put("newModelList", this.frontModelJpaApiService.findModelList(newModelMap));
-
-        return ResponseEntity.ok().body(resultMap);
+    public ResponseEntity<Page<FrontModelDTO>> findNewModelList(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
+                                                                @RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
+        paramMap.put("categoryCd", categoryCd);
+        paramMap.put("newYn", "Y");
+        return ResponseEntity.ok().body(frontModelJpaApiService.findModelList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }
 
     /**
@@ -251,10 +225,8 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/recommend")
-    public ResponseEntity<Map<String, Object>> findRecommendList() {
-        Map<String, Object> recommendMap = new HashMap<>();
-        recommendMap.put("recommendList", frontModelJpaApiService.findRecommendList());
-        return ResponseEntity.ok().body(recommendMap);
+    public ResponseEntity<Page<FrontRecommendDTO>> findRecommendList() {
+        return ResponseEntity.ok().body(frontModelJpaApiService.findRecommendList(PageRequest.of(1, 10)));
     }
 
     /**
@@ -276,10 +248,8 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/rank")
-    public ResponseEntity<Map<String, Object>> rankingKeywordList() {
-        Map<String, Object> rankMap = new HashMap<>();
-        rankMap.put("rankList", frontModelJpaApiService.rankingKeywordList());
-        return ResponseEntity.ok().body(rankMap);
+    public ResponseEntity<Page<FrontSearchDTO>> rankingKeywordList() {
+        return ResponseEntity.ok().body(frontModelJpaApiService.rankingKeywordList(PageRequest.of(1, 10)));
     }
 
     /**

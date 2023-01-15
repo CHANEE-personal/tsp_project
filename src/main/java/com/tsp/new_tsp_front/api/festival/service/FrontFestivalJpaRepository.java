@@ -110,7 +110,7 @@ public class FrontFestivalJpaRepository {
         FrontFestivalEntity oneFestival = Optional.ofNullable(queryFactory
                 .selectFrom(frontFestivalEntity)
                 .where(frontFestivalEntity.idx.eq(idx))
-                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_FESTIVAL, new Throwable()));
+                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_FESTIVAL));
 
         return FrontFestivalEntity.toDto(oneFestival);
     }
