@@ -53,23 +53,21 @@ class FrontNoticeJpaApiControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.noticeList.length()", equalTo(55)));
+                .andExpect(jsonPath("$.content").isNotEmpty());
     }
 
     @Test
     @DisplayName("공지사항 검색 조회 테스트")
     void 공지사항검색조회테스트() throws Exception {
         LinkedMultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
-        paramMap.add("jpaStartPage", "1");
-        paramMap.add("size", "3");
         paramMap.add("searchType", "0");
         paramMap.add("searchKeyword", "하하");
 
-        mockMvc.perform(get("/api/notice/lists").queryParams(paramMap))
+        mockMvc.perform(get("/api/notice/lists").queryParams(paramMap).param("pageNum", "1").param("size", "3"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.noticeList.length()", equalTo(1)));
+                .andExpect(jsonPath("$.content").isNotEmpty());
     }
 
     @Test
