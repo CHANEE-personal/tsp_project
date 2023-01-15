@@ -24,7 +24,7 @@ import static javax.persistence.FetchType.LAZY;
 @Setter
 @Builder
 @EqualsAndHashCode(of = "idx", callSuper = false)
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "tsp_image")
 public class CommonImageEntity implements Serializable {

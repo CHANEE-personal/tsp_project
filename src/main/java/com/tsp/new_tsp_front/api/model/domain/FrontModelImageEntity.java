@@ -21,7 +21,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @SuperBuilder
 @EqualsAndHashCode(of = "idx", callSuper = false)
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tsp_model_image")
 public class FrontModelImageEntity {
     @Id

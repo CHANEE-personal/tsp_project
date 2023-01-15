@@ -35,7 +35,7 @@ import static javax.persistence.GenerationType.*;
 @SuperBuilder
 @EqualsAndHashCode(of = "idx", callSuper = false)
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicUpdate
 @Table(name = "tsp_model")
 public class FrontModelEntity extends NewCommonMappedClass {

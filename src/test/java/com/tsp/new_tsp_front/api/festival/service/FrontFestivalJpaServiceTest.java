@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 
@@ -68,7 +69,7 @@ class FrontFestivalJpaServiceTest {
     @DisplayName("행사 리스트 조회 테스트")
     void 행사리스트조회테스트() {
         // then
-        assertThat(frontFestivalJpaService.findFestivalList(frontFestivalEntity)).isNotEmpty();
+        assertThat(frontFestivalJpaService.findFestivalList(frontFestivalEntity, PageRequest.of(1, 10))).isNotEmpty();
     }
 
     @Test

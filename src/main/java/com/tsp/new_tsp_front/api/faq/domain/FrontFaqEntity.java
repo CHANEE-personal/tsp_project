@@ -17,7 +17,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Setter
 @SuperBuilder
 @EqualsAndHashCode(of = "idx", callSuper = false)
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "tsp_faq")
 public class FrontFaqEntity extends NewCommonMappedClass {

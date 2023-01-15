@@ -19,7 +19,7 @@ import static javax.persistence.GenerationType.*;
 @Entity
 @SuperBuilder
 @EqualsAndHashCode(of = "idx", callSuper = false)
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "tsp_cmm_code")
 public class NewCodeEntity extends NewCommonMappedClass {

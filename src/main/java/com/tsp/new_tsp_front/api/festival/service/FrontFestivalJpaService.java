@@ -2,32 +2,27 @@ package com.tsp.new_tsp_front.api.festival.service;
 
 import com.tsp.new_tsp_front.api.festival.domain.FrontFestivalDTO;
 import com.tsp.new_tsp_front.api.festival.domain.FrontFestivalEntity;
+import com.tsp.new_tsp_front.exception.TspException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
+
+import static com.tsp.new_tsp_front.exception.ApiExceptionType.NOT_FOUND_FESTIVAL;
 
 @Service
 @RequiredArgsConstructor
 public class FrontFestivalJpaService {
 
+    private final FrontFestivalJpaQueryRepository frontFestivalJpaQueryRepository;
     private final FrontFestivalJpaRepository frontFestivalJpaRepository;
 
-    /**
-     * <pre>
-     * 1. MethodName : findFestivalCount
-     * 2. ClassName  : FrontFestivalJpaService.java
-     * 3. Comment    : 프론트 > 행사 리스트 갯수 조회
-     * 4. 작성자      : CHO
-     * 5. 작성일      : 2023. 01. 09.
-     * </pre>
-     */
-    @Transactional(readOnly = true)
-    public int findFestivalCount(Map<String, Object> festivalMap) {
-        return frontFestivalJpaRepository.findFestivalCount(festivalMap);
+    private FrontFestivalEntity oneFestival(Long idx) {
+        return frontFestivalJpaRepository.findById(idx)
+                .orElseThrow(() -> new TspException(NOT_FOUND_FESTIVAL));
     }
 
     /**
@@ -39,10 +34,9 @@ public class FrontFestivalJpaService {
      * 5. 작성일      : 2023. 01. 09.
      * </pre>
      */
-    @Cacheable(value = "festival", key = "#frontFestivalEntity")
     @Transactional(readOnly = true)
-    public List<FrontFestivalDTO> findFestivalList(FrontFestivalEntity frontFestivalEntity) {
-        return frontFestivalJpaRepository.findFestivalList(frontFestivalEntity);
+    public Page<FrontFestivalDTO> findFestivalList(FrontFestivalEntity frontFestivalEntity, PageRequest pageRequest) {
+        return frontFestivalJpaQueryRepository.findFestivalList(frontFestivalEntity, pageRequest);
     }
 
     /**
@@ -54,10 +48,9 @@ public class FrontFestivalJpaService {
      * 5. 작성일      : 2023. 01. 09.
      * </pre>
      */
-    @Cacheable(value = "festival", key = "#month")
     @Transactional(readOnly = true)
     public List<FrontFestivalDTO> findFestivalGroup(Integer month) {
-        return frontFestivalJpaRepository.findFestivalGroup(month);
+        return frontFestivalJpaQueryRepository.findFestivalGroup(month);
     }
 
     /**
@@ -69,9 +62,8 @@ public class FrontFestivalJpaService {
      * 5. 작성일      : 2023. 01. 09.
      * </pre>
      */
-    @Cacheable(value = "festival", key = "#idx")
     @Transactional(readOnly = true)
     public FrontFestivalDTO findOneFestival(Long idx) {
-        return frontFestivalJpaRepository.findOneFestival(idx);
+        return FrontFestivalEntity.toDto(oneFestival(idx));
     }
 }

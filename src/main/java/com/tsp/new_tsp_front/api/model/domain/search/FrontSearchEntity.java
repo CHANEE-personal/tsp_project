@@ -16,7 +16,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @SuperBuilder
 @EqualsAndHashCode(of = "idx", callSuper = false)
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "tsp_search")
 public class FrontSearchEntity extends NewCommonMappedClass {
