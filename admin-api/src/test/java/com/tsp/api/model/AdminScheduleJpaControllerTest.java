@@ -135,7 +135,7 @@ class AdminScheduleJpaControllerTest {
     void 모델스케줄조회Api테스트() throws Exception {
         LinkedMultiValueMap<String, String> scheduleMap = new LinkedMultiValueMap<>();
 
-        mockMvc.perform(get("/api/schedule/lists").param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/schedule").param("pageNum", "1").param("size", "3")
                         .queryParams(scheduleMap)
                         .queryParam("searchStartTime", of(now().getYear(), LocalDate.now().getMonth(), 1, 0, 0, 0, 0).format(ofPattern("yyyyMMdd")))
                         .queryParam("searchEndTime", of(now().getYear(), LocalDate.now().getMonth(), 30, 23, 59, 59).format(ofPattern("yyyyMMdd")))

@@ -139,7 +139,7 @@ class AdminNegotiationJpaControllerTest {
     @DisplayName("Admin 모델 섭외 조회 테스트")
     void 모델섭외조회Api테스트() throws Exception {
         LinkedMultiValueMap<String, String> negotiationMap = new LinkedMultiValueMap<>();
-        mockMvc.perform(get("/api/negotiation/lists").param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/negotiation").param("pageNum", "1").param("size", "3")
                         .queryParams(negotiationMap)
                         .queryParam("searchStartTime", of(now().getYear(), LocalDate.now().getMonth(), 1, 0, 0, 0, 0).format(ofPattern("yyyyMMdd")))
                         .queryParam("searchEndTime", of(now().getYear(), LocalDate.now().getMonth(), 30, 23, 59, 59).format(ofPattern("yyyyMMdd")))
@@ -224,7 +224,7 @@ class AdminNegotiationJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("CreatedBy, CreationTimestamp 테스트")
     void CreatedByAndCreationTimestamp테스트() throws Exception {
-        mockMvc.perform(post("/api/jpa-schedule")
+        mockMvc.perform(post("/api/schedule")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(adminNegotiationEntity)))

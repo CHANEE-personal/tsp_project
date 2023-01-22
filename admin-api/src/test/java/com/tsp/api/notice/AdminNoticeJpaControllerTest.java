@@ -125,7 +125,7 @@ class AdminNoticeJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 공지사항 조회 테스트")
     void 공지사항조회Api테스트() throws Exception {
-        mockMvc.perform(get("/api/notice/lists").param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/notice").param("pageNum", "1").param("size", "3")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -143,7 +143,7 @@ class AdminNoticeJpaControllerTest {
         paramMap.add("searchType", "0");
         paramMap.add("searchKeyword", "하하");
 
-        mockMvc.perform(get("/api/notice/lists").queryParams(paramMap).param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/notice").queryParams(paramMap).param("pageNum", "1").param("size", "3")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())

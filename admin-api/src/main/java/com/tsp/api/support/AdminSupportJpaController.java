@@ -56,7 +56,7 @@ public class AdminSupportJpaController {
             @ApiResponse(code = 404, message = "존재 하지 않음", response = NotFound.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
-    @GetMapping("/lists")
+    @GetMapping
     public ResponseEntity<Page<AdminSupportDTO>> findSupportList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
         return ResponseEntity.ok().body(adminSupportJpaService.findSupportList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }
@@ -129,7 +129,7 @@ public class AdminSupportJpaController {
             @ApiResponse(code = 404, message = "존재 하지 않음", response = NotFound.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
-    @PostMapping("/evaluation/lists")
+    @PostMapping("/evaluation")
     public ResponseEntity<Page<EvaluationDTO>> findEvaluationList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
         return ResponseEntity.ok().body(adminSupportJpaService.findEvaluationList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }

@@ -28,14 +28,14 @@ public class SwaggerConfiguration {
      * 1. MethodName : apiInfo
      * 2. ClassName  : SwaggerConfiguration.java
      * 3. Comment    : api Info
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 15.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 15.
      * </pre>
      */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Tsp Model")
-                .description("Tsp Model API")
+                .title("Tsp Front")
+                .description("Tsp Front API")
                 .build();
     }
 
@@ -44,8 +44,8 @@ public class SwaggerConfiguration {
      * 1. MethodName : commonApi
      * 2. ClassName  : SwaggerConfiguration.java
      * 3. Comment    : Api path and info config
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 15.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 15.
      * </pre>
      */
     @Bean
@@ -54,7 +54,7 @@ public class SwaggerConfiguration {
                 .groupName("tsp")
                 .apiInfo(this.apiInfo())
                 .select()
-                .apis(basePackage("com.tsp.new_tsp_front.api"))
+                .apis(basePackage("com.tsp.api"))
                 .paths(ant("/api/**"))
                 .build()
                 .securityContexts(of(securityContext()))
@@ -66,8 +66,8 @@ public class SwaggerConfiguration {
      * 1. MethodName : apiKey
      * 2. ClassName  : SwaggerConfiguration.java
      * 3. Comment    : api key 설정
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 01. 15.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 01. 15.
      * </pre>
      */
     private ApiKey apikey() {

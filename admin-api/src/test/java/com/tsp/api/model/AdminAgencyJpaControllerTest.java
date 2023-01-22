@@ -139,7 +139,7 @@ class AdminAgencyJpaControllerTest {
     void 소속사조회Api테스트() throws Exception {
         LinkedMultiValueMap<String, String> agencyMap = new LinkedMultiValueMap<>();
 
-        mockMvc.perform(get("/api/agency/lists").queryParams(agencyMap).param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/agency").queryParams(agencyMap).param("pageNum", "1").param("size", "3")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())

@@ -50,7 +50,7 @@ class FrontAgencyJpaApiControllerTest {
     @Test
     @DisplayName("Agency 조회 테스트")
     void Agency조회테스트() throws Exception {
-        mockMvc.perform(get("/api/agency/lists").param("page", "1").param("size", "100"))
+        mockMvc.perform(get("/api/agency").param("page", "1").param("size", "100"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))

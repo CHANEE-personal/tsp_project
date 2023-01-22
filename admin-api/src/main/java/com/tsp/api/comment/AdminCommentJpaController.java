@@ -23,7 +23,7 @@ import java.util.Map;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping("/api/jpa-comment")
+@RequestMapping("/api/comment")
 @Api(tags = "어드민 코멘트 관련 API")
 @RequiredArgsConstructor
 public class AdminCommentJpaController {
@@ -48,7 +48,7 @@ public class AdminCommentJpaController {
             @ApiResponse(code = 404, message = "존재 하지 않음", response = HttpClientErrorException.NotFound.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
-    @GetMapping(value = "/lists")
+    @GetMapping
     public ResponseEntity<Page<AdminCommentDTO>> findAdminCommentList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
         return ResponseEntity.ok().body(adminCommentJpaService.findAdminCommentList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }

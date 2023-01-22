@@ -50,7 +50,7 @@ public class AdminPortfolioJpaController {
             @ApiResponse(code = 404, message = "존재 하지 않음", response = NotFound.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
-    @GetMapping(value = "/lists")
+    @GetMapping
     public ResponseEntity<Page<AdminPortFolioDTO>> findPortfolioList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
         return ResponseEntity.ok().body(adminPortfolioJpaService.findPortfolioList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }

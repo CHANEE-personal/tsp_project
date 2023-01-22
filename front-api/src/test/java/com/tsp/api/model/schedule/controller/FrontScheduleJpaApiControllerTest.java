@@ -59,7 +59,7 @@ class FrontScheduleJpaApiControllerTest {
     void 모델스케줄조회테스트() throws Exception {
         LinkedMultiValueMap<String, String> scheduleMap = new LinkedMultiValueMap<>();
 
-        mockMvc.perform(get("/api/schedule/lists")
+        mockMvc.perform(get("/api/schedule")
                         .queryParams(scheduleMap).param("pageNum", "1").param("size", "3")
                         .queryParam("searchStartTime", of(now().getYear(), LocalDate.now().getMonth(), 1, 0, 0, 0, 0).format(ofPattern("yyyyMMdd")))
                         .queryParam("searchEndTime", of(now().getYear(), LocalDate.now().getMonth(), 30, 23, 59, 59).format(ofPattern("yyyyMMdd"))))

@@ -160,7 +160,7 @@ class AdminModelJpaControllerTest {
     @DisplayName("Admin 모델 조회 테스트")
     void 모델조회Api테스트() throws Exception {
         LinkedMultiValueMap<String, String> modelMap = new LinkedMultiValueMap<>();
-        mockMvc.perform(get("/api/model/lists/1").queryParams(modelMap).param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/model/1").queryParams(modelMap).param("pageNum", "1").param("size", "3")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -176,7 +176,7 @@ class AdminModelJpaControllerTest {
         paramMap.add("searchType", "0");
         paramMap.add("searchKeyword", "김민주");
 
-        mockMvc.perform(get("/api/model/lists/2").queryParams(paramMap).param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/model/2").queryParams(paramMap).param("pageNum", "1").param("size", "3")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -187,7 +187,7 @@ class AdminModelJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 모델 조회 예외 테스트")
     void 모델조회Api예외테스트() throws Exception {
-        mockMvc.perform(get("/api/model/lists/-1")
+        mockMvc.perform(get("/api/model/-1")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
@@ -198,7 +198,7 @@ class AdminModelJpaControllerTest {
     @WithMockUser(roles = "USER")
     @DisplayName("Admin 모델 조회 권한 테스트")
     void 모델조회Api권한테스트() throws Exception {
-        mockMvc.perform(get("/api/model/lists/1").param("pageNum", "1").param("size", "3"))
+        mockMvc.perform(get("/api/model/1").param("pageNum", "1").param("size", "3"))
                 .andDo(print())
                 .andExpect(status().isForbidden());
     }

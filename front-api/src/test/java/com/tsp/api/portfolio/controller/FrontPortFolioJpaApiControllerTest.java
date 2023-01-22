@@ -48,7 +48,7 @@ class FrontPortFolioJpaApiControllerTest {
     @Test
     @DisplayName("포트폴리오 조회 테스트")
     void 포트폴리오조회() throws Exception {
-        mockMvc.perform(get("/api/portfolio/lists").param("pageNum", "1").param("size", "100"))
+        mockMvc.perform(get("/api/portfolio").param("pageNum", "1").param("size", "100"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
@@ -63,7 +63,7 @@ class FrontPortFolioJpaApiControllerTest {
         paramMap.add("searchType", "0");
         paramMap.add("searchKeyword", "하하");
 
-        mockMvc.perform(get("/api/portfolio/lists").queryParams(paramMap).param("pageNum", "1").param("size", "3"))
+        mockMvc.perform(get("/api/portfolio").queryParams(paramMap).param("pageNum", "1").param("size", "3"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))

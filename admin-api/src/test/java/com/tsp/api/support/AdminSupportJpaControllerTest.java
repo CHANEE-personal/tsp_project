@@ -144,7 +144,7 @@ class AdminSupportJpaControllerTest {
     void 지원모델조회Api테스트() throws Exception {
         MultiValueMap<String, String> supportMap = new LinkedMultiValueMap<>();
 
-        mockMvc.perform(get("/api/support/lists").params(supportMap).param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/support").params(supportMap).param("pageNum", "1").param("size", "3")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -158,7 +158,7 @@ class AdminSupportJpaControllerTest {
     void 지원모델조회Api권한테스트() throws Exception {
         MultiValueMap<String, String> supportMap = new LinkedMultiValueMap<>();
 
-        mockMvc.perform(get("/api/support/lists").params(supportMap).param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/support").params(supportMap).param("pageNum", "1").param("size", "3")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isForbidden());
@@ -282,7 +282,7 @@ class AdminSupportJpaControllerTest {
     void 지원모델평가조회Api테스트() throws Exception {
         MultiValueMap<String, String> evaluationMap = new LinkedMultiValueMap<>();
 
-        mockMvc.perform(get("/api/support/evaluation/lists").params(evaluationMap).param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/support/evaluation").params(evaluationMap).param("pageNum", "1").param("size", "3")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())

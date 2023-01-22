@@ -48,7 +48,7 @@ class FrontNoticeJpaApiControllerTest {
     @Test
     @DisplayName("공지사항 조회 테스트")
     void 공지사항조회테스트() throws Exception {
-        mockMvc.perform(get("/api/notice/lists").param("page", "1").param("size", "100"))
+        mockMvc.perform(get("/api/notice").param("page", "1").param("size", "100"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
@@ -62,7 +62,7 @@ class FrontNoticeJpaApiControllerTest {
         paramMap.add("searchType", "0");
         paramMap.add("searchKeyword", "하하");
 
-        mockMvc.perform(get("/api/notice/lists").queryParams(paramMap).param("pageNum", "1").param("size", "3"))
+        mockMvc.perform(get("/api/notice").queryParams(paramMap).param("pageNum", "1").param("size", "3"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))

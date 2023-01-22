@@ -128,7 +128,7 @@ class AdminFaqJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin FAQ 조회 테스트")
     void FAQ조회Api테스트() throws Exception {
-        mockMvc.perform(get("/api/jpa-faq/lists")
+        mockMvc.perform(get("/api/faq")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -145,7 +145,7 @@ class AdminFaqJpaControllerTest {
         paramMap.add("searchType", "0");
         paramMap.add("searchKeyword", "하하");
 
-        mockMvc.perform(get("/api/jpa-faq/lists").queryParams(paramMap)
+        mockMvc.perform(get("/api/faq").queryParams(paramMap)
                         .param("pageNum", "1").param("size", "3")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
@@ -157,7 +157,7 @@ class AdminFaqJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin FAQ 상세 조회 테스트")
     void FAQ상세조회Api테스트() throws Exception {
-        mockMvc.perform(get("/api/jpa-faq/1")
+        mockMvc.perform(get("/api/faq/1")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -171,7 +171,7 @@ class AdminFaqJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 이전 FAQ 상세 조회 테스트")
     void 이전FAQ상세조회Api테스트() throws Exception {
-        mockMvc.perform(get("/api/jpa-faq/2/prev"))
+        mockMvc.perform(get("/api/faq/2/prev"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
@@ -182,7 +182,7 @@ class AdminFaqJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 다음 FAQ 상세 조회 테스트")
     void 다음FAQ상세조회Api테스트() throws Exception {
-        mockMvc.perform(get("/api/jpa-faq/2/next"))
+        mockMvc.perform(get("/api/faq/2/next"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
@@ -193,7 +193,7 @@ class AdminFaqJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin FAQ 등록 테스트")
     void FAQ등록Api테스트() throws Exception {
-        mockMvc.perform(post("/api/jpa-faq")
+        mockMvc.perform(post("/api/faq")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(adminFaqEntity)))
@@ -225,7 +225,7 @@ class AdminFaqJpaControllerTest {
 
         adminFaqEntity = AdminFaqEntity.builder().idx(adminFaqEntity.getIdx()).title("테스트1").description("테스트1").visible("Y").build();
 
-        mockMvc.perform(put("/api/jpa-faq/{idx}", adminFaqEntity.getIdx())
+        mockMvc.perform(put("/api/faq/{idx}", adminFaqEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(adminFaqEntity)))
@@ -255,7 +255,7 @@ class AdminFaqJpaControllerTest {
     void FAQ삭제Api테스트() throws Exception {
         em.persist(adminFaqEntity);
 
-        mockMvc.perform(delete("/api/jpa-faq/{idx}", adminFaqEntity.getIdx())
+        mockMvc.perform(delete("/api/faq/{idx}", adminFaqEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isNoContent())

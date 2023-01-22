@@ -128,7 +128,7 @@ class FrontNegotiationJpaApiControllerTest {
     @DisplayName("모델 섭외 조회 테스트")
     void 모델섭외조회Api테스트() throws Exception {
         LinkedMultiValueMap<String, String> negotiationMap = new LinkedMultiValueMap<>();
-        mockMvc.perform(get("/api/jpa-negotiation/lists").param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/negotiation").param("pageNum", "1").param("size", "3")
                         .queryParams(negotiationMap)
                         .queryParam("searchStartTime", of(now().getYear(), LocalDate.now().getMonth(), 1, 0, 0, 0, 0).format(ofPattern("yyyyMMdd")))
                         .queryParam("searchEndTime", of(now().getYear(), LocalDate.now().getMonth(), 30, 23, 59, 59).format(ofPattern("yyyyMMdd"))))

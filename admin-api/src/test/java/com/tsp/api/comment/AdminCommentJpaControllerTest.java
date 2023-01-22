@@ -150,7 +150,7 @@ class AdminCommentJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 코멘트 조회 테스트")
     void 어드민코멘트조회Api테스트() throws Exception {
-        mockMvc.perform(get("/api/jpa-comment/lists").param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/comment").param("pageNum", "1").param("size", "3")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -167,7 +167,7 @@ class AdminCommentJpaControllerTest {
         paramMap.add("searchType", "0");
         paramMap.add("searchKeyword", "하하");
 
-        mockMvc.perform(get("/api/jpa-comment/lists").queryParams(paramMap).param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/comment").queryParams(paramMap).param("pageNum", "1").param("size", "3")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -178,7 +178,7 @@ class AdminCommentJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 코멘트 상세 조회 테스트")
     void 어드민코멘트상세조회Api테스트() throws Exception {
-        mockMvc.perform(get("/api/jpa-comment/1")
+        mockMvc.perform(get("/api/comment/1")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -193,7 +193,7 @@ class AdminCommentJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 코멘트 등록 테스트")
     void 어드민코멘트등록Api테스트() throws Exception {
-        mockMvc.perform(post("/api/jpa-comment")
+        mockMvc.perform(post("/api/comment")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(adminCommentEntity)))
@@ -228,7 +228,7 @@ class AdminCommentJpaControllerTest {
 
         adminCommentEntity = AdminCommentEntity.builder().idx(adminCommentEntity.getIdx()).comment("코멘트 테스트1").visible("Y").build();
 
-        mockMvc.perform(put("/api/jpa-comment/{idx}", adminCommentEntity.getIdx())
+        mockMvc.perform(put("/api/comment/{idx}", adminCommentEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(adminCommentEntity)))
@@ -261,7 +261,7 @@ class AdminCommentJpaControllerTest {
     void 어드민코멘트삭제Api테스트() throws Exception {
         em.persist(adminCommentEntity);
 
-        mockMvc.perform(delete("/api/jpa-comment/{idx}", adminCommentEntity.getIdx())
+        mockMvc.perform(delete("/api/comment/{idx}", adminCommentEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isNoContent())

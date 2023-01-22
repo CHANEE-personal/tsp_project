@@ -50,7 +50,7 @@ public class AdminScheduleJpaController {
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
-    @GetMapping(value = "/lists")
+    @GetMapping
     public ResponseEntity<Page<AdminScheduleDTO>> findScheduleList(@RequestParam(required = false) Map<String, Object> paramMap,
                                                                    @RequestParam(value = "searchStartTime", required = false) String searchStartTime,
                                                                    @RequestParam(value = "searchEndTime", required = false) String searchEndTime,

@@ -203,7 +203,7 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 404, message = "존재 하지 않음", response = NotFound.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
-    @GetMapping(value = "/lists/new/{categoryCd}")
+    @GetMapping(value = "/new/{categoryCd}")
     public ResponseEntity<Page<FrontModelDTO>> findNewModelList(@PathVariable @Range(min = 1, max = 3, message = "{modelCategory.Range}") Integer categoryCd,
                                                                 @RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
         paramMap.put("categoryCd", categoryCd);

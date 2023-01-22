@@ -42,7 +42,7 @@ public class FrontNoticeJpaApiController {
             @ApiResponse(code = 404, message = "존재 하지 않음", response = HttpClientErrorException.NotFound.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
-    @GetMapping(value = "/lists")
+    @GetMapping
     public ResponseEntity<Page<FrontNoticeDTO>> findNoticeList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
         return ResponseEntity.ok().body(frontNoticeJpaService.findNoticeList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }

@@ -47,7 +47,7 @@ class FrontProductionJpaApiControllerTest {
     @Test
     @DisplayName("프로덕션 조회 테스트")
     void 프로덕션조회() throws Exception {
-        mockMvc.perform(get("/api/production/lists").param("page", "1").param("size", "100"))
+        mockMvc.perform(get("/api/production").param("page", "1").param("size", "100"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
@@ -61,7 +61,7 @@ class FrontProductionJpaApiControllerTest {
         paramMap.add("searchType", "0");
         paramMap.add("searchKeyword", "하하");
 
-        mockMvc.perform(get("/api/production/lists").queryParams(paramMap).param("pageNum", "1").param("size", "3"))
+        mockMvc.perform(get("/api/production").queryParams(paramMap).param("pageNum", "1").param("size", "3"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))

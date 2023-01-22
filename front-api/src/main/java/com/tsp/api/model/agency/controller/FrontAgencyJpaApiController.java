@@ -33,7 +33,7 @@ public class FrontAgencyJpaApiController {
      * 5. 작성일      : 2022. 08. 24.
      * </pre>
      */
-    @ApiOperation(value = "Agency 조회", notes = "Agency를 조회한다.")
+    @ApiOperation(value = "Agency 조회", notes = "Agency 조회한다.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Agency 조회 성공", response = Map.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
@@ -42,7 +42,7 @@ public class FrontAgencyJpaApiController {
             @ApiResponse(code = 404, message = "존재 하지 않음", response = HttpClientErrorException.NotFound.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
-    @GetMapping(value = "/lists")
+    @GetMapping
     public ResponseEntity<Page<FrontAgencyDTO>> findAgencyList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
         return ResponseEntity.ok().body(frontAgencyJpaService.findAgencyList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }
