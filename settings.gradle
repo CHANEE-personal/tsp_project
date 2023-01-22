@@ -1,1 +1,4 @@
 rootProject.name = 'new_tsp_front'
+include 'admin-api'
+include 'front-api'
+
