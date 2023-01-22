@@ -1,0 +1,1 @@
+alter table tsp_admin change user_refreshToken user_refresh_token varchar(255);

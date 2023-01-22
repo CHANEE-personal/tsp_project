@@ -1,0 +1,41 @@
+server:
+  port: 28080
+  error:
+    include-stacktrace: never
+    include-message: never
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://13.124.84.154:3306/tspmodel
+    username: root
+    password: tsp135!T
+    tomcat:
+      default-auto-commit: true
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      use-new-id-generator-mappings: false
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+logging:
+  level:
+    org.hibernate.type: trace
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+    org.springframework.transaction.interceptor: trace
+    org.springframework.jdbc.datasource.DataSourceTransactionManager: debug
+    org.springframework.orm.jpa.JpaTransactionManager: debug
+    org.hibernate.resource.transaction: debug
+    org.hibernate.sql: debug
+
+jwt.header: Authorization
+
+
+

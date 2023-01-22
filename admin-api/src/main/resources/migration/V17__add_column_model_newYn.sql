@@ -1,0 +1,1 @@
+alter table tsp_model add column `new_yn` varchar(1) DEFAULT 'N';
