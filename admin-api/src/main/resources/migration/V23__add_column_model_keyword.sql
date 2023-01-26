@@ -1,0 +1,1 @@
+alter table tsp_model add column `model_keyword` json DEFAULT NULL;
