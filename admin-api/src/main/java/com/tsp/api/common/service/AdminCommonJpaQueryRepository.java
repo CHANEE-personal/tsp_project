@@ -1,8 +1,8 @@
 package com.tsp.api.common.service;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tsp.api.domain.common.NewCodeDTO;
-import com.tsp.api.domain.common.NewCodeEntity;
+import com.tsp.api.common.domain.NewCodeDTO;
+import com.tsp.api.common.domain.NewCodeEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

@@ -1,8 +1,8 @@
 package com.tsp.api.comment;
 
 import com.tsp.api.comment.service.AdminCommentJpaService;
-import com.tsp.api.domain.comment.AdminCommentDTO;
-import com.tsp.api.domain.comment.AdminCommentEntity;
+import com.tsp.api.comment.domain.AdminCommentDTO;
+import com.tsp.api.comment.domain.AdminCommentEntity;
 import com.tsp.common.Paging;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

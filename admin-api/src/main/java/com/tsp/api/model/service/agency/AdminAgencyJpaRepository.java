@@ -1,6 +1,6 @@
 package com.tsp.api.model.service.agency;
 
-import com.tsp.api.domain.model.agency.AdminAgencyEntity;
+import com.tsp.api.model.domain.agency.AdminAgencyEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,8 +1,8 @@
 package com.tsp.api.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tsp.api.domain.model.schedule.AdminScheduleEntity;
-import com.tsp.api.domain.user.AdminUserEntity;
+import com.tsp.api.model.domain.schedule.AdminScheduleEntity;
+import com.tsp.api.user.domain.AdminUserEntity;
 import com.tsp.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +37,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.tsp.api.domain.user.Role.ROLE_ADMIN;
+import static com.tsp.api.user.domain.Role.ROLE_ADMIN;
 import static com.tsp.common.StringUtil.getString;
 import static java.time.LocalDateTime.*;
 import static java.time.format.DateTimeFormatter.*;
@@ -277,8 +277,6 @@ class AdminScheduleJpaControllerTest {
                 .idx(adminScheduleEntity.getIdx())
                 .modelSchedule("스케줄 수정")
                 .visible("Y")
-                .updater("1")
-                .updateTime(LocalDateTime.now())
                 .build();
 
         mockMvc.perform(put("/api/schedule/{idx}", newAdminScheduleEntity.getIdx())

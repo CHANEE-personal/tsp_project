@@ -2,8 +2,8 @@ package com.tsp.api.model.service.negotiation;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tsp.api.domain.model.negotiation.AdminNegotiationDTO;
-import com.tsp.api.domain.model.negotiation.AdminNegotiationEntity;
+import com.tsp.api.model.domain.negotiation.AdminNegotiationDTO;
+import com.tsp.api.model.domain.negotiation.AdminNegotiationEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +19,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.tsp.api.domain.model.negotiation.AdminNegotiationEntity.toDto;
-import static com.tsp.api.domain.model.negotiation.AdminNegotiationEntity.toDtoList;
-import static com.tsp.api.domain.model.negotiation.QAdminNegotiationEntity.adminNegotiationEntity;
+import static com.tsp.api.model.domain.negotiation.AdminNegotiationEntity.toDto;
+import static com.tsp.api.model.domain.negotiation.AdminNegotiationEntity.toDtoList;
+import static com.tsp.api.model.domain.negotiation.QAdminNegotiationEntity.adminNegotiationEntity;
 import static com.tsp.common.StringUtil.getString;
 import static com.tsp.exception.ApiExceptionType.NOT_FOUND_MODEL_NEGOTIATION;
 import static java.time.LocalDate.now;

@@ -1,14 +1,14 @@
 package com.tsp.api.model.service;
 
-import com.tsp.api.domain.comment.AdminCommentDTO;
-import com.tsp.api.domain.comment.AdminCommentEntity;
-import com.tsp.api.domain.common.CommonImageDTO;
-import com.tsp.api.domain.common.CommonImageEntity;
-import com.tsp.api.domain.model.AdminModelDTO;
-import com.tsp.api.domain.model.AdminModelEntity;
-import com.tsp.api.domain.model.recommend.AdminRecommendDTO;
-import com.tsp.api.domain.model.recommend.AdminRecommendEntity;
-import com.tsp.api.domain.model.schedule.AdminScheduleDTO;
+import com.tsp.api.comment.domain.AdminCommentDTO;
+import com.tsp.api.comment.domain.AdminCommentEntity;
+import com.tsp.api.common.domain.CommonImageDTO;
+import com.tsp.api.common.domain.CommonImageEntity;
+import com.tsp.api.model.domain.AdminModelDTO;
+import com.tsp.api.model.domain.AdminModelEntity;
+import com.tsp.api.model.domain.recommend.AdminRecommendDTO;
+import com.tsp.api.model.domain.recommend.AdminRecommendEntity;
+import com.tsp.api.model.domain.schedule.AdminScheduleDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;

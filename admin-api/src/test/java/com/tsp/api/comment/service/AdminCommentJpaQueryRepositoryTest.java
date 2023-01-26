@@ -1,9 +1,9 @@
 package com.tsp.api.comment.service;
 
-import com.tsp.api.domain.comment.AdminCommentDTO;
-import com.tsp.api.domain.comment.AdminCommentEntity;
-import com.tsp.api.domain.model.AdminModelDTO;
-import com.tsp.api.domain.model.AdminModelEntity;
+import com.tsp.api.comment.domain.AdminCommentDTO;
+import com.tsp.api.comment.domain.AdminCommentEntity;
+import com.tsp.api.model.domain.AdminModelDTO;
+import com.tsp.api.model.domain.AdminModelEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;

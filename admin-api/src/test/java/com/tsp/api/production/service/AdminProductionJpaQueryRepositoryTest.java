@@ -1,12 +1,12 @@
 package com.tsp.api.production.service;
 
 import com.tsp.api.common.EntityType;
-import com.tsp.api.domain.comment.AdminCommentDTO;
-import com.tsp.api.domain.comment.AdminCommentEntity;
-import com.tsp.api.domain.common.CommonImageDTO;
-import com.tsp.api.domain.common.CommonImageEntity;
-import com.tsp.api.domain.production.AdminProductionDTO;
-import com.tsp.api.domain.production.AdminProductionEntity;
+import com.tsp.api.comment.domain.AdminCommentDTO;
+import com.tsp.api.comment.domain.AdminCommentEntity;
+import com.tsp.api.common.domain.CommonImageDTO;
+import com.tsp.api.common.domain.CommonImageEntity;
+import com.tsp.api.production.domain.AdminProductionDTO;
+import com.tsp.api.production.domain.AdminProductionEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;

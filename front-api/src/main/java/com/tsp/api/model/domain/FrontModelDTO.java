@@ -21,9 +21,10 @@ import java.util.List;
 
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @EqualsAndHashCode(of = "idx", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @ApiModel
 public class FrontModelDTO extends NewCommonDTO {
 

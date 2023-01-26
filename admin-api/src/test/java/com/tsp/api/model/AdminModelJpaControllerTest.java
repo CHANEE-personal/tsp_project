@@ -2,12 +2,12 @@ package com.tsp.api.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tsp.api.common.EntityType;
-import com.tsp.api.domain.common.CommonImageEntity;
-import com.tsp.api.domain.model.AdminModelEntity;
-import com.tsp.api.domain.model.CareerJson;
-import com.tsp.api.domain.model.agency.AdminAgencyEntity;
-import com.tsp.api.domain.model.recommend.AdminRecommendEntity;
-import com.tsp.api.domain.user.AdminUserEntity;
+import com.tsp.api.common.domain.CommonImageEntity;
+import com.tsp.api.model.domain.AdminModelEntity;
+import com.tsp.api.model.domain.CareerJson;
+import com.tsp.api.model.domain.agency.AdminAgencyEntity;
+import com.tsp.api.model.domain.recommend.AdminRecommendEntity;
+import com.tsp.api.user.domain.AdminUserEntity;
 import com.tsp.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.tsp.api.domain.user.Role.ROLE_ADMIN;
+import static com.tsp.api.user.domain.Role.ROLE_ADMIN;
 import static com.tsp.common.StringUtil.getString;
 import static java.util.List.of;
 import static org.hamcrest.Matchers.greaterThan;

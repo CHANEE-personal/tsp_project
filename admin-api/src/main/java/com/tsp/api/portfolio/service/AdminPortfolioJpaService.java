@@ -1,7 +1,7 @@
 package com.tsp.api.portfolio.service;
 
-import com.tsp.api.domain.portfolio.AdminPortFolioDTO;
-import com.tsp.api.domain.portfolio.AdminPortFolioEntity;
+import com.tsp.api.portfolio.domain.AdminPortFolioDTO;
+import com.tsp.api.portfolio.domain.AdminPortFolioEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 

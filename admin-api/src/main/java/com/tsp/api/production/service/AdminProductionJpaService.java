@@ -1,7 +1,7 @@
 package com.tsp.api.production.service;
 
-import com.tsp.api.domain.production.AdminProductionDTO;
-import com.tsp.api.domain.production.AdminProductionEntity;
+import com.tsp.api.production.domain.AdminProductionDTO;
+import com.tsp.api.production.domain.AdminProductionEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 

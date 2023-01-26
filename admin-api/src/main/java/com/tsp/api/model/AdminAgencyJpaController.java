@@ -1,10 +1,10 @@
 package com.tsp.api.model;
 
 import com.tsp.api.common.EntityType;
-import com.tsp.api.domain.common.CommonImageDTO;
-import com.tsp.api.domain.common.CommonImageEntity;
-import com.tsp.api.domain.model.agency.AdminAgencyDTO;
-import com.tsp.api.domain.model.agency.AdminAgencyEntity;
+import com.tsp.api.common.domain.CommonImageDTO;
+import com.tsp.api.common.domain.CommonImageEntity;
+import com.tsp.api.model.domain.agency.AdminAgencyDTO;
+import com.tsp.api.model.domain.agency.AdminAgencyEntity;
 import com.tsp.api.model.service.agency.AdminAgencyJpaService;
 import com.tsp.common.Paging;
 import io.swagger.annotations.Api;

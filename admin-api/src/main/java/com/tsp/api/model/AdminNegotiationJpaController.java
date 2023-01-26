@@ -1,8 +1,8 @@
 package com.tsp.api.model;
 
-import com.tsp.api.domain.model.AdminModelEntity;
-import com.tsp.api.domain.model.negotiation.AdminNegotiationDTO;
-import com.tsp.api.domain.model.negotiation.AdminNegotiationEntity;
+import com.tsp.api.model.domain.AdminModelEntity;
+import com.tsp.api.model.domain.negotiation.AdminNegotiationDTO;
+import com.tsp.api.model.domain.negotiation.AdminNegotiationEntity;
 import com.tsp.api.model.service.negotiation.AdminNegotiationJpaService;
 import com.tsp.common.Paging;
 import io.swagger.annotations.Api;

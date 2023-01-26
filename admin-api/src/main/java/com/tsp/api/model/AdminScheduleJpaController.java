@@ -1,7 +1,7 @@
 package com.tsp.api.model;
 
-import com.tsp.api.domain.model.schedule.AdminScheduleDTO;
-import com.tsp.api.domain.model.schedule.AdminScheduleEntity;
+import com.tsp.api.model.domain.schedule.AdminScheduleDTO;
+import com.tsp.api.model.domain.schedule.AdminScheduleEntity;
 import com.tsp.api.model.service.schedule.AdminScheduleJpaService;
 import com.tsp.common.Paging;
 import io.swagger.annotations.Api;

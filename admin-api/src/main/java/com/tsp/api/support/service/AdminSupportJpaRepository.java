@@ -1,6 +1,6 @@
 package com.tsp.api.support.service;
 
-import com.tsp.api.domain.support.AdminSupportEntity;
+import com.tsp.api.support.domain.AdminSupportEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

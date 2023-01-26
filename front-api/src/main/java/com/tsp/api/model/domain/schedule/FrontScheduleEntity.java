@@ -50,15 +50,12 @@ public class FrontScheduleEntity extends NewCommonMappedClass {
 
     public static FrontScheduleDTO toDto(FrontScheduleEntity entity) {
         if (entity == null) return null;
-        return FrontScheduleDTO.builder().idx(entity.getIdx())
-                .modelIdx(entity.frontModelEntity.getIdx())
+        return FrontScheduleDTO.builder()
+                .idx(entity.getIdx())
+                .frontModelDTO(FrontModelEntity.toDto(entity.frontModelEntity))
                 .modelSchedule(entity.getModelSchedule())
                 .modelScheduleTime(entity.getModelScheduleTime())
                 .visible(entity.getVisible())
-                .creator(entity.getCreator())
-                .createTime(entity.getCreateTime())
-                .updater(entity.getUpdater())
-                .updateTime(entity.getUpdateTime())
                 .build();
     }
 

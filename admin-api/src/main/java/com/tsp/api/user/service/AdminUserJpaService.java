@@ -1,9 +1,9 @@
 package com.tsp.api.user.service;
 
-import com.tsp.api.domain.user.AdminUserDTO;
-import com.tsp.api.domain.user.AdminUserEntity;
-import com.tsp.api.domain.user.LoginRequest;
-import com.tsp.api.domain.user.SignUpRequest;
+import com.tsp.api.user.domain.AdminUserDTO;
+import com.tsp.api.user.domain.AdminUserEntity;
+import com.tsp.api.user.domain.LoginRequest;
+import com.tsp.api.user.domain.SignUpRequest;
 import com.tsp.jwt.JwtUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

@@ -13,9 +13,10 @@ import java.util.List;
 
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @EqualsAndHashCode(of = "idx", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @ApiModel(value = "추천 검색어 관련 변수")
 public class FrontRecommendDTO extends NewCommonDTO {
 

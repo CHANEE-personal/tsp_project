@@ -1,8 +1,8 @@
 package com.tsp.api.model.service.negotiation;
 
-import com.tsp.api.domain.model.AdminModelEntity;
-import com.tsp.api.domain.model.negotiation.AdminNegotiationDTO;
-import com.tsp.api.domain.model.negotiation.AdminNegotiationEntity;
+import com.tsp.api.model.domain.AdminModelEntity;
+import com.tsp.api.model.domain.negotiation.AdminNegotiationDTO;
+import com.tsp.api.model.domain.negotiation.AdminNegotiationEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 

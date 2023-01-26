@@ -1,8 +1,8 @@
 package com.tsp.api.portfolio;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tsp.api.domain.portfolio.AdminPortFolioEntity;
-import com.tsp.api.domain.user.AdminUserEntity;
+import com.tsp.api.portfolio.domain.AdminPortFolioEntity;
+import com.tsp.api.user.domain.AdminUserEntity;
 import com.tsp.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.tsp.api.domain.user.Role.ROLE_ADMIN;
+import static com.tsp.api.user.domain.Role.ROLE_ADMIN;
 import static com.tsp.common.StringUtil.getString;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;

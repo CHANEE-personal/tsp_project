@@ -2,7 +2,6 @@ package com.tsp.api.common.domain;
 
 import com.tsp.api.model.domain.FrontModelEntity;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
@@ -16,9 +15,10 @@ import static javax.persistence.GenerationType.*;
 @Getter
 @Setter
 @Entity
-@SuperBuilder
+@Builder
 @EqualsAndHashCode(of = "idx", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Table(name = "tsp_cmm_code")
 public class NewCodeEntity extends NewCommonMappedClass {
 

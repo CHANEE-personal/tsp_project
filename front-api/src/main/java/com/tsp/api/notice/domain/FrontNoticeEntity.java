@@ -15,9 +15,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @EqualsAndHashCode(of = "idx", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Table(name = "tsp_notice")
 public class FrontNoticeEntity extends NewCommonMappedClass {
 
@@ -52,10 +53,6 @@ public class FrontNoticeEntity extends NewCommonMappedClass {
                 .description(entity.getDescription())
                 .visible(entity.getVisible())
                 .topFixed(entity.getTopFixed())
-                .creator(entity.getCreator())
-                .createTime(entity.getCreateTime())
-                .updater(entity.getUpdater())
-                .updateTime(entity.getUpdateTime())
                 .build();
     }
 

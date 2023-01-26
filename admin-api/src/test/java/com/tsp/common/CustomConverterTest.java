@@ -1,6 +1,6 @@
 package com.tsp.common;
 
-import com.tsp.api.domain.model.CareerJson;
+import com.tsp.api.model.domain.CareerJson;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

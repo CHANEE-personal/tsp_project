@@ -1,9 +1,9 @@
 package com.tsp.api.portfolio.service;
 
 import com.tsp.api.common.service.AdminCommonJpaRepository;
-import com.tsp.api.domain.common.NewCodeEntity;
-import com.tsp.api.domain.portfolio.AdminPortFolioDTO;
-import com.tsp.api.domain.portfolio.AdminPortFolioEntity;
+import com.tsp.api.common.domain.NewCodeEntity;
+import com.tsp.api.portfolio.domain.AdminPortFolioDTO;
+import com.tsp.api.portfolio.domain.AdminPortFolioEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

@@ -31,9 +31,10 @@ import static javax.persistence.GenerationType.*;
 @Entity
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @EqualsAndHashCode(of = "idx", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @DynamicUpdate
 @Table(name = "tsp_model")
 public class FrontModelEntity extends NewCommonMappedClass {
@@ -173,10 +174,6 @@ public class FrontModelEntity extends NewCommonMappedClass {
                 .modelViewCount(entity.getModelViewCount())
                 .newYn(entity.getNewYn())
                 .careerList(entity.getCareerList())
-                .creator(entity.getCreator())
-                .createTime(entity.getCreateTime())
-                .updater(entity.getUpdater())
-                .updateTime(entity.getUpdateTime())
                 .build();
     }
 

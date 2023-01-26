@@ -1,6 +1,6 @@
 package com.tsp.api.user.service;
 
-import com.tsp.api.domain.user.*;
+import com.tsp.api.user.domain.*;
 import com.tsp.api.user.service.repository.AdminUserJpaQueryRepository;
 import com.tsp.api.user.service.repository.AdminUserJpaRepository;
 import com.tsp.exception.TspException;

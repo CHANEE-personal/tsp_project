@@ -1,7 +1,7 @@
 package com.tsp.api.model.service.schedule;
 
-import com.tsp.api.domain.model.schedule.AdminScheduleDTO;
-import com.tsp.api.domain.model.schedule.AdminScheduleEntity;
+import com.tsp.api.model.domain.schedule.AdminScheduleDTO;
+import com.tsp.api.model.domain.schedule.AdminScheduleEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 

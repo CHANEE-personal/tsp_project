@@ -1,7 +1,7 @@
 package com.tsp.api.production;
 
-import com.tsp.api.domain.production.AdminProductionDTO;
-import com.tsp.api.domain.production.AdminProductionEntity;
+import com.tsp.api.production.domain.AdminProductionDTO;
+import com.tsp.api.production.domain.AdminProductionEntity;
 import com.tsp.api.production.service.AdminProductionJpaService;
 import com.tsp.common.Paging;
 import io.swagger.annotations.Api;

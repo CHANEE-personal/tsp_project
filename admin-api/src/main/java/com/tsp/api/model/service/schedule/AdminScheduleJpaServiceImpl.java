@@ -1,8 +1,8 @@
 package com.tsp.api.model.service.schedule;
 
-import com.tsp.api.domain.model.AdminModelEntity;
-import com.tsp.api.domain.model.schedule.AdminScheduleDTO;
-import com.tsp.api.domain.model.schedule.AdminScheduleEntity;
+import com.tsp.api.model.domain.AdminModelEntity;
+import com.tsp.api.model.domain.schedule.AdminScheduleDTO;
+import com.tsp.api.model.domain.schedule.AdminScheduleEntity;
 import com.tsp.api.model.service.AdminModelJpaRepository;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;

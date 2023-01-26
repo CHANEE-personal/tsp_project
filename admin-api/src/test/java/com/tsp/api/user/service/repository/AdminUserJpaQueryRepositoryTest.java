@@ -1,7 +1,7 @@
 package com.tsp.api.user.service.repository;
 
-import com.tsp.api.domain.user.AdminUserDTO;
-import com.tsp.api.domain.user.AdminUserEntity;
+import com.tsp.api.user.domain.AdminUserDTO;
+import com.tsp.api.user.domain.AdminUserEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

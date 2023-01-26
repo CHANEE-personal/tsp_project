@@ -1,7 +1,7 @@
 package com.tsp.jwt;
 
-import com.tsp.api.domain.user.AdminUserEntity;
-import com.tsp.api.domain.user.AuthenticationRequest;
+import com.tsp.api.user.domain.AdminUserEntity;
+import com.tsp.api.user.domain.AuthenticationRequest;
 import com.tsp.api.user.service.repository.AdminUserJpaRepository;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;

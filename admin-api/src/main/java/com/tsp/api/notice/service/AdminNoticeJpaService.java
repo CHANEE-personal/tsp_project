@@ -1,7 +1,7 @@
 package com.tsp.api.notice.service;
 
-import com.tsp.api.domain.notice.AdminNoticeDTO;
-import com.tsp.api.domain.notice.AdminNoticeEntity;
+import com.tsp.api.notice.domain.AdminNoticeDTO;
+import com.tsp.api.notice.domain.AdminNoticeEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 

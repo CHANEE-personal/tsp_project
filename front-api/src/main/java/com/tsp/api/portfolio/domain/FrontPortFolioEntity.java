@@ -4,7 +4,6 @@ import com.tsp.api.common.domain.CommonImageEntity;
 import com.tsp.api.common.domain.NewCodeEntity;
 import com.tsp.api.common.domain.NewCommonMappedClass;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Where;
 
@@ -22,9 +21,10 @@ import static javax.persistence.GenerationType.*;
 @Entity
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @EqualsAndHashCode(of = "idx", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Table(name = "tsp_portfolio")
 public class FrontPortFolioEntity extends NewCommonMappedClass {
 
@@ -81,10 +81,6 @@ public class FrontPortFolioEntity extends NewCommonMappedClass {
                 .videoUrl(entity.getVideoUrl())
                 .viewCount(entity.getViewCount())
                 .visible(entity.getVisible())
-                .creator(entity.getCreator())
-                .createTime(entity.getCreateTime())
-                .updater(entity.getUpdater())
-                .updateTime(entity.getUpdateTime())
                 .portfolioImage(CommonImageEntity.toDtoList(entity.getCommonImageEntityList()))
                 .build();
     }

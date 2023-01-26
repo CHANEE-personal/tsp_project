@@ -1,12 +1,12 @@
 package com.tsp.api.model.service.negotiation;
 
-import com.tsp.api.domain.model.AdminModelDTO;
-import com.tsp.api.domain.model.AdminModelEntity;
-import com.tsp.api.domain.model.CareerJson;
-import com.tsp.api.domain.model.agency.AdminAgencyDTO;
-import com.tsp.api.domain.model.agency.AdminAgencyEntity;
-import com.tsp.api.domain.model.negotiation.AdminNegotiationDTO;
-import com.tsp.api.domain.model.negotiation.AdminNegotiationEntity;
+import com.tsp.api.model.domain.AdminModelDTO;
+import com.tsp.api.model.domain.AdminModelEntity;
+import com.tsp.api.model.domain.CareerJson;
+import com.tsp.api.model.domain.agency.AdminAgencyDTO;
+import com.tsp.api.model.domain.agency.AdminAgencyEntity;
+import com.tsp.api.model.domain.negotiation.AdminNegotiationDTO;
+import com.tsp.api.model.domain.negotiation.AdminNegotiationEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -160,10 +160,10 @@ class AdminNegotiationJpaQueryRepositoryTest {
         PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<AdminNegotiationDTO> negotiationList = new ArrayList<>();
-        negotiationList.add(AdminNegotiationDTO.builder().modelIdx(adminModelEntity.getIdx())
-                .modelNegotiationDesc("영화 프로젝트 참여 테스트 첫번째").modelNegotiationDate(now()).build());
-        negotiationList.add(AdminNegotiationDTO.builder().modelIdx(adminModelEntity.getIdx())
-                .modelNegotiationDesc("영화 프로젝트 참여 테스트 두번째").modelNegotiationDate(now()).build());
+//        negotiationList.add(AdminNegotiationDTO.builder().modelIdx(adminModelEntity.getIdx())
+//                .modelNegotiationDesc("영화 프로젝트 참여 테스트 첫번째").modelNegotiationDate(now()).build());
+//        negotiationList.add(AdminNegotiationDTO.builder().modelIdx(adminModelEntity.getIdx())
+//                .modelNegotiationDesc("영화 프로젝트 참여 테스트 두번째").modelNegotiationDate(now()).build());
 
         Page<AdminNegotiationDTO> resultNegotiation = new PageImpl<>(negotiationList, pageRequest, negotiationList.size());
 
@@ -193,10 +193,10 @@ class AdminNegotiationJpaQueryRepositoryTest {
         PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<AdminNegotiationDTO> negotiationList = new ArrayList<>();
-        negotiationList.add(AdminNegotiationDTO.builder().modelIdx(adminModelEntity.getIdx())
-                .modelNegotiationDesc("영화 프로젝트 참여 테스트 첫번째").modelNegotiationDate(now()).build());
-        negotiationList.add(AdminNegotiationDTO.builder().modelIdx(adminModelEntity.getIdx())
-                .modelNegotiationDesc("영화 프로젝트 참여 테스트 두번째").modelNegotiationDate(now()).build());
+//        negotiationList.add(AdminNegotiationDTO.builder().modelIdx(adminModelEntity.getIdx())
+//                .modelNegotiationDesc("영화 프로젝트 참여 테스트 첫번째").modelNegotiationDate(now()).build());
+//        negotiationList.add(AdminNegotiationDTO.builder().modelIdx(adminModelEntity.getIdx())
+//                .modelNegotiationDesc("영화 프로젝트 참여 테스트 두번째").modelNegotiationDate(now()).build());
 
         Page<AdminNegotiationDTO> resultNegotiation = new PageImpl<>(negotiationList, pageRequest, negotiationList.size());
 

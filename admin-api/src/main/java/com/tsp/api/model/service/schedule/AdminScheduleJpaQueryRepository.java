@@ -2,10 +2,10 @@ package com.tsp.api.model.service.schedule;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tsp.api.domain.model.AdminModelDTO;
-import com.tsp.api.domain.model.AdminModelEntity;
-import com.tsp.api.domain.model.schedule.AdminScheduleDTO;
-import com.tsp.api.domain.model.schedule.AdminScheduleEntity;
+import com.tsp.api.model.domain.AdminModelDTO;
+import com.tsp.api.model.domain.AdminModelEntity;
+import com.tsp.api.model.domain.schedule.AdminScheduleDTO;
+import com.tsp.api.model.domain.schedule.AdminScheduleEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +21,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.tsp.api.domain.model.AdminModelEntity.toDto;
+import static com.tsp.api.model.domain.AdminModelEntity.toDto;
 import static com.tsp.api.domain.model.QAdminModelEntity.adminModelEntity;
-import static com.tsp.api.domain.model.schedule.AdminScheduleEntity.toDtoList;
-import static com.tsp.api.domain.model.schedule.QAdminScheduleEntity.adminScheduleEntity;
+import static com.tsp.api.model.domain.schedule.AdminScheduleEntity.toDtoList;
+import static com.tsp.api.model.domain.schedule.QAdminScheduleEntity.adminScheduleEntity;
 import static com.tsp.common.StringUtil.getString;
 import static com.tsp.exception.ApiExceptionType.NOT_FOUND_MODEL_SCHEDULE;
 import static java.time.LocalDate.now;

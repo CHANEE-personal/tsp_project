@@ -1,7 +1,7 @@
 package com.tsp.api.faq;
 
-import com.tsp.api.domain.faq.AdminFaqDTO;
-import com.tsp.api.domain.faq.AdminFaqEntity;
+import com.tsp.api.faq.domain.AdminFaqDTO;
+import com.tsp.api.faq.domain.AdminFaqEntity;
 import com.tsp.api.faq.service.AdminFaqJpaService;
 import com.tsp.common.Paging;
 import io.swagger.annotations.Api;

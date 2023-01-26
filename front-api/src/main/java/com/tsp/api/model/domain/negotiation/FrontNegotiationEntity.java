@@ -3,7 +3,6 @@ package com.tsp.api.model.domain.negotiation;
 import com.tsp.api.common.domain.NewCommonMappedClass;
 import com.tsp.api.model.domain.FrontModelEntity;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -20,9 +19,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @EqualsAndHashCode(of = "idx", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Table(name = "tsp_model_negotiation")
 public class FrontNegotiationEntity extends NewCommonMappedClass {
 
@@ -80,7 +80,7 @@ public class FrontNegotiationEntity extends NewCommonMappedClass {
         if (entity == null) return null;
         return FrontNegotiationDTO.builder()
                 .idx(entity.getIdx())
-                .modelIdx(entity.frontModelEntity.getIdx())
+                .frontModelDTO(FrontModelEntity.toDto(entity.frontModelEntity))
                 .modelKorName(entity.getModelKorName())
                 .modelNegotiationDesc(entity.getModelNegotiationDesc())
                 .modelNegotiationDate(entity.getModelNegotiationDate())
@@ -88,10 +88,6 @@ public class FrontNegotiationEntity extends NewCommonMappedClass {
                 .email(entity.getEmail())
                 .phone(entity.getPhone())
                 .visible(entity.getVisible())
-                .creator(entity.getCreator())
-                .createTime(entity.getCreateTime())
-                .updater(entity.getUpdater())
-                .updateTime(entity.getUpdateTime())
                 .build();
     }
 

@@ -1,6 +1,6 @@
 package com.tsp.common;
 
-import com.tsp.api.domain.user.AuthenticationRequest;
+import com.tsp.api.user.domain.AuthenticationRequest;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 
