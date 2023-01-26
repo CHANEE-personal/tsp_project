@@ -2,8 +2,8 @@ package com.tsp.api.faq.service;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tsp.api.domain.faq.AdminFaqDTO;
-import com.tsp.api.domain.faq.AdminFaqEntity;
+import com.tsp.api.faq.domain.AdminFaqDTO;
+import com.tsp.api.faq.domain.AdminFaqEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +17,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.tsp.api.domain.faq.AdminFaqEntity.toDto;
-import static com.tsp.api.domain.faq.AdminFaqEntity.toDtoList;
+import static com.tsp.api.faq.domain.AdminFaqEntity.toDto;
+import static com.tsp.api.faq.domain.AdminFaqEntity.toDtoList;
 import static com.tsp.api.domain.faq.QAdminFaqEntity.adminFaqEntity;
 import static com.tsp.common.StringUtil.getString;
 import static com.tsp.exception.ApiExceptionType.NOT_FOUND_FAQ;

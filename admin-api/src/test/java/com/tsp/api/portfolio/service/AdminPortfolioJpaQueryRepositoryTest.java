@@ -1,12 +1,12 @@
 package com.tsp.api.portfolio.service;
 
 import com.tsp.api.common.EntityType;
-import com.tsp.api.domain.comment.AdminCommentDTO;
-import com.tsp.api.domain.comment.AdminCommentEntity;
-import com.tsp.api.domain.common.CommonImageDTO;
-import com.tsp.api.domain.common.CommonImageEntity;
-import com.tsp.api.domain.portfolio.AdminPortFolioDTO;
-import com.tsp.api.domain.portfolio.AdminPortFolioEntity;
+import com.tsp.api.comment.domain.AdminCommentDTO;
+import com.tsp.api.comment.domain.AdminCommentEntity;
+import com.tsp.api.common.domain.CommonImageDTO;
+import com.tsp.api.common.domain.CommonImageEntity;
+import com.tsp.api.portfolio.domain.AdminPortFolioDTO;
+import com.tsp.api.portfolio.domain.AdminPortFolioEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

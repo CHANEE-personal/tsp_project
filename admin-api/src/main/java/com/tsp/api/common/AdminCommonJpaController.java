@@ -1,8 +1,8 @@
 package com.tsp.api.common;
 
 import com.tsp.api.common.service.AdminCommonJpaService;
-import com.tsp.api.domain.common.NewCodeDTO;
-import com.tsp.api.domain.common.NewCodeEntity;
+import com.tsp.api.common.domain.NewCodeDTO;
+import com.tsp.api.common.domain.NewCodeEntity;
 import com.tsp.common.Paging;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

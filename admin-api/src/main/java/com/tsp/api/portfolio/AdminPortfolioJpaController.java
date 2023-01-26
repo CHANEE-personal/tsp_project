@@ -1,7 +1,7 @@
 package com.tsp.api.portfolio;
 
-import com.tsp.api.domain.portfolio.AdminPortFolioDTO;
-import com.tsp.api.domain.portfolio.AdminPortFolioEntity;
+import com.tsp.api.portfolio.domain.AdminPortFolioDTO;
+import com.tsp.api.portfolio.domain.AdminPortFolioEntity;
 import com.tsp.api.portfolio.service.AdminPortfolioJpaService;
 import com.tsp.common.Paging;
 import io.swagger.annotations.Api;

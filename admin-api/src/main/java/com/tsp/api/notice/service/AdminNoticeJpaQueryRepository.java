@@ -2,8 +2,8 @@ package com.tsp.api.notice.service;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tsp.api.domain.notice.AdminNoticeDTO;
-import com.tsp.api.domain.notice.AdminNoticeEntity;
+import com.tsp.api.notice.domain.AdminNoticeDTO;
+import com.tsp.api.notice.domain.AdminNoticeEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +18,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.tsp.api.domain.notice.AdminNoticeEntity.toDto;
-import static com.tsp.api.domain.notice.AdminNoticeEntity.toDtoList;
+import static com.tsp.api.notice.domain.AdminNoticeEntity.toDto;
+import static com.tsp.api.notice.domain.AdminNoticeEntity.toDtoList;
 import static com.tsp.api.domain.notice.QAdminNoticeEntity.adminNoticeEntity;
 import static com.tsp.common.StringUtil.getString;
 import static com.tsp.exception.ApiExceptionType.NOT_FOUND_NOTICE;

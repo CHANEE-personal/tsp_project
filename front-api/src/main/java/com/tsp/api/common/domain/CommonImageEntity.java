@@ -5,7 +5,6 @@ import com.tsp.api.model.domain.FrontModelEntity;
 import com.tsp.api.model.domain.agency.FrontAgencyEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -20,9 +19,10 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @EqualsAndHashCode(of = "idx", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Table(name = "tsp_image")
 public class CommonImageEntity implements Serializable {
 

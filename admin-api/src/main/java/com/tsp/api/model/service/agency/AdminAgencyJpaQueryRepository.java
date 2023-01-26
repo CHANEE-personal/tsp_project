@@ -2,8 +2,8 @@ package com.tsp.api.model.service.agency;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tsp.api.domain.model.agency.AdminAgencyDTO;
-import com.tsp.api.domain.model.agency.AdminAgencyEntity;
+import com.tsp.api.model.domain.agency.AdminAgencyDTO;
+import com.tsp.api.model.domain.agency.AdminAgencyEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,9 +18,9 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.tsp.api.domain.common.QCommonImageEntity.commonImageEntity;
-import static com.tsp.api.domain.model.agency.AdminAgencyEntity.toDto;
-import static com.tsp.api.domain.model.agency.AdminAgencyEntity.toDtoList;
-import static com.tsp.api.domain.model.agency.QAdminAgencyEntity.adminAgencyEntity;
+import static com.tsp.api.model.domain.agency.AdminAgencyEntity.toDto;
+import static com.tsp.api.model.domain.agency.AdminAgencyEntity.toDtoList;
+import static com.tsp.api.model.domain.agency.QAdminAgencyEntity.adminAgencyEntity;
 import static com.tsp.common.StringUtil.getString;
 import static com.tsp.exception.ApiExceptionType.NOT_FOUND_AGENCY;
 

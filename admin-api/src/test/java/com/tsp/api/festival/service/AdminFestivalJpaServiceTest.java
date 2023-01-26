@@ -1,7 +1,7 @@
 package com.tsp.api.festival.service;
 
-import com.tsp.api.domain.festival.AdminFestivalDTO;
-import com.tsp.api.domain.festival.AdminFestivalEntity;
+import com.tsp.api.festival.domain.AdminFestivalDTO;
+import com.tsp.api.festival.domain.AdminFestivalEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

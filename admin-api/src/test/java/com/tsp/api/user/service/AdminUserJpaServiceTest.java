@@ -1,9 +1,9 @@
 package com.tsp.api.user.service;
 
-import com.tsp.api.domain.user.AdminUserDTO;
-import com.tsp.api.domain.user.AdminUserEntity;
-import com.tsp.api.domain.user.LoginRequest;
-import com.tsp.api.domain.user.SignUpRequest;
+import com.tsp.api.user.domain.AdminUserDTO;
+import com.tsp.api.user.domain.AdminUserEntity;
+import com.tsp.api.user.domain.LoginRequest;
+import com.tsp.api.user.domain.SignUpRequest;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.tsp.api.domain.user.Role.ROLE_ADMIN;
+import static com.tsp.api.user.domain.Role.ROLE_ADMIN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;

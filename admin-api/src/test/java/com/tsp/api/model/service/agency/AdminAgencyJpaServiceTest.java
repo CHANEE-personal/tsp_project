@@ -1,7 +1,7 @@
 package com.tsp.api.model.service.agency;
 
-import com.tsp.api.domain.model.agency.AdminAgencyDTO;
-import com.tsp.api.domain.model.agency.AdminAgencyEntity;
+import com.tsp.api.model.domain.agency.AdminAgencyDTO;
+import com.tsp.api.model.domain.agency.AdminAgencyEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

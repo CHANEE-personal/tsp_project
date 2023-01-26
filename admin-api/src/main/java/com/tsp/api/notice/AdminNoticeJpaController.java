@@ -1,7 +1,7 @@
 package com.tsp.api.notice;
 
-import com.tsp.api.domain.notice.AdminNoticeDTO;
-import com.tsp.api.domain.notice.AdminNoticeEntity;
+import com.tsp.api.notice.domain.AdminNoticeDTO;
+import com.tsp.api.notice.domain.AdminNoticeEntity;
 import com.tsp.api.notice.service.AdminNoticeJpaService;
 import com.tsp.common.Paging;
 import io.swagger.annotations.Api;

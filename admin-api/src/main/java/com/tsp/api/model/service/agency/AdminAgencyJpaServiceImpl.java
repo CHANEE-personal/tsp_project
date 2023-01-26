@@ -2,10 +2,10 @@ package com.tsp.api.model.service.agency;
 
 import com.tsp.api.common.SaveImage;
 import com.tsp.api.common.image.AdminCommonImageJpaRepository;
-import com.tsp.api.domain.common.CommonImageDTO;
-import com.tsp.api.domain.common.CommonImageEntity;
-import com.tsp.api.domain.model.agency.AdminAgencyDTO;
-import com.tsp.api.domain.model.agency.AdminAgencyEntity;
+import com.tsp.api.common.domain.CommonImageDTO;
+import com.tsp.api.common.domain.CommonImageEntity;
+import com.tsp.api.model.domain.agency.AdminAgencyDTO;
+import com.tsp.api.model.domain.agency.AdminAgencyEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

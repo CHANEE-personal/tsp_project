@@ -1,6 +1,6 @@
 package com.tsp.api.user.service.repository;
 
-import com.tsp.api.domain.user.AdminUserEntity;
+import com.tsp.api.user.domain.AdminUserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

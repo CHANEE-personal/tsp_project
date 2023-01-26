@@ -2,7 +2,7 @@ package com.tsp.common;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tsp.api.domain.model.CareerJson;
+import com.tsp.api.model.domain.CareerJson;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.AttributeConverter;

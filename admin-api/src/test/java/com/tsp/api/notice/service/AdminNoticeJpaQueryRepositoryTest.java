@@ -1,7 +1,7 @@
 package com.tsp.api.notice.service;
 
-import com.tsp.api.domain.notice.AdminNoticeDTO;
-import com.tsp.api.domain.notice.AdminNoticeEntity;
+import com.tsp.api.notice.domain.AdminNoticeDTO;
+import com.tsp.api.notice.domain.AdminNoticeEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -21,7 +21,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package com.tsp.api.faq.service;
 
-import com.tsp.api.domain.faq.AdminFaqDTO;
-import com.tsp.api.domain.faq.AdminFaqEntity;
+import com.tsp.api.faq.domain.AdminFaqDTO;
+import com.tsp.api.faq.domain.AdminFaqEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;

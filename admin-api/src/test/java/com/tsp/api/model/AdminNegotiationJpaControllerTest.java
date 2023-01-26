@@ -1,8 +1,8 @@
 package com.tsp.api.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tsp.api.domain.model.negotiation.AdminNegotiationEntity;
-import com.tsp.api.domain.user.AdminUserEntity;
+import com.tsp.api.model.domain.negotiation.AdminNegotiationEntity;
+import com.tsp.api.user.domain.AdminUserEntity;
 import com.tsp.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +37,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.tsp.api.domain.user.Role.ROLE_ADMIN;
+import static com.tsp.api.user.domain.Role.ROLE_ADMIN;
 import static com.tsp.common.StringUtil.getString;
 import static java.time.LocalDateTime.now;
 import static java.time.LocalDateTime.of;
@@ -291,8 +291,6 @@ class AdminNegotiationJpaControllerTest {
                 .phone("010-1234-5678")
                 .email("test@gmail.com")
                 .visible("Y")
-                .updater("1")
-                .updateTime(LocalDateTime.now())
                 .build();
 
         mockMvc.perform(put("/api/negotiation/{idx}", newAdminNegotiationEntity.getIdx())

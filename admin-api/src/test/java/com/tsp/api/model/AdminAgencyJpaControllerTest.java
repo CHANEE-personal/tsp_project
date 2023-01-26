@@ -2,9 +2,9 @@ package com.tsp.api.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tsp.api.common.EntityType;
-import com.tsp.api.domain.common.CommonImageEntity;
-import com.tsp.api.domain.model.agency.AdminAgencyEntity;
-import com.tsp.api.domain.user.AdminUserEntity;
+import com.tsp.api.common.domain.CommonImageEntity;
+import com.tsp.api.model.domain.agency.AdminAgencyEntity;
+import com.tsp.api.user.domain.AdminUserEntity;
 import com.tsp.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.tsp.api.domain.user.Role.ROLE_ADMIN;
+import static com.tsp.api.user.domain.Role.ROLE_ADMIN;
 import static com.tsp.common.StringUtil.getString;
 import static java.util.List.of;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
@@ -251,8 +251,6 @@ class AdminAgencyJpaControllerTest {
                 .agencyName("newAgency")
                 .agencyDescription("newAgency")
                 .visible("Y")
-                .updater("1")
-                .updateTime(LocalDateTime.now())
                 .build();
 
         mockMvc.perform(put("/api/agency/{idx}", newAdminAgencyEntity.getIdx())

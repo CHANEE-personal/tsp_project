@@ -1,8 +1,8 @@
 package com.tsp.api.user.service.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tsp.api.domain.user.AdminUserDTO;
-import com.tsp.api.domain.user.AdminUserEntity;
+import com.tsp.api.user.domain.AdminUserDTO;
+import com.tsp.api.user.domain.AdminUserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

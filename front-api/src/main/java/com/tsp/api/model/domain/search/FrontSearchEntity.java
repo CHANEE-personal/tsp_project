@@ -13,9 +13,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Getter
 @Setter
 @Entity
-@SuperBuilder
+@Builder
 @EqualsAndHashCode(of = "idx", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Table(name = "tsp_search")
 public class FrontSearchEntity extends NewCommonMappedClass {
 
@@ -32,10 +33,6 @@ public class FrontSearchEntity extends NewCommonMappedClass {
         return FrontSearchDTO.builder()
                 .idx(entity.getIdx())
                 .searchKeyword(entity.getSearchKeyword())
-                .creator(entity.getCreator())
-                .createTime(entity.getCreateTime())
-                .updater(entity.getUpdater())
-                .updateTime(entity.getUpdateTime())
                 .build();
     }
 

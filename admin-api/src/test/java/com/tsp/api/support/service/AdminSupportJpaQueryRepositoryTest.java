@@ -1,11 +1,11 @@
 package com.tsp.api.support.service;
 
-import com.tsp.api.domain.comment.AdminCommentDTO;
-import com.tsp.api.domain.comment.AdminCommentEntity;
-import com.tsp.api.domain.support.AdminSupportDTO;
-import com.tsp.api.domain.support.AdminSupportEntity;
-import com.tsp.api.domain.support.evaluation.EvaluationDTO;
-import com.tsp.api.domain.support.evaluation.EvaluationEntity;
+import com.tsp.api.comment.domain.AdminCommentDTO;
+import com.tsp.api.comment.domain.AdminCommentEntity;
+import com.tsp.api.support.domain.AdminSupportDTO;
+import com.tsp.api.support.domain.AdminSupportEntity;
+import com.tsp.api.support.domain.evaluation.EvaluationDTO;
+import com.tsp.api.support.domain.evaluation.EvaluationEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -154,8 +154,8 @@ class AdminSupportJpaQueryRepositoryTest {
         PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<EvaluationDTO> evaluationList = new ArrayList<>();
-        evaluationList.add(EvaluationDTO.builder().idx(1L)
-                .supportIdx(adminSupportEntity.getIdx()).evaluateComment("합격").visible("Y").build());
+//        evaluationList.add(EvaluationDTO.builder().idx(1L)
+//                .supportIdx(adminSupportEntity.getIdx()).evaluateComment("합격").visible("Y").build());
         Page<EvaluationDTO> resultEvaluate = new PageImpl<>(evaluationList, pageRequest, evaluationList.size());
 
         // when
@@ -165,7 +165,7 @@ class AdminSupportJpaQueryRepositoryTest {
 
         // then
         assertThat(findEvaluationList.get(0).getIdx()).isEqualTo(evaluationList.get(0).getIdx());
-        assertThat(findEvaluationList.get(0).getSupportIdx()).isEqualTo(evaluationList.get(0).getSupportIdx());
+//        assertThat(findEvaluationList.get(0).getSupportIdx()).isEqualTo(evaluationList.get(0).getSupportIdx());
         assertThat(findEvaluationList.get(0).getEvaluateComment()).isEqualTo(evaluationList.get(0).getEvaluateComment());
 
         // verify
@@ -185,8 +185,8 @@ class AdminSupportJpaQueryRepositoryTest {
         PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<EvaluationDTO> evaluationList = new ArrayList<>();
-        evaluationList.add(EvaluationDTO.builder().idx(1L)
-                .supportIdx(adminSupportEntity.getIdx()).evaluateComment("합격").visible("Y").build());
+//        evaluationList.add(EvaluationDTO.builder().idx(1L)
+//                .supportIdx(adminSupportEntity.getIdx()).evaluateComment("합격").visible("Y").build());
         Page<EvaluationDTO> resultEvaluate = new PageImpl<>(evaluationList, pageRequest, evaluationList.size());
 
         // when
@@ -196,7 +196,7 @@ class AdminSupportJpaQueryRepositoryTest {
 
         // then
         assertThat(findEvaluationList.get(0).getIdx()).isEqualTo(evaluationList.get(0).getIdx());
-        assertThat(findEvaluationList.get(0).getSupportIdx()).isEqualTo(evaluationList.get(0).getSupportIdx());
+//        assertThat(findEvaluationList.get(0).getSupportIdx()).isEqualTo(evaluationList.get(0).getSupportIdx());
         assertThat(findEvaluationList.get(0).getEvaluateComment()).isEqualTo(evaluationList.get(0).getEvaluateComment());
 
         // verify

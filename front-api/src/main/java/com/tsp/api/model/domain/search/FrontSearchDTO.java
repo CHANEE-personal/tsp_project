@@ -10,9 +10,10 @@ import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @EqualsAndHashCode(of = "idx", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @ApiModel
 public class FrontSearchDTO extends NewCommonDTO {
 

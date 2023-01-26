@@ -1,7 +1,7 @@
 package com.tsp.api.comment.service;
 
-import com.tsp.api.domain.comment.AdminCommentDTO;
-import com.tsp.api.domain.comment.AdminCommentEntity;
+import com.tsp.api.comment.domain.AdminCommentDTO;
+import com.tsp.api.comment.domain.AdminCommentEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

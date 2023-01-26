@@ -4,7 +4,6 @@ import com.tsp.api.common.domain.CommonImageEntity;
 import com.tsp.api.common.domain.NewCommonMappedClass;
 import com.tsp.api.model.domain.FrontModelEntity;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Where;
 
@@ -21,9 +20,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @EqualsAndHashCode(of = "idx", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Table(name = "tsp_agency")
 public class FrontAgencyEntity extends NewCommonMappedClass {
 
@@ -68,10 +68,6 @@ public class FrontAgencyEntity extends NewCommonMappedClass {
                 .agencyDescription(entity.getAgencyDescription())
                 .favoriteCount(entity.getFavoriteCount())
                 .visible(entity.getVisible())
-                .creator(entity.getCreator())
-                .createTime(entity.getCreateTime())
-                .updater(entity.getUpdater())
-                .updateTime(entity.getUpdateTime())
                 .agencyImage(CommonImageEntity.toDtoList(entity.getCommonImageEntityList()))
                 .build();
     }

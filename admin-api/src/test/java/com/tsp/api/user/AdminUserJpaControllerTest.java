@@ -1,9 +1,9 @@
 package com.tsp.api.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tsp.api.domain.user.AdminUserEntity;
-import com.tsp.api.domain.user.AuthenticationRequest;
-import com.tsp.api.domain.user.LoginRequest;
+import com.tsp.api.user.domain.AdminUserEntity;
+import com.tsp.api.user.domain.AuthenticationRequest;
+import com.tsp.api.user.domain.LoginRequest;
 import com.tsp.jwt.JwtUtil;
 import com.tsp.jwt.MyUserDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.tsp.api.domain.user.Role.ROLE_ADMIN;
+import static com.tsp.api.user.domain.Role.ROLE_ADMIN;
 import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;

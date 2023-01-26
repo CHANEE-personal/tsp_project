@@ -2,7 +2,6 @@ package com.tsp.api.festival.domain;
 
 import com.tsp.api.common.domain.NewCommonMappedClass;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -17,9 +16,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @EqualsAndHashCode(of = "idx", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Table(name = "tsp_festival")
 public class FrontFestivalEntity extends NewCommonMappedClass {
 
@@ -60,10 +60,6 @@ public class FrontFestivalEntity extends NewCommonMappedClass {
                 .festivalMonth(entity.getFestivalMonth())
                 .festivalDay(entity.getFestivalDay())
                 .festivalTime(entity.getFestivalTime())
-                .creator(entity.getCreator())
-                .createTime(entity.getCreateTime())
-                .updater(entity.getUpdater())
-                .updateTime(entity.getUpdateTime())
                 .build();
     }
 

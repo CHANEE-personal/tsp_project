@@ -1,10 +1,10 @@
 package com.tsp.api.support.service;
 
-import com.tsp.api.domain.comment.AdminCommentDTO;
-import com.tsp.api.domain.support.AdminSupportDTO;
-import com.tsp.api.domain.support.AdminSupportEntity;
-import com.tsp.api.domain.support.evaluation.EvaluationDTO;
-import com.tsp.api.domain.support.evaluation.EvaluationEntity;
+import com.tsp.api.comment.domain.AdminCommentDTO;
+import com.tsp.api.support.domain.AdminSupportDTO;
+import com.tsp.api.support.domain.AdminSupportEntity;
+import com.tsp.api.support.domain.evaluation.EvaluationDTO;
+import com.tsp.api.support.domain.evaluation.EvaluationEntity;
 import com.tsp.api.support.evaluation.AdminEvaluationJpaRepository;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;

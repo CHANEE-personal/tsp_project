@@ -1,7 +1,7 @@
 package com.tsp.api.festival.service;
 
-import com.tsp.api.domain.festival.AdminFestivalDTO;
-import com.tsp.api.domain.festival.AdminFestivalEntity;
+import com.tsp.api.festival.domain.AdminFestivalDTO;
+import com.tsp.api.festival.domain.AdminFestivalEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
