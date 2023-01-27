@@ -20,10 +20,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.tsp.api.domain.common.QCommonImageEntity.commonImageEntity;
+import static com.tsp.api.common.domain.QCommonImageEntity.commonImageEntity;
 import static com.tsp.api.portfolio.domain.AdminPortFolioEntity.toDto;
-import static com.tsp.api.domain.portfolio.QAdminPortFolioEntity.adminPortFolioEntity;
-import static com.tsp.api.domain.production.QAdminProductionEntity.adminProductionEntity;
+import static com.tsp.api.portfolio.domain.QAdminPortFolioEntity.adminPortFolioEntity;
+import static com.tsp.api.production.domain.QAdminProductionEntity.adminProductionEntity;
 import static com.tsp.common.StringUtil.getString;
 import static com.tsp.exception.ApiExceptionType.NOT_FOUND_PORTFOLIO;
 

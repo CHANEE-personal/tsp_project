@@ -14,7 +14,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.api.domain.user.QAdminUserEntity.adminUserEntity;
+import static com.tsp.api.user.domain.QAdminUserEntity.adminUserEntity;
 
 @Slf4j
 @RequiredArgsConstructor

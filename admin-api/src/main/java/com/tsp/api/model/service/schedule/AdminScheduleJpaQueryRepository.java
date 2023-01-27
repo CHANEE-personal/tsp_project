@@ -1,9 +1,11 @@
 package com.tsp.api.model.service.schedule;
 
+import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tsp.api.model.domain.AdminModelDTO;
 import com.tsp.api.model.domain.AdminModelEntity;
+import com.tsp.api.model.domain.QAdminModelEntity;
 import com.tsp.api.model.domain.schedule.AdminScheduleDTO;
 import com.tsp.api.model.domain.schedule.AdminScheduleEntity;
 import com.tsp.exception.TspException;
@@ -22,7 +24,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.tsp.api.model.domain.AdminModelEntity.toDto;
-import static com.tsp.api.domain.model.QAdminModelEntity.adminModelEntity;
+import static com.tsp.api.model.domain.QAdminModelEntity.adminModelEntity;
 import static com.tsp.api.model.domain.schedule.AdminScheduleEntity.toDtoList;
 import static com.tsp.api.model.domain.schedule.QAdminScheduleEntity.adminScheduleEntity;
 import static com.tsp.common.StringUtil.getString;
@@ -79,7 +81,7 @@ public class AdminScheduleJpaQueryRepository {
      */
     public AdminModelDTO findOneModelSchedule(AdminScheduleEntity existAdminScheduleEntity) {
         AdminModelEntity findOneModelSchedule = Optional.ofNullable(queryFactory
-                .selectFrom(adminModelEntity)
+                .selectFrom(QAdminModelEntity.adminModelEntity)
                 .leftJoin(adminModelEntity.scheduleList, adminScheduleEntity)
                 .fetchJoin()
                 .where(adminModelEntity.visible.eq("Y")

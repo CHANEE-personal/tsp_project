@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.tsp.api.domain.festival.QAdminFestivalEntity.adminFestivalEntity;
+import static com.tsp.api.festival.domain.QAdminFestivalEntity.adminFestivalEntity;
 import static com.tsp.common.StringUtil.getString;
 
 @Repository

@@ -4,7 +4,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tsp.api.comment.domain.AdminCommentDTO;
 import com.tsp.api.comment.domain.AdminCommentEntity;
-import com.tsp.api.domain.comment.QAdminCommentEntity;
+import com.tsp.api.comment.domain.QAdminCommentEntity;
 import com.tsp.api.support.domain.AdminSupportDTO;
 import com.tsp.api.support.domain.AdminSupportEntity;
 import com.tsp.api.support.domain.evaluation.EvaluationDTO;
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.tsp.api.domain.support.QAdminSupportEntity.adminSupportEntity;
+import static com.tsp.api.support.domain.QAdminSupportEntity.adminSupportEntity;
 import static com.tsp.api.support.domain.evaluation.EvaluationEntity.toDto;
 import static com.tsp.api.support.domain.evaluation.QEvaluationEntity.evaluationEntity;
 import static com.tsp.common.StringUtil.getString;

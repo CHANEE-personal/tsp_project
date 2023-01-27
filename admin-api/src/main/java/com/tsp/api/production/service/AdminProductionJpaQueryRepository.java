@@ -20,9 +20,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.tsp.api.domain.common.QCommonImageEntity.commonImageEntity;
+import static com.tsp.api.common.domain.QCommonImageEntity.commonImageEntity;
 import static com.tsp.api.production.domain.AdminProductionEntity.toDto;
-import static com.tsp.api.domain.production.QAdminProductionEntity.adminProductionEntity;
+import static com.tsp.api.production.domain.QAdminProductionEntity.adminProductionEntity;
 import static com.tsp.common.StringUtil.getString;
 import static com.tsp.exception.ApiExceptionType.NOT_FOUND_PRODUCTION;
 
