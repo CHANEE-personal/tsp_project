@@ -168,9 +168,9 @@ class FrontNegotiationApiServiceTest {
         PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<FrontNegotiationDTO> negotiationList = new ArrayList<>();
-        negotiationList.add(FrontNegotiationDTO.builder().modelIdx(frontModelEntity.getIdx())
+        negotiationList.add(FrontNegotiationDTO.builder().frontModelDTO(frontModelDTO)
                 .modelNegotiationDesc("영화 프로젝트 참여 테스트 첫번째").modelNegotiationDate(now()).build());
-        negotiationList.add(FrontNegotiationDTO.builder().modelIdx(frontModelEntity.getIdx())
+        negotiationList.add(FrontNegotiationDTO.builder().frontModelDTO(frontModelDTO)
                 .modelNegotiationDesc("영화 프로젝트 참여 테스트 두번째").modelNegotiationDate(now()).build());
 
         Page<FrontNegotiationDTO> resultNegotiation = new PageImpl<>(negotiationList, pageRequest, negotiationList.size());
@@ -200,9 +200,9 @@ class FrontNegotiationApiServiceTest {
         PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<FrontNegotiationDTO> negotiationList = new ArrayList<>();
-        negotiationList.add(FrontNegotiationDTO.builder().modelIdx(frontModelEntity.getIdx())
+        negotiationList.add(FrontNegotiationDTO.builder().frontModelDTO(frontModelDTO)
                 .modelNegotiationDesc("영화 프로젝트 참여 테스트 첫번째").modelNegotiationDate(now()).build());
-        negotiationList.add(FrontNegotiationDTO.builder().modelIdx(frontModelEntity.getIdx())
+        negotiationList.add(FrontNegotiationDTO.builder().frontModelDTO(frontModelDTO)
                 .modelNegotiationDesc("영화 프로젝트 참여 테스트 두번째").modelNegotiationDate(now()).build());
 
         Page<FrontNegotiationDTO> resultNegotiation = new PageImpl<>(negotiationList, pageRequest, negotiationList.size());
@@ -232,7 +232,7 @@ class FrontNegotiationApiServiceTest {
         FrontNegotiationDTO negotiationInfo = mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity.getIdx());
 
         // then
-        assertThat(negotiationInfo.getModelIdx()).isEqualTo(frontModelEntity.getIdx());
+        assertThat(negotiationInfo.getFrontModelDTO().getIdx()).isEqualTo(frontModelEntity.getIdx());
         assertThat(negotiationInfo.getModelKorName()).isEqualTo("조찬희");
         assertThat(negotiationInfo.getModelNegotiationDesc()).isNotNull();
 
@@ -256,7 +256,7 @@ class FrontNegotiationApiServiceTest {
         FrontNegotiationDTO negotiationInfo = mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity.getIdx());
 
         // then
-        assertThat(negotiationInfo.getModelIdx()).isEqualTo(frontModelEntity.getIdx());
+        assertThat(negotiationInfo.getFrontModelDTO().getIdx()).isEqualTo(frontModelEntity.getIdx());
         assertThat(negotiationInfo.getModelKorName()).isEqualTo("조찬희");
         assertThat(negotiationInfo.getModelNegotiationDesc()).isNotNull();
 
@@ -293,7 +293,7 @@ class FrontNegotiationApiServiceTest {
         FrontNegotiationDTO negotiationInfo = mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity.getIdx());
 
         // then
-        assertThat(negotiationInfo.getModelIdx()).isEqualTo(frontModelEntity.getIdx());
+        assertThat(negotiationInfo.getFrontModelDTO().getIdx()).isEqualTo(frontModelEntity.getIdx());
         assertThat(negotiationInfo.getModelNegotiationDesc()).isEqualTo("섭외 수정 테스트");
 
         // verify
@@ -332,7 +332,7 @@ class FrontNegotiationApiServiceTest {
         FrontNegotiationDTO negotiationInfo = mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity.getIdx());
 
         // then
-        assertThat(negotiationInfo.getModelIdx()).isEqualTo(frontModelEntity.getIdx());
+        assertThat(negotiationInfo.getFrontModelDTO().getIdx()).isEqualTo(frontModelEntity.getIdx());
         assertThat(negotiationInfo.getModelNegotiationDesc()).isEqualTo("섭외 수정 테스트");
 
         // verify

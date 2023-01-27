@@ -1,5 +1,6 @@
 package com.tsp.api.model.schedule.service;
 
+import com.tsp.api.model.domain.FrontModelDTO;
 import com.tsp.api.model.domain.schedule.FrontScheduleDTO;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
@@ -81,7 +82,7 @@ class FrontScheduleJpaApiServiceTest {
         PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<FrontScheduleDTO> scheduleList = new ArrayList<>();
-        scheduleList.add(FrontScheduleDTO.builder().idx(1L).modelIdx(1L)
+        scheduleList.add(FrontScheduleDTO.builder().idx(1L).frontModelDTO(FrontModelDTO.builder().build())
                 .modelSchedule("스케줄 테스트").modelScheduleTime(now()).build());
 
         Page<FrontScheduleDTO> resultSchedule = new PageImpl<>(scheduleList, pageRequest, scheduleList.size());
@@ -92,7 +93,7 @@ class FrontScheduleJpaApiServiceTest {
 
         // then
         assertThat(findScheduleList.get(0).getIdx()).isEqualTo(scheduleList.get(0).getIdx());
-        assertThat(findScheduleList.get(0).getModelIdx()).isEqualTo(scheduleList.get(0).getModelIdx());
+        assertThat(findScheduleList.get(0).getFrontModelDTO().getIdx()).isEqualTo(scheduleList.get(0).getFrontModelDTO().getIdx());
         assertThat(findScheduleList.get(0).getModelSchedule()).isEqualTo(scheduleList.get(0).getModelSchedule());
         assertThat(findScheduleList.get(0).getModelScheduleTime()).isEqualTo(scheduleList.get(0).getModelScheduleTime());
 
@@ -113,7 +114,7 @@ class FrontScheduleJpaApiServiceTest {
         PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<FrontScheduleDTO> scheduleList = new ArrayList<>();
-        scheduleList.add(FrontScheduleDTO.builder().idx(1L).modelIdx(1L)
+        scheduleList.add(FrontScheduleDTO.builder().idx(1L).frontModelDTO(FrontModelDTO.builder().build())
                 .modelSchedule("스케줄 테스트").modelScheduleTime(now()).build());
 
         Page<FrontScheduleDTO> resultSchedule = new PageImpl<>(scheduleList, pageRequest, scheduleList.size());
@@ -124,7 +125,7 @@ class FrontScheduleJpaApiServiceTest {
 
         // then
         assertThat(findScheduleList.get(0).getIdx()).isEqualTo(scheduleList.get(0).getIdx());
-        assertThat(findScheduleList.get(0).getModelIdx()).isEqualTo(scheduleList.get(0).getModelIdx());
+        assertThat(findScheduleList.get(0).getFrontModelDTO().getIdx()).isEqualTo(scheduleList.get(0).getFrontModelDTO().getIdx());
         assertThat(findScheduleList.get(0).getModelSchedule()).isEqualTo(scheduleList.get(0).getModelSchedule());
         assertThat(findScheduleList.get(0).getModelScheduleTime()).isEqualTo(scheduleList.get(0).getModelScheduleTime());
 

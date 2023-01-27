@@ -2,7 +2,6 @@ package com.tsp.api.common.domain;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;

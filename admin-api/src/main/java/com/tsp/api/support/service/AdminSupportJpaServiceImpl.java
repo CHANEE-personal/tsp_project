@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.tsp.exception.ApiExceptionType.*;
 
@@ -126,8 +127,10 @@ public class AdminSupportJpaServiceImpl implements AdminSupportJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<EvaluationDTO> findEvaluationList(Map<String, Object> evaluationMap, PageRequest pageRequest) {
-        return adminSupportJpaQueryRepository.findEvaluationList(evaluationMap, pageRequest);
+    public List<EvaluationDTO> findEvaluationList(Map<String, Object> evaluationMap, PageRequest pageRequest) {
+        return adminEvaluationJpaRepository.findAll(pageRequest)
+                .stream().map(EvaluationEntity::toDto)
+                .collect(Collectors.toList());
     }
 
     /**

@@ -13,8 +13,10 @@ import com.tsp.api.model.domain.agency.AdminAgencyEntity;
 import com.tsp.api.model.domain.recommend.AdminRecommendDTO;
 import com.tsp.api.model.domain.recommend.AdminRecommendEntity;
 import com.tsp.api.model.domain.schedule.AdminScheduleDTO;
+import com.tsp.api.model.domain.schedule.AdminScheduleEntity;
 import com.tsp.api.model.service.agency.AdminAgencyJpaRepository;
 import com.tsp.api.model.service.recommend.AdminRecommendJpaRepository;
+import com.tsp.api.model.service.schedule.AdminScheduleJpaRepository;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.tsp.api.model.domain.AdminModelEntity.toDto;
 import static com.tsp.exception.ApiExceptionType.*;
@@ -41,6 +44,7 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
     private final AdminRecommendJpaRepository adminRecommendJpaRepository;
     private final AdminCommentJpaRepository adminCommentJpaRepository;
     private final AdminCommonImageJpaRepository adminCommonImageJpaRepository;
+    private final AdminScheduleJpaRepository adminScheduleJpaRepository;
     private final SaveImage saveImage;
 
     private AdminModelEntity oneModel(Long idx) {
@@ -85,7 +89,8 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
     @Override
     @Transactional(readOnly = true)
     public AdminModelDTO findOneModel(Long idx) {
-        return adminModelJpaQueryRepository.findOneModel(idx);
+        return AdminModelEntity.toDto(adminModelJpaRepository.findByIdx(idx)
+                .orElseThrow(() -> new TspException(NOT_FOUND_MODEL)));
     }
 
     /**
@@ -232,8 +237,8 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
      * 1. MethodName : insertModelAdminComment
      * 2. ClassName  : AdminCommentJpaServiceImpl.java
      * 3. Comment    : 관리자 코멘트 등록
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 08. 24.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 08. 24.
      * </pre>
      */
     @Override
@@ -295,7 +300,9 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
     @Override
     @Transactional(readOnly = true)
     public List<AdminScheduleDTO> findOneModelSchedule(Long idx) {
-        return adminModelJpaQueryRepository.findOneModelSchedule(idx);
+        return adminScheduleJpaRepository.findAllById(idx)
+                .stream().map(AdminScheduleEntity::toDto)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -310,7 +317,9 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
     @Override
     @Transactional(readOnly = true)
     public List<AdminRecommendDTO> findRecommendList(Map<String, Object> recommendMap) {
-        return adminModelJpaQueryRepository.findRecommendList(recommendMap);
+        return adminRecommendJpaRepository.findAll(PageRequest.of(0, 10))
+                .stream().map(AdminRecommendEntity::toDto)
+                .collect(Collectors.toList());
     }
 
     /**

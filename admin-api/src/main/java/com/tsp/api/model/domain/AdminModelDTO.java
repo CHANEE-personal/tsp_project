@@ -95,10 +95,10 @@ public class AdminModelDTO extends NewCommonDTO {
     private String modelKorSecondName;
 
     @ApiModelProperty(position = 7, required = true, value = "모델 좋아요 수((ex)0)")
-    private Integer favoriteCount;
+    private int favoriteCount;
 
     @ApiModelProperty(position = 8, value = "모델 조회 수((ex)0", example = "1")
-    private Integer viewCount;
+    private int viewCount;
 
     @ApiModelProperty(position = 9, value = "소속사 idx((ex)1", example = "1")
     private Long agencyIdx;

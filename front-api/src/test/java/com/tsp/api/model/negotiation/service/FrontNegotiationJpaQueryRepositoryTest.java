@@ -170,9 +170,9 @@ class FrontNegotiationJpaQueryRepositoryTest {
         PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<FrontNegotiationDTO> negotiationList = new ArrayList<>();
-        negotiationList.add(FrontNegotiationDTO.builder().modelIdx(frontModelEntity.getIdx())
+        negotiationList.add(FrontNegotiationDTO.builder().frontModelDTO(frontModelDTO)
                 .modelNegotiationDesc("영화 프로젝트 참여 테스트 첫번째").modelNegotiationDate(now()).build());
-        negotiationList.add(FrontNegotiationDTO.builder().modelIdx(frontModelEntity.getIdx())
+        negotiationList.add(FrontNegotiationDTO.builder().frontModelDTO(frontModelDTO)
                 .modelNegotiationDesc("영화 프로젝트 참여 테스트 두번째").modelNegotiationDate(now()).build());
 
         Page<FrontNegotiationDTO> resultNegotiation = new PageImpl<>(negotiationList, pageRequest, negotiationList.size());
@@ -202,9 +202,9 @@ class FrontNegotiationJpaQueryRepositoryTest {
         PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<FrontNegotiationDTO> negotiationList = new ArrayList<>();
-        negotiationList.add(FrontNegotiationDTO.builder().modelIdx(frontModelEntity.getIdx())
+        negotiationList.add(FrontNegotiationDTO.builder().frontModelDTO(frontModelDTO)
                 .modelNegotiationDesc("영화 프로젝트 참여 테스트 첫번째").modelNegotiationDate(now()).build());
-        negotiationList.add(FrontNegotiationDTO.builder().modelIdx(frontModelEntity.getIdx())
+        negotiationList.add(FrontNegotiationDTO.builder().frontModelDTO(frontModelDTO)
                 .modelNegotiationDesc("영화 프로젝트 참여 테스트 두번째").modelNegotiationDate(now()).build());
 
         Page<FrontNegotiationDTO> resultNegotiation = new PageImpl<>(negotiationList, pageRequest, negotiationList.size());

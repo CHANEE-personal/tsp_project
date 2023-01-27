@@ -26,7 +26,6 @@ public class AdminNoticeJpaServiceImpl implements AdminNoticeJpaService {
                 .orElseThrow(() -> new TspException(NOT_FOUND_NOTICE));
     }
 
-
     /**
      * <pre>
      * 1. MethodName : findNoticeList
