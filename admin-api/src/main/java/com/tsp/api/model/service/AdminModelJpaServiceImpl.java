@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
 import static com.tsp.api.model.domain.AdminModelEntity.toDto;
 import static com.tsp.exception.ApiExceptionType.*;
 
-
 @Service
 @Transactional
 @RequiredArgsConstructor

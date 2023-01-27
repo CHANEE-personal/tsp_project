@@ -72,29 +72,6 @@ public class AdminScheduleJpaQueryRepository {
 
     /**
      * <pre>
-     * 1. MethodName : findOneModelSchedule
-     * 2. ClassName  : AdminScheduleJpaRepository.java
-     * 3. Comment    : 관리자 모델 스케줄 상세 조회
-     * 4. 작성자      : CHO
-     * 5. 작성일      : 2022. 08. 31.
-     * </pre>
-     */
-    public AdminModelDTO findOneModelSchedule(AdminScheduleEntity existAdminScheduleEntity) {
-        AdminModelEntity findOneModelSchedule = Optional.ofNullable(queryFactory
-                .selectFrom(QAdminModelEntity.adminModelEntity)
-                .leftJoin(adminModelEntity.scheduleList, adminScheduleEntity)
-                .fetchJoin()
-                .where(adminModelEntity.visible.eq("Y")
-                        .and(adminScheduleEntity.visible.eq("Y"))
-                        .and(adminModelEntity.idx.eq(existAdminScheduleEntity.getAdminModelEntity().getIdx()))
-                        .and(adminScheduleEntity.idx.eq(existAdminScheduleEntity.getIdx())))
-                .fetchOne()).orElseThrow(() -> new TspException(NOT_FOUND_MODEL_SCHEDULE));
-
-        return toDto(findOneModelSchedule);
-    }
-
-    /**
-     * <pre>
      * 1. MethodName : findPrevOneSchedule
      * 2. ClassName  : AdminScheduleJpaRepository.java
      * 3. Comment    : 관리자 이전 모델 스케줄 상세 조회

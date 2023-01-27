@@ -16,7 +16,6 @@ import java.util.Optional;
 
 import static com.tsp.exception.ApiExceptionType.*;
 
-
 @Service
 @RequiredArgsConstructor
 public class AdminScheduleJpaServiceImpl implements AdminScheduleJpaService {
