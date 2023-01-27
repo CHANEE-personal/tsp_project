@@ -20,10 +20,6 @@ script: "./gradlew clean build"
 
 # CI 실행 완료 시 작성한 이메일로 알람
 notifications:
-  slack:
-    on_success: always
-    on_failure: always
-    studycommpany:W1gOLioFUZEtMCkvRrdo8yZ1
   email:
     recipients:
       - cksgml4424@gmail.com
