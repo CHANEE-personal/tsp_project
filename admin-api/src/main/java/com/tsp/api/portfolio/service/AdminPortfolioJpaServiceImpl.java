@@ -60,7 +60,8 @@ public class AdminPortfolioJpaServiceImpl implements AdminPortfolioJpaService {
     @Override
     @Transactional(readOnly = true)
     public AdminPortFolioDTO findOnePortfolio(Long idx) {
-        return adminPortfolioJpaQueryRepository.findOnePortfolio(idx);
+        return AdminPortFolioEntity.toDto(adminPortfolioJpaRepository.findByIdx(idx)
+                .orElseThrow(() -> new TspException(NOT_FOUND_PORTFOLIO)));
     }
 
     /**

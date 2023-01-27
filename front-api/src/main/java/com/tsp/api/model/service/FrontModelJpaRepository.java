@@ -5,10 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+@Transactional(readOnly = true)
 @Repository
 public interface FrontModelJpaRepository extends JpaRepository<FrontModelEntity, Long> {
 
@@ -20,11 +22,9 @@ public interface FrontModelJpaRepository extends JpaRepository<FrontModelEntity,
     Optional<FrontModelEntity> findByIdx(@Param("idx") Long idx);
 
     @Query("select m from FrontModelEntity m " +
-            "left join fetch m.commonImageEntityList " +
+            "left join fetch m.commonImageEntityList i " +
             "where m.modelMainYn = 'Y'" +
             "and m.visible = 'Y'" +
-            "and CommonImageEntity.typeName = 'model'" +
-            "and CommonImageEntity.imageType = 'main'" +
-            "and CommonImageEntity.visible = 'Y'")
+            "and i.imageType = 'main'")
     List<FrontModelEntity> findMainModelList();
 }

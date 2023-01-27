@@ -51,7 +51,8 @@ public class AdminProductionJpaServiceImpl implements AdminProductionJpaService 
     @Override
     @Transactional(readOnly = true)
     public AdminProductionDTO findOneProduction(Long idx) {
-        return adminProductionJpaQueryRepository.findOneProduction(idx);
+        return AdminProductionEntity.toDto(adminProductionJpaRepository.findByIdx(idx)
+                .orElseThrow(() -> new TspException(NOT_FOUND_PRODUCTION)));
     }
 
     /**

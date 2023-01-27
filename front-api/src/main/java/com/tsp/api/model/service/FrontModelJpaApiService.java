@@ -3,7 +3,9 @@ package com.tsp.api.model.service;
 import com.tsp.api.model.domain.FrontModelDTO;
 import com.tsp.api.model.domain.FrontModelEntity;
 import com.tsp.api.model.domain.recommend.FrontRecommendDTO;
+import com.tsp.api.model.domain.recommend.FrontRecommendEntity;
 import com.tsp.api.model.domain.search.FrontSearchDTO;
+import com.tsp.api.model.recommend.service.FrontRecommendJpaRepository;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,6 +25,12 @@ import static com.tsp.exception.ApiExceptionType.NOT_FOUND_MODEL;
 public class FrontModelJpaApiService {
     private final FrontModelJpaQueryRepository frontModelJpaQueryRepository;
     private final FrontModelJpaRepository frontModelJpaRepository;
+    private final FrontRecommendJpaRepository frontRecommendJpaRepository;
+
+    private FrontModelEntity oneModel(Long idx) {
+        return frontModelJpaRepository.findById(idx)
+                .orElseThrow(() -> new TspException(NOT_FOUND_MODEL));
+    }
 
     /**
      * <pre>
@@ -113,7 +121,8 @@ public class FrontModelJpaApiService {
     @Transactional
     public int favoriteModel(Long idx) {
         try {
-            return frontModelJpaQueryRepository.favoriteModel(idx);
+            oneModel(idx).updateFavoriteCount();
+            return oneModel(idx).getModelFavoriteCount();
         } catch (Exception e) {
             throw new TspException(ERROR_MODEL_LIKE);
         }
@@ -129,8 +138,10 @@ public class FrontModelJpaApiService {
      * </pre>
      */
     @Transactional(readOnly = true)
-    public Page<FrontRecommendDTO> findRecommendList(PageRequest pageRequest) {
-        return frontModelJpaQueryRepository.findRecommendList(pageRequest);
+    public List<FrontRecommendDTO> findRecommendList(PageRequest pageRequest) {
+        return frontRecommendJpaRepository.findAll(pageRequest)
+                .stream().map(FrontRecommendEntity::toDto)
+                .collect(Collectors.toList());
     }
 
     /**

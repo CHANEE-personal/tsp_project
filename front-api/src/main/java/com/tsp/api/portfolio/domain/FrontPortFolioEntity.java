@@ -70,6 +70,10 @@ public class FrontPortFolioEntity extends NewCommonMappedClass {
     @OneToMany(mappedBy = "frontPortFolioEntity", fetch = LAZY)
     private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 
+    public void updateViewCount() {
+        this.viewCount++;
+    }
+
     public static FrontPortFolioDTO toDto(FrontPortFolioEntity entity) {
         if (entity == null) return null;
         return FrontPortFolioDTO.builder()

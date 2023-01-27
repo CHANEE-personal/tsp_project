@@ -51,6 +51,10 @@ public class FrontProductionEntity extends NewCommonMappedClass {
     @OneToMany(mappedBy = "frontProductionEntity", fetch = LAZY)
     private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 
+    public void updateViewCount() {
+        this.viewCount++;
+    }
+
     public static FrontProductionDTO toDto(FrontProductionEntity entity) {
         if (entity == null) return null;
         return FrontProductionDTO.builder()

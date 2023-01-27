@@ -80,7 +80,7 @@ class FrontPortFolioJpaRepositoryTest {
                 .viewCount(1)
                 .videoUrl("https://youtube.com")
                 .visible("Y")
-                .commonImageEntityList(commonImageEntityList)
+//                .commonImageEntityList(commonImageEntityList)
                 .build();
 
         frontPortFolioDTO = FrontPortFolioEntity.toDto(frontPortFolioEntity);

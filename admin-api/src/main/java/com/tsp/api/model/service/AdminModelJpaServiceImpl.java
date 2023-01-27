@@ -155,7 +155,7 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
         try {
             Optional.ofNullable(oneModel(idx))
                     .ifPresent(adminModel -> adminModel.update(adminModelEntity));
-            return toDto(adminModelJpaRepository.save(adminModelEntity));
+            return toDto(adminModelEntity);
         } catch (Exception e) {
             throw new TspException(ERROR_UPDATE_MODEL);
         }
@@ -191,6 +191,7 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
     @Override
     public List<CommonImageDTO> insertModelImage(CommonImageEntity commonImageEntity, List<MultipartFile> fileName) {
         try {
+            oneModel(commonImageEntity.getTypeIdx()).addImage(commonImageEntity);
             return saveImage.saveFile(fileName, commonImageEntity);
         } catch (Exception e) {
             throw new TspException(ERROR_MODEL);
