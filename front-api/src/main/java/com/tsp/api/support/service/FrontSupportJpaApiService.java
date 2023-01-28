@@ -12,8 +12,6 @@ import static com.tsp.exception.ApiExceptionType.ERROR_SUPPORT;
 @Service
 @RequiredArgsConstructor
 public class FrontSupportJpaApiService {
-
-    private final FrontSupportJpaQueryRepository frontSupportJpaQueryRepository;
     private final FrontSupportJpaRepository frontSupportJpaRepository;
 
     /**

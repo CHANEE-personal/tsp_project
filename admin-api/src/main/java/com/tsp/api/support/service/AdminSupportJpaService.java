@@ -77,7 +77,7 @@ public interface AdminSupportJpaService {
      * 5. 작성일       : 2022. 05. 02.
      * </pre>
      */
-    Page<EvaluationDTO> findEvaluationList(Map<String, Object> evaluationMap, PageRequest pageRequest);
+    List<EvaluationDTO> findEvaluationList(Map<String, Object> evaluationMap, PageRequest pageRequest);
 
     /**
      * <pre>

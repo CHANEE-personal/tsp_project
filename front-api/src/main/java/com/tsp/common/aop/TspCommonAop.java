@@ -23,7 +23,7 @@ public class TspCommonAop {
      * 5. 작성일      : 2022. 01. 16.
      * </pre>
      */
-    @Pointcut("execution(* com.tsp.new_tsp_front..api..*.*(..))")
+    @Pointcut("execution(* com.tsp.api..*.*(..))")
     private void cut() {
     }
 
@@ -78,7 +78,7 @@ public class TspCommonAop {
         return signature.getMethod();
     }
 
-    @Around("execution(* com.tsp.new_tsp_front..api..*.*(..))")
+    @Around("execution(* com.tsp.api..*.*(..))")
     public Object execute(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.currentTimeMillis();
         log.info("START: {}", joinPoint.toString());

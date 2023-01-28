@@ -9,7 +9,6 @@ import com.tsp.api.model.domain.negotiation.AdminNegotiationEntity;
 import com.tsp.api.model.domain.schedule.AdminScheduleEntity;
 import com.tsp.common.CustomConverter;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Type;
@@ -104,10 +103,10 @@ public class AdminModelEntity extends NewCommonMappedClass {
     private String modelKorSecondName;
 
     @Column(name = "favorite_count")
-    private Integer favoriteCount;
+    private int favoriteCount;
 
     @Column(name = "view_count")
-    private Integer viewCount;
+    private int viewCount;
 
     @Column(name = "career_list")
     @Convert(converter = CustomConverter.class)

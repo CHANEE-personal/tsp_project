@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.tsp.api.domain.common.QCommonImageEntity.commonImageEntity;
+import static com.tsp.api.common.domain.QCommonImageEntity.commonImageEntity;
 import static com.tsp.api.model.domain.agency.AdminAgencyEntity.toDto;
 import static com.tsp.api.model.domain.agency.AdminAgencyEntity.toDtoList;
 import static com.tsp.api.model.domain.agency.QAdminAgencyEntity.adminAgencyEntity;

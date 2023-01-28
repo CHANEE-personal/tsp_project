@@ -1,6 +1,6 @@
 package com.tsp.api.production.service;
 
-import com.tsp.api.production.domain.AdminProductionEntity;
+import com.tsp.api.production.domain.FrontProductionEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,11 +11,11 @@ import java.util.Optional;
 
 @Repository
 @Transactional(readOnly = true)
-public interface AdminProductionJpaRepository extends JpaRepository<AdminProductionEntity, Long> {
+public interface FrontProductionJpaRepository extends JpaRepository<FrontProductionEntity, Long> {
 
-    @Query("select p from AdminProductionEntity p " +
-            "left join fetch p.commonImageEntityList " +
+    @Query("select p from FrontProductionEntity p " +
+            "left join fetch p.commonImageEntityList i " +
             "where p.idx = :idx " +
             "and p.visible = 'Y'")
-    Optional<AdminProductionEntity> findByIdx(@Param("idx") Long idx);
+    Optional<FrontProductionEntity> findByIdx(@Param("idx") Long idx);
 }

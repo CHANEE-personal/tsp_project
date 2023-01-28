@@ -1,6 +1,8 @@
 package com.tsp.api.production.service;
 
 import com.tsp.api.production.domain.FrontProductionDTO;
+import com.tsp.api.production.domain.FrontProductionEntity;
+import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,10 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
+import static com.tsp.exception.ApiExceptionType.NOT_FOUND_PRODUCTION;
+
 @Service
 @RequiredArgsConstructor
 public class FrontProductionJpaApiService {
     private final FrontProductionJpaQueryRepository frontProductionJpaQueryRepository;
+    private final FrontProductionJpaRepository frontProductionJpaRepository;
 
     /**
      * <pre>
@@ -39,7 +44,12 @@ public class FrontProductionJpaApiService {
      */
     @Transactional
     public FrontProductionDTO findOneProduction(Long idx) {
-        return frontProductionJpaQueryRepository.findOneProduction(idx);
+        FrontProductionEntity oneProduction = frontProductionJpaRepository.findByIdx(idx)
+                .orElseThrow(() -> new TspException(NOT_FOUND_PRODUCTION));
+
+        // 조회 수 증가
+        oneProduction.updateViewCount();
+        return FrontProductionEntity.toDto(oneProduction);
     }
 
     /**

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.api.domain.common.QNewCodeEntity.newCodeEntity;
+import static com.tsp.api.common.domain.QNewCodeEntity.newCodeEntity;
 
 @Slf4j
 @RequiredArgsConstructor

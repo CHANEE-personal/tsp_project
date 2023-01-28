@@ -1,6 +1,6 @@
 package com.tsp.api.portfolio.service;
 
-import com.tsp.api.portfolio.domain.AdminPortFolioEntity;
+import com.tsp.api.portfolio.domain.FrontPortFolioEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,11 +11,11 @@ import java.util.Optional;
 
 @Repository
 @Transactional(readOnly = true)
-public interface AdminPortfolioJpaRepository extends JpaRepository<AdminPortFolioEntity, Long> {
+public interface FrontPortFolioJpaRepository extends JpaRepository<FrontPortFolioEntity, Long> {
 
-    @Query("select f from AdminPortFolioEntity f " +
-            "left join fetch f.commonImageEntityList " +
+    @Query("select f from FrontPortFolioEntity f " +
+            "left join fetch f.commonImageEntityList i " +
             "where f.idx = :idx " +
             "and f.visible = 'Y'")
-    Optional<AdminPortFolioEntity> findByIdx(@Param("idx") Long idx);
+    Optional<FrontPortFolioEntity> findByIdx(@Param("idx") Long idx);
 }

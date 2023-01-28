@@ -1,8 +1,11 @@
 package com.tsp.api.model.service;
 
 import com.tsp.api.model.domain.FrontModelDTO;
+import com.tsp.api.model.domain.FrontModelEntity;
 import com.tsp.api.model.domain.recommend.FrontRecommendDTO;
+import com.tsp.api.model.domain.recommend.FrontRecommendEntity;
 import com.tsp.api.model.domain.search.FrontSearchDTO;
+import com.tsp.api.model.recommend.service.FrontRecommendJpaRepository;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -12,14 +15,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.tsp.exception.ApiExceptionType.ERROR_MODEL_LIKE;
-
+import static com.tsp.exception.ApiExceptionType.NOT_FOUND_MODEL;
 
 @Service
 @RequiredArgsConstructor
 public class FrontModelJpaApiService {
     private final FrontModelJpaQueryRepository frontModelJpaQueryRepository;
+    private final FrontModelJpaRepository frontModelJpaRepository;
+    private final FrontRecommendJpaRepository frontRecommendJpaRepository;
+
+    private FrontModelEntity oneModel(Long idx) {
+        return frontModelJpaRepository.findById(idx)
+                .orElseThrow(() -> new TspException(NOT_FOUND_MODEL));
+    }
 
     /**
      * <pre>
@@ -46,7 +57,12 @@ public class FrontModelJpaApiService {
      */
     @Transactional
     public FrontModelDTO findOneModel(Long idx) {
-        return frontModelJpaQueryRepository.findOneModel(idx);
+        FrontModelEntity oneModel = frontModelJpaRepository.findByIdx(idx)
+                .orElseThrow(() -> new TspException(NOT_FOUND_MODEL));
+
+        // 조회 수 증가
+        oneModel.updateViewCount();
+        return FrontModelEntity.toDto(oneModel);
     }
 
     /**
@@ -88,7 +104,9 @@ public class FrontModelJpaApiService {
      */
     @Transactional(readOnly = true)
     public List<FrontModelDTO> findMainModelList() {
-        return this.frontModelJpaQueryRepository.findMainModelList();
+        return this.frontModelJpaRepository.findMainModelList()
+                .stream().map(FrontModelEntity::toDto)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -103,7 +121,8 @@ public class FrontModelJpaApiService {
     @Transactional
     public int favoriteModel(Long idx) {
         try {
-            return frontModelJpaQueryRepository.favoriteModel(idx);
+            oneModel(idx).updateFavoriteCount();
+            return oneModel(idx).getModelFavoriteCount();
         } catch (Exception e) {
             throw new TspException(ERROR_MODEL_LIKE);
         }
@@ -119,8 +138,10 @@ public class FrontModelJpaApiService {
      * </pre>
      */
     @Transactional(readOnly = true)
-    public Page<FrontRecommendDTO> findRecommendList(PageRequest pageRequest) {
-        return frontModelJpaQueryRepository.findRecommendList(pageRequest);
+    public List<FrontRecommendDTO> findRecommendList(PageRequest pageRequest) {
+        return frontRecommendJpaRepository.findAll(pageRequest)
+                .stream().map(FrontRecommendEntity::toDto)
+                .collect(Collectors.toList());
     }
 
     /**

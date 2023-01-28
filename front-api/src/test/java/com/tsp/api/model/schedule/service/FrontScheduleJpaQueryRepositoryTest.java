@@ -85,7 +85,7 @@ class FrontScheduleJpaQueryRepositoryTest {
         PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<FrontScheduleDTO> scheduleList = new ArrayList<>();
-        scheduleList.add(FrontScheduleDTO.builder().idx(1L).modelIdx(1L)
+        scheduleList.add(FrontScheduleDTO.builder().idx(1L).frontModelDTO(FrontModelDTO.builder().build())
                 .modelSchedule("스케줄 테스트").modelScheduleTime(now()).build());
 
         Page<FrontScheduleDTO> resultSchedule = new PageImpl<>(scheduleList, pageRequest, scheduleList.size());
@@ -96,7 +96,7 @@ class FrontScheduleJpaQueryRepositoryTest {
 
         // then
         assertThat(findScheduleList.get(0).getIdx()).isEqualTo(scheduleList.get(0).getIdx());
-        assertThat(findScheduleList.get(0).getModelIdx()).isEqualTo(scheduleList.get(0).getModelIdx());
+        assertThat(findScheduleList.get(0).getFrontModelDTO().getIdx()).isEqualTo(scheduleList.get(0).getFrontModelDTO().getIdx());
         assertThat(findScheduleList.get(0).getModelSchedule()).isEqualTo(scheduleList.get(0).getModelSchedule());
         assertThat(findScheduleList.get(0).getModelScheduleTime()).isEqualTo(scheduleList.get(0).getModelScheduleTime());
 
@@ -117,7 +117,7 @@ class FrontScheduleJpaQueryRepositoryTest {
         PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<FrontScheduleDTO> scheduleList = new ArrayList<>();
-        scheduleList.add(FrontScheduleDTO.builder().idx(1L).modelIdx(1L)
+        scheduleList.add(FrontScheduleDTO.builder().idx(1L).frontModelDTO(FrontModelDTO.builder().build())
                 .modelSchedule("스케줄 테스트").modelScheduleTime(now()).build());
 
         Page<FrontScheduleDTO> resultSchedule = new PageImpl<>(scheduleList, pageRequest, scheduleList.size());
@@ -128,7 +128,7 @@ class FrontScheduleJpaQueryRepositoryTest {
 
         // then
         assertThat(findScheduleList.get(0).getIdx()).isEqualTo(scheduleList.get(0).getIdx());
-        assertThat(findScheduleList.get(0).getModelIdx()).isEqualTo(scheduleList.get(0).getModelIdx());
+        assertThat(findScheduleList.get(0).getFrontModelDTO().getIdx()).isEqualTo(scheduleList.get(0).getFrontModelDTO().getIdx());
         assertThat(findScheduleList.get(0).getModelSchedule()).isEqualTo(scheduleList.get(0).getModelSchedule());
         assertThat(findScheduleList.get(0).getModelScheduleTime()).isEqualTo(scheduleList.get(0).getModelScheduleTime());
 
@@ -147,10 +147,10 @@ class FrontScheduleJpaQueryRepositoryTest {
         scheduleMap.put("size", 3);
 
         List<FrontScheduleDTO> scheduleList = new ArrayList<>();
-        scheduleList.add(FrontScheduleDTO.builder().modelIdx(1L)
+        scheduleList.add(FrontScheduleDTO.builder().idx(1L).frontModelDTO(FrontModelDTO.builder().build())
                 .modelSchedule("스케줄 테스트").modelScheduleTime(now()).build());
-        scheduleList.add(FrontScheduleDTO.builder().modelIdx(1L)
-                .modelSchedule("스케줄 테스트 두번째").modelScheduleTime(now()).build());
+        scheduleList.add(FrontScheduleDTO.builder().idx(1L).frontModelDTO(FrontModelDTO.builder().build())
+                .modelSchedule("스케줄 두번째 테스트").modelScheduleTime(now()).build());
 
         List<FrontModelDTO> modelScheduleList = new ArrayList<>();
         modelScheduleList.add(FrontModelDTO.builder().idx(1L).categoryCd(1).modelKorName("조찬희")
@@ -183,10 +183,10 @@ class FrontScheduleJpaQueryRepositoryTest {
         scheduleMap.put("size", 3);
 
         List<FrontScheduleDTO> scheduleList = new ArrayList<>();
-        scheduleList.add(FrontScheduleDTO.builder().modelIdx(1L)
+        scheduleList.add(FrontScheduleDTO.builder().idx(1L).frontModelDTO(FrontModelDTO.builder().build())
                 .modelSchedule("스케줄 테스트").modelScheduleTime(now()).build());
-        scheduleList.add(FrontScheduleDTO.builder().modelIdx(1L)
-                .modelSchedule("스케줄 테스트 두번째").modelScheduleTime(now()).build());
+        scheduleList.add(FrontScheduleDTO.builder().idx(1L).frontModelDTO(FrontModelDTO.builder().build())
+                .modelSchedule("스케줄 두번째 테스트").modelScheduleTime(now()).build());
 
         List<FrontModelDTO> modelScheduleList = new ArrayList<>();
         modelScheduleList.add(FrontModelDTO.builder().idx(1L).categoryCd(1).modelKorName("조찬희")

@@ -309,14 +309,12 @@ class AdminSupportJpaServiceTest {
         PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<EvaluationDTO> evaluationList = new ArrayList<>();
-//        evaluationList.add(EvaluationDTO.builder().idx(1L)
-//                .supportIdx(adminSupportEntity.getIdx()).evaluateComment("합격").visible("Y").build());
-        Page<EvaluationDTO> resultEvaluate = new PageImpl<>(evaluationList, pageRequest, evaluationList.size());
+        evaluationList.add(EvaluationDTO.builder().idx(1L)
+                .adminSupportDTO(adminSupportDTO).evaluateComment("합격").visible("Y").build());
 
         // when
-        when(mockAdminSupportJpaService.findEvaluationList(evaluationMap, pageRequest)).thenReturn(resultEvaluate);
-        Page<EvaluationDTO> evaluationInfo = mockAdminSupportJpaService.findEvaluationList(evaluationMap, pageRequest);
-        List<EvaluationDTO> findEvaluateList = evaluationInfo.stream().collect(Collectors.toList());
+        when(mockAdminSupportJpaService.findEvaluationList(evaluationMap, pageRequest)).thenReturn(evaluationList);
+        List<EvaluationDTO> findEvaluateList = mockAdminSupportJpaService.findEvaluationList(evaluationMap, pageRequest);
 
         // then
         assertThat(findEvaluateList.get(0).getIdx()).isEqualTo(evaluationList.get(0).getIdx());
@@ -340,14 +338,12 @@ class AdminSupportJpaServiceTest {
         PageRequest pageRequest = PageRequest.of(1, 3);
 
         List<EvaluationDTO> evaluationList = new ArrayList<>();
-//        evaluationList.add(EvaluationDTO.builder().idx(1L)
-//                .supportIdx(adminSupportEntity.getIdx()).evaluateComment("합격").visible("Y").build());
-        Page<EvaluationDTO> resultEvaluate = new PageImpl<>(evaluationList, pageRequest, evaluationList.size());
+        evaluationList.add(EvaluationDTO.builder().idx(1L)
+                .adminSupportDTO(adminSupportDTO).evaluateComment("합격").visible("Y").build());
 
         // when
-        given(mockAdminSupportJpaService.findEvaluationList(evaluationMap, pageRequest)).willReturn(resultEvaluate);
-        Page<EvaluationDTO> evaluationInfo = mockAdminSupportJpaService.findEvaluationList(evaluationMap, pageRequest);
-        List<EvaluationDTO> findEvaluateList = evaluationInfo.stream().collect(Collectors.toList());
+        given(mockAdminSupportJpaService.findEvaluationList(evaluationMap, pageRequest)).willReturn(evaluationList);
+        List<EvaluationDTO> findEvaluateList = mockAdminSupportJpaService.findEvaluationList(evaluationMap, pageRequest);
 
         // then
         assertThat(findEvaluateList.get(0).getIdx()).isEqualTo(evaluationList.get(0).getIdx());

@@ -118,7 +118,7 @@ public class FrontModelEntity extends NewCommonMappedClass {
     private ArrayList<CareerJson> careerList;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "category_cd", insertable = false, updatable = false)
+    @JoinColumn(name = "category_cd")
     private NewCodeEntity newModelCodeJpaDTO;
 
     @Builder.Default
@@ -128,7 +128,7 @@ public class FrontModelEntity extends NewCommonMappedClass {
     private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 
     @OneToOne(fetch = LAZY, cascade = ALL)
-    @JoinColumn(name = "agency_idx", referencedColumnName = "idx", insertable = false, updatable = false)
+    @JoinColumn(name = "agency_idx", referencedColumnName = "idx")
     private FrontAgencyEntity frontAgencyEntity;
 
     @Builder.Default

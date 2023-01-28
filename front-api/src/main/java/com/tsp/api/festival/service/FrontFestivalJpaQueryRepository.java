@@ -42,20 +42,6 @@ public class FrontFestivalJpaQueryRepository {
 
     /**
      * <pre>
-     * 1. MethodName : findFestivalCount
-     * 2. ClassName  : FrontFestivalJpaRepository.java
-     * 3. Comment    : 관리자 행사 리스트 갯수 조회
-     * 4. 작성자      : CHO
-     * 5. 작성일      : 2023. 01. 09.
-     * </pre>
-     */
-    public int findFestivalCount(Map<String, Object> festivalMap) {
-        return queryFactory.selectFrom(frontFestivalEntity)
-                .where(searchFestival(festivalMap)).fetch().size();
-    }
-
-    /**
-     * <pre>
      * 1. MethodName : findFestivalList
      * 2. ClassName  : FrontFestivalJpaRepository.java
      * 3. Comment    : 행사 리스트 조회

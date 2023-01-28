@@ -268,6 +268,8 @@ class FrontModelJpaApiServiceTest {
         Map<String, Object> modelMap = new HashMap<>();
         modelMap.put("categoryCd", "1");
 
+        frontModelJpaApiService.findMainModelList();
+
         List<FrontModelDTO> returnModelList = new ArrayList<>();
 
         // 남성

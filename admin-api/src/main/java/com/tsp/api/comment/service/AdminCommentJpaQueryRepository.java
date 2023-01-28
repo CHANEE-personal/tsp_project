@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.tsp.api.comment.domain.AdminCommentEntity.toDtoList;
-import static com.tsp.api.domain.comment.QAdminCommentEntity.adminCommentEntity;
+import static com.tsp.api.comment.domain.QAdminCommentEntity.adminCommentEntity;
 import static com.tsp.common.StringUtil.getString;
 
 @Slf4j

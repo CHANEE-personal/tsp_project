@@ -14,14 +14,13 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Map;
 
-import static com.tsp.api.domain.user.QAdminUserEntity.adminUserEntity;
+import static com.tsp.api.user.domain.QAdminUserEntity.adminUserEntity;
 
 @Slf4j
 @RequiredArgsConstructor
 @Repository
 public class AdminUserJpaQueryRepository {
     private final JPAQueryFactory queryFactory;
-    private final EntityManager em;
 
     /**
      * <pre>
@@ -42,29 +41,4 @@ public class AdminUserJpaQueryRepository {
 
         return new PageImpl<>(AdminUserEntity.toDtoList(userList), pageRequest, userList.size());
     }
-
-    /**
-     * <pre>
-     * 1. MethodName : adminLogin
-     * 2. ClassName  : AdminUserJpaRepository.java
-     * 3. Comment    : 관리자 로그인 처리
-     * 4. 작성자      : CHO
-     * 5. 작성일      : 2022. 05. 02.
-     * </pre>
-     */
-//    public String adminLogin(AdminUserEntity existAdminUserEntity) {
-//        final String db_pw = nullStrToStr(findOneUser(existAdminUserEntity.getUserId()).getPassword());
-//        String result;
-//
-//        if (passwordEncoder.matches(existAdminUserEntity.getPassword(), db_pw)) {
-//            Authentication authentication = authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(existAdminUserEntity.getUserId(), existAdminUserEntity.getPassword())
-//            );
-//            getContext().setAuthentication(authentication);
-//            result = "Y";
-//        } else {
-//            result = "N";
-//        }
-//        return result;
-//    }
 }

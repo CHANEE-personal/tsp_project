@@ -20,7 +20,7 @@ import java.util.Optional;
 
 import static com.tsp.api.notice.domain.AdminNoticeEntity.toDto;
 import static com.tsp.api.notice.domain.AdminNoticeEntity.toDtoList;
-import static com.tsp.api.domain.notice.QAdminNoticeEntity.adminNoticeEntity;
+import static com.tsp.api.notice.domain.QAdminNoticeEntity.adminNoticeEntity;
 import static com.tsp.common.StringUtil.getString;
 import static com.tsp.exception.ApiExceptionType.NOT_FOUND_NOTICE;
 

@@ -78,7 +78,7 @@ class FrontProductionJpaRepositoryTest {
                 .description("프로덕션 테스트")
                 .visible("Y")
                 .viewCount(1)
-                .commonImageEntityList(commonImageEntityList)
+//                .commonImageEntityList(commonImageEntityList)
                 .build();
 
         frontProductionDTO = FrontProductionEntity.toDto(frontProductionEntity);

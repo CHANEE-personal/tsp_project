@@ -19,7 +19,7 @@ import java.util.Optional;
 
 import static com.tsp.api.faq.domain.AdminFaqEntity.toDto;
 import static com.tsp.api.faq.domain.AdminFaqEntity.toDtoList;
-import static com.tsp.api.domain.faq.QAdminFaqEntity.adminFaqEntity;
+import static com.tsp.api.faq.domain.QAdminFaqEntity.adminFaqEntity;
 import static com.tsp.common.StringUtil.getString;
 import static com.tsp.exception.ApiExceptionType.NOT_FOUND_FAQ;
 

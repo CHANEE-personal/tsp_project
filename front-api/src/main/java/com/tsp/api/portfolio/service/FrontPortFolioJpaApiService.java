@@ -1,6 +1,8 @@
 package com.tsp.api.portfolio.service;
 
 import com.tsp.api.portfolio.domain.FrontPortFolioDTO;
+import com.tsp.api.portfolio.domain.FrontPortFolioEntity;
+import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,10 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
+import static com.tsp.exception.ApiExceptionType.NOT_FOUND_PORTFOLIO;
+
 @Service
 @RequiredArgsConstructor
 public class FrontPortFolioJpaApiService {
     private final FrontPortFolioJpaQueryRepository frontPortFolioJpaQueryRepository;
+    private final FrontPortFolioJpaRepository frontPortFolioJpaRepository;
 
     /**
      * <pre>
@@ -39,7 +44,12 @@ public class FrontPortFolioJpaApiService {
      */
     @Transactional
     public FrontPortFolioDTO findOnePortfolio(Long idx) {
-        return frontPortFolioJpaQueryRepository.findOnePortfolio(idx);
+        FrontPortFolioEntity onePortfolio = frontPortFolioJpaRepository.findByIdx(idx)
+                .orElseThrow(() -> new TspException(NOT_FOUND_PORTFOLIO));
+
+        // 조회 수 증가
+        onePortfolio.updateViewCount();
+        return FrontPortFolioEntity.toDto(onePortfolio);
     }
 
     /**
@@ -47,8 +57,8 @@ public class FrontPortFolioJpaApiService {
      * 1. MethodName : findPrevOnePortfolio
      * 2. ClassName  : FrontPortfolioJpaServiceImpl.java
      * 3. Comment    : 이전 포트폴리오 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
     @Transactional
@@ -61,8 +71,8 @@ public class FrontPortFolioJpaApiService {
      * 1. MethodName : findPrevOnePortfolio
      * 2. ClassName  : FrontPortfolioJpaServiceImpl.java
      * 3. Comment    : 다음 포트폴리오 상세 조회
-     * 4. 작성자       : CHO
-     * 5. 작성일       : 2022. 09. 17.
+     * 4. 작성자      : CHO
+     * 5. 작성일      : 2022. 09. 17.
      * </pre>
      */
     @Transactional

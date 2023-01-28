@@ -25,6 +25,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.rmi.ServerError;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.web.client.HttpClientErrorException.*;
@@ -222,7 +223,7 @@ public class FrontModelJpaApiController {
      */
     @ApiOperation(value = "추천 검색어 리스트 조회", notes = "추천 검색어 리스트를 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "추천 검색어 리스트 조회 성공", response = Map.class),
+            @ApiResponse(code = 200, message = "추천 검색어 리스트 조회 성공", response = List.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -230,7 +231,7 @@ public class FrontModelJpaApiController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/recommend")
-    public ResponseEntity<Page<FrontRecommendDTO>> findRecommendList() {
+    public ResponseEntity<List<FrontRecommendDTO>> findRecommendList() {
         return ResponseEntity.ok().body(frontModelJpaApiService.findRecommendList(PageRequest.of(1, 10)));
     }
 

@@ -122,7 +122,7 @@ public class AdminSupportJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "지원모델 평가 리스트 조회", notes = "지원모델을 평가 리스트를 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "지원모델 평가 리스트 조회성공", response = Page.class),
+            @ApiResponse(code = 200, message = "지원모델 평가 리스트 조회성공", response = List.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -130,7 +130,7 @@ public class AdminSupportJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PostMapping("/evaluation")
-    public ResponseEntity<Page<EvaluationDTO>> findEvaluationList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
+    public ResponseEntity<List<EvaluationDTO>> findEvaluationList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
         return ResponseEntity.ok().body(adminSupportJpaService.findEvaluationList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }
 

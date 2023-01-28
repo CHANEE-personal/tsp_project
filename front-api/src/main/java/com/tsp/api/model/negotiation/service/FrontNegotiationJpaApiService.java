@@ -15,7 +15,6 @@ import java.util.Map;
 
 import static com.tsp.exception.ApiExceptionType.*;
 
-
 @Service
 @RequiredArgsConstructor
 public class FrontNegotiationJpaApiService {
@@ -92,8 +91,6 @@ public class FrontNegotiationJpaApiService {
     @Transactional
     public FrontNegotiationDTO updateModelNegotiation(Long idx, FrontNegotiationEntity frontNegotiationEntity) {
         try {
-            System.out.println("===front===");
-            System.out.println(frontNegotiationEntity.getFrontModelEntity().getIdx());
             oneNegotiation(idx).update(frontNegotiationEntity);
             return FrontNegotiationEntity.toDto(frontNegotiationJpaRepository.save(frontNegotiationEntity));
         } catch (Exception e) {
