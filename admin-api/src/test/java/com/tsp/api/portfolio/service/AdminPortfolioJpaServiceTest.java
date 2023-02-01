@@ -1,30 +1,23 @@
 package com.tsp.api.portfolio.service;
 
-import com.tsp.api.comment.domain.AdminCommentDTO;
-import com.tsp.api.comment.domain.AdminCommentEntity;
-import com.tsp.api.common.domain.NewCodeDTO;
-import com.tsp.api.common.domain.NewCodeEntity;
+import com.tsp.api.model.service.AdminModelCommonServiceTest;
 import com.tsp.api.portfolio.domain.AdminPortFolioDTO;
 import com.tsp.api.portfolio.domain.AdminPortFolioEntity;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import java.util.ArrayList;
@@ -50,53 +43,16 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @RequiredArgsConstructor
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("포트폴리오 Service Test")
-class AdminPortfolioJpaServiceTest {
+class AdminPortfolioJpaServiceTest extends AdminModelCommonServiceTest {
     @Mock private AdminPortfolioJpaService mockAdminPortfolioJpaService;
     private final AdminPortfolioJpaService adminPortfolioJpaService;
-
-    private AdminPortFolioEntity adminPortFolioEntity;
-    private AdminPortFolioDTO adminPortFolioDTO;
-    private AdminCommentEntity adminCommentEntity;
-    private AdminCommentDTO adminCommentDTO;
-    private NewCodeEntity newCodeEntity;
-    private NewCodeDTO newCodeDTO;
-    private final EntityManager em;
-
-    void createPortfolio() {
-        newCodeEntity = NewCodeEntity.builder()
-                .categoryCd(10)
-                .categoryNm("테스트")
-                .cmmType("test")
-                .visible("Y")
-                .build();
-
-        em.persist(newCodeEntity);
-        newCodeDTO = NewCodeEntity.toDto(newCodeEntity);
-
-        adminPortFolioEntity = AdminPortFolioEntity.builder()
-                .categoryCd(newCodeDTO.getCategoryCd())
-                .title("포트폴리오 테스트")
-                .description("포트폴리오 테스트")
-                .hashTag("#test")
-                .videoUrl("https://youtube.com")
-                .visible("Y")
-                .build();
-
-        adminPortFolioDTO = AdminPortFolioEntity.toDto(adminPortFolioEntity);
-    }
-
-    @BeforeEach
-    @EventListener(ApplicationReadyEvent.class)
-    public void init() {
-        createPortfolio();
-    }
 
     @Test
     @DisplayName("포트폴리오조회테스트")
     void 포트폴리오조회테스트() {
         // given
         Map<String, Object> portfolioMap = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(1, 100);
+        PageRequest pageRequest = PageRequest.of(0, 100);
 
         // then
         assertThat(adminPortfolioJpaService.findPortfolioList(portfolioMap, pageRequest)).isNotEmpty();
@@ -107,7 +63,7 @@ class AdminPortfolioJpaServiceTest {
     void 포트폴리오리스트조회Mockito테스트() {
         // given
         Map<String, Object> portfolioMap = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
 
         List<AdminPortFolioDTO> returnPortfolioList = new ArrayList<>();
         returnPortfolioList.add(AdminPortFolioDTO.builder()
@@ -146,7 +102,7 @@ class AdminPortfolioJpaServiceTest {
     void 포트폴리오리스트조회BDD테스트() {
         // given
         Map<String, Object> portfolioMap = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
 
         List<AdminPortFolioDTO> returnPortfolioList = new ArrayList<>();
         returnPortfolioList.add(AdminPortFolioDTO.builder()
