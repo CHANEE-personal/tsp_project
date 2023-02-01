@@ -1,21 +1,15 @@
 package com.tsp.api.comment.service;
 
 import com.tsp.api.comment.domain.AdminCommentDTO;
-import com.tsp.api.comment.domain.AdminCommentEntity;
-import com.tsp.api.model.domain.AdminModelDTO;
-import com.tsp.api.model.domain.AdminModelEntity;
-import com.tsp.api.model.service.AdminModelJpaRepository;
+import com.tsp.api.model.service.AdminModelCommonServiceTest;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -46,53 +40,9 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @RequiredArgsConstructor
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("어드민 코멘트 Service Test")
-class AdminCommentJpaServiceTest {
+class AdminCommentJpaServiceTest extends AdminModelCommonServiceTest {
     @Mock AdminCommentJpaService mockAdminCommentJpaService;
     private final AdminCommentJpaService adminCommentJpaService;
-    private final AdminModelJpaRepository adminModelJpaRepository;
-
-    private AdminCommentEntity adminCommentEntity;
-    private AdminCommentDTO adminCommentDTO;
-    private AdminModelEntity adminModelEntity;
-    private AdminModelDTO adminModelDTO;
-
-    void createAdminComment() {
-        adminModelEntity = AdminModelEntity.builder()
-                .categoryCd(1)
-                .categoryAge(2)
-                .modelKorFirstName("조")
-                .modelKorSecondName("찬희")
-                .modelKorName("조찬희")
-                .modelFirstName("CHO")
-                .modelSecondName("CHANHEE")
-                .modelEngName("CHOCHANHEE")
-                .modelDescription("chaneeCho")
-                .favoriteCount(1)
-                .viewCount(1)
-                .modelMainYn("Y")
-                .newYn("N")
-                .status("draft")
-                .height(170)
-                .size3("34-24-34")
-                .shoes(270)
-                .visible("Y")
-                .build();
-
-        adminModelDTO = AdminModelEntity.toDto(adminModelJpaRepository.save(adminModelEntity));
-
-        adminCommentEntity = AdminCommentEntity.builder()
-                .comment("코멘트 테스트")
-                .visible("Y")
-                .build();
-
-        adminCommentDTO = AdminCommentEntity.toDto(adminCommentEntity);
-    }
-
-    @BeforeEach
-    @EventListener(ApplicationReadyEvent.class)
-    public void init() {
-        createAdminComment();
-    }
 
     @Test
     @DisplayName("어드민 코멘트 리스트 조회 테스트")
