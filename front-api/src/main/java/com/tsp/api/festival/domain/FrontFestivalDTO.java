@@ -5,7 +5,6 @@ import com.tsp.api.common.domain.NewCommonDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotEmpty;
@@ -18,7 +17,7 @@ import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 @Setter
 @Builder
 @EqualsAndHashCode(of = "idx", callSuper = false)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 @ApiModel
 public class FrontFestivalDTO extends NewCommonDTO {

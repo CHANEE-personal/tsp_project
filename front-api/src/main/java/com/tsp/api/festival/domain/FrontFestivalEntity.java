@@ -18,7 +18,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Setter
 @Builder
 @EqualsAndHashCode(of = "idx", callSuper = false)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tsp_festival")
 public class FrontFestivalEntity extends NewCommonMappedClass {

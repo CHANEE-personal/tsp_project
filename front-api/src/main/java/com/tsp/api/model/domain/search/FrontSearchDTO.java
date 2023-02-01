@@ -12,7 +12,7 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 @Builder
 @EqualsAndHashCode(of = "idx", callSuper = false)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 @ApiModel
 public class FrontSearchDTO extends NewCommonDTO {

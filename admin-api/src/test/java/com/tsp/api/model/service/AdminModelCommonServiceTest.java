@@ -113,8 +113,7 @@ public abstract class AdminModelCommonServiceTest {
                         .agencyName("agency")
                         .agencyDescription("agency")
                         .visible("Y")
-                        .build()
-        );
+                        .build());
 
         adminAgencyDTO = AdminAgencyEntity.toDto(adminAgencyEntity);
 
@@ -127,8 +126,7 @@ public abstract class AdminModelCommonServiceTest {
                         .filePath("/test/test.jpg")
                         .typeIdx(1L)
                         .typeName(EntityType.MODEL)
-                        .build()
-        );
+                        .build());
 
         commonImageDTO = CommonImageEntity.toDto(commonImageEntity);
 

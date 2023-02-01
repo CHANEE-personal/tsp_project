@@ -1,27 +1,21 @@
 package com.tsp.api.model.service;
 
-import com.tsp.api.common.domain.CommonImageDTO;
-import com.tsp.api.common.domain.CommonImageEntity;
-import com.tsp.api.common.domain.NewCodeEntity;
+import com.tsp.api.FrontCommonServiceTest;
 import com.tsp.api.model.domain.FrontModelDTO;
 import com.tsp.api.model.domain.FrontModelEntity;
-import com.tsp.api.model.domain.agency.FrontAgencyDTO;
 import com.tsp.api.model.domain.agency.FrontAgencyEntity;
 import com.tsp.api.model.domain.recommend.FrontRecommendEntity;
 import com.tsp.api.model.domain.search.FrontSearchDTO;
 import com.tsp.api.model.domain.search.FrontSearchEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -55,83 +49,11 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @RequiredArgsConstructor
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("모델 Service Test")
-class FrontModelJpaApiServiceTest {
+class FrontModelJpaApiServiceTest extends FrontCommonServiceTest {
     private final FrontModelJpaApiService frontModelJpaApiService;
     @Mock private FrontModelJpaApiService mockFrontModelJpaApiService;
 
-    private FrontModelEntity frontModelEntity;
-    private FrontModelDTO frontModelDTO;
-    private FrontAgencyEntity frontAgencyEntity;
-    private FrontAgencyDTO frontAgencyDTO;
-    private CommonImageEntity commonImageEntity;
-    private CommonImageDTO commonImageDTO;
-    private NewCodeEntity newCodeEntity;
-
-
     private final EntityManager em;
-
-    private void createModel() {
-        frontAgencyEntity = FrontAgencyEntity.builder()
-                .agencyName("agency")
-                .agencyDescription("agency")
-                .visible("Y")
-                .build();
-
-        em.persist(frontAgencyEntity);
-
-        frontAgencyDTO = FrontAgencyEntity.toDto(frontAgencyEntity);
-
-        newCodeEntity = NewCodeEntity.builder()
-                .categoryCd(999)
-                .categoryNm("남성모델")
-                .visible("Y")
-                .cmmType("model")
-                .build();
-
-        em.persist(newCodeEntity);
-
-        frontModelEntity = FrontModelEntity.builder()
-                .newModelCodeJpaDTO(newCodeEntity)
-                .categoryAge(2)
-                .frontAgencyEntity(frontAgencyEntity)
-                .modelKorFirstName("조")
-                .modelKorSecondName("찬희")
-                .modelKorName("조찬희")
-                .modelFirstName("CHO")
-                .modelSecondName("CHANHEE")
-                .modelEngName("CHOCHANHEE")
-                .modelDescription("chaneeCho")
-                .modelMainYn("Y")
-                .height(170)
-                .size3("34-24-34")
-                .shoes(270)
-                .newYn("N")
-                .modelFavoriteCount(1)
-                .visible("Y")
-                .build();
-
-        em.persist(frontModelEntity);
-
-        frontModelDTO = FrontModelEntity.toDto(frontModelEntity);
-
-        commonImageEntity = CommonImageEntity.builder()
-                .idx(1L)
-                .imageType("main")
-                .fileName("test.jpg")
-                .fileMask("test.jpg")
-                .filePath("/test/test.jpg")
-                .typeIdx(1L)
-                .typeName("model")
-                .build();
-
-        commonImageDTO = CommonImageEntity.toDto(commonImageEntity);
-    }
-
-    @BeforeEach
-    @EventListener(ApplicationReadyEvent.class)
-    public void init() {
-        createModel();
-    }
 
     @Test
     @DisplayName("모델 리스트 조회 예외 테스트")
@@ -139,7 +61,7 @@ class FrontModelJpaApiServiceTest {
         // given
         Map<String, Object> modelMap = new HashMap<>();
         modelMap.put("categoryCd", -1);
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
 
         // then
         assertThatThrownBy(() -> frontModelJpaApiService.findModelList(modelMap, pageRequest))
@@ -151,7 +73,7 @@ class FrontModelJpaApiServiceTest {
     void 모델리스트조회Mockito테스트() {
         Map<String, Object> modelMap = new HashMap<>();
         modelMap.put("categoryCd", "1");
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
 
         List<FrontModelDTO> returnModelList = new ArrayList<>();
 
@@ -211,7 +133,7 @@ class FrontModelJpaApiServiceTest {
     void 모델리스트조회BDD테스트() {
         Map<String, Object> modelMap = new HashMap<>();
         modelMap.put("categoryCd", "1");
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
 
         List<FrontModelDTO> returnModelList = new ArrayList<>();
 
@@ -643,7 +565,7 @@ class FrontModelJpaApiServiceTest {
 
         em.persist(frontRecommendEntity);
 
-        assertThat(frontModelJpaApiService.findRecommendList(PageRequest.of(1, 10))).isNotEmpty();
+        assertThat(frontModelJpaApiService.findRecommendList(PageRequest.of(0, 10))).isNotEmpty();
     }
 
     @Test
@@ -653,7 +575,7 @@ class FrontModelJpaApiServiceTest {
         em.persist(FrontSearchEntity.builder().searchKeyword("모델1").build());
         em.persist(FrontSearchEntity.builder().searchKeyword("모델1").build());
         em.persist(FrontSearchEntity.builder().searchKeyword("모델2").build());
-        Page<FrontSearchDTO> searchResult = frontModelJpaApiService.rankingKeywordList(PageRequest.of(1, 10));
+        Page<FrontSearchDTO> searchResult = frontModelJpaApiService.rankingKeywordList(PageRequest.of(0, 10));
         List<FrontSearchDTO> searchList = searchResult.stream().collect(Collectors.toList());
 
         assertThat(searchList.get(0).getSearchKeyword()).isEqualTo("모델1");

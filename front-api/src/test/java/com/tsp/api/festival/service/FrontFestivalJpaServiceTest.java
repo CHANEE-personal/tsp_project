@@ -1,5 +1,6 @@
 package com.tsp.api.festival.service;
 
+import com.tsp.api.FrontCommonServiceTest;
 import com.tsp.api.festival.domain.FrontFestivalDTO;
 import com.tsp.api.festival.domain.FrontFestivalEntity;
 import lombok.RequiredArgsConstructor;
@@ -33,43 +34,16 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @TestPropertySource(locations = "classpath:application.properties")
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("행사 Service Test")
-class FrontFestivalJpaServiceTest {
-    @Mock private final FrontFestivalJpaService mockFrontFestivalJpaService;
+class FrontFestivalJpaServiceTest extends FrontCommonServiceTest {
     private final FrontFestivalJpaService frontFestivalJpaService;
 
-    private FrontFestivalEntity frontFestivalEntity;
-    private FrontFestivalDTO frontFestivalDTO;
-
     private final EntityManager em;
-
-    private void createFestival() {
-        // 등록
-        LocalDateTime dateTime = LocalDateTime.now();
-
-        frontFestivalEntity = FrontFestivalEntity.builder()
-                .festivalTitle("축제 제목")
-                .festivalDescription("축제 내용")
-                .festivalMonth(dateTime.getMonthValue())
-                .festivalDay(dateTime.getDayOfMonth())
-                .festivalTime(dateTime)
-                .build();
-
-        em.persist(frontFestivalEntity);
-
-        frontFestivalDTO = FrontFestivalEntity.toDto(frontFestivalEntity);
-    }
-
-    @BeforeEach
-    @EventListener(ApplicationReadyEvent.class)
-    public void init() {
-        createFestival();
-    }
 
     @Test
     @DisplayName("행사 리스트 조회 테스트")
     void 행사리스트조회테스트() {
         // then
-        assertThat(frontFestivalJpaService.findFestivalList(frontFestivalEntity, PageRequest.of(1, 10))).isNotEmpty();
+        assertThat(frontFestivalJpaService.findFestivalList(frontFestivalEntity, PageRequest.of(0, 10))).isNotEmpty();
     }
 
     @Test
@@ -77,17 +51,6 @@ class FrontFestivalJpaServiceTest {
     void 행사리스트갯수그룹조회() {
         // 등록
         LocalDateTime dateTime = LocalDateTime.now();
-
-        FrontFestivalEntity frontFestivalEntity1 = FrontFestivalEntity.builder()
-                .festivalTitle("축제 제목")
-                .festivalDescription("축제 내용")
-                .festivalMonth(dateTime.getMonthValue())
-                .festivalDay(dateTime.getDayOfMonth())
-                .festivalTime(dateTime)
-                .build();
-
-        em.persist(frontFestivalEntity1);
-
         FrontFestivalEntity frontFestivalEntity2 = FrontFestivalEntity.builder()
                 .festivalTitle("축제 제목")
                 .festivalDescription("축제 내용")
