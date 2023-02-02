@@ -1,20 +1,16 @@
 package com.tsp.api.production.service;
 
-import com.tsp.api.comment.domain.AdminCommentDTO;
-import com.tsp.api.comment.domain.AdminCommentEntity;
+import com.tsp.api.model.service.AdminModelCommonServiceTest;
 import com.tsp.api.production.domain.AdminProductionDTO;
 import com.tsp.api.production.domain.AdminProductionEntity;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -46,37 +42,16 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @RequiredArgsConstructor
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("프로덕션 Service Test")
-class AdminProductionJpaServiceTest {
+class AdminProductionJpaServiceTest extends AdminModelCommonServiceTest {
     @Mock private AdminProductionJpaService mockAdminProductionJpaService;
     private final AdminProductionJpaService adminProductionJpaService;
-
-    private AdminProductionEntity adminProductionEntity;
-    private AdminProductionDTO adminProductionDTO;
-    private AdminCommentEntity adminCommentEntity;
-    private AdminCommentDTO adminCommentDTO;
-
-    void createProduction() {
-        adminProductionEntity = AdminProductionEntity.builder()
-                .title("프로덕션 테스트")
-                .description("프로덕션 테스트")
-                .visible("Y")
-                .build();
-
-        adminProductionDTO = AdminProductionEntity.toDto(adminProductionEntity);
-    }
-
-    @BeforeEach
-    @EventListener(ApplicationReadyEvent.class)
-    public void init() {
-        createProduction();
-    }
 
     @Test
     @DisplayName("프로덕션 리스트 조회 테스트")
     void 프로덕션리스트조회테스트() {
         // given
         Map<String, Object> productionMap = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
 
         // then
         assertThat(adminProductionJpaService.findProductionList(productionMap, pageRequest)).isNotEmpty();
@@ -87,7 +62,7 @@ class AdminProductionJpaServiceTest {
     void 프로덕션리스트조회Mockito테스트() {
         // given
         Map<String, Object> productionMap = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
 
         List<AdminProductionDTO> returnProductionList = new ArrayList<>();
 
@@ -125,7 +100,7 @@ class AdminProductionJpaServiceTest {
     void 프로덕션리스트조회BDD테스트() {
         // given
         Map<String, Object> productionMap = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
 
         List<AdminProductionDTO> returnProductionList = new ArrayList<>();
 
@@ -299,9 +274,6 @@ class AdminProductionJpaServiceTest {
     @Test
     @DisplayName("프로덕션 등록 Mockito 테스트")
     void 프로덕션등록Mockito테스트() {
-        // given
-        adminProductionJpaService.insertProduction(adminProductionEntity);
-
         // when
         when(mockAdminProductionJpaService.findOneProduction(adminProductionEntity.getIdx())).thenReturn(adminProductionDTO);
         AdminProductionDTO productionInfo = mockAdminProductionJpaService.findOneProduction(adminProductionEntity.getIdx());
@@ -322,9 +294,6 @@ class AdminProductionJpaServiceTest {
     @Test
     @DisplayName("프로덕션 등록 BDD 테스트")
     void 프로덕션등록BDD테스트() {
-        // given
-        adminProductionJpaService.insertProduction(adminProductionEntity);
-
         // when
         given(mockAdminProductionJpaService.findOneProduction(adminProductionEntity.getIdx())).willReturn(adminProductionDTO);
         AdminProductionDTO productionInfo = mockAdminProductionJpaService.findOneProduction(adminProductionEntity.getIdx());
@@ -343,74 +312,63 @@ class AdminProductionJpaServiceTest {
     @DisplayName("프로덕션 수정 Mockito 테스트")
     void 프로덕션수정Mockito테스트() {
         // given
-        Long idx = adminProductionJpaService.insertProduction(adminProductionEntity).getIdx();
-
         adminProductionEntity = AdminProductionEntity.builder()
-                .idx(idx)
+                .idx(adminProductionDTO.getIdx())
                 .title("프로덕션 테스트1")
                 .description("프로덕션 테스트1")
                 .visible("Y")
                 .build();
 
-        AdminProductionDTO adminProductionDTO = AdminProductionEntity.toDto(adminProductionEntity);
-
-        adminProductionJpaService.updateProduction(idx, adminProductionEntity);
+        AdminProductionDTO updateProduction = adminProductionJpaService.updateProduction(adminProductionDTO.getIdx(), adminProductionEntity);
 
         // when
-        when(mockAdminProductionJpaService.findOneProduction(adminProductionEntity.getIdx())).thenReturn(adminProductionDTO);
-        AdminProductionDTO productionInfo = mockAdminProductionJpaService.findOneProduction(adminProductionEntity.getIdx());
+        when(mockAdminProductionJpaService.findOneProduction(updateProduction.getIdx())).thenReturn(updateProduction);
+        AdminProductionDTO productionInfo = mockAdminProductionJpaService.findOneProduction(updateProduction.getIdx());
 
         // then
         assertThat(productionInfo.getTitle()).isEqualTo("프로덕션 테스트1");
         assertThat(productionInfo.getDescription()).isEqualTo("프로덕션 테스트1");
 
         // verify
-        verify(mockAdminProductionJpaService, times(1)).findOneProduction(adminProductionEntity.getIdx());
-        verify(mockAdminProductionJpaService, atLeastOnce()).findOneProduction(adminProductionEntity.getIdx());
+        verify(mockAdminProductionJpaService, times(1)).findOneProduction(updateProduction.getIdx());
+        verify(mockAdminProductionJpaService, atLeastOnce()).findOneProduction(updateProduction.getIdx());
         verifyNoMoreInteractions(mockAdminProductionJpaService);
 
         InOrder inOrder = inOrder(mockAdminProductionJpaService);
-        inOrder.verify(mockAdminProductionJpaService).findOneProduction(adminProductionEntity.getIdx());
+        inOrder.verify(mockAdminProductionJpaService).findOneProduction(updateProduction.getIdx());
     }
 
     @Test
     @DisplayName("프로덕션 수정 BDD 테스트")
     void 프로덕션수정BDD테스트() {
         // given
-        Long idx = adminProductionJpaService.insertProduction(adminProductionEntity).getIdx();
-
         adminProductionEntity = AdminProductionEntity.builder()
-                .idx(idx)
+                .idx(adminProductionDTO.getIdx())
                 .title("프로덕션 테스트1")
                 .description("프로덕션 테스트1")
                 .visible("Y")
                 .build();
 
-        AdminProductionDTO adminProductionDTO = AdminProductionEntity.toDto(adminProductionEntity);
-
-        adminProductionJpaService.updateProduction(idx, adminProductionEntity);
+        AdminProductionDTO updateProduction = adminProductionJpaService.updateProduction(adminProductionDTO.getIdx(), adminProductionEntity);
 
         // when
-        given(mockAdminProductionJpaService.findOneProduction(adminProductionEntity.getIdx())).willReturn(adminProductionDTO);
-        AdminProductionDTO productionInfo = mockAdminProductionJpaService.findOneProduction(adminProductionEntity.getIdx());
+        given(mockAdminProductionJpaService.findOneProduction(updateProduction.getIdx())).willReturn(updateProduction);
+        AdminProductionDTO productionInfo = mockAdminProductionJpaService.findOneProduction(updateProduction.getIdx());
 
         // then
         assertThat(productionInfo.getTitle()).isEqualTo("프로덕션 테스트1");
         assertThat(productionInfo.getDescription()).isEqualTo("프로덕션 테스트1");
 
         // verify
-        then(mockAdminProductionJpaService).should(times(1)).findOneProduction(adminProductionEntity.getIdx());
-        then(mockAdminProductionJpaService).should(atLeastOnce()).findOneProduction(adminProductionEntity.getIdx());
+        then(mockAdminProductionJpaService).should(times(1)).findOneProduction(updateProduction.getIdx());
+        then(mockAdminProductionJpaService).should(atLeastOnce()).findOneProduction(updateProduction.getIdx());
         then(mockAdminProductionJpaService).shouldHaveNoMoreInteractions();
     }
 
     @Test
     @DisplayName("프로덕션 삭제 테스트")
     void 프로덕션삭제테스트() {
-        // given
-        Long idx = adminProductionJpaService.insertProduction(adminProductionEntity).getIdx();
-
         // then
-        assertThat(adminProductionJpaService.deleteProduction(idx)).isNotNull();
+        assertThat(adminProductionJpaService.deleteProduction(adminProductionDTO.getIdx())).isNotNull();
     }
 }

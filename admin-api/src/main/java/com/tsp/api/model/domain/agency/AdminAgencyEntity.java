@@ -48,12 +48,14 @@ public class AdminAgencyEntity extends NewCommonMappedClass {
     @NotEmpty(message = "소속사 노출 여부 선택은 필수입니다.")
     private String visible;
 
+    @Builder.Default
     @Where(clause = "type_name = 'agency'")
     @OneToMany(mappedBy = "adminAgencyEntity", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 
-    @OneToOne(mappedBy = "adminAgencyEntity", fetch = LAZY)
-    private AdminModelEntity adminModelEntity;
+    @Builder.Default
+    @OneToMany(mappedBy = "adminAgencyEntity", fetch = LAZY)
+    private List<AdminModelEntity> adminModelEntity = new ArrayList<>();
 
     public void update(AdminAgencyEntity adminAgency) {
         this.agencyName = adminAgency.agencyName;

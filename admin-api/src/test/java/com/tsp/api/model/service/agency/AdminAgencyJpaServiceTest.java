@@ -2,17 +2,15 @@ package com.tsp.api.model.service.agency;
 
 import com.tsp.api.model.domain.agency.AdminAgencyDTO;
 import com.tsp.api.model.domain.agency.AdminAgencyEntity;
+import com.tsp.api.model.service.AdminModelCommonServiceTest;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -43,35 +41,16 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @RequiredArgsConstructor
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("소속사 Service Test")
-class AdminAgencyJpaServiceTest {
+class AdminAgencyJpaServiceTest extends AdminModelCommonServiceTest {
     @Mock private AdminAgencyJpaService mockAdminAgencyJpaService;
     private final AdminAgencyJpaService adminAgencyJpaService;
-
-    private AdminAgencyEntity adminAgencyEntity;
-    private AdminAgencyDTO adminAgencyDTO;
-
-    void createAgency() {
-        adminAgencyEntity = AdminAgencyEntity.builder()
-                .agencyName("agency")
-                .agencyDescription("agency")
-                .visible("Y")
-                .build();
-
-        adminAgencyDTO = adminAgencyJpaService.insertAgency(adminAgencyEntity);
-    }
-
-    @BeforeEach
-    @EventListener(ApplicationReadyEvent.class)
-    public void init() {
-        createAgency();
-    }
 
     @Test
     @DisplayName("소속사 리스트 조회 테스트")
     void 소속사리스트조회테스트() {
         // given
         Map<String, Object> agencyMap = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
 
         // then
         assertThat(adminAgencyJpaService.findAgencyList(agencyMap, pageRequest)).isNotEmpty();

@@ -2,22 +2,19 @@ package com.tsp.api.support.service;
 
 import com.tsp.api.comment.domain.AdminCommentDTO;
 import com.tsp.api.comment.domain.AdminCommentEntity;
+import com.tsp.api.model.service.AdminModelCommonServiceTest;
 import com.tsp.api.support.domain.AdminSupportDTO;
 import com.tsp.api.support.domain.AdminSupportEntity;
 import com.tsp.api.support.domain.evaluation.EvaluationDTO;
-import com.tsp.api.support.domain.evaluation.EvaluationEntity;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -48,45 +45,16 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @RequiredArgsConstructor
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("지원모델 Service Test")
-class AdminSupportJpaServiceTest {
+class AdminSupportJpaServiceTest extends AdminModelCommonServiceTest {
     @Mock private AdminSupportJpaService mockAdminSupportJpaService;
     private final AdminSupportJpaService adminSupportJpaService;
-
-    private AdminSupportEntity adminSupportEntity;
-    private AdminSupportDTO adminSupportDTO;
-
-    private EvaluationEntity evaluationEntity;
-    private EvaluationDTO evaluationDTO;
-    private AdminCommentEntity adminCommentEntity;
-    private AdminCommentDTO adminCommentDTO;
-
-    void createSupport() {
-        adminSupportEntity = AdminSupportEntity.builder()
-                .supportName("조찬희")
-                .supportHeight(170)
-                .supportMessage("조찬희")
-                .supportPhone("010-9466-2702")
-                .supportSize3("31-24-31")
-                .supportInstagram("https://instagram.com")
-                .supportTime(LocalDateTime.now())
-                .visible("Y")
-                .build();
-
-        adminSupportDTO = AdminSupportEntity.toDto(adminSupportEntity);
-    }
-
-    @BeforeEach
-    @EventListener(ApplicationReadyEvent.class)
-    public void init() {
-        createSupport();
-    }
 
     @Test
     @DisplayName("지원모델 리스트 조회 테스트")
     void 지원모델리스트조회테스트() {
         // given
         Map<String, Object> supportMap = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
 
         // then
         assertThat(adminSupportJpaService.findSupportList(supportMap, pageRequest)).isNotEmpty();
@@ -97,7 +65,7 @@ class AdminSupportJpaServiceTest {
     void 지원모델리스트조회Mockito테스트() {
         // given
         Map<String, Object> supportMap = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
 
         List<AdminSupportDTO> returnSupportList = new ArrayList<>();
         returnSupportList.add(AdminSupportDTO.builder()
@@ -359,20 +327,13 @@ class AdminSupportJpaServiceTest {
     @Test
     @DisplayName("지원 모델 평가 상세 조회 Mockito 테스트")
     void 지원모델평가상세조회Mockito테스트() {
-        // given
-        evaluationEntity = EvaluationEntity.builder()
-                .idx(1L).adminSupportEntity(adminSupportEntity)
-                .evaluateComment("합격").visible("Y").build();
-
-        evaluationDTO = EvaluationEntity.toDto(evaluationEntity);
-
         // when
         when(mockAdminSupportJpaService.findOneEvaluation(evaluationEntity.getIdx())).thenReturn(evaluationDTO);
         EvaluationDTO evaluationInfo = mockAdminSupportJpaService.findOneEvaluation(evaluationEntity.getIdx());
 
         // then
         assertThat(evaluationInfo.getIdx()).isEqualTo(1);
-//        assertThat(evaluationInfo.getSupportIdx()).isEqualTo(adminSupportEntity.getIdx());
+        assertThat(evaluationInfo.getAdminSupportDTO().getIdx()).isEqualTo(adminSupportEntity.getIdx());
         assertThat(evaluationInfo.getEvaluateComment()).isEqualTo("합격");
 
         // verify
@@ -387,20 +348,13 @@ class AdminSupportJpaServiceTest {
     @Test
     @DisplayName("지원 모델 평가 상세 조회 BDD 테스트")
     void 지원모델평가상세조회BDD테스트() {
-        // given
-        evaluationEntity = EvaluationEntity.builder()
-                .idx(1L).adminSupportEntity(adminSupportEntity)
-                .evaluateComment("합격").visible("Y").build();
-
-        evaluationDTO = EvaluationEntity.toDto(evaluationEntity);
-
         // when
         given(mockAdminSupportJpaService.findOneEvaluation(evaluationEntity.getIdx())).willReturn(evaluationDTO);
         EvaluationDTO evaluationInfo = mockAdminSupportJpaService.findOneEvaluation(evaluationEntity.getIdx());
 
         // then
         assertThat(evaluationInfo.getIdx()).isEqualTo(1);
-//        assertThat(evaluationInfo.getSupportIdx()).isEqualTo(adminSupportEntity.getIdx());
+        assertThat(evaluationInfo.getAdminSupportDTO().getIdx()).isEqualTo(adminSupportEntity.getIdx());
         assertThat(evaluationInfo.getEvaluateComment()).isEqualTo("합격");
 
         // verify
@@ -413,28 +367,19 @@ class AdminSupportJpaServiceTest {
     @DisplayName("지원 모델 평가 Mockito 테스트")
     void 지원모델평가Mockito테스트() {
         // given
-        Long supportIdx = adminSupportJpaService.insertSupportModel(adminSupportEntity).getIdx();
-
-        evaluationEntity = EvaluationEntity.builder()
-                .evaluateComment("합격")
-                .visible("Y")
-                .build();
-
-        adminSupportJpaService.evaluationSupportModel(supportIdx, evaluationEntity);
-
-        evaluationDTO = EvaluationEntity.toDto(evaluationEntity);
+        EvaluationDTO evaluation = adminSupportJpaService.evaluationSupportModel(adminSupportDTO.getIdx(), evaluationEntity);
 
         // when
-        when(mockAdminSupportJpaService.findOneEvaluation(evaluationEntity.getIdx())).thenReturn(evaluationDTO);
-        EvaluationDTO evaluationInfo = mockAdminSupportJpaService.findOneEvaluation(evaluationEntity.getIdx());
+        when(mockAdminSupportJpaService.findOneEvaluation(evaluation.getIdx())).thenReturn(evaluation);
+        EvaluationDTO evaluationInfo = mockAdminSupportJpaService.findOneEvaluation(evaluation.getIdx());
 
         // then
-//        assertThat(evaluationInfo.getSupportIdx()).isEqualTo(supportIdx);
+        assertThat(evaluationInfo.getAdminSupportDTO().getIdx()).isEqualTo(evaluation.getIdx());
         assertThat(evaluationInfo.getEvaluateComment()).isEqualTo("합격");
 
         // verify
-        verify(mockAdminSupportJpaService, times(1)).findOneEvaluation(evaluationEntity.getIdx());
-        verify(mockAdminSupportJpaService, atLeastOnce()).findOneEvaluation(evaluationEntity.getIdx());
+        verify(mockAdminSupportJpaService, times(1)).findOneEvaluation(evaluation.getIdx());
+        verify(mockAdminSupportJpaService, atLeastOnce()).findOneEvaluation(evaluation.getIdx());
         verifyNoMoreInteractions(mockAdminSupportJpaService);
 
         InOrder inOrder = inOrder(mockAdminSupportJpaService);
@@ -445,81 +390,53 @@ class AdminSupportJpaServiceTest {
     @DisplayName("지원 모델 평가 BDD 테스트")
     void 지원모델평가BDD테스트() {
         // given
-        Long supportIdx = adminSupportJpaService.insertSupportModel(adminSupportEntity).getIdx();
-
-        evaluationEntity = EvaluationEntity.builder()
-                .evaluateComment("합격")
-                .visible("Y")
-                .build();
-
-        adminSupportJpaService.evaluationSupportModel(supportIdx, evaluationEntity);
-
-        evaluationDTO = EvaluationEntity.toDto(evaluationEntity);
+        EvaluationDTO evaluation = adminSupportJpaService.evaluationSupportModel(adminSupportDTO.getIdx(), evaluationEntity);
 
         // when
-        given(mockAdminSupportJpaService.findOneEvaluation(evaluationEntity.getIdx())).willReturn(evaluationDTO);
-        EvaluationDTO evaluationInfo = mockAdminSupportJpaService.findOneEvaluation(evaluationEntity.getIdx());
+        given(mockAdminSupportJpaService.findOneEvaluation(evaluation.getIdx())).willReturn(evaluation);
+        EvaluationDTO evaluationInfo = mockAdminSupportJpaService.findOneEvaluation(evaluation.getIdx());
 
         // then
-//        assertThat(evaluationInfo.getSupportIdx()).isEqualTo(supportIdx);
+        assertThat(evaluationInfo.getAdminSupportDTO().getIdx()).isEqualTo(adminSupportDTO.getIdx());
         assertThat(evaluationInfo.getEvaluateComment()).isEqualTo("합격");
 
         // verify
-        then(mockAdminSupportJpaService).should(times(1)).findOneEvaluation(evaluationEntity.getIdx());
-        then(mockAdminSupportJpaService).should(atLeastOnce()).findOneEvaluation(evaluationEntity.getIdx());
+        then(mockAdminSupportJpaService).should(times(1)).findOneEvaluation(evaluation.getIdx());
+        then(mockAdminSupportJpaService).should(atLeastOnce()).findOneEvaluation(evaluation.getIdx());
         then(mockAdminSupportJpaService).shouldHaveNoMoreInteractions();
     }
 
     @Test
     @DisplayName("지원 모델 평가 삭제 Mockito 테스트")
     void 지원모델평가삭제Mockito테스트() {
-        // given
-        Long supportIdx = adminSupportJpaService.insertSupportModel(adminSupportEntity).getIdx();
-
-        evaluationEntity = EvaluationEntity.builder()
-                .evaluateComment("합격").visible("Y").build();
-
-        // 지원모델 평가 저장
-        adminSupportJpaService.evaluationSupportModel(supportIdx, evaluationEntity);
-        evaluationDTO = EvaluationEntity.toDto(evaluationEntity);
-
-        given(mockAdminSupportJpaService.findOneEvaluation(evaluationEntity.getIdx())).willReturn(evaluationDTO);
-        Long deleteIdx = adminSupportJpaService.deleteEvaluation(evaluationEntity.getIdx());
+        given(mockAdminSupportJpaService.findOneEvaluation(evaluationDTO.getIdx())).willReturn(evaluationDTO);
+        Long deleteIdx = adminSupportJpaService.deleteEvaluation(evaluationDTO.getIdx());
 
         // then
-        assertThat(mockAdminSupportJpaService.findOneEvaluation(evaluationEntity.getIdx()).getIdx()).isEqualTo(deleteIdx);
+        assertThat(mockAdminSupportJpaService.findOneEvaluation(evaluationDTO.getIdx()).getIdx()).isEqualTo(deleteIdx);
 
         // verify
-        verify(mockAdminSupportJpaService, times(1)).findOneEvaluation(evaluationEntity.getIdx());
-        verify(mockAdminSupportJpaService, atLeastOnce()).findOneEvaluation(evaluationEntity.getIdx());
+        verify(mockAdminSupportJpaService, times(1)).findOneEvaluation(evaluationDTO.getIdx());
+        verify(mockAdminSupportJpaService, atLeastOnce()).findOneEvaluation(evaluationDTO.getIdx());
         verifyNoMoreInteractions(mockAdminSupportJpaService);
 
         InOrder inOrder = inOrder(mockAdminSupportJpaService);
-        inOrder.verify(mockAdminSupportJpaService).findOneEvaluation(evaluationEntity.getIdx());
+        inOrder.verify(mockAdminSupportJpaService).findOneEvaluation(evaluationDTO.getIdx());
     }
 
     @Test
     @DisplayName("지원 모델 평가 삭제 BDD 테스트")
     void 지원모델평가삭제BDD테스트() {
         // given
-        Long supportIdx = adminSupportJpaService.insertSupportModel(adminSupportEntity).getIdx();
-
-        evaluationEntity = EvaluationEntity.builder()
-                .evaluateComment("합격").visible("Y").build();
-
-        // 지원모델 평가 저장
-        adminSupportJpaService.evaluationSupportModel(supportIdx, evaluationEntity);
-        evaluationDTO = EvaluationEntity.toDto(evaluationEntity);
-
-        given(mockAdminSupportJpaService.findOneEvaluation(evaluationEntity.getIdx())).willReturn(evaluationDTO);
-        Long deleteIdx = adminSupportJpaService.deleteEvaluation(evaluationEntity.getIdx());
+        given(mockAdminSupportJpaService.findOneEvaluation(evaluationDTO.getIdx())).willReturn(evaluationDTO);
+        Long deleteIdx = adminSupportJpaService.deleteEvaluation(evaluationDTO.getIdx());
 
         // then
-        assertThat(mockAdminSupportJpaService.findOneEvaluation(evaluationEntity.getIdx()).getIdx()).isEqualTo(deleteIdx);
+        assertThat(mockAdminSupportJpaService.findOneEvaluation(evaluationDTO.getIdx()).getIdx()).isEqualTo(deleteIdx);
 
         // verify
-        then(mockAdminSupportJpaService).should(times(1)).findOneEvaluation(evaluationEntity.getIdx());
-        then(mockAdminSupportJpaService).should(atLeastOnce()).findOneEvaluation(evaluationEntity.getIdx());
+        then(mockAdminSupportJpaService).should(times(1)).findOneEvaluation(evaluationDTO.getIdx());
+        then(mockAdminSupportJpaService).should(atLeastOnce()).findOneEvaluation(evaluationDTO.getIdx());
         then(mockAdminSupportJpaService).shouldHaveNoMoreInteractions();
     }
 
@@ -527,9 +444,7 @@ class AdminSupportJpaServiceTest {
     @DisplayName("지원 모델 합격 Mockito 테스트")
     void 지원모델합격Mockito테스트() {
         // given
-        Long supportIdx = adminSupportJpaService.insertSupportModel(adminSupportEntity).getIdx();
-
-        AdminSupportDTO supportDTO = adminSupportJpaService.updatePass(supportIdx);
+        AdminSupportDTO supportDTO = adminSupportJpaService.updatePass(adminSupportDTO.getIdx());
 
         // when
         when(mockAdminSupportJpaService.findOneSupportModel(adminSupportEntity.getIdx())).thenReturn(supportDTO);
@@ -552,9 +467,7 @@ class AdminSupportJpaServiceTest {
     @DisplayName("지원 모델 합격 BDD 테스트")
     void 지원모델합격BDD테스트() {
         // given
-        Long supportIdx = adminSupportJpaService.insertSupportModel(adminSupportEntity).getIdx();
-
-        AdminSupportDTO supportDTO = adminSupportJpaService.updatePass(supportIdx);
+        AdminSupportDTO supportDTO = adminSupportJpaService.updatePass(adminSupportDTO.getIdx());
 
         // when
         when(mockAdminSupportJpaService.findOneSupportModel(adminSupportEntity.getIdx())).thenReturn(supportDTO);

@@ -3,6 +3,8 @@ package com.tsp.api.common.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tsp.api.model.domain.FrontModelEntity;
 import com.tsp.api.model.domain.agency.FrontAgencyEntity;
+import com.tsp.api.portfolio.domain.FrontPortFolioEntity;
+import com.tsp.api.production.domain.FrontProductionEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -78,13 +80,13 @@ public class CommonImageEntity implements Serializable {
     @JoinColumn(name = "type_idx", referencedColumnName = "idx", insertable = false, updatable = false)
     private FrontModelEntity frontModelEntity;
 
-//    @ManyToOne(fetch = LAZY)
-//    @JoinColumn(name = "type_idx", referencedColumnName = "idx", insertable = false, updatable = false)
-//    private FrontProductionEntity frontProductionEntity;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "type_idx", referencedColumnName = "idx", insertable = false, updatable = false)
+    private FrontProductionEntity frontProductionEntity;
 
-//    @ManyToOne(fetch = LAZY)
-//    @JoinColumn(name = "type_idx", referencedColumnName = "idx", insertable = false, updatable = false)
-//    private FrontPortFolioEntity frontPortFolioEntity;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "type_idx", referencedColumnName = "idx", insertable = false, updatable = false)
+    private FrontPortFolioEntity frontPortFolioEntity;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "type_idx", referencedColumnName = "idx", insertable = false, updatable = false)

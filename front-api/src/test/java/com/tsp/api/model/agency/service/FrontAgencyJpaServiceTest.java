@@ -1,5 +1,6 @@
 package com.tsp.api.model.agency.service;
 
+import com.tsp.api.FrontCommonServiceTest;
 import com.tsp.api.model.domain.agency.FrontAgencyDTO;
 import com.tsp.api.model.domain.agency.FrontAgencyEntity;
 import lombok.RequiredArgsConstructor;
@@ -41,11 +42,9 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @RequiredArgsConstructor
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("Agency Service Test")
-class FrontAgencyJpaServiceTest {
+class FrontAgencyJpaServiceTest extends FrontCommonServiceTest {
     @Mock private FrontAgencyJpaService mockFrontAgencyJpaService;
     private final FrontAgencyJpaService frontAgencyJpaService;
-    private FrontAgencyEntity frontAgencyEntity;
-    private FrontAgencyDTO frontAgencyDTO;
     private final EntityManager em;
 
     @Test
@@ -53,10 +52,10 @@ class FrontAgencyJpaServiceTest {
     void Agency리스트조회Mockito테스트() {
         // given
         Map<String, Object> agencyMap = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
 
         List<FrontAgencyDTO> agencyList = new ArrayList<>();
-        agencyList.add(FrontAgencyDTO.builder().idx(1L).agencyName("agency").agencyDescription("agency").visible("Y").build());
+        agencyList.add(frontAgencyDTO);
 
         Page<FrontAgencyDTO> resultAgency = new PageImpl<>(agencyList, pageRequest, agencyList.size());
         // when
@@ -67,7 +66,7 @@ class FrontAgencyJpaServiceTest {
         // then
         assertAll(
                 () -> assertThat(findAgencyList).isNotEmpty(),
-                () -> assertThat(findAgencyList).hasSize(2)
+                () -> assertThat(findAgencyList).hasSize(1)
         );
 
         assertThat(findAgencyList.get(0).getIdx()).isEqualTo(agencyList.get(0).getIdx());
@@ -89,10 +88,10 @@ class FrontAgencyJpaServiceTest {
     void Agency리스트조회BDD테스트() {
         // given
         Map<String, Object> agencyMap = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
 
         List<FrontAgencyDTO> agencyList = new ArrayList<>();
-        agencyList.add(FrontAgencyDTO.builder().idx(1L).agencyName("agency").agencyDescription("agency").visible("Y").build());
+        agencyList.add(frontAgencyDTO);
 
         Page<FrontAgencyDTO> resultAgency = new PageImpl<>(agencyList, pageRequest, agencyList.size());
         // when
@@ -103,7 +102,7 @@ class FrontAgencyJpaServiceTest {
         // then
         assertAll(
                 () -> assertThat(agencyList).isNotEmpty(),
-                () -> assertThat(agencyList).hasSize(2)
+                () -> assertThat(agencyList).hasSize(1)
         );
 
         assertThat(findAgencyList.get(0).getIdx()).isEqualTo(agencyList.get(0).getIdx());

@@ -133,7 +133,7 @@ public class AdminModelEntity extends NewCommonMappedClass {
     @OneToMany(mappedBy = "adminModelEntity", fetch = LAZY, cascade = REMOVE, orphanRemoval = true)
     private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 
-    @OneToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "agency_idx", referencedColumnName = "idx")
     private AdminAgencyEntity adminAgencyEntity;
 
