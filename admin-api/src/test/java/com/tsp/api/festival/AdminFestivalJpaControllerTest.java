@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.event.EventListener;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -37,9 +38,16 @@ import java.util.List;
 import static com.tsp.api.user.domain.Role.ROLE_ADMIN;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
+import static org.springframework.restdocs.payload.JsonFieldType.STRING;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -79,7 +87,7 @@ class AdminFestivalJpaControllerTest {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("admin04", "pass1234", getAuthorities());
 
         adminUserEntity = AdminUserEntity.builder()
-                .userId("admin04")
+                .userId("admin05")
                 .password("pass1234")
                 .name("test")
                 .email("test@test.com")
@@ -139,9 +147,12 @@ class AdminFestivalJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 행사 상세 조회 테스트")
     void 행사상세조회Api테스트() throws Exception {
-        mockMvc.perform(get("/api/festival/{idx}", adminFestivalEntity.getIdx())
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/festival/{idx}", adminFestivalEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
+                .andDo(document("festival/get", pathParameters(
+                        parameterWithName("idx").description("축제 IDX")
+                )))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.idx").value(adminFestivalEntity.getIdx()));
@@ -161,14 +172,32 @@ class AdminFestivalJpaControllerTest {
                 .festivalTime(dateTime)
                 .build();
 
-        mockMvc.perform(post("/api/festival")
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/api/festival")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(insertFestivalEntity)))
                 .andDo(print())
+                .andDo(document("festival/post",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        relaxedRequestFields(
+                                fieldWithPath("festivalTitle").type(STRING).description("축제 제목"),
+                                fieldWithPath("festivalDescription").type(STRING).description("축제 상세"),
+                                fieldWithPath("festivalMonth").type(NUMBER).description("축제 월"),
+                                fieldWithPath("festivalDay").type(NUMBER).description("축제 일"),
+                                fieldWithPath("festivalTime").type(STRING).description("축제 일자")
+                        ),
+                        relaxedResponseFields(
+                                fieldWithPath("festivalTitle").type(STRING).description("축제 제목"),
+                                fieldWithPath("festivalDescription").type(STRING).description("축제 상세"),
+                                fieldWithPath("festivalMonth").type(NUMBER).description("축제 월"),
+                                fieldWithPath("festivalDay").type(NUMBER).description("축제 일"),
+                                fieldWithPath("festivalTime").type(STRING).description("축제 일자")
+                        )))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.festivalTitle").value(insertFestivalEntity.getFestivalTitle()));
+                .andExpect(jsonPath("$.festivalTitle").value(insertFestivalEntity.getFestivalTitle()))
+                .andExpect(jsonPath("$.festivalDescription").value(insertFestivalEntity.getFestivalDescription()));
     }
 
     @Test
@@ -186,11 +215,28 @@ class AdminFestivalJpaControllerTest {
                 .festivalTime(dateTime)
                 .build();
 
-        mockMvc.perform(put("/api/festival/{idx}", adminFestivalEntity.getIdx())
+        mockMvc.perform(RestDocumentationRequestBuilders.put("/api/festival/{idx}", adminFestivalEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(updateFestivalEntity)))
                 .andDo(print())
+                .andDo(document("festival/put",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        relaxedRequestFields(
+                                fieldWithPath("festivalTitle").type(STRING).description("축제 제목"),
+                                fieldWithPath("festivalDescription").type(STRING).description("축제 상세"),
+                                fieldWithPath("festivalMonth").type(NUMBER).description("축제 월"),
+                                fieldWithPath("festivalDay").type(NUMBER).description("축제 일"),
+                                fieldWithPath("festivalTime").type(STRING).description("축제 일자")
+                        ),
+                        relaxedResponseFields(
+                                fieldWithPath("festivalTitle").type(STRING).description("축제 제목"),
+                                fieldWithPath("festivalDescription").type(STRING).description("축제 상세"),
+                                fieldWithPath("festivalMonth").type(NUMBER).description("축제 월"),
+                                fieldWithPath("festivalDay").type(NUMBER).description("축제 일"),
+                                fieldWithPath("festivalTime").type(STRING).description("축제 일자")
+                        )))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.festivalTitle").value("축제 수정 제목"));
@@ -200,9 +246,12 @@ class AdminFestivalJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 행사 삭제 테스트")
     void 행사삭제Api테스트() throws Exception {
-        mockMvc.perform(delete("/api/festival/{idx}", adminFestivalEntity.getIdx())
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/festival/{idx}", adminFestivalEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
+                .andDo(document("festival/delete", pathParameters(
+                        parameterWithName("idx").description("축제 IDX")
+                )))
                 .andExpect(status().isNoContent());
     }
 }

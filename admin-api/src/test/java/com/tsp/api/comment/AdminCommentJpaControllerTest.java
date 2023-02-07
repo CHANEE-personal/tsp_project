@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.event.EventListener;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -45,10 +46,11 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
-import static org.springframework.restdocs.payload.JsonFieldType.STRING;
+import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -87,7 +89,7 @@ class AdminCommentJpaControllerTest {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("admin04", "pass1234", getAuthorities());
 
         adminUserEntity = AdminUserEntity.builder()
-                .userId("admin04")
+                .userId("admin05")
                 .password("pass1234")
                 .name("test")
                 .email("test@test.com")
@@ -115,6 +117,7 @@ class AdminCommentJpaControllerTest {
                 .modelEngName("test")
                 .modelDescription("test")
                 .modelMainYn("Y")
+                .newYn("N")
                 .height(170)
                 .size3("34-24-34")
                 .shoes(270)
@@ -127,6 +130,8 @@ class AdminCommentJpaControllerTest {
         // 어드민 코멘트 생성
         adminCommentEntity = AdminCommentEntity.builder()
                 .comment("코멘트 테스트")
+                .adminModelEntity(adminModelEntity)
+                .commentType("model")
                 .visible("Y")
                 .build();
 
@@ -150,7 +155,7 @@ class AdminCommentJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 코멘트 조회 테스트")
     void 어드민코멘트조회Api테스트() throws Exception {
-        mockMvc.perform(get("/api/comment").param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/comment").param("pageNum", "0").param("size", "3")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -167,7 +172,7 @@ class AdminCommentJpaControllerTest {
         paramMap.add("searchType", "0");
         paramMap.add("searchKeyword", "하하");
 
-        mockMvc.perform(get("/api/comment").queryParams(paramMap).param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/comment").queryParams(paramMap).param("pageNum", "0").param("size", "3")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -178,22 +183,25 @@ class AdminCommentJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 코멘트 상세 조회 테스트")
     void 어드민코멘트상세조회Api테스트() throws Exception {
-        mockMvc.perform(get("/api/comment/1")
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/comment/{idx}", adminCommentEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
+                .andDo(document("comment/get", pathParameters(
+                        parameterWithName("idx").description("코멘트 IDX")
+                )))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.idx").value(1))
-                .andExpect(jsonPath("$.comment").value("테스트1"))
+                .andExpect(jsonPath("$.idx").value(adminCommentEntity.getIdx()))
+                .andExpect(jsonPath("$.comment").value(adminCommentEntity.getComment()))
                 .andExpect(jsonPath("$.commentType").value("model"))
-                .andExpect(jsonPath("$.commentTypeIdx").value(adminModelEntity.getIdx()));
+                .andExpect(jsonPath("$.adminModelDTO.idx").value(adminModelEntity.getIdx()));
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 코멘트 등록 테스트")
     void 어드민코멘트등록Api테스트() throws Exception {
-        mockMvc.perform(post("/api/comment")
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/api/comment")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(adminCommentEntity)))
@@ -204,55 +212,57 @@ class AdminCommentJpaControllerTest {
                         relaxedRequestFields(
                                 fieldWithPath("comment").type(STRING).description("코멘트"),
                                 fieldWithPath("commentType").type(STRING).description("코멘트 타입"),
-                                fieldWithPath("commentTypeIdx").type(NUMBER).description("코멘트 타입 IDX"),
+                                fieldWithPath("adminModelDTO").type(OBJECT).description("코멘트 타입"),
                                 fieldWithPath("visible").type(STRING).description("코멘트 노출 여부")
                         ),
                         relaxedResponseFields(
                                 fieldWithPath("comment").type(STRING).description("코멘트"),
                                 fieldWithPath("commentType").type(STRING).description("코멘트 타입"),
-                                fieldWithPath("commentTypeIdx").type(NUMBER).description("코멘트 타입 IDX"),
+                                fieldWithPath("adminModelDTO").type(OBJECT).description("코멘트 타입"),
                                 fieldWithPath("visible").type(STRING).description("코멘트 노출 여부")
                         )))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.comment").value("코멘트 테스트"))
                 .andExpect(jsonPath("$.commentType").value("model"))
-                .andExpect(jsonPath("$.commentTypeIdx").value(adminModelEntity.getIdx()));
+                .andExpect(jsonPath("$.adminModelDTO.idx").value(adminModelEntity.getIdx()));
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 코멘트 수정 테스트")
     void 어드민코멘트수정Api테스트() throws Exception {
-        em.persist(adminCommentEntity);
+        adminCommentEntity = AdminCommentEntity.builder()
+                .idx(adminCommentEntity.getIdx())
+                .adminModelEntity(adminModelEntity)
+                .commentType("model")
+                .comment("코멘트 테스트1")
+                .visible("Y")
+                .build();
 
-        adminCommentEntity = AdminCommentEntity.builder().idx(adminCommentEntity.getIdx()).comment("코멘트 테스트1").visible("Y").build();
-
-        mockMvc.perform(put("/api/comment/{idx}", adminCommentEntity.getIdx())
+        mockMvc.perform(RestDocumentationRequestBuilders.put("/api/comment/{idx}", adminCommentEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(adminCommentEntity)))
                 .andDo(print())
-                .andDo(document("comment/put",
+                .andDo(document("comment/update",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         relaxedRequestFields(
                                 fieldWithPath("comment").type(STRING).description("코멘트"),
                                 fieldWithPath("commentType").type(STRING).description("코멘트 타입"),
-                                fieldWithPath("commentTypeIdx").type(NUMBER).description("코멘트 타입 IDX"),
                                 fieldWithPath("visible").type(STRING).description("코멘트 노출 여부")
                         ),
                         relaxedResponseFields(
                                 fieldWithPath("comment").type(STRING).description("코멘트"),
                                 fieldWithPath("commentType").type(STRING).description("코멘트 타입"),
-                                fieldWithPath("commentTypeIdx").type(NUMBER).description("코멘트 타입 IDX"),
                                 fieldWithPath("visible").type(STRING).description("코멘트 노출 여부")
                         )))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.comment").value("코멘트 테스트1"))
                 .andExpect(jsonPath("$.commentType").value("model"))
-                .andExpect(jsonPath("$.commentTypeIdx").value(adminModelEntity.getIdx()));
+                .andExpect(jsonPath("$.adminModelDTO.idx").value(adminModelEntity.getIdx()));
     }
 
     @Test
@@ -261,11 +271,12 @@ class AdminCommentJpaControllerTest {
     void 어드민코멘트삭제Api테스트() throws Exception {
         em.persist(adminCommentEntity);
 
-        mockMvc.perform(delete("/api/comment/{idx}", adminCommentEntity.getIdx())
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/comment/{idx}", adminCommentEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
-                .andExpect(status().isNoContent())
-                .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(content().string(getString(adminCommentEntity.getIdx())));
+                .andDo(document("comment/delete", pathParameters(
+                        parameterWithName("idx").description("코멘트 IDX")
+                )))
+                .andExpect(status().isNoContent());
     }
 }

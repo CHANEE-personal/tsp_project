@@ -1,6 +1,7 @@
 package com.tsp.api.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tsp.api.model.domain.AdminModelEntity;
 import com.tsp.api.model.domain.negotiation.AdminNegotiationEntity;
 import com.tsp.api.user.domain.AdminUserEntity;
 import com.tsp.jwt.JwtUtil;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.event.EventListener;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -50,9 +52,12 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
@@ -77,6 +82,7 @@ class AdminNegotiationJpaControllerTest {
     private final EntityManager em;
     private final JwtUtil jwtUtil;
 
+    private AdminModelEntity adminModelEntity;
     private AdminNegotiationEntity adminNegotiationEntity;
     private AdminUserEntity adminUserEntity;
 
@@ -93,7 +99,7 @@ class AdminNegotiationJpaControllerTest {
         String token = jwtUtil.doGenerateToken(authenticationToken.getName());
 
         adminUserEntity = AdminUserEntity.builder()
-                .userId("admin04")
+                .userId("admin06")
                 .password(passwordEncoder.encode("pass1234"))
                 .name("test")
                 .email("test@test.com")
@@ -110,7 +116,29 @@ class AdminNegotiationJpaControllerTest {
         // user 생성
         createUser();
 
+        adminModelEntity = AdminModelEntity.builder()
+                .categoryCd(1)
+                .categoryAge(2)
+                .modelKorFirstName("조")
+                .modelKorSecondName("찬희")
+                .modelKorName("조찬희")
+                .modelFirstName("CHO")
+                .modelSecondName("CHANHEE")
+                .modelEngName("CHOCHANHEE")
+                .modelDescription("chaneeCho")
+                .modelMainYn("Y")
+                .height(170)
+                .size3("34-24-34")
+                .shoes(270)
+                .status("draft")
+                .newYn("Y")
+                .visible("Y")
+                .build();
+
+        em.persist(adminModelEntity);
+
         adminNegotiationEntity = AdminNegotiationEntity.builder()
+                .adminModelEntity(adminModelEntity)
                 .modelKorName("테스트")
                 .modelNegotiationDesc("섭외 테스트")
                 .modelNegotiationDate(now())
@@ -119,6 +147,8 @@ class AdminNegotiationJpaControllerTest {
                 .email("test@gmail.com")
                 .visible("Y")
                 .build();
+
+        em.persist(adminNegotiationEntity);
     }
 
     @BeforeEach
@@ -139,10 +169,10 @@ class AdminNegotiationJpaControllerTest {
     @DisplayName("Admin 모델 섭외 조회 테스트")
     void 모델섭외조회Api테스트() throws Exception {
         LinkedMultiValueMap<String, String> negotiationMap = new LinkedMultiValueMap<>();
-        mockMvc.perform(get("/api/negotiation").param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/negotiation").param("pageNum", "0").param("size", "3")
                         .queryParams(negotiationMap)
                         .queryParam("searchStartTime", of(now().getYear(), LocalDate.now().getMonth(), 1, 0, 0, 0, 0).format(ofPattern("yyyyMMdd")))
-                        .queryParam("searchEndTime", of(now().getYear(), LocalDate.now().getMonth(), 30, 23, 59, 59).format(ofPattern("yyyyMMdd")))
+                        .queryParam("searchEndTime", of(now().getYear(), LocalDate.now().getMonth(), 28, 23, 59, 59).format(ofPattern("yyyyMMdd")))
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -153,14 +183,17 @@ class AdminNegotiationJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 모델 섭외 상세 조회 테스트")
     void 모델섭외상세조회Api테스트() throws Exception {
-        mockMvc.perform(get("/api/negotiation/1")
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/negotiation/{idx}", adminNegotiationEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
+                .andDo(document("negotiation/get", pathParameters(
+                        parameterWithName("idx").description("섭외 IDX")
+                )))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.idx").value("1"))
-                .andExpect(jsonPath("$.modelIdx").value(1))
-                .andExpect(jsonPath("$.modelNegotiationDesc").value("섭외 테스트"))
+                .andExpect(jsonPath("$.idx").value(adminNegotiationEntity.getIdx()))
+                .andExpect(jsonPath("$.adminModelDTO.idx").value(adminModelEntity.getIdx()))
+                .andExpect(jsonPath("$.modelNegotiationDesc").value(adminNegotiationEntity.getModelNegotiationDesc()))
                 .andExpect(jsonPath("$.visible").value("Y"));
     }
 
@@ -198,7 +231,18 @@ class AdminNegotiationJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 모델 섭외 등록 테스트")
     void 모델섭외등록Api테스트() throws Exception {
-        mockMvc.perform(post("/api/negotiation")
+        adminNegotiationEntity = AdminNegotiationEntity.builder()
+                .adminModelEntity(adminModelEntity)
+                .modelKorName("테스트")
+                .modelNegotiationDesc("섭외 테스트")
+                .modelNegotiationDate(now())
+                .name("테스트")
+                .phone("010-1234-5678")
+                .email("test@gmail.com")
+                .visible("Y")
+                .build();
+
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/api/negotiation/model/{modelIdx}", adminModelEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(adminNegotiationEntity)))
@@ -207,17 +251,15 @@ class AdminNegotiationJpaControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         relaxedRequestFields(
-                                fieldWithPath("modelIdx").type(NUMBER).description(1),
                                 fieldWithPath("modelNegotiationDesc").type(STRING).description("섭외 등록")
                         ),
                         relaxedResponseFields(
-                                fieldWithPath("modelIdx").type(NUMBER).description(1),
                                 fieldWithPath("modelNegotiationDesc").type(STRING).description("섭외 등록")
                         )))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.modelIdx").value(1))
-                .andExpect(jsonPath("$.modelNegotiationDesc").value("섭외 등록"));
+                .andExpect(jsonPath("$.adminModelDTO.idx").value(adminModelEntity.getIdx()))
+                .andExpect(jsonPath("$.modelNegotiationDesc").value(adminNegotiationEntity.getModelNegotiationDesc()));
     }
 
     @Test
@@ -241,8 +283,6 @@ class AdminNegotiationJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 모델 섭외 수정 테스트")
     void 모델섭외수정Api테스트() throws Exception {
-        em.persist(adminNegotiationEntity);
-
         adminNegotiationEntity = AdminNegotiationEntity.builder()
                 .idx(adminNegotiationEntity.getIdx())
                 .modelKorName("테스트")
@@ -254,7 +294,7 @@ class AdminNegotiationJpaControllerTest {
                 .visible("Y")
                 .build();
 
-        mockMvc.perform(put("/api/negotiation/{idx}", adminNegotiationEntity.getIdx())
+        mockMvc.perform(RestDocumentationRequestBuilders.put("/api/negotiation/{idx}", adminNegotiationEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(adminNegotiationEntity)))

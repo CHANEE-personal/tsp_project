@@ -6,8 +6,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import static javax.persistence.EnumType.STRING;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,16 +32,20 @@ public class SignUpRequest {
     @NotBlank(message = "이메일 입력은 필수입니다.")
     private String email;
 
+    @Enumerated(value = STRING)
+    private Role role;
+
     @ApiModelProperty(required = true, value = "user visible")
     @NotBlank(message = "유저 사용여부 선택은 필수입니다.")
     private String visible;
 
     @Builder(access = AccessLevel.PUBLIC)
-    private SignUpRequest(String userId, String password, String name, String email, String visible) {
+    private SignUpRequest(String userId, String password, String name, String email, Role role, String visible) {
         this.userId = userId;
         this.password = password;
         this.name = name;
         this.email = email;
+        this.role = role;
         this.visible = visible;
     }
 }

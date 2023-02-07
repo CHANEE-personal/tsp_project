@@ -3,6 +3,7 @@ package com.tsp.api.model.service.negotiation;
 import com.tsp.api.model.domain.AdminModelEntity;
 import com.tsp.api.model.domain.negotiation.AdminNegotiationDTO;
 import com.tsp.api.model.domain.negotiation.AdminNegotiationEntity;
+import com.tsp.api.model.service.AdminModelJpaRepository;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,12 @@ public class AdminNegotiationJpaServiceImpl implements AdminNegotiationJpaServic
 
     private final AdminNegotiationJpaQueryRepository adminNegotiationJpaQueryRepository;
     private final AdminNegotiationJpaRepository adminNegotiationJpaRepository;
+    private final AdminModelJpaRepository adminModelJpaRepository;
+
+    private AdminModelEntity oneModel(Long idx) {
+        return adminModelJpaRepository.findById(idx)
+                .orElseThrow(() -> new TspException(NOT_FOUND_MODEL));
+    }
 
     private AdminNegotiationEntity oneNegotiation(Long idx) {
         return adminNegotiationJpaRepository.findById(idx)
@@ -98,8 +105,8 @@ public class AdminNegotiationJpaServiceImpl implements AdminNegotiationJpaServic
      */
     @Override
     @Transactional
-    public AdminNegotiationDTO insertModelNegotiation(AdminModelEntity adminModelEntity, AdminNegotiationEntity adminNegotiationEntity) {
-        adminModelEntity.addNegotiation(adminNegotiationEntity);
+    public AdminNegotiationDTO insertModelNegotiation(Long modelIdx, AdminNegotiationEntity adminNegotiationEntity) {
+        oneModel(modelIdx).addNegotiation(adminNegotiationEntity);
         return AdminNegotiationEntity.toDto(adminNegotiationJpaRepository.save(adminNegotiationEntity));
     }
 

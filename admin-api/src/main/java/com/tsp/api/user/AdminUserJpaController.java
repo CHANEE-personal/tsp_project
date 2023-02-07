@@ -11,6 +11,7 @@ import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -61,7 +62,7 @@ public class AdminUserJpaController {
     })
     @GetMapping
     public ResponseEntity<Page<AdminUserDTO>> findUserList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
-        return ok(adminUserJpaService.findUserList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
+        return ok(adminUserJpaService.findUserList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize(), Sort.by("idx").descending())));
     }
 
     /**
@@ -160,6 +161,7 @@ public class AdminUserJpaController {
      * 5. 작성일      : 2022. 05. 11.
      * </pre>
      */
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "Admin 회원 수정 처리", notes = "Admin 회원 수정 처리한다.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "회원 수정 성공", response = AdminUserDTO.class),
@@ -170,7 +172,7 @@ public class AdminUserJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PutMapping("/{idx}")
-    public ResponseEntity<AdminUserDTO> updateAdminUser(@PathVariable Long idx, @CurrentUser AdminUserEntity adminUserEntity) {
+    public ResponseEntity<AdminUserDTO> updateAdminUser(@PathVariable Long idx, @CurrentUser @RequestBody AdminUserEntity adminUserEntity) {
         return ok(adminUserJpaService.updateAdminUser(idx, adminUserEntity));
     }
 
@@ -183,6 +185,7 @@ public class AdminUserJpaController {
      * 5. 작성일      : 2022. 05. 11.
      * </pre>
      */
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "Admin 회원 탈퇴 처리", notes = "Admin 회원 탈퇴 처리한다.")
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "회원 탈퇴 성공", response = Long.class),
@@ -193,7 +196,7 @@ public class AdminUserJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @DeleteMapping
-    public ResponseEntity<Void> deleteAdminUser(@CurrentUser AdminUserEntity adminUserEntity) {
+    public ResponseEntity<Void> deleteAdminUser(@CurrentUser @RequestBody AdminUserEntity adminUserEntity) {
         adminUserJpaService.deleteAdminUser(adminUserEntity);
         return ResponseEntity.noContent().build();
     }

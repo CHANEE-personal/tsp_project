@@ -63,7 +63,7 @@ public interface AdminNegotiationJpaService {
      * 5. 작성일      : 2022. 09. 09.
      * </pre>
      */
-    AdminNegotiationDTO insertModelNegotiation(AdminModelEntity adminModelEntity, AdminNegotiationEntity adminNegotiationEntity);
+    AdminNegotiationDTO insertModelNegotiation(Long modelIdx, AdminNegotiationEntity adminNegotiationEntity);
 
     /**
      * <pre>
