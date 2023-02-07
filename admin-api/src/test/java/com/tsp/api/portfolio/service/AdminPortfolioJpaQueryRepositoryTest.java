@@ -5,6 +5,7 @@ import com.tsp.api.comment.domain.AdminCommentDTO;
 import com.tsp.api.comment.domain.AdminCommentEntity;
 import com.tsp.api.common.domain.CommonImageDTO;
 import com.tsp.api.common.domain.CommonImageEntity;
+import com.tsp.api.common.domain.NewCodeEntity;
 import com.tsp.api.portfolio.domain.AdminPortFolioDTO;
 import com.tsp.api.portfolio.domain.AdminPortFolioEntity;
 import lombok.RequiredArgsConstructor;
@@ -58,12 +59,18 @@ class AdminPortfolioJpaQueryRepositoryTest {
     private AdminPortFolioDTO adminPortFolioDTO;
     private CommonImageEntity commonImageEntity;
     private CommonImageDTO commonImageDTO;
-    private AdminCommentEntity adminCommentEntity;
-    private AdminCommentDTO adminCommentDTO;
+    private NewCodeEntity newCodeEntity;
 
     void createPortfolioAndImage() {
+        newCodeEntity = NewCodeEntity.builder()
+                .categoryCd(999)
+                .categoryNm("남성모델")
+                .visible("Y")
+                .cmmType("model")
+                .build();
+
         adminPortFolioEntity = AdminPortFolioEntity.builder()
-                .categoryCd(1)
+                .newPortFolioJpaDTO(newCodeEntity)
                 .title("포트폴리오 테스트")
                 .description("포트폴리오 테스트")
                 .hashTag("#test")
@@ -280,7 +287,7 @@ class AdminPortfolioJpaQueryRepositoryTest {
         // given
         adminPortFolioEntity = AdminPortFolioEntity.builder()
                 .idx(2L)
-                .categoryCd(1)
+                .newPortFolioJpaDTO(newCodeEntity)
                 .title("포트폴리오 테스트")
                 .description("포트폴리오 테스트")
                 .hashTag("#test")
@@ -303,7 +310,7 @@ class AdminPortfolioJpaQueryRepositoryTest {
         // given
         adminPortFolioEntity = AdminPortFolioEntity.builder()
                 .idx(2L)
-                .categoryCd(1)
+                .newPortFolioJpaDTO(newCodeEntity)
                 .title("포트폴리오 테스트")
                 .description("포트폴리오 테스트")
                 .hashTag("#test")
@@ -335,7 +342,7 @@ class AdminPortfolioJpaQueryRepositoryTest {
         // given
         adminPortFolioEntity = AdminPortFolioEntity.builder()
                 .idx(2L)
-                .categoryCd(1)
+                .newPortFolioJpaDTO(newCodeEntity)
                 .title("포트폴리오 테스트")
                 .description("포트폴리오 테스트")
                 .hashTag("#test")
@@ -364,7 +371,7 @@ class AdminPortfolioJpaQueryRepositoryTest {
         // given
         adminPortFolioEntity = AdminPortFolioEntity.builder()
                 .idx(2L)
-                .categoryCd(1)
+                .newPortFolioJpaDTO(newCodeEntity)
                 .title("포트폴리오 테스트")
                 .description("포트폴리오 테스트")
                 .hashTag("#test")
@@ -396,7 +403,7 @@ class AdminPortfolioJpaQueryRepositoryTest {
         // given
         adminPortFolioEntity = AdminPortFolioEntity.builder()
                 .idx(2L)
-                .categoryCd(1)
+                .newPortFolioJpaDTO(newCodeEntity)
                 .title("포트폴리오 테스트")
                 .description("포트폴리오 테스트")
                 .hashTag("#test")

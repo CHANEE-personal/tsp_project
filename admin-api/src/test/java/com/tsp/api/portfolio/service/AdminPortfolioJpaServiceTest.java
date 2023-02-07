@@ -195,7 +195,7 @@ class AdminPortfolioJpaServiceTest extends AdminModelCommonServiceTest {
         // given
         adminPortFolioEntity = AdminPortFolioEntity.builder()
                 .idx(2L)
-                .categoryCd(1)
+                .newPortFolioJpaDTO(newCodeEntity)
                 .title("포트폴리오 테스트")
                 .description("포트폴리오 테스트")
                 .hashTag("#test")
@@ -227,7 +227,7 @@ class AdminPortfolioJpaServiceTest extends AdminModelCommonServiceTest {
         // given
         adminPortFolioEntity = AdminPortFolioEntity.builder()
                 .idx(2L)
-                .categoryCd(1)
+                .newPortFolioJpaDTO(newCodeEntity)
                 .title("포트폴리오 테스트")
                 .description("포트폴리오 테스트")
                 .hashTag("#test")
@@ -256,7 +256,7 @@ class AdminPortfolioJpaServiceTest extends AdminModelCommonServiceTest {
         // given
         adminPortFolioEntity = AdminPortFolioEntity.builder()
                 .idx(2L)
-                .categoryCd(1)
+                .newPortFolioJpaDTO(newCodeEntity)
                 .title("포트폴리오 테스트")
                 .description("포트폴리오 테스트")
                 .hashTag("#test")
@@ -288,7 +288,7 @@ class AdminPortfolioJpaServiceTest extends AdminModelCommonServiceTest {
         // given
         adminPortFolioEntity = AdminPortFolioEntity.builder()
                 .idx(2L)
-                .categoryCd(1)
+                .newPortFolioJpaDTO(newCodeEntity)
                 .title("포트폴리오 테스트")
                 .description("포트폴리오 테스트")
                 .hashTag("#test")
@@ -366,7 +366,7 @@ class AdminPortfolioJpaServiceTest extends AdminModelCommonServiceTest {
 
         adminPortFolioEntity = AdminPortFolioEntity.builder()
                 .idx(idx)
-                .categoryCd(1)
+                .newPortFolioJpaDTO(newCodeEntity)
                 .title("포트폴리오 테스트1")
                 .description("포트폴리오 테스트1")
                 .hashTag("#test1")
@@ -402,7 +402,7 @@ class AdminPortfolioJpaServiceTest extends AdminModelCommonServiceTest {
 
         adminPortFolioEntity = AdminPortFolioEntity.builder()
                 .idx(idx)
-                .categoryCd(1)
+                .newPortFolioJpaDTO(newCodeEntity)
                 .title("포트폴리오 테스트1")
                 .description("포트폴리오 테스트1")
                 .hashTag("#test1")

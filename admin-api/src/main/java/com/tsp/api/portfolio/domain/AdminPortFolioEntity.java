@@ -34,10 +34,6 @@ public class AdminPortFolioEntity extends NewCommonMappedClass {
     @Column(name = "idx")
     private Long idx;
 
-    @Column(name = "category_cd")
-    @NotNull(message = "포트폴리오 카테고리 선택은 필수입니다.")
-    private Integer categoryCd;
-
     @Column(name = "title")
     @NotEmpty(message = "포트폴리오 제목 입력은 필수입니다.")
     private String title;
@@ -63,7 +59,7 @@ public class AdminPortFolioEntity extends NewCommonMappedClass {
     private String visible;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "category_cd", insertable = false, updatable = false)
+    @JoinColumn(name = "category_cd")
     private NewCodeEntity newPortFolioJpaDTO;
 
     @Builder.Default
@@ -73,7 +69,6 @@ public class AdminPortFolioEntity extends NewCommonMappedClass {
     private List<CommonImageEntity> commonImageEntityList = new ArrayList<>();
 
     public void update(AdminPortFolioEntity adminPortFolioEntity) {
-        this.categoryCd = adminPortFolioEntity.categoryCd;
         this.title = adminPortFolioEntity.title;
         this.description = adminPortFolioEntity.description;
         this.hashTag = adminPortFolioEntity.hashTag;
@@ -90,7 +85,7 @@ public class AdminPortFolioEntity extends NewCommonMappedClass {
         if (entity == null) return null;
         return AdminPortFolioDTO.builder()
                 .idx(entity.getIdx())
-                .categoryCd(entity.getCategoryCd())
+                .categoryCd(entity.getNewPortFolioJpaDTO().getCategoryCd())
                 .title(entity.getTitle())
                 .description(entity.getDescription())
                 .hashTag(entity.getHashTag())

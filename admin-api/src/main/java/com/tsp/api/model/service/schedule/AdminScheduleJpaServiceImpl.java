@@ -124,9 +124,9 @@ public class AdminScheduleJpaServiceImpl implements AdminScheduleJpaService {
      */
     @Override
     @Transactional
-    public AdminScheduleDTO updateSchedule(AdminScheduleEntity adminScheduleEntity) {
+    public AdminScheduleDTO updateSchedule(Long idx, AdminScheduleEntity adminScheduleEntity) {
         try {
-            Optional<AdminScheduleEntity> oneSchedule = Optional.ofNullable(adminScheduleJpaRepository.findById(adminScheduleEntity.getIdx())
+            Optional<AdminScheduleEntity> oneSchedule = Optional.ofNullable(adminScheduleJpaRepository.findById(idx)
                     .orElseThrow(() -> new TspException(NOT_FOUND_MODEL_SCHEDULE)));
             oneSchedule.ifPresent(adminSchedule -> adminSchedule.update(adminScheduleEntity));
             return AdminScheduleEntity.toDto(adminScheduleEntity);

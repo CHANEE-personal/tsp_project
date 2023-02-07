@@ -428,7 +428,7 @@ class AdminScheduleJpaServiceTest {
                 .visible("Y")
                 .build();
 
-        AdminScheduleDTO updateScheduleDTO = adminScheduleJpaService.updateSchedule(adminScheduleEntity);
+        AdminScheduleDTO updateScheduleDTO = adminScheduleJpaService.updateSchedule(adminScheduleEntity.getIdx(), adminScheduleEntity);
 
         em.flush();
         em.clear();
@@ -465,7 +465,7 @@ class AdminScheduleJpaServiceTest {
                 .visible("Y")
                 .build();
 
-        AdminScheduleDTO updateScheduleDTO = adminScheduleJpaService.updateSchedule(adminScheduleEntity);
+        AdminScheduleDTO updateScheduleDTO = adminScheduleJpaService.updateSchedule(adminScheduleEntity.getIdx(), adminScheduleEntity);
 
         em.flush();
         em.clear();

@@ -1,6 +1,7 @@
 package com.tsp.api.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tsp.api.model.domain.AdminModelEntity;
 import com.tsp.api.model.domain.schedule.AdminScheduleEntity;
 import com.tsp.api.user.domain.AdminUserEntity;
 import com.tsp.jwt.JwtUtil;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.event.EventListener;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -52,6 +54,8 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
@@ -76,6 +80,7 @@ class AdminScheduleJpaControllerTest {
     private final EntityManager em;
     private final JwtUtil jwtUtil;
 
+    private AdminModelEntity adminModelEntity;
     private AdminScheduleEntity adminScheduleEntity;
     private AdminUserEntity adminUserEntity;
 
@@ -92,7 +97,7 @@ class AdminScheduleJpaControllerTest {
         String token = jwtUtil.doGenerateToken(authenticationToken.getName());
 
         adminUserEntity = AdminUserEntity.builder()
-                .userId("admin04")
+                .userId("admin06")
                 .password(passwordEncoder.encode("pass1234"))
                 .name("test")
                 .email("test@test.com")
@@ -109,11 +114,35 @@ class AdminScheduleJpaControllerTest {
         // user 생성
         createUser();
 
+        adminModelEntity = AdminModelEntity.builder()
+                .categoryCd(1)
+                .categoryAge(2)
+                .modelKorFirstName("조")
+                .modelKorSecondName("찬희")
+                .modelKorName("조찬희")
+                .modelFirstName("CHO")
+                .modelSecondName("CHANHEE")
+                .modelEngName("CHOCHANHEE")
+                .modelDescription("chaneeCho")
+                .modelMainYn("Y")
+                .height(170)
+                .size3("34-24-34")
+                .shoes(270)
+                .status("draft")
+                .newYn("Y")
+                .visible("Y")
+                .build();
+
+        em.persist(adminModelEntity);
+
         adminScheduleEntity = AdminScheduleEntity.builder()
+                .adminModelEntity(adminModelEntity)
                 .modelSchedule("스케줄 테스트")
                 .modelScheduleTime(now())
                 .visible("Y")
                 .build();
+
+        em.persist(adminScheduleEntity);
     }
 
     @BeforeEach
@@ -135,7 +164,7 @@ class AdminScheduleJpaControllerTest {
     void 모델스케줄조회Api테스트() throws Exception {
         LinkedMultiValueMap<String, String> scheduleMap = new LinkedMultiValueMap<>();
 
-        mockMvc.perform(get("/api/schedule").param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/schedule").param("pageNum", "0").param("size", "3")
                         .queryParams(scheduleMap)
                         .queryParam("searchStartTime", of(now().getYear(), LocalDate.now().getMonth(), 1, 0, 0, 0, 0).format(ofPattern("yyyyMMdd")))
                         .queryParam("searchEndTime", of(now().getYear(), LocalDate.now().getMonth(), 30, 23, 59, 59).format(ofPattern("yyyyMMdd")))
@@ -149,14 +178,17 @@ class AdminScheduleJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 모델 스케줄 상세 조회 테스트")
     void 모델스케줄상세조회Api테스트() throws Exception {
-        mockMvc.perform(get("/api/schedule/1")
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/schedule/{idx}", adminScheduleEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
+                .andDo(document("schedule/get", pathParameters(
+                        parameterWithName("idx").description("스케줄 IDX")
+                )))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.idx").value("1"))
-                .andExpect(jsonPath("$.modelIdx").value(1))
-                .andExpect(jsonPath("$.modelSchedule").value("스케줄 테스트"))
+                .andExpect(jsonPath("$.idx").value(adminScheduleEntity.getIdx()))
+                .andExpect(jsonPath("$.adminModelDTO.idx").value(adminModelEntity.getIdx()))
+                .andExpect(jsonPath("$.modelSchedule").value(adminScheduleEntity.getModelSchedule()))
                 .andExpect(jsonPath("$.visible").value("Y"));
     }
 
@@ -194,7 +226,7 @@ class AdminScheduleJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 모델 스케줄 등록 테스트")
     void 모델스케줄등록Api테스트() throws Exception {
-        mockMvc.perform(post("/api/schedule")
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/api/schedule/model/{modelIdx}", adminModelEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(adminScheduleEntity)))
@@ -203,17 +235,16 @@ class AdminScheduleJpaControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         relaxedRequestFields(
-                                fieldWithPath("modelIdx").type(NUMBER).description(1),
+                                fieldWithPath("modelScheduleTime").type(STRING).description("스케줄 일자"),
                                 fieldWithPath("modelSchedule").type(STRING).description("스케줄 등록")
                         ),
                         relaxedResponseFields(
-                                fieldWithPath("modelIdx").type(NUMBER).description(1),
+                                fieldWithPath("modelScheduleTime").type(STRING).description("스케줄 일자"),
                                 fieldWithPath("modelSchedule").type(STRING).description("스케줄 등록")
                         )))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.modelIdx").value(1))
-                .andExpect(jsonPath("$.modelSchedule").value("스케줄 등록"));
+                .andExpect(jsonPath("$.modelSchedule").value(adminScheduleEntity.getModelSchedule()));
     }
 
     @Test
@@ -237,15 +268,14 @@ class AdminScheduleJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 모델 스케줄 수정 테스트")
     void 모델스케줄수정Api테스트() throws Exception {
-        em.persist(adminScheduleEntity);
-
         adminScheduleEntity = AdminScheduleEntity.builder()
                 .idx(adminScheduleEntity.getIdx())
                 .modelSchedule("스케줄 수정")
+                .modelScheduleTime(LocalDateTime.now())
                 .visible("Y")
                 .build();
 
-        mockMvc.perform(put("/api/schedule/{idx}", adminScheduleEntity.getIdx())
+        mockMvc.perform(RestDocumentationRequestBuilders.put("/api/schedule/{idx}", adminScheduleEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(adminScheduleEntity)))
@@ -254,16 +284,13 @@ class AdminScheduleJpaControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         relaxedRequestFields(
-                                fieldWithPath("modelIdx").type(NUMBER).description(1),
                                 fieldWithPath("modelSchedule").type(STRING).description("스케줄 수정")
                         ),
                         relaxedResponseFields(
-                                fieldWithPath("modelIdx").type(NUMBER).description(1),
                                 fieldWithPath("modelSchedule").type(STRING).description("스케줄 수정")
                         )))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.modelIdx").value(1))
                 .andExpect(jsonPath("$.modelSchedule").value("스케줄 수정"));
     }
 
@@ -296,13 +323,12 @@ class AdminScheduleJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 모델 스케줄 삭제 테스트")
     void 모델스케줄삭제Api테스트() throws Exception {
-        em.persist(adminScheduleEntity);
-
         mockMvc.perform(delete("/api/schedule/{idx}", adminScheduleEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
-                .andExpect(status().isNoContent())
-                .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(content().string(getString(adminScheduleEntity.getIdx())));
+                .andDo(document("schedule/delete", pathParameters(
+                        parameterWithName("idx").description("스케줄 IDX")
+                )))
+                .andExpect(status().isNoContent());
     }
 }

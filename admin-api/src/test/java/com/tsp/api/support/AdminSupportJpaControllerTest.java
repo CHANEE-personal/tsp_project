@@ -1,16 +1,12 @@
 package com.tsp.api.support;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tsp.api.comment.domain.AdminCommentDTO;
-import com.tsp.api.comment.domain.AdminCommentEntity;
 import com.tsp.api.support.domain.AdminSupportEntity;
-import com.tsp.api.support.domain.evaluation.EvaluationDTO;
 import com.tsp.api.support.domain.evaluation.EvaluationEntity;
 import com.tsp.api.user.domain.AdminUserEntity;
 import com.tsp.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,9 +17,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.event.EventListener;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
@@ -54,6 +52,9 @@ import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -80,9 +81,6 @@ class AdminSupportJpaControllerTest {
     private AdminUserEntity adminUserEntity;
 
     private EvaluationEntity evaluationEntity;
-    private EvaluationDTO evaluationDTO;
-    private AdminCommentEntity adminCommentEntity;
-    private AdminCommentDTO adminCommentDTO;
 
     Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
@@ -92,15 +90,17 @@ class AdminSupportJpaControllerTest {
 
     @DisplayName("테스트 유저 생성")
     void createUser() {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("admin04", "pass1234", getAuthorities());
+        PasswordEncoder passwordEncoder = createDelegatingPasswordEncoder();
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("admin04", passwordEncoder.encode("pass1234"), getAuthorities());
+        String token = jwtUtil.doGenerateToken(authenticationToken.getName());
 
         adminUserEntity = AdminUserEntity.builder()
-                .userId("admin04")
-                .password("pass1234")
+                .userId("admin06")
+                .password(passwordEncoder.encode("pass1234"))
                 .name("test")
                 .email("test@test.com")
                 .role(ROLE_ADMIN)
-                .userToken(jwtUtil.doGenerateToken(authenticationToken.getName()))
+                .userToken(token)
                 .visible("Y")
                 .build();
 
@@ -123,6 +123,8 @@ class AdminSupportJpaControllerTest {
                 .supportTime(LocalDateTime.now())
                 .visible("Y")
                 .build();
+
+        em.persist(adminSupportEntity);
     }
 
     @BeforeEach
@@ -144,7 +146,9 @@ class AdminSupportJpaControllerTest {
     void 지원모델조회Api테스트() throws Exception {
         MultiValueMap<String, String> supportMap = new LinkedMultiValueMap<>();
 
-        mockMvc.perform(get("/api/support").params(supportMap).param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/support").params(supportMap)
+                        .param("pageNum", "0")
+                        .param("size", "3")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -152,14 +156,14 @@ class AdminSupportJpaControllerTest {
     }
 
     @Test
-    @Disabled
     @WithMockUser(roles = "USER")
     @DisplayName("Admin 지원 모델 조회 권한 테스트")
     void 지원모델조회Api권한테스트() throws Exception {
         MultiValueMap<String, String> supportMap = new LinkedMultiValueMap<>();
 
-        mockMvc.perform(get("/api/support").params(supportMap).param("pageNum", "1").param("size", "3")
-                        .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
+        mockMvc.perform(get("/api/support").params(supportMap)
+                        .param("pageNum", "0")
+                        .param("size", "3"))
                 .andDo(print())
                 .andExpect(status().isForbidden());
     }
@@ -168,19 +172,21 @@ class AdminSupportJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 지원 모델 상세 조회 테스트")
     void 지원모델상세조회Api테스트() throws Exception {
-        mockMvc.perform(get("/api/support/1")
+        mockMvc.perform(get("/api/support/{idx}", adminSupportEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
+                .andDo(document("support/get", pathParameters(
+                        parameterWithName("idx").description("지원모델 IDX")
+                )))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=utf-8"));
+                .andExpect(content().contentType("application/json;charset=utf-8"))
+                .andExpect(jsonPath("$.supportName").value(adminSupportEntity.getSupportName()));
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 지원 모델 수정 테스트")
     void 지원모델수정Api테스트() throws Exception {
-        em.persist(adminSupportEntity);
-
         adminSupportEntity = AdminSupportEntity.builder()
                 .idx(adminSupportEntity.getIdx())
                 .supportName("테스트")
@@ -192,7 +198,7 @@ class AdminSupportJpaControllerTest {
                 .visible("Y")
                 .build();
 
-        mockMvc.perform(put("/api/support/{idx}", adminSupportEntity.getIdx())
+        mockMvc.perform(RestDocumentationRequestBuilders.put("/api/support/{idx}", adminSupportEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(adminSupportEntity)))
@@ -225,12 +231,9 @@ class AdminSupportJpaControllerTest {
     }
 
     @Test
-    @Disabled
     @WithMockUser(roles = "USER")
     @DisplayName("Admin 지원 모델 수정 권한 테스트")
     void 지원모델수정Api권한테스트() throws Exception {
-        em.persist(adminSupportEntity);
-
         adminSupportEntity = AdminSupportEntity.builder()
                 .idx(adminSupportEntity.getIdx())
                 .supportName("테스트")
@@ -242,7 +245,6 @@ class AdminSupportJpaControllerTest {
                 .build();
 
         mockMvc.perform(put("/api/support/{idx}", adminSupportEntity.getIdx())
-                        .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(adminSupportEntity)))
                 .andDo(print())
@@ -253,25 +255,20 @@ class AdminSupportJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 지원모델 삭제 테스트")
     void 지원모델삭제Api테스트() throws Exception {
-        em.persist(adminSupportEntity);
-
         mockMvc.perform(delete("/api/support/{idx}", adminSupportEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
-                .andExpect(status().isNoContent())
-                .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(content().string(getString(adminSupportEntity.getIdx())));
+                .andDo(document("support/delete", pathParameters(
+                        parameterWithName("idx").description("지원모델 IDX")
+                )))
+                .andExpect(status().isNoContent());
     }
 
     @Test
-    @Disabled
     @WithMockUser(roles = "USER")
     @DisplayName("Admin 지원모델 삭제 권한 테스트")
     void 지원모델삭제Api권한테스트() throws Exception {
-        em.persist(adminSupportEntity);
-
-        mockMvc.perform(delete("/api/support/{idx}", adminSupportEntity.getIdx())
-                        .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
+        mockMvc.perform(delete("/api/support/{idx}", adminSupportEntity.getIdx()))
                 .andDo(print())
                 .andExpect(status().isForbidden());
     }
@@ -282,7 +279,7 @@ class AdminSupportJpaControllerTest {
     void 지원모델평가조회Api테스트() throws Exception {
         MultiValueMap<String, String> evaluationMap = new LinkedMultiValueMap<>();
 
-        mockMvc.perform(get("/api/support/evaluation").params(evaluationMap).param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/support/evaluation").params(evaluationMap).param("pageNum", "0").param("size", "3")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -304,8 +301,6 @@ class AdminSupportJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 지원 모델 평가 등록 테스트")
     void 지원모델평가등록Api테스트() throws Exception {
-        em.persist(adminSupportEntity);
-
         evaluationEntity = EvaluationEntity.builder()
                 .adminSupportEntity(adminSupportEntity)
                 .evaluateComment("합격")

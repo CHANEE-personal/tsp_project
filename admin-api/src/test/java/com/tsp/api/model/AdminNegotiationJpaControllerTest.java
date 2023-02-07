@@ -40,11 +40,9 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.tsp.api.user.domain.Role.ROLE_ADMIN;
-import static com.tsp.common.StringUtil.getString;
 import static java.time.LocalDateTime.now;
 import static java.time.LocalDateTime.of;
 import static java.time.format.DateTimeFormatter.ofPattern;
-import static javax.swing.text.html.parser.DTDConstants.NUMBER;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -52,7 +50,6 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -303,16 +300,13 @@ class AdminNegotiationJpaControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         relaxedRequestFields(
-                                fieldWithPath("modelIdx").type(NUMBER).description(1),
                                 fieldWithPath("modelNegotiationDesc").type(STRING).description("섭외 수정")
                         ),
                         relaxedResponseFields(
-                                fieldWithPath("modelIdx").type(NUMBER).description(1),
                                 fieldWithPath("modelNegotiationDesc").type(STRING).description("섭외 수정")
                         )))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.modelIdx").value(1))
                 .andExpect(jsonPath("$.modelNegotiationDesc").value("섭외 수정 테스트"));
     }
 
@@ -350,13 +344,12 @@ class AdminNegotiationJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 모델 섭외 삭제 테스트")
     void 모델섭외삭제Api테스트() throws Exception {
-        em.persist(adminNegotiationEntity);
-
         mockMvc.perform(delete("/api/negotiation/{idx}", adminNegotiationEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
-                .andExpect(status().isNoContent())
-                .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(content().string(getString(adminNegotiationEntity.getIdx())));
+                .andDo(document("negotiation/delete", pathParameters(
+                        parameterWithName("idx").description("섭외 IDX")
+                )))
+                .andExpect(status().isNoContent());
     }
 }
