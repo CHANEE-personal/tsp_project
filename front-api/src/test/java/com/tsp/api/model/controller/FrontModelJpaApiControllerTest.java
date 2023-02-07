@@ -6,11 +6,14 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.event.EventListener;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,6 +28,7 @@ import java.util.List;
 import static com.tsp.common.utils.StringUtil.getString;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -34,6 +38,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 
 @SpringBootTest
 @Transactional
+@ExtendWith(RestDocumentationExtension.class)
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-local.properties")
 @TestConstructor(autowireMode = ALL)
@@ -47,10 +52,10 @@ class FrontModelJpaApiControllerTest {
 
     @BeforeEach
     @EventListener(ApplicationReadyEvent.class)
-    public void setup() {
+    public void setup(RestDocumentationContextProvider restDocumentationContextProvider) {
         this.mockMvc = webAppContextSetup(wac)
-                .addFilters(new CharacterEncodingFilter("UTF-8", true))  // 필터 추가
-                .alwaysExpect(status().isOk())
+                .addFilter(new CharacterEncodingFilter("UTF-8", true))
+                .apply(documentationConfiguration(restDocumentationContextProvider))
                 .alwaysDo(print())
                 .build();
     }
@@ -58,7 +63,7 @@ class FrontModelJpaApiControllerTest {
     @Test
     @DisplayName("모델 조회 테스트")
     void 모델조회() throws Exception {
-        mockMvc.perform(get("/api/model/1").param("pageNum", "1").param("size", "100"))
+        mockMvc.perform(get("/api/model/1").param("pageNum", "0").param("size", "100"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))

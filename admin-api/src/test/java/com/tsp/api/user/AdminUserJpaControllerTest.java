@@ -9,7 +9,6 @@ import com.tsp.jwt.JwtUtil;
 import com.tsp.jwt.MyUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,6 +49,8 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
@@ -279,6 +280,9 @@ class AdminUserJpaControllerTest {
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(adminUserEntity)))
                 .andDo(print())
+                .andDo(document("user/delete", pathParameters(
+                        parameterWithName("idx").description("유저 IDX")
+                )))
                 .andExpect(status().isNoContent());
     }
 
