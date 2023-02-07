@@ -171,7 +171,7 @@ public class AdminProductionJpaController {
             @ApiResponse(code = 404, message = "존재 하지 않음", response = NotFound.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
-    @PutMapping(value = "/{idx}", consumes = APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{idx}")
     public ResponseEntity<AdminProductionDTO> updateProduction(@PathVariable Long idx, @Valid @RequestBody AdminProductionEntity adminProductionEntity) {
         return ResponseEntity.ok(adminProductionJpaService.updateProduction(idx, adminProductionEntity));
     }

@@ -19,7 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "Agency관련 API")
+@Api(tags = "소속사 관련 API")
 @RequestMapping("/api/agency")
 public class FrontAgencyJpaApiController {
     private final FrontAgencyJpaService frontAgencyJpaService;

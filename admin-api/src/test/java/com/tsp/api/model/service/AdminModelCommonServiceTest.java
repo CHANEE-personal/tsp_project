@@ -261,7 +261,7 @@ public abstract class AdminModelCommonServiceTest {
         // 포트폴리오 등록
         adminPortFolioEntity = adminPortfolioJpaRepository.save(
                 AdminPortFolioEntity.builder()
-                        .categoryCd(newCodeDTO.getCategoryCd())
+                        .newPortFolioJpaDTO(newCodeEntity)
                         .title("포트폴리오 테스트")
                         .description("포트폴리오 테스트")
                         .hashTag("#test")

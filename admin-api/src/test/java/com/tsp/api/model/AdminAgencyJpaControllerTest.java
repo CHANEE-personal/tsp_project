@@ -19,10 +19,10 @@ import org.springframework.context.event.EventListener;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
@@ -36,7 +36,6 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import java.io.FileInputStream;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -55,7 +54,8 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -91,17 +91,15 @@ class AdminAgencyJpaControllerTest {
 
     @DisplayName("테스트 유저 생성")
     void createUser() {
-        PasswordEncoder passwordEncoder = createDelegatingPasswordEncoder();
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("admin04", passwordEncoder.encode("pass1234"), getAuthorities());
-        String token = jwtUtil.doGenerateToken(authenticationToken.getName());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("admin04", "pass1234", getAuthorities());
 
         adminUserEntity = AdminUserEntity.builder()
-                .userId("admin04")
-                .password(passwordEncoder.encode("pass1234"))
+                .userId("admin05")
+                .password("pass1234")
                 .name("test")
                 .email("test@test.com")
                 .role(ROLE_ADMIN)
-                .userToken(token)
+                .userToken(jwtUtil.doGenerateToken(authenticationToken.getName()))
                 .visible("Y")
                 .build();
 
@@ -118,6 +116,8 @@ class AdminAgencyJpaControllerTest {
                 .agencyDescription("agency")
                 .visible("Y")
                 .build();
+
+        em.persist(adminAgencyEntity);
     }
 
     @BeforeEach
@@ -139,7 +139,7 @@ class AdminAgencyJpaControllerTest {
     void 소속사조회Api테스트() throws Exception {
         LinkedMultiValueMap<String, String> agencyMap = new LinkedMultiValueMap<>();
 
-        mockMvc.perform(get("/api/agency").queryParams(agencyMap).param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/agency").queryParams(agencyMap).param("pageNum", "0").param("size", "3")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -150,14 +150,17 @@ class AdminAgencyJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 소속사 상세 조회 테스트")
     void 소속사상세조회Api테스트() throws Exception {
-        mockMvc.perform(get("/api/agency/1")
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/agency/{idx}", adminAgencyEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
+                .andDo(document("agency/get", pathParameters(
+                        parameterWithName("idx").description("소속사 IDX")
+                )))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.idx").value("1"))
-                .andExpect(jsonPath("$.agencyName").value("agency"))
-                .andExpect(jsonPath("$.agencyDescription").value("agency"))
+                .andExpect(jsonPath("$.idx").value(adminAgencyEntity.getIdx()))
+                .andExpect(jsonPath("$.agencyName").value(adminAgencyEntity.getAgencyName()))
+                .andExpect(jsonPath("$.agencyDescription").value(adminAgencyEntity.getAgencyDescription()))
                 .andExpect(jsonPath("$.visible").value("Y"));
 
     }
@@ -166,7 +169,7 @@ class AdminAgencyJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 소속사 등록 테스트")
     void 소속사등록Api테스트() throws Exception {
-        mockMvc.perform(post("/api/agency")
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/api/agency")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(adminAgencyEntity)))
@@ -209,8 +212,6 @@ class AdminAgencyJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 모델 수정 테스트")
     void 소속사수정Api테스트() throws Exception {
-        em.persist(adminAgencyEntity);
-
         adminAgencyEntity = AdminAgencyEntity.builder()
                 .idx(adminAgencyEntity.getIdx())
                 .agencyName("newAgency")
@@ -218,7 +219,7 @@ class AdminAgencyJpaControllerTest {
                 .visible("Y")
                 .build();
 
-        mockMvc.perform(put("/api/agency/{idx}", adminAgencyEntity.getIdx())
+        mockMvc.perform(RestDocumentationRequestBuilders.put("/api/agency/{idx}", adminAgencyEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(adminAgencyEntity)))
@@ -270,14 +271,13 @@ class AdminAgencyJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 소속사 삭제 테스트")
     void 소속사삭제Api테스트() throws Exception {
-        em.persist(adminAgencyEntity);
-
-        mockMvc.perform(delete("/api/agency/{idx}", adminAgencyEntity.getIdx())
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/agency/{idx}", adminAgencyEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
-                .andExpect(status().isNoContent())
-                .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(content().string(getString(adminAgencyEntity.getIdx())));
+                .andDo(document("agency/delete", pathParameters(
+                        parameterWithName("idx").description("소속사 IDX")
+                )))
+                .andExpect(status().isNoContent());
     }
 
     @Test
@@ -302,8 +302,8 @@ class AdminAgencyJpaControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    @DisplayName("Admin 모델 이미지 삭제 테스트")
-    void 모델이미지삭제Api테스트() throws Exception {
+    @DisplayName("Admin 소속사 이미지 삭제 테스트")
+    void 소속사이미지삭제Api테스트() throws Exception {
         CommonImageEntity commonImageEntity = CommonImageEntity.builder()
                 .imageType("main")
                 .fileName("test.jpg")

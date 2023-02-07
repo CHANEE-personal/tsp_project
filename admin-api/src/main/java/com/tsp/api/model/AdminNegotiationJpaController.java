@@ -155,9 +155,9 @@ public class AdminNegotiationJpaController {
             @ApiResponse(code = 404, message = "존재 하지 않음", response = HttpClientErrorException.NotFound.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
-    @PostMapping
-    public ResponseEntity<AdminNegotiationDTO> insertModelNegotiation(@Valid @RequestBody AdminModelEntity adminModelEntity, @Valid @RequestBody AdminNegotiationEntity adminNegotiationEntity) {
-        return ResponseEntity.created(URI.create("")).body(adminNegotiationJpaService.insertModelNegotiation(adminModelEntity, adminNegotiationEntity));
+    @PostMapping("/model/{modelIdx}")
+    public ResponseEntity<AdminNegotiationDTO> insertModelNegotiation(@PathVariable Long modelIdx, @Valid @RequestBody AdminNegotiationEntity adminNegotiationEntity) {
+        return ResponseEntity.created(URI.create("")).body(adminNegotiationJpaService.insertModelNegotiation(modelIdx, adminNegotiationEntity));
     }
 
     /**

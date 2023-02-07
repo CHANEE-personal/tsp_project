@@ -107,7 +107,7 @@ public class AdminPortfolioJpaServiceImpl implements AdminPortfolioJpaService {
     @Transactional
     public AdminPortFolioDTO insertPortfolio(AdminPortFolioEntity adminPortFolioEntity) {
         try {
-            oneCommon(adminPortFolioEntity.getCategoryCd())
+            oneCommon(adminPortFolioEntity.getNewPortFolioJpaDTO().getCategoryCd())
                     .ifPresent(adminCommon -> adminCommon.addPortfolio(adminPortFolioEntity));
             return AdminPortFolioEntity.toDto(adminPortfolioJpaRepository.save(adminPortFolioEntity));
         } catch (Exception e) {

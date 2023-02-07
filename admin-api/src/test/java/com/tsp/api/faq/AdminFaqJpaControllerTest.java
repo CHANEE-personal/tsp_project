@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.event.EventListener;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -47,6 +48,8 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -85,7 +88,7 @@ class AdminFaqJpaControllerTest {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("admin04", "pass1234", getAuthorities());
 
         adminUserEntity = AdminUserEntity.builder()
-                .userId("admin04")
+                .userId("admin05")
                 .password("pass1234")
                 .name("test")
                 .email("test@test.com")
@@ -108,6 +111,8 @@ class AdminFaqJpaControllerTest {
                 .description("FAQ 테스트")
                 .visible("Y")
                 .build();
+
+        em.persist(adminFaqEntity);
     }
 
     @BeforeEach
@@ -117,7 +122,6 @@ class AdminFaqJpaControllerTest {
                 .addFilter(new CharacterEncodingFilter("UTF-8", true))
                 .apply(springSecurity())
                 .apply(documentationConfiguration(restDocumentationContextProvider))
-                .alwaysExpect(status().isOk())
                 .alwaysDo(print())
                 .build();
 
@@ -128,7 +132,7 @@ class AdminFaqJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin FAQ 조회 테스트")
     void FAQ조회Api테스트() throws Exception {
-        mockMvc.perform(get("/api/faq")
+        mockMvc.perform(get("/api/faq").param("pageNum", "0").param("size", "3")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -146,7 +150,7 @@ class AdminFaqJpaControllerTest {
         paramMap.add("searchKeyword", "하하");
 
         mockMvc.perform(get("/api/faq").queryParams(paramMap)
-                        .param("pageNum", "1").param("size", "3")
+                        .param("pageNum", "0").param("size", "3")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -157,14 +161,17 @@ class AdminFaqJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin FAQ 상세 조회 테스트")
     void FAQ상세조회Api테스트() throws Exception {
-        mockMvc.perform(get("/api/faq/1")
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/faq/{idx}", adminFaqEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
+                .andDo(document("faq/get", pathParameters(
+                        parameterWithName("idx").description("FAQ IDX")
+                )))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.idx").value("1"))
-                .andExpect(jsonPath("$.title").value("테스트1"))
-                .andExpect(jsonPath("$.description").value("테스트1"));
+                .andExpect(jsonPath("$.idx").value(adminFaqEntity.getIdx()))
+                .andExpect(jsonPath("$.title").value(adminFaqEntity.getTitle()))
+                .andExpect(jsonPath("$.description").value(adminFaqEntity.getDescription()));
     }
 
     @Test
@@ -193,7 +200,7 @@ class AdminFaqJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin FAQ 등록 테스트")
     void FAQ등록Api테스트() throws Exception {
-        mockMvc.perform(post("/api/faq")
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/api/faq")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(adminFaqEntity)))
@@ -221,11 +228,9 @@ class AdminFaqJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin FAQ 수정 테스트")
     void FAQ수정Api테스트() throws Exception {
-        em.persist(adminFaqEntity);
-
         adminFaqEntity = AdminFaqEntity.builder().idx(adminFaqEntity.getIdx()).title("테스트1").description("테스트1").visible("Y").build();
 
-        mockMvc.perform(put("/api/faq/{idx}", adminFaqEntity.getIdx())
+        mockMvc.perform(RestDocumentationRequestBuilders.put("/api/faq/{idx}", adminFaqEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(adminFaqEntity)))
@@ -253,13 +258,12 @@ class AdminFaqJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin FAQ 삭제 테스트")
     void FAQ삭제Api테스트() throws Exception {
-        em.persist(adminFaqEntity);
-
-        mockMvc.perform(delete("/api/faq/{idx}", adminFaqEntity.getIdx())
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/faq/{idx}", adminFaqEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
-                .andExpect(status().isNoContent())
-                .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(content().string(getString(adminFaqEntity.getIdx())));
+                .andDo(document("faq/delete", pathParameters(
+                        parameterWithName("idx").description("FAQ IDX")
+                )))
+                .andExpect(status().isNoContent());
     }
 }

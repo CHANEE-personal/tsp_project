@@ -151,9 +151,9 @@ public class AdminScheduleJpaController {
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
-    @PostMapping("/model/{idx}")
-    public ResponseEntity<AdminScheduleDTO> insertSchedule(@PathVariable Long idx, @Valid @RequestBody AdminScheduleEntity adminScheduleEntity) throws Exception {
-        return ResponseEntity.created(URI.create("")).body(adminScheduleJpaService.insertSchedule(idx, adminScheduleEntity));
+    @PostMapping("/model/{modelIdx}")
+    public ResponseEntity<AdminScheduleDTO> insertSchedule(@PathVariable Long modelIdx, @Valid @RequestBody AdminScheduleEntity adminScheduleEntity) {
+        return ResponseEntity.created(URI.create("")).body(adminScheduleJpaService.insertSchedule(modelIdx, adminScheduleEntity));
     }
 
     /**
@@ -175,8 +175,8 @@ public class AdminScheduleJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PutMapping("/{idx}")
-    public ResponseEntity<AdminScheduleDTO> updateSchedule(@Valid @RequestBody AdminScheduleEntity adminScheduleEntity) {
-        return ResponseEntity.ok(adminScheduleJpaService.updateSchedule(adminScheduleEntity));
+    public ResponseEntity<AdminScheduleDTO> updateSchedule(@PathVariable Long idx, @Valid @RequestBody AdminScheduleEntity adminScheduleEntity) {
+        return ResponseEntity.ok(adminScheduleJpaService.updateSchedule(idx, adminScheduleEntity));
     }
 
     /**

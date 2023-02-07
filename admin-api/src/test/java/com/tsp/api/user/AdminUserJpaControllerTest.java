@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tsp.api.user.domain.AdminUserEntity;
 import com.tsp.api.user.domain.AuthenticationRequest;
 import com.tsp.api.user.domain.LoginRequest;
+import com.tsp.api.user.domain.SignUpRequest;
 import com.tsp.jwt.JwtUtil;
 import com.tsp.jwt.MyUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +20,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.event.EventListener;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -48,6 +49,8 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
@@ -71,11 +74,11 @@ class AdminUserJpaControllerTest {
     private final JwtUtil jwtUtil;
 
     private AdminUserEntity adminUserEntity;
-    private AdminUserEntity nonAdminUserEntity;
     private MockMvc mockMvc;
     protected PasswordEncoder passwordEncoder;
 
-    @MockBean protected MyUserDetailsService myUserDetailsService;
+    @MockBean
+    protected MyUserDetailsService myUserDetailsService;
     protected AuthenticationRequest authenticationRequest;
 
     Collection<? extends GrantedAuthority> getAuthorities() {
@@ -102,18 +105,6 @@ class AdminUserJpaControllerTest {
                 .build();
 
         em.persist(adminUserEntity);
-
-        nonAdminUserEntity = AdminUserEntity.builder()
-                .userId("admin07")
-                .password(passwordEncoder.encode("pass1234"))
-                .name("test")
-                .email("test@test.com")
-                .role(ROLE_ADMIN)
-                .userToken(token)
-                .visible("Y")
-                .build();
-
-        em.persist(nonAdminUserEntity);
     }
 
     @BeforeEach
@@ -135,59 +126,70 @@ class AdminUserJpaControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 회원 조회 테스트")
-    void Admin회원조회() throws Exception {
-        mockMvc.perform(get("/api/user").param("pageNum", "1").param("size", "100")
+    void 회원조회() throws Exception {
+        mockMvc.perform(get("/api/user").param("pageNum", "0").param("size", "100")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=utf-8"));
+                .andExpect(content().contentType("application/json;charset=utf-8"))
+                .andExpect(jsonPath("$.content").isNotEmpty());
     }
 
     @Test
-    @Disabled
     @WithMockUser(roles = "USER")
     @DisplayName("Admin 회원 조회 권한 테스트")
-    void Admin회원조회권한테스트() throws Exception {
-        mockMvc.perform(get("/api/user").param("pageNum", "1").param("size", "100")
-                        .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
+    void 회원조회권한테스트() throws Exception {
+        mockMvc.perform(get("/api/user").param("pageNum", "0").param("size", "100"))
                 .andDo(print())
                 .andExpect(status().isForbidden());
     }
 
     @Test
-//    @WithMockUser(roles = "USER")
+    @WithMockUser(roles = "USER")
     @DisplayName("로그인 테스트")
     void 로그인테스트() throws Exception {
-        LoginRequest loginRequest = LoginRequest.builder().userId(adminUserEntity.getUserId()).password("pass1234").build();
-        mockMvc.perform(post("/api/user/login")
-//                .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
+        LoginRequest loginRequest = LoginRequest.builder()
+                .userId(adminUserEntity.getUserId())
+                .password("pass1234")
+                .build();
+
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/api/user/login")
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(loginRequest)))
                 .andDo(print())
+                .andDo(document("LOGIN-USER",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        relaxedRequestFields(
+                                fieldWithPath("userId").type(STRING).description("아이디"),
+                                fieldWithPath("password").type(STRING).description("패스워드")
+                        )
+                ))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
+                .andExpect(header().exists("X-ACCESS-TOKEN"))
                 .andExpect(jsonPath("$.accessToken").isNotEmpty());
     }
 
     @Test
-    @WithMockUser(roles = "ADMIN")
+    @WithMockUser(roles = "USER")
     @DisplayName("관리자 회원가입 테스트")
     void 회원가입테스트() throws Exception {
-        AdminUserEntity newAdminUserEntity = AdminUserEntity.builder()
+        SignUpRequest signUpRequest = SignUpRequest.builder()
                 .userId("test")
-                .password("test")
+                .password("test1234")
                 .name("test")
                 .email("test@test.com")
                 .role(ROLE_ADMIN)
                 .visible("Y")
                 .build();
 
-        mockMvc.perform(post("/api/user")
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/api/user/signUp")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
-                        .content(objectMapper.writeValueAsString(newAdminUserEntity)))
+                        .content(objectMapper.writeValueAsString(signUpRequest)))
                 .andDo(print())
-                .andDo(document("user/post",
+                .andDo(document("INSERT-USER",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         relaxedRequestFields(
@@ -198,36 +200,16 @@ class AdminUserJpaControllerTest {
                         ),
                         relaxedResponseFields(
                                 fieldWithPath("userId").type(STRING).description("아이디"),
-                                fieldWithPath("password").type(STRING).description("패스워드")
+                                fieldWithPath("password").type(STRING).description("패스워드"),
+                                fieldWithPath("name").type(STRING).description("이름"),
+                                fieldWithPath("email").type(STRING).description("이메일")
                         )))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.userId").value("test"))
-                .andExpect(jsonPath("$.password").value("test"))
                 .andExpect(jsonPath("$.name").value("test"))
                 .andExpect(jsonPath("$.email").value("test@test.com"))
                 .andExpect(jsonPath("$.role").value("ROLE_ADMIN"));
-    }
-
-    @Test
-    @Disabled
-    @WithMockUser(roles = "USER")
-    @DisplayName("관리자 회원가입 권한 예외 테스트")
-    void 회원가입권한테스트() throws Exception {
-        adminUserEntity = AdminUserEntity.builder()
-                .userId("test")
-                .password("test")
-                .name("test")
-                .email("test@test.com")
-                .visible("Y")
-                .build();
-
-        mockMvc.perform(post("/api/user")
-                        .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
-                        .contentType(APPLICATION_JSON_VALUE)
-                        .content(objectMapper.writeValueAsString(adminUserEntity)))
-                .andDo(print())
-                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -243,12 +225,12 @@ class AdminUserJpaControllerTest {
                 .visible("Y")
                 .build();
 
-        mockMvc.perform(put("/api/user/{idx}", updateAdminUserEntity.getIdx())
+        mockMvc.perform(RestDocumentationRequestBuilders.put("/api/user/{idx}", updateAdminUserEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(updateAdminUserEntity)))
                 .andDo(print())
-                .andDo(document("user/put",
+                .andDo(document("UPDATE-USER",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         relaxedRequestFields(
@@ -259,7 +241,9 @@ class AdminUserJpaControllerTest {
                         ),
                         relaxedResponseFields(
                                 fieldWithPath("userId").type(STRING).description("아이디"),
-                                fieldWithPath("password").type(STRING).description("패스워드")
+                                fieldWithPath("password").type(STRING).description("패스워드"),
+                                fieldWithPath("name").type(STRING).description("이름"),
+                                fieldWithPath("email").type(STRING).description("이메일")
                         )))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
@@ -268,7 +252,6 @@ class AdminUserJpaControllerTest {
     }
 
     @Test
-    @Disabled
     @WithMockUser(roles = "USER")
     @DisplayName("관리자 회원수정 권한 예외 테스트")
     void 회원수정권한테스트() throws Exception {
@@ -282,9 +265,8 @@ class AdminUserJpaControllerTest {
                 .build();
 
         mockMvc.perform(put("/api/user/{idx}", updateAdminUserEntity.getIdx())
-                        .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
-                        .content(objectMapper.writeValueAsString(adminUserEntity)))
+                        .content(objectMapper.writeValueAsString(updateAdminUserEntity)))
                 .andDo(print())
                 .andExpect(status().isForbidden());
     }
@@ -293,24 +275,24 @@ class AdminUserJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("관리자 회원탈퇴 테스트")
     void 회원탈퇴테스트() throws Exception {
-        mockMvc.perform(delete("/api/user")
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/user")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(adminUserEntity)))
                 .andDo(print())
+                .andDo(document("user/delete", pathParameters(
+                        parameterWithName("idx").description("유저 IDX")
+                )))
                 .andExpect(status().isNoContent());
-
-        em.flush();
-        em.clear();
     }
 
     @Test
-    @Disabled
     @WithMockUser(roles = "USER")
     @DisplayName("관리자 회원탈퇴 권한 테스트")
     void 회원탈퇴권한테스트() throws Exception {
-        mockMvc.perform(put("/api/user")
-                        .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/user")
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(adminUserEntity)))
                 .andDo(print())
                 .andExpect(status().isForbidden());
     }

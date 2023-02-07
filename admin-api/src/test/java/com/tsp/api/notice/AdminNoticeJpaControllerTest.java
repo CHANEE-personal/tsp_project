@@ -16,9 +16,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.event.EventListener;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
@@ -46,6 +48,9 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -80,15 +85,17 @@ class AdminNoticeJpaControllerTest {
 
     @DisplayName("테스트 유저 생성")
     void createUser() {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("admin04", "pass1234", getAuthorities());
+        PasswordEncoder passwordEncoder = createDelegatingPasswordEncoder();
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("admin04", passwordEncoder.encode("pass1234"), getAuthorities());
+        String token = jwtUtil.doGenerateToken(authenticationToken.getName());
 
         adminUserEntity = AdminUserEntity.builder()
-                .userId("admin04")
-                .password("pass1234")
+                .userId("admin06")
+                .password(passwordEncoder.encode("pass1234"))
                 .name("test")
                 .email("test@test.com")
                 .role(ROLE_ADMIN)
-                .userToken(jwtUtil.doGenerateToken(authenticationToken.getName()))
+                .userToken(token)
                 .visible("Y")
                 .build();
 
@@ -105,7 +112,10 @@ class AdminNoticeJpaControllerTest {
                 .title("공지사항 테스트")
                 .description("공지사항 테스트")
                 .visible("Y")
+                .topFixed(false)
                 .build();
+
+        em.persist(adminNoticeEntity);
     }
 
     @BeforeEach
@@ -125,7 +135,7 @@ class AdminNoticeJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 공지사항 조회 테스트")
     void 공지사항조회Api테스트() throws Exception {
-        mockMvc.perform(get("/api/notice").param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/notice").param("pageNum", "0").param("size", "3")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -139,29 +149,32 @@ class AdminNoticeJpaControllerTest {
     void 공지사항검색조회Api테스트() throws Exception {
         // 검색 테스트
         LinkedMultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
-
         paramMap.add("searchType", "0");
-        paramMap.add("searchKeyword", "하하");
+        paramMap.add("searchKeyword", "공지사항");
 
-        mockMvc.perform(get("/api/notice").queryParams(paramMap).param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/notice").queryParams(paramMap).param("pageNum", "0").param("size", "3")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=utf-8"));
+                .andExpect(content().contentType("application/json;charset=utf-8"))
+                .andExpect(jsonPath("$.content").isNotEmpty());
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 공지사항 상세 조회 테스트")
     void 공지사항상세조회Api테스트() throws Exception {
-        mockMvc.perform(get("/api/notice/1")
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/notice/{idx}", adminNoticeEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
+                .andDo(document("notice/get", pathParameters(
+                        parameterWithName("idx").description("공지사항 IDX")
+                )))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.idx").value("1"))
-                .andExpect(jsonPath("$.title").value("테스트1"))
-                .andExpect(jsonPath("$.description").value("테스트1"));
+                .andExpect(jsonPath("$.idx").value(adminNoticeEntity.getIdx()))
+                .andExpect(jsonPath("$.title").value(adminNoticeEntity.getTitle()))
+                .andExpect(jsonPath("$.description").value(adminNoticeEntity.getDescription()));
     }
 
     @Test
@@ -210,17 +223,20 @@ class AdminNoticeJpaControllerTest {
                         )))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.title").value("공지사항 테스트"))
-                .andExpect(jsonPath("$.description").value("공지사항 테스트"));
+                .andExpect(jsonPath("$.title").value(adminNoticeEntity.getTitle()))
+                .andExpect(jsonPath("$.description").value(adminNoticeEntity.getDescription()));
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 공지사항 수정 테스트")
     void 공지사항수정Api테스트() throws Exception {
-        em.persist(adminNoticeEntity);
-
-        adminNoticeEntity = AdminNoticeEntity.builder().idx(adminNoticeEntity.getIdx()).title("테스트1").description("테스트1").visible("Y").build();
+        adminNoticeEntity = AdminNoticeEntity.builder()
+                .idx(adminNoticeEntity.getIdx())
+                .title("테스트1")
+                .description("테스트1")
+                .visible("Y")
+                .build();
 
         mockMvc.perform(put("/api/notice/{idx}", adminNoticeEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
@@ -250,24 +266,27 @@ class AdminNoticeJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 공지사항 상단 고정 테스트")
     void 다음공지사항상단고정Api테스트() throws Exception {
-        mockMvc.perform(get("/api/notice/2/fixed"))
+        mockMvc.perform(put("/api/notice/{idx}/fixed", adminNoticeEntity.getIdx())
+                        .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
+                .andDo(document("notice/fixed", pathParameters(
+                        parameterWithName("idx").description("공지사항 IDX")
+                )))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.topFixed").isBoolean());
+                .andExpect(content().string(getString(true)));
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 공지사항 삭제 테스트")
     void 공지사항삭제Api테스트() throws Exception {
-        em.persist(adminNoticeEntity);
-
         mockMvc.perform(delete("/api/notice/{idx}", adminNoticeEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
-                .andExpect(status().isNoContent())
-                .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(content().string(getString(adminNoticeEntity.getIdx())));
+                .andDo(document("notice/delete", pathParameters(
+                        parameterWithName("idx").description("공지사항 IDX")
+                )))
+                .andExpect(status().isNoContent());
     }
 }

@@ -230,7 +230,7 @@ class AdminNegotiationJpaServiceTest extends AdminModelCommonServiceTest {
     @DisplayName("다음 모델 섭외 상세 조회 BDD 테스트")
     void 다음모델섭외상세조회BDD테스트() {
         // given
-        AdminNegotiationDTO oneNegotiation = adminNegotiationJpaService.insertModelNegotiation(adminModelEntity, adminNegotiationEntity);
+        AdminNegotiationDTO oneNegotiation = adminNegotiationJpaService.insertModelNegotiation(adminModelEntity.getIdx(), adminNegotiationEntity);
 
         // when
         adminNegotiationDTO = adminNegotiationJpaService.findOneNegotiation(oneNegotiation.getIdx());
@@ -251,7 +251,7 @@ class AdminNegotiationJpaServiceTest extends AdminModelCommonServiceTest {
     @DisplayName("모델섭외등록Mockito테스트")
     void 모델섭외등록Mockito테스트() {
         // given
-        AdminNegotiationDTO oneNegotiation = adminNegotiationJpaService.insertModelNegotiation(adminModelEntity, adminNegotiationEntity);
+        AdminNegotiationDTO oneNegotiation = adminNegotiationJpaService.insertModelNegotiation(adminModelEntity.getIdx(), adminNegotiationEntity);
 
         // when
         when(mockAdminNegotiationJpaService.findOneNegotiation(oneNegotiation.getIdx())).thenReturn(oneNegotiation);
@@ -366,7 +366,7 @@ class AdminNegotiationJpaServiceTest extends AdminModelCommonServiceTest {
     @DisplayName("모델섭외삭제Mockito테스트")
     void 모델섭외삭제Mockito테스트() {
         // given
-        AdminNegotiationDTO oneNegotiation = adminNegotiationJpaService.insertModelNegotiation(adminModelEntity, adminNegotiationEntity);
+        AdminNegotiationDTO oneNegotiation = adminNegotiationJpaService.insertModelNegotiation(adminModelEntity.getIdx(), adminNegotiationEntity);
 
         // when
         when(mockAdminNegotiationJpaService.findOneNegotiation(oneNegotiation.getIdx())).thenReturn(oneNegotiation);
@@ -388,7 +388,7 @@ class AdminNegotiationJpaServiceTest extends AdminModelCommonServiceTest {
     @DisplayName("모델섭외삭제BDD테스트")
     void 모델섭외삭제BDD테스트() {
         // given
-        AdminNegotiationDTO oneNegotiation = adminNegotiationJpaService.insertModelNegotiation(adminModelEntity, adminNegotiationEntity);
+        AdminNegotiationDTO oneNegotiation = adminNegotiationJpaService.insertModelNegotiation(adminModelEntity.getIdx(), adminNegotiationEntity);
 
         // when
         given(mockAdminNegotiationJpaService.findOneNegotiation(oneNegotiation.getIdx())).willReturn(oneNegotiation);

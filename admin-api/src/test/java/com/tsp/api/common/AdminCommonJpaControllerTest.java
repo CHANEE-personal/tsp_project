@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.event.EventListener;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -35,7 +36,6 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.tsp.api.user.domain.Role.ROLE_ADMIN;
-import static com.tsp.common.StringUtil.getString;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -47,6 +47,8 @@ import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -81,15 +83,14 @@ class AdminCommonJpaControllerTest {
     @DisplayName("테스트 유저 생성")
     void createUser() {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("admin04", "pass1234", getAuthorities());
-        String token = jwtUtil.doGenerateToken(authenticationToken.getName());
 
         adminUserEntity = AdminUserEntity.builder()
-                .userId("admin04")
+                .userId("admin05")
                 .password("pass1234")
                 .name("test")
                 .email("test@test.com")
                 .role(ROLE_ADMIN)
-                .userToken(token)
+                .userToken(jwtUtil.doGenerateToken(authenticationToken.getName()))
                 .visible("Y")
                 .build();
 
@@ -108,6 +109,8 @@ class AdminCommonJpaControllerTest {
                 .cmmType("model")
                 .visible("Y")
                 .build();
+
+        em.persist(newCodeEntity);
     }
 
     @BeforeEach
@@ -128,7 +131,7 @@ class AdminCommonJpaControllerTest {
     @DisplayName("Admin 공통코드 조회 테스트")
     void 공통코드조회Api테스트() throws Exception {
         LinkedMultiValueMap<String, String> commonMap = new LinkedMultiValueMap<>();
-        mockMvc.perform(get("/api/common").queryParams(commonMap).param("pageNum", "1").param("size", "3")
+        mockMvc.perform(get("/api/common").queryParams(commonMap).param("pageNum", "0").param("size", "3")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -140,33 +143,34 @@ class AdminCommonJpaControllerTest {
     @DisplayName("Admin 공통코드 조회 권한 테스트")
     void 공통코드조회Api권한테스트() throws Exception {
         LinkedMultiValueMap<String, String> commonMap = new LinkedMultiValueMap<>();
-        mockMvc.perform(get("/api/common").queryParams(commonMap).param("pageNum", "1").param("size", "3")
-                        .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
+        mockMvc.perform(get("/api/common").queryParams(commonMap).param("pageNum", "0").param("size", "3"))
                 .andDo(print())
-                .andExpect(status().isForbidden())
-                .andExpect(content().contentType("application/json;charset=utf-8"));
+                .andExpect(status().isForbidden());
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 공통코드 상세 조회 테스트")
-    void 모델상세조회Api테스트() throws Exception {
-        mockMvc.perform(get("/api/common/1")
+    void 공통코드상세조회Api테스트() throws Exception {
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/common/{idx}", newCodeEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
+                .andDo(document("common/get", pathParameters(
+                        parameterWithName("idx").description("공통코드 IDX")
+                )))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(jsonPath("$.idx").value(1))
-                .andExpect(jsonPath("$.categoryCd").value(1))
-                .andExpect(jsonPath("$.categoryNm").value("men"))
-                .andExpect(jsonPath("$.cmmType").value("model"));
+                .andExpect(jsonPath("$.idx").value(newCodeEntity.getIdx()))
+                .andExpect(jsonPath("$.categoryCd").value(newCodeEntity.getCategoryCd()))
+                .andExpect(jsonPath("$.categoryNm").value(newCodeEntity.getCategoryNm()))
+                .andExpect(jsonPath("$.cmmType").value(newCodeEntity.getCmmType()));
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 공통코드 등록 테스트")
     void 공통코드등록Api테스트() throws Exception {
-        mockMvc.perform(post("/api/common")
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/api/common")
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(newCodeEntity)))
@@ -195,8 +199,6 @@ class AdminCommonJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 공통코드 수정 테스트")
     void 공통코드수정Api테스트() throws Exception {
-        em.persist(newCodeEntity);
-
         newCodeEntity = NewCodeEntity.builder()
                 .idx(newCodeEntity.getIdx())
                 .categoryCd(1)
@@ -205,7 +207,7 @@ class AdminCommonJpaControllerTest {
                 .visible("Y")
                 .build();
 
-        mockMvc.perform(put("/api/common/{idx}", newCodeEntity.getIdx())
+        mockMvc.perform(RestDocumentationRequestBuilders.put("/api/common/{idx}", newCodeEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken())
                         .contentType(APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(newCodeEntity)))
@@ -234,13 +236,12 @@ class AdminCommonJpaControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Admin 공통코드 삭제 테스트")
     void 공통코드삭제Api테스트() throws Exception {
-        em.persist(newCodeEntity);
-
-        mockMvc.perform(delete("/api/common/{idx}", newCodeEntity.getIdx())
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/common/{idx}", newCodeEntity.getIdx())
                         .header("Authorization", "Bearer " + adminUserEntity.getUserToken()))
                 .andDo(print())
-                .andExpect(status().isNoContent())
-                .andExpect(content().contentType("application/json;charset=utf-8"))
-                .andExpect(content().string(getString(newCodeEntity.getIdx())));
+                .andDo(document("common/delete", pathParameters(
+                        parameterWithName("idx").description("공통코드 IDX")
+                )))
+                .andExpect(status().isNoContent());
     }
 }

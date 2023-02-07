@@ -5,11 +5,15 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.event.EventListener;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,14 +26,18 @@ import java.time.LocalDateTime;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @SpringBootTest
 @Transactional
+@ExtendWith(RestDocumentationExtension.class)
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-local.properties")
 @TestConstructor(autowireMode = ALL)
@@ -43,10 +51,10 @@ class FrontFestivalJpaApiControllerTest {
 
     @BeforeEach
     @EventListener(ApplicationReadyEvent.class)
-    public void setup() {
+    public void setup(RestDocumentationContextProvider restDocumentationContextProvider) {
         this.mockMvc = webAppContextSetup(wac)
-                .addFilters(new CharacterEncodingFilter("UTF-8", true))  // 필터 추가
-                .alwaysExpect(status().isOk())
+                .addFilter(new CharacterEncodingFilter("UTF-8", true))
+                .apply(documentationConfiguration(restDocumentationContextProvider))
                 .alwaysDo(print())
                 .build();
     }
@@ -76,11 +84,12 @@ class FrontFestivalJpaApiControllerTest {
                 .build();
 
         em.persist(festivalEntity1);
-        em.flush();
-        em.clear();
 
-        mockMvc.perform(get("/api/festival/list/{month}", dateTime.getMonthValue()))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/festival/list/{month}", dateTime.getMonthValue()))
                 .andDo(print())
+                .andDo(document("festival/get", pathParameters(
+                        parameterWithName("month").description("축제 월")
+                )))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.festivalGroup.length()", greaterThan(0)));
@@ -111,11 +120,13 @@ class FrontFestivalJpaApiControllerTest {
                 .build();
 
         em.persist(festivalEntity1);
-        em.flush();
-        em.clear();
 
-        mockMvc.perform(get("/api/festival/list/{month}/{day}", dateTime.getMonthValue(), dateTime.getDayOfMonth()))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/festival/list/{month}/{day}", dateTime.getMonthValue(), dateTime.getDayOfMonth()))
                 .andDo(print())
+                .andDo(document("festival/get", pathParameters(
+                        parameterWithName("month").description("축제 월"),
+                        parameterWithName("day").description("축제 일")
+                )))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.festivalList.length()", greaterThan(0)));
@@ -137,8 +148,11 @@ class FrontFestivalJpaApiControllerTest {
 
         em.persist(festivalEntity);
 
-        mockMvc.perform(get("/api/festival/{idx}", festivalEntity.getIdx()))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/festival/{idx}", festivalEntity.getIdx()))
                 .andDo(print())
+                .andDo(document("festival/get", pathParameters(
+                        parameterWithName("idx").description("축제 IDX")
+                )))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=utf-8"))
                 .andExpect(jsonPath("$.idx").value(festivalEntity.getIdx()));

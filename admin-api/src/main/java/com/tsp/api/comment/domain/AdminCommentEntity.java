@@ -35,6 +35,7 @@ public class AdminCommentEntity extends NewCommonMappedClass {
     private String comment;
 
     @Column(name = "comment_type")
+    @NotEmpty(message = "코멘트 타입은 필수입니다.")
     private String commentType;
 
     @Column(name = "visible")
