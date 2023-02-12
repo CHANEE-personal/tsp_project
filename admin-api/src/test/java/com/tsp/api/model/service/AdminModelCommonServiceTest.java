@@ -19,8 +19,11 @@ import com.tsp.api.model.domain.agency.AdminAgencyDTO;
 import com.tsp.api.model.domain.agency.AdminAgencyEntity;
 import com.tsp.api.model.domain.negotiation.AdminNegotiationDTO;
 import com.tsp.api.model.domain.negotiation.AdminNegotiationEntity;
+import com.tsp.api.model.domain.schedule.AdminScheduleDTO;
+import com.tsp.api.model.domain.schedule.AdminScheduleEntity;
 import com.tsp.api.model.service.agency.AdminAgencyJpaRepository;
 import com.tsp.api.model.service.negotiation.AdminNegotiationJpaRepository;
+import com.tsp.api.model.service.schedule.AdminScheduleJpaRepository;
 import com.tsp.api.notice.domain.AdminNoticeDTO;
 import com.tsp.api.notice.domain.AdminNoticeEntity;
 import com.tsp.api.notice.service.AdminNoticeJpaRepository;
@@ -61,6 +64,8 @@ public abstract class AdminModelCommonServiceTest {
     @Autowired private AdminSupportJpaRepository adminSupportJpaRepository;
     @Autowired private AdminEvaluationJpaRepository adminEvaluationJpaRepository;
     @Autowired private AdminPortfolioJpaRepository adminPortfolioJpaRepository;
+    @Autowired private AdminScheduleJpaRepository adminScheduleJpaRepository;
+
     protected NewCodeEntity newCodeEntity;
     protected NewCodeDTO newCodeDTO;
 
@@ -88,6 +93,8 @@ public abstract class AdminModelCommonServiceTest {
     protected EvaluationDTO evaluationDTO;
     protected AdminPortFolioEntity adminPortFolioEntity;
     protected AdminPortFolioDTO adminPortFolioDTO;
+    protected AdminScheduleEntity adminScheduleEntity;
+    protected AdminScheduleDTO adminScheduleDTO;
 
     @BeforeEach
     @EventListener(ApplicationContext.class)
@@ -124,7 +131,7 @@ public abstract class AdminModelCommonServiceTest {
                         .fileName("test.jpg")
                         .fileMask("test.jpg")
                         .filePath("/test/test.jpg")
-                        .typeIdx(1L)
+                        .typeIdx(1000L)
                         .typeName(EntityType.MODEL)
                         .build());
 
@@ -252,7 +259,7 @@ public abstract class AdminModelCommonServiceTest {
         // 지원모델 평가 등록
         evaluationEntity = adminEvaluationJpaRepository.save(
                 EvaluationEntity.builder()
-                        .idx(1L).adminSupportEntity(adminSupportEntity)
+                        .adminSupportEntity(adminSupportEntity)
                         .evaluateComment("합격").visible("Y").build()
         );
 
@@ -271,5 +278,16 @@ public abstract class AdminModelCommonServiceTest {
         );
 
         adminPortFolioDTO = AdminPortFolioEntity.toDto(adminPortFolioEntity);
+
+        // 모델 스케줄 등록
+        adminScheduleEntity = adminScheduleJpaRepository.save(
+                AdminScheduleEntity.builder()
+                        .adminModelEntity(adminModelEntity)
+                        .modelSchedule("모델 스케줄")
+                        .modelScheduleTime(LocalDateTime.now())
+                        .visible("Y")
+                        .build());
+
+        adminScheduleDTO = AdminScheduleEntity.toDto(adminScheduleEntity);
     }
 }

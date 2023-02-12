@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -41,7 +42,8 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("어드민 코멘트 Service Test")
 class AdminCommentJpaServiceTest extends AdminModelCommonServiceTest {
-    @Mock AdminCommentJpaService mockAdminCommentJpaService;
+    @Mock private AdminCommentJpaQueryRepository adminCommentJpaQueryRepository;
+    @InjectMocks private AdminCommentJpaServiceImpl mockAdminCommentJpaService;
     private final AdminCommentJpaService adminCommentJpaService;
 
     @Test
@@ -49,7 +51,7 @@ class AdminCommentJpaServiceTest extends AdminModelCommonServiceTest {
     void 어드민코멘트리스트조회테스트() {
         // given
         Map<String, Object> commentMap = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
 
         // then
         assertThat(adminCommentJpaService.findAdminCommentList(commentMap, pageRequest)).isNotEmpty();
@@ -60,7 +62,7 @@ class AdminCommentJpaServiceTest extends AdminModelCommonServiceTest {
     void 어드민코멘트리스트조회Mockito테스트() {
         // given
         Map<String, Object> commentMap = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
 
         List<AdminCommentDTO> returnCommentList = new ArrayList<>();
 
@@ -69,7 +71,7 @@ class AdminCommentJpaServiceTest extends AdminModelCommonServiceTest {
 
         Page<AdminCommentDTO> resultComment = new PageImpl<>(returnCommentList, pageRequest, returnCommentList.size());
         // when
-        when(mockAdminCommentJpaService.findAdminCommentList(commentMap, pageRequest)).thenReturn(resultComment);
+        when(adminCommentJpaQueryRepository.findAdminCommentList(commentMap, pageRequest)).thenReturn(resultComment);
         Page<AdminCommentDTO> commentList = mockAdminCommentJpaService.findAdminCommentList(commentMap, pageRequest);
         List<AdminCommentDTO> findCommentList = commentList.stream().collect(Collectors.toList());
 
@@ -85,12 +87,12 @@ class AdminCommentJpaServiceTest extends AdminModelCommonServiceTest {
         assertThat(findCommentList.get(0).getCommentTypeIdx()).isEqualTo(returnCommentList.get(0).getCommentTypeIdx());
 
         // verify
-        verify(mockAdminCommentJpaService, times(1)).findAdminCommentList(commentMap, pageRequest);
-        verify(mockAdminCommentJpaService, atLeastOnce()).findAdminCommentList(commentMap, pageRequest);
-        verifyNoMoreInteractions(mockAdminCommentJpaService);
+        verify(adminCommentJpaQueryRepository, times(1)).findAdminCommentList(commentMap, pageRequest);
+        verify(adminCommentJpaQueryRepository, atLeastOnce()).findAdminCommentList(commentMap, pageRequest);
+        verifyNoMoreInteractions(adminCommentJpaQueryRepository);
 
-        InOrder inOrder = inOrder(mockAdminCommentJpaService);
-        inOrder.verify(mockAdminCommentJpaService).findAdminCommentList(commentMap, pageRequest);
+        InOrder inOrder = inOrder(adminCommentJpaQueryRepository);
+        inOrder.verify(adminCommentJpaQueryRepository).findAdminCommentList(commentMap, pageRequest);
     }
 
     @Test
@@ -98,7 +100,7 @@ class AdminCommentJpaServiceTest extends AdminModelCommonServiceTest {
     void 어드민코멘트리스트조회BDD테스트() {
         // given
         Map<String, Object> commentMap = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
 
         List<AdminCommentDTO> returnCommentList = new ArrayList<>();
 
@@ -107,7 +109,7 @@ class AdminCommentJpaServiceTest extends AdminModelCommonServiceTest {
 
         Page<AdminCommentDTO> resultComment = new PageImpl<>(returnCommentList, pageRequest, returnCommentList.size());
         // when
-        given(mockAdminCommentJpaService.findAdminCommentList(commentMap, pageRequest)).willReturn(resultComment);
+        given(adminCommentJpaQueryRepository.findAdminCommentList(commentMap, pageRequest)).willReturn(resultComment);
         Page<AdminCommentDTO> commentList = mockAdminCommentJpaService.findAdminCommentList(commentMap, pageRequest);
         List<AdminCommentDTO> findCommentList = commentList.stream().collect(Collectors.toList());
 
@@ -123,8 +125,8 @@ class AdminCommentJpaServiceTest extends AdminModelCommonServiceTest {
         assertThat(findCommentList.get(0).getCommentTypeIdx()).isEqualTo(returnCommentList.get(0).getCommentTypeIdx());
 
         // verify
-        then(mockAdminCommentJpaService).should(times(1)).findAdminCommentList(commentMap, pageRequest);
-        then(mockAdminCommentJpaService).should(atLeastOnce()).findAdminCommentList(commentMap, pageRequest);
-        then(mockAdminCommentJpaService).shouldHaveNoMoreInteractions();
+        then(adminCommentJpaQueryRepository).should(times(1)).findAdminCommentList(commentMap, pageRequest);
+        then(adminCommentJpaQueryRepository).should(atLeastOnce()).findAdminCommentList(commentMap, pageRequest);
+        then(adminCommentJpaQueryRepository).shouldHaveNoMoreInteractions();
     }
 }
