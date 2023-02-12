@@ -54,7 +54,7 @@ public interface AdminUserJpaService {
      * 5. 작성일      : 2022. 05. 11.
      * </pre>
      */
-    AdminUserDTO insertAdminUser(SignUpRequest signUpRequest);
+    AdminUserDTO insertAdminUser(AdminUserEntity adminUserEntity);
 
     /**
      * <pre>

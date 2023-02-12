@@ -3,11 +3,13 @@ package com.tsp.api.user.service;
 import com.tsp.api.user.domain.AdminUserDTO;
 import com.tsp.api.user.domain.AdminUserEntity;
 import com.tsp.api.user.domain.LoginRequest;
-import com.tsp.api.user.domain.SignUpRequest;
+import com.tsp.api.user.service.repository.AdminUserJpaQueryRepository;
+import com.tsp.api.user.service.repository.AdminUserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -44,8 +46,9 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("유저 Service Test")
 class AdminUserJpaServiceTest {
-    @Mock
-    private AdminUserJpaService mockAdminUserJpaService;
+    @Mock private AdminUserJpaRepository adminUserJpaRepository;
+    @Mock private AdminUserJpaQueryRepository adminUserJpaQueryRepository;
+    @InjectMocks private AdminUserJpaServiceImpl mockAdminUserJpaService;
     private final AdminUserJpaService adminUserJpaService;
     private final PasswordEncoder passwordEncoder;
     private final EntityManager em;
@@ -55,7 +58,7 @@ class AdminUserJpaServiceTest {
     void 관리자회원리스트조회테스트() {
         // given
         Map<String, Object> userMap = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(1, 100);
+        PageRequest pageRequest = PageRequest.of(0, 100);
         Page<AdminUserDTO> adminUserList = adminUserJpaService.findUserList(userMap, pageRequest);
 
         // then
@@ -75,7 +78,7 @@ class AdminUserJpaServiceTest {
         Page<AdminUserDTO> resultUser = new PageImpl<>(returnUserList, pageRequest, returnUserList.size());
 
         // when
-        when(mockAdminUserJpaService.findUserList(userMap, pageRequest)).thenReturn(resultUser);
+        when(adminUserJpaQueryRepository.findUserList(userMap, pageRequest)).thenReturn(resultUser);
         Page<AdminUserDTO> userList = mockAdminUserJpaService.findUserList(userMap, pageRequest);
         List<AdminUserDTO> findUserList = userList.stream().collect(Collectors.toList());
 
@@ -92,12 +95,12 @@ class AdminUserJpaServiceTest {
         assertThat(findUserList.get(0).getVisible()).isEqualTo(returnUserList.get(0).getVisible());
 
         // verify
-        verify(mockAdminUserJpaService, times(1)).findUserList(userMap, pageRequest);
-        verify(mockAdminUserJpaService, atLeastOnce()).findUserList(userMap, pageRequest);
-        verifyNoMoreInteractions(mockAdminUserJpaService);
+        verify(adminUserJpaQueryRepository, times(1)).findUserList(userMap, pageRequest);
+        verify(adminUserJpaQueryRepository, atLeastOnce()).findUserList(userMap, pageRequest);
+        verifyNoMoreInteractions(adminUserJpaQueryRepository);
 
-        InOrder inOrder = inOrder(mockAdminUserJpaService);
-        inOrder.verify(mockAdminUserJpaService).findUserList(userMap, pageRequest);
+        InOrder inOrder = inOrder(adminUserJpaQueryRepository);
+        inOrder.verify(adminUserJpaQueryRepository).findUserList(userMap, pageRequest);
     }
 
     @Test
@@ -105,7 +108,7 @@ class AdminUserJpaServiceTest {
     void 관리자회원리스트조회BDD테스트() {
         // given
         Map<String, Object> userMap = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
 
         List<AdminUserDTO> returnUserList = new ArrayList<>();
         returnUserList.add(AdminUserDTO.builder()
@@ -113,7 +116,7 @@ class AdminUserJpaServiceTest {
         Page<AdminUserDTO> resultUser = new PageImpl<>(returnUserList, pageRequest, returnUserList.size());
 
         // when
-        given(mockAdminUserJpaService.findUserList(userMap, pageRequest)).willReturn(resultUser);
+        given(adminUserJpaQueryRepository.findUserList(userMap, pageRequest)).willReturn(resultUser);
         Page<AdminUserDTO> userList = mockAdminUserJpaService.findUserList(userMap, pageRequest);
         List<AdminUserDTO> findUserList = userList.stream().collect(Collectors.toList());
 
@@ -130,9 +133,9 @@ class AdminUserJpaServiceTest {
         assertThat(findUserList.get(0).getVisible()).isEqualTo(returnUserList.get(0).getVisible());
 
         // verify
-        then(mockAdminUserJpaService).should(times(1)).findUserList(userMap, pageRequest);
-        then(mockAdminUserJpaService).should(atLeastOnce());
-        then(mockAdminUserJpaService).shouldHaveNoMoreInteractions();
+        then(adminUserJpaQueryRepository).should(times(1)).findUserList(userMap, pageRequest);
+        then(adminUserJpaQueryRepository).should(atLeastOnce());
+        then(adminUserJpaQueryRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
@@ -148,63 +151,65 @@ class AdminUserJpaServiceTest {
     @DisplayName("관리자 회원 상세 조회 Mockito 테스트")
     void 관리자회원상세조회Mockito테스트() {
         // given
-        SignUpRequest signUpRequest = SignUpRequest.builder()
-                .userId("test")
-                .password("test")
-                .name("test")
-                .email("test@test.com")
+        AdminUserEntity adminUserEntity = AdminUserEntity.builder()
+                .userId("admin99")
+                .password(passwordEncoder.encode("pass1234"))
+                .name("admin99")
+                .email("admin99@admin.com")
                 .visible("Y")
+                .role(ROLE_ADMIN)
                 .build();
 
-        AdminUserDTO oneUser = adminUserJpaService.insertAdminUser(signUpRequest);
+        em.persist(adminUserEntity);
 
         // when
-        when(mockAdminUserJpaService.findOneUser(oneUser.getUserId())).thenReturn(oneUser);
-        AdminUserDTO userInfo = mockAdminUserJpaService.findOneUser(oneUser.getUserId());
+        when(adminUserJpaRepository.findByUserId(adminUserEntity.getUserId())).thenReturn(Optional.of(adminUserEntity));
+        AdminUserDTO userInfo = mockAdminUserJpaService.findOneUser(adminUserEntity.getUserId());
 
         // then
-        assertThat(userInfo.getIdx()).isEqualTo(oneUser.getIdx());
-        assertThat(userInfo.getUserId()).isEqualTo(oneUser.getUserId());
-        assertThat(userInfo.getPassword()).isEqualTo(oneUser.getPassword());
-        assertThat(userInfo.getVisible()).isEqualTo(oneUser.getVisible());
+        assertThat(userInfo.getIdx()).isEqualTo(adminUserEntity.getIdx());
+        assertThat(userInfo.getUserId()).isEqualTo(adminUserEntity.getUserId());
+        assertThat(userInfo.getPassword()).isEqualTo(adminUserEntity.getPassword());
+        assertThat(userInfo.getVisible()).isEqualTo(adminUserEntity.getVisible());
 
         // verify
-        verify(mockAdminUserJpaService, times(1)).findOneUser(oneUser.getUserId());
-        verify(mockAdminUserJpaService, atLeastOnce()).findOneUser(oneUser.getUserId());
-        verifyNoMoreInteractions(mockAdminUserJpaService);
+        verify(adminUserJpaRepository, times(1)).findByUserId(adminUserEntity.getUserId());
+        verify(adminUserJpaRepository, atLeastOnce()).findByUserId(adminUserEntity.getUserId());
+        verifyNoMoreInteractions(adminUserJpaRepository);
 
-        InOrder inOrder = inOrder(mockAdminUserJpaService);
-        inOrder.verify(mockAdminUserJpaService).findOneUser(oneUser.getUserId());
+        InOrder inOrder = inOrder(adminUserJpaRepository);
+        inOrder.verify(adminUserJpaRepository).findByUserId(adminUserEntity.getUserId());
     }
 
     @Test
     @DisplayName("관리자 회원 상세 조회 BDD 테스트")
     void 관리자회원상세조회BDD테스트() {
         // given
-        SignUpRequest signUpRequest = SignUpRequest.builder()
-                .userId("test")
-                .password("test")
-                .name("test")
-                .email("test@test.com")
+        AdminUserEntity adminUserEntity = AdminUserEntity.builder()
+                .userId("admin99")
+                .password(passwordEncoder.encode("pass1234"))
+                .name("admin99")
+                .email("admin99@admin.com")
                 .visible("Y")
+                .role(ROLE_ADMIN)
                 .build();
 
-        AdminUserDTO oneUser = adminUserJpaService.insertAdminUser(signUpRequest);
+        em.persist(adminUserEntity);
 
         // when
-        given(mockAdminUserJpaService.findOneUser(oneUser.getUserId())).willReturn(oneUser);
-        AdminUserDTO userInfo = mockAdminUserJpaService.findOneUser(oneUser.getUserId());
+        given(adminUserJpaRepository.findByUserId(adminUserEntity.getUserId())).willReturn(Optional.of(adminUserEntity));
+        AdminUserDTO userInfo = mockAdminUserJpaService.findOneUser(adminUserEntity.getUserId());
 
         // then
-        assertThat(userInfo.getIdx()).isEqualTo(oneUser.getIdx());
-        assertThat(userInfo.getUserId()).isEqualTo(oneUser.getUserId());
-        assertThat(userInfo.getPassword()).isEqualTo(oneUser.getPassword());
-        assertThat(userInfo.getVisible()).isEqualTo(oneUser.getVisible());
+        assertThat(userInfo.getIdx()).isEqualTo(adminUserEntity.getIdx());
+        assertThat(userInfo.getUserId()).isEqualTo(adminUserEntity.getUserId());
+        assertThat(userInfo.getPassword()).isEqualTo(adminUserEntity.getPassword());
+        assertThat(userInfo.getVisible()).isEqualTo(adminUserEntity.getVisible());
 
         // verify
-        then(mockAdminUserJpaService).should(times(1)).findOneUser(oneUser.getUserId());
-        then(mockAdminUserJpaService).should(atLeastOnce()).findOneUser(oneUser.getUserId());
-        then(mockAdminUserJpaService).shouldHaveNoMoreInteractions();
+        then(adminUserJpaRepository).should(times(1)).findByUserId(adminUserEntity.getUserId());
+        then(adminUserJpaRepository).should(atLeastOnce()).findByUserId(adminUserEntity.getUserId());
+        then(adminUserJpaRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
@@ -233,76 +238,73 @@ class AdminUserJpaServiceTest {
     @DisplayName("관리자 회원가입 Mockito 테스트")
     void 관리자회원가입Mockito테스트() {
         // given
-        SignUpRequest signUpRequest = SignUpRequest.builder()
-                .userId("test")
-                .password("test")
-                .name("test")
-                .email("test@test.com")
+        AdminUserEntity adminUserEntity = AdminUserEntity.builder()
+                .userId("admin99")
+                .password(passwordEncoder.encode("pass1234"))
+                .name("admin99")
+                .email("admin99@admin.com")
                 .visible("Y")
+                .role(ROLE_ADMIN)
                 .build();
 
-        AdminUserDTO oneUser = adminUserJpaService.insertAdminUser(signUpRequest);
-
         // when
-        when(mockAdminUserJpaService.findOneUser(oneUser.getUserId())).thenReturn(oneUser);
-        AdminUserDTO userInfo = mockAdminUserJpaService.findOneUser(oneUser.getUserId());
+        when(adminUserJpaRepository.save(adminUserEntity)).thenReturn(adminUserEntity);
+        AdminUserDTO userInfo = mockAdminUserJpaService.insertAdminUser(adminUserEntity);
 
         // then
-        assertThat(userInfo.getUserId()).isEqualTo("test");
-        assertThat(userInfo.getName()).isEqualTo("test");
-        assertThat(userInfo.getEmail()).isEqualTo("test@test.com");
+        assertThat(userInfo.getUserId()).isEqualTo(adminUserEntity.getUserId());
+        assertThat(userInfo.getName()).isEqualTo(adminUserEntity.getName());
+        assertThat(userInfo.getEmail()).isEqualTo(adminUserEntity.getEmail());
 
         // verify
-        verify(mockAdminUserJpaService, times(1)).findOneUser(oneUser.getUserId());
-        verify(mockAdminUserJpaService, atLeastOnce()).findOneUser(oneUser.getUserId());
-        verifyNoMoreInteractions(mockAdminUserJpaService);
+        verify(adminUserJpaRepository, times(1)).save(adminUserEntity);
+        verify(adminUserJpaRepository, atLeastOnce()).save(adminUserEntity);
 
-        InOrder inOrder = inOrder(mockAdminUserJpaService);
-        inOrder.verify(mockAdminUserJpaService).findOneUser(oneUser.getUserId());
+        InOrder inOrder = inOrder(adminUserJpaRepository);
+        inOrder.verify(adminUserJpaRepository).save(adminUserEntity);
     }
 
     @Test
     @DisplayName("관리자 회원가입 BDD 테스트")
     void 관리자회원가입BDD테스트() {
         // given
-        SignUpRequest signUpRequest = SignUpRequest.builder()
-                .userId("test")
-                .password("test")
-                .name("test")
-                .email("test@test.com")
+        AdminUserEntity adminUserEntity = AdminUserEntity.builder()
+                .userId("admin99")
+                .password(passwordEncoder.encode("pass1234"))
+                .name("admin99")
+                .email("admin99@admin.com")
                 .visible("Y")
+                .role(ROLE_ADMIN)
                 .build();
 
-        AdminUserDTO oneUser = adminUserJpaService.insertAdminUser(signUpRequest);
-
         // when
-        given(mockAdminUserJpaService.findOneUser(oneUser.getUserId())).willReturn(oneUser);
-        AdminUserDTO userInfo = mockAdminUserJpaService.findOneUser(oneUser.getUserId());
+        given(adminUserJpaRepository.save(adminUserEntity)).willReturn(adminUserEntity);
+        AdminUserDTO userInfo = mockAdminUserJpaService.insertAdminUser(adminUserEntity);
 
         // then
-        assertThat(userInfo.getUserId()).isEqualTo("test");
-        assertThat(userInfo.getName()).isEqualTo("test");
-        assertThat(userInfo.getEmail()).isEqualTo("test@test.com");
+        assertThat(userInfo.getUserId()).isEqualTo(adminUserEntity.getUserId());
+        assertThat(userInfo.getName()).isEqualTo(adminUserEntity.getName());
+        assertThat(userInfo.getEmail()).isEqualTo(adminUserEntity.getEmail());
 
         // verify
-        then(mockAdminUserJpaService).should(times(1)).findOneUser(oneUser.getUserId());
-        then(mockAdminUserJpaService).should(atLeastOnce()).findOneUser(oneUser.getUserId());
-        then(mockAdminUserJpaService).shouldHaveNoMoreInteractions();
+        then(adminUserJpaRepository).should(times(1)).save(adminUserEntity);
+        then(adminUserJpaRepository).should(atLeastOnce()).save(adminUserEntity);
     }
 
     @Test
     @DisplayName("관리자 수정 Mockito 테스트")
     void 관리자수정Mockito테스트() {
         // given
-        SignUpRequest signUpRequest = SignUpRequest.builder()
-                .userId("test")
-                .password("test")
-                .name("test")
-                .email("test@test.com")
+        AdminUserEntity adminUserEntity = AdminUserEntity.builder()
+                .userId("admin99")
+                .password(passwordEncoder.encode("pass1234"))
+                .name("admin99")
+                .email("admin99@admin.com")
                 .visible("Y")
+                .role(ROLE_ADMIN)
                 .build();
 
-        Long idx = adminUserJpaService.insertAdminUser(signUpRequest).getIdx();
+        Long idx = adminUserJpaService.insertAdminUser(adminUserEntity).getIdx();
 
         AdminUserEntity newAdminUserEntity = AdminUserEntity.builder()
                 .idx(idx)
@@ -314,39 +316,39 @@ class AdminUserJpaServiceTest {
                 .visible("Y")
                 .build();
 
-        AdminUserDTO updateUser = adminUserJpaService.updateAdminUser(idx, newAdminUserEntity);
-
         // when
-        when(mockAdminUserJpaService.findOneUser(newAdminUserEntity.getUserId())).thenReturn(updateUser);
-        AdminUserDTO userInfo = mockAdminUserJpaService.findOneUser(newAdminUserEntity.getUserId());
+        when(adminUserJpaRepository.findById(newAdminUserEntity.getIdx())).thenReturn(Optional.of(newAdminUserEntity));
+        when(adminUserJpaRepository.save(newAdminUserEntity)).thenReturn(newAdminUserEntity);
+        AdminUserDTO userInfo = mockAdminUserJpaService.updateAdminUser(newAdminUserEntity.getIdx(), newAdminUserEntity);
 
         // then
-        assertThat(userInfo.getUserId()).isEqualTo("test1");
-        assertThat(userInfo.getName()).isEqualTo("test1");
-        assertThat(userInfo.getEmail()).isEqualTo("test1@test.com");
+        assertThat(userInfo.getUserId()).isEqualTo(newAdminUserEntity.getUserId());
+        assertThat(userInfo.getName()).isEqualTo(newAdminUserEntity.getName());
+        assertThat(userInfo.getEmail()).isEqualTo(newAdminUserEntity.getEmail());
 
         // verify
-        verify(mockAdminUserJpaService, times(1)).findOneUser(newAdminUserEntity.getUserId());
-        verify(mockAdminUserJpaService, atLeastOnce()).findOneUser(newAdminUserEntity.getUserId());
-        verifyNoMoreInteractions(mockAdminUserJpaService);
+        verify(adminUserJpaRepository, times(1)).findById(newAdminUserEntity.getIdx());
+        verify(adminUserJpaRepository, atLeastOnce()).findById(newAdminUserEntity.getIdx());
+        verifyNoMoreInteractions(adminUserJpaRepository);
 
-        InOrder inOrder = inOrder(mockAdminUserJpaService);
-        inOrder.verify(mockAdminUserJpaService).findOneUser(newAdminUserEntity.getUserId());
+        InOrder inOrder = inOrder(adminUserJpaRepository);
+        inOrder.verify(adminUserJpaRepository).findById(newAdminUserEntity.getIdx());
     }
 
     @Test
     @DisplayName("관리자 수정 BDD 테스트")
     void 관리자수정BDD테스트() {
         // given
-        SignUpRequest signUpRequest = SignUpRequest.builder()
-                .userId("test")
-                .password("test")
-                .name("test")
-                .email("test@test.com")
+        AdminUserEntity adminUserEntity = AdminUserEntity.builder()
+                .userId("admin99")
+                .password(passwordEncoder.encode("pass1234"))
+                .name("admin99")
+                .email("admin99@admin.com")
                 .visible("Y")
+                .role(ROLE_ADMIN)
                 .build();
 
-        Long idx = adminUserJpaService.insertAdminUser(signUpRequest).getIdx();
+        Long idx = adminUserJpaService.insertAdminUser(adminUserEntity).getIdx();
 
         AdminUserEntity newAdminUserEntity = AdminUserEntity.builder()
                 .idx(idx)
@@ -358,56 +360,38 @@ class AdminUserJpaServiceTest {
                 .visible("Y")
                 .build();
 
-        AdminUserDTO updateUser = adminUserJpaService.updateAdminUser(idx, newAdminUserEntity);
-
         // when
-        given(mockAdminUserJpaService.findOneUser(newAdminUserEntity.getUserId())).willReturn(updateUser);
-        AdminUserDTO userInfo = mockAdminUserJpaService.findOneUser(newAdminUserEntity.getUserId());
+        given(adminUserJpaRepository.findById(newAdminUserEntity.getIdx())).willReturn(Optional.of(newAdminUserEntity));
+        given(adminUserJpaRepository.save(newAdminUserEntity)).willReturn(newAdminUserEntity);
+        AdminUserDTO userInfo = mockAdminUserJpaService.updateAdminUser(newAdminUserEntity.getIdx(), newAdminUserEntity);
 
         // then
-        assertThat(userInfo.getUserId()).isEqualTo("test1");
-        assertThat(userInfo.getName()).isEqualTo("test1");
-        assertThat(userInfo.getEmail()).isEqualTo("test1@test.com");
+        assertThat(userInfo.getUserId()).isEqualTo(newAdminUserEntity.getUserId());
+        assertThat(userInfo.getName()).isEqualTo(newAdminUserEntity.getName());
+        assertThat(userInfo.getEmail()).isEqualTo(newAdminUserEntity.getEmail());
 
         // verify
-        then(mockAdminUserJpaService).should(times(1)).findOneUser(newAdminUserEntity.getUserId());
-        then(mockAdminUserJpaService).should(atLeastOnce()).findOneUser(newAdminUserEntity.getUserId());
-        then(mockAdminUserJpaService).shouldHaveNoMoreInteractions();
+        then(adminUserJpaRepository).should(times(1)).findById(newAdminUserEntity.getIdx());
+        then(adminUserJpaRepository).should(atLeastOnce()).findById(newAdminUserEntity.getIdx());
+        then(adminUserJpaRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
     @DisplayName("관리자 탈퇴 테스트")
     void 관리자탈퇴테스트() {
-        // given
-        SignUpRequest signUpRequest = SignUpRequest.builder()
-                .userId("test")
-                .password("test")
-                .name("test")
-                .email("test@test.com")
-                .visible("Y")
-                .build();
-
-        AdminUserDTO adminUserDTO = adminUserJpaService.insertAdminUser(signUpRequest);
         AdminUserEntity adminUserEntity = AdminUserEntity.builder()
-                .idx(adminUserDTO.getIdx())
-                .userId(adminUserDTO.getUserId())
-                .password(adminUserDTO.getPassword())
-                .name(adminUserDTO.getName())
-                .email(adminUserDTO.getEmail())
+                .userId("admin99")
+                .password(passwordEncoder.encode("pass1234"))
+                .name("admin99")
+                .email("admin99@admin.com")
                 .visible("Y")
+                .role(ROLE_ADMIN)
                 .build();
 
-        AdminUserEntity nonadminUserEntity = AdminUserEntity.builder()
-                .idx(999L)
-                .userId(adminUserDTO.getUserId())
-                .password(adminUserDTO.getPassword())
-                .name(adminUserDTO.getName())
-                .email(adminUserDTO.getEmail())
-                .visible("Y")
-                .build();
+        em.persist(adminUserEntity);
 
         // then
-        adminUserJpaService.deleteAdminUser(nonadminUserEntity);
+        adminUserJpaService.deleteAdminUser(adminUserEntity);
         em.flush();
         em.clear();
     }
