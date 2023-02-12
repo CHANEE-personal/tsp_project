@@ -1,11 +1,13 @@
 package com.tsp.api.notice.service;
 
+import com.tsp.api.FrontCommonServiceTest;
 import com.tsp.api.notice.domain.FrontNoticeDTO;
 import com.tsp.api.notice.domain.FrontNoticeEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,14 +20,10 @@ import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
@@ -40,9 +38,10 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @TestPropertySource(locations = "classpath:application.properties")
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("공지사항 Service Test")
-class FrontNoticeJpaServiceTest {
-    @Mock
-    private FrontNoticeJpaService mockFrontNoticeJpaService;
+class FrontNoticeJpaServiceTest extends FrontCommonServiceTest {
+    @Mock private FrontNoticeJpaRepository frontNoticeJpaRepository;
+    @Mock private FrontNoticeJpaQueryRepository frontNoticeJpaQueryRepository;
+    @InjectMocks private FrontNoticeJpaService mockFrontNoticeJpaService;
     private final FrontNoticeJpaService frontNoticeJpaService;
 
     @Test
@@ -50,14 +49,14 @@ class FrontNoticeJpaServiceTest {
     void 공지사항리스트조회Mockito테스트() {
         // given
         Map<String, Object> noticeMap = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
 
         List<FrontNoticeDTO> noticeList = new ArrayList<>();
         noticeList.add(FrontNoticeDTO.builder().idx(1L).title("공지사항").description("공지사항").visible("Y").build());
         Page<FrontNoticeDTO> resultNotice = new PageImpl<>(noticeList, pageRequest, noticeList.size());
 
         // when
-        when(mockFrontNoticeJpaService.findNoticeList(noticeMap, pageRequest)).thenReturn(resultNotice);
+        when(frontNoticeJpaQueryRepository.findNoticeList(noticeMap, pageRequest)).thenReturn(resultNotice);
         Page<FrontNoticeDTO> newNoticeList = mockFrontNoticeJpaService.findNoticeList(noticeMap, pageRequest);
         List<FrontNoticeDTO> findNoticeList = newNoticeList.stream().collect(Collectors.toList());
 
@@ -67,12 +66,12 @@ class FrontNoticeJpaServiceTest {
         assertThat(findNoticeList.get(0).getDescription()).isEqualTo(noticeList.get(0).getDescription());
 
         // verify
-        verify(mockFrontNoticeJpaService, times(1)).findNoticeList(noticeMap, pageRequest);
-        verify(mockFrontNoticeJpaService, atLeastOnce()).findNoticeList(noticeMap, pageRequest);
-        verifyNoMoreInteractions(mockFrontNoticeJpaService);
+        verify(frontNoticeJpaQueryRepository, times(1)).findNoticeList(noticeMap, pageRequest);
+        verify(frontNoticeJpaQueryRepository, atLeastOnce()).findNoticeList(noticeMap, pageRequest);
+        verifyNoMoreInteractions(frontNoticeJpaQueryRepository);
 
-        InOrder inOrder = inOrder(mockFrontNoticeJpaService);
-        inOrder.verify(mockFrontNoticeJpaService).findNoticeList(noticeMap, pageRequest);
+        InOrder inOrder = inOrder(frontNoticeJpaQueryRepository);
+        inOrder.verify(frontNoticeJpaQueryRepository).findNoticeList(noticeMap, pageRequest);
     }
 
     @Test
@@ -80,14 +79,14 @@ class FrontNoticeJpaServiceTest {
     void 공지사항리스트조회BDD테스트() {
         // given
         Map<String, Object> noticeMap = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(1, 3);
+        PageRequest pageRequest = PageRequest.of(0, 3);
 
         List<FrontNoticeDTO> noticeList = new ArrayList<>();
         noticeList.add(FrontNoticeDTO.builder().idx(1L).title("공지사항").description("공지사항").visible("Y").build());
         Page<FrontNoticeDTO> resultNotice = new PageImpl<>(noticeList, pageRequest, noticeList.size());
 
         // when
-        given(mockFrontNoticeJpaService.findNoticeList(noticeMap, pageRequest)).willReturn(resultNotice);
+        given(frontNoticeJpaQueryRepository.findNoticeList(noticeMap, pageRequest)).willReturn(resultNotice);
         Page<FrontNoticeDTO> newNoticeList = mockFrontNoticeJpaService.findNoticeList(noticeMap, pageRequest);
         List<FrontNoticeDTO> findNoticeList = newNoticeList.stream().collect(Collectors.toList());
 
@@ -97,58 +96,50 @@ class FrontNoticeJpaServiceTest {
         assertThat(findNoticeList.get(0).getDescription()).isEqualTo(noticeList.get(0).getDescription());
 
         // verify
-        then(mockFrontNoticeJpaService).should(times(1)).findNoticeList(noticeMap, pageRequest);
-        then(mockFrontNoticeJpaService).should(atLeastOnce()).findNoticeList(noticeMap, pageRequest);
-        then(mockFrontNoticeJpaService).shouldHaveNoMoreInteractions();
+        then(frontNoticeJpaQueryRepository).should(times(1)).findNoticeList(noticeMap, pageRequest);
+        then(frontNoticeJpaQueryRepository).should(atLeastOnce()).findNoticeList(noticeMap, pageRequest);
+        then(frontNoticeJpaQueryRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
     @DisplayName("공지사항상세조회Mockito테스트")
     void 공지사항상세조회Mockito테스트() {
-        // given
-        FrontNoticeEntity frontNoticeEntity = FrontNoticeEntity.builder().idx(1L).title("noticeTest").description("noticeTest").build();
-        FrontNoticeDTO frontNoticeDTO = FrontNoticeEntity.toDto(frontNoticeEntity);
-
         // when
-        when(mockFrontNoticeJpaService.findOneNotice(frontNoticeEntity.getIdx())).thenReturn(frontNoticeDTO);
+        when(frontNoticeJpaRepository.findById(frontNoticeEntity.getIdx())).thenReturn(Optional.ofNullable(frontNoticeEntity));
         FrontNoticeDTO noticeInfo = mockFrontNoticeJpaService.findOneNotice(frontNoticeEntity.getIdx());
 
         // then
-        assertThat(noticeInfo.getIdx()).isEqualTo(frontNoticeDTO.getIdx());
-        assertThat(noticeInfo.getTitle()).isEqualTo(frontNoticeDTO.getTitle());
-        assertThat(noticeInfo.getDescription()).isEqualTo(frontNoticeDTO.getDescription());
-        assertThat(noticeInfo.getVisible()).isEqualTo(frontNoticeDTO.getVisible());
+        assertThat(noticeInfo.getIdx()).isEqualTo(frontNoticeEntity.getIdx());
+        assertThat(noticeInfo.getTitle()).isEqualTo(frontNoticeEntity.getTitle());
+        assertThat(noticeInfo.getDescription()).isEqualTo(frontNoticeEntity.getDescription());
+        assertThat(noticeInfo.getVisible()).isEqualTo(frontNoticeEntity.getVisible());
 
         // verify
-        verify(mockFrontNoticeJpaService, times(1)).findOneNotice(frontNoticeEntity.getIdx());
-        verify(mockFrontNoticeJpaService, atLeastOnce()).findOneNotice(frontNoticeEntity.getIdx());
-        verifyNoMoreInteractions(mockFrontNoticeJpaService);
+        verify(frontNoticeJpaRepository, times(1)).findById(frontNoticeEntity.getIdx());
+        verify(frontNoticeJpaRepository, atLeastOnce()).findById(frontNoticeEntity.getIdx());
+        verifyNoMoreInteractions(frontNoticeJpaRepository);
 
-        InOrder inOrder = inOrder(mockFrontNoticeJpaService);
-        inOrder.verify(mockFrontNoticeJpaService).findOneNotice(frontNoticeEntity.getIdx());
+        InOrder inOrder = inOrder(frontNoticeJpaRepository);
+        inOrder.verify(frontNoticeJpaRepository).findById(frontNoticeEntity.getIdx());
     }
 
     @Test
     @DisplayName("공지사항상세조회BDD테스트")
     void 공지사항상세조회BDD테스트() {
-        // given
-        FrontNoticeEntity frontNoticeEntity = FrontNoticeEntity.builder().idx(1L).title("noticeTest").description("noticeTest").build();
-        FrontNoticeDTO frontNoticeDTO = FrontNoticeEntity.toDto(frontNoticeEntity);
-
         // when
-        when(mockFrontNoticeJpaService.findOneNotice(frontNoticeEntity.getIdx())).thenReturn(frontNoticeDTO);
+        given(frontNoticeJpaRepository.findById(frontNoticeEntity.getIdx())).willReturn(Optional.ofNullable(frontNoticeEntity));
         FrontNoticeDTO noticeInfo = mockFrontNoticeJpaService.findOneNotice(frontNoticeEntity.getIdx());
 
         // then
-        assertThat(noticeInfo.getIdx()).isEqualTo(frontNoticeDTO.getIdx());
-        assertThat(noticeInfo.getTitle()).isEqualTo(frontNoticeDTO.getTitle());
-        assertThat(noticeInfo.getDescription()).isEqualTo(frontNoticeDTO.getDescription());
-        assertThat(noticeInfo.getVisible()).isEqualTo(frontNoticeDTO.getVisible());
+        assertThat(noticeInfo.getIdx()).isEqualTo(frontNoticeEntity.getIdx());
+        assertThat(noticeInfo.getTitle()).isEqualTo(frontNoticeEntity.getTitle());
+        assertThat(noticeInfo.getDescription()).isEqualTo(frontNoticeEntity.getDescription());
+        assertThat(noticeInfo.getVisible()).isEqualTo(frontNoticeEntity.getVisible());
 
         // verify
-        then(mockFrontNoticeJpaService).should(times(1)).findOneNotice(frontNoticeEntity.getIdx());
-        then(mockFrontNoticeJpaService).should(atLeastOnce()).findOneNotice(frontNoticeEntity.getIdx());
-        then(mockFrontNoticeJpaService).shouldHaveNoMoreInteractions();
+        then(frontNoticeJpaRepository).should(times(1)).findById(frontNoticeEntity.getIdx());
+        then(frontNoticeJpaRepository).should(atLeastOnce()).findById(frontNoticeEntity.getIdx());
+        then(frontNoticeJpaRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
@@ -212,8 +203,8 @@ class FrontNoticeJpaServiceTest {
     }
 
     @Test
-    @DisplayName("다음 프로덕션 상세 조회 Mockito 테스트")
-    void 다음프로덕션상세조회Mockito테스트() {
+    @DisplayName("다음 공지사항 상세 조회 Mockito 테스트")
+    void 다음공지사항상세조회Mockito테스트() {
         // given
         FrontNoticeEntity frontNoticeEntity = FrontNoticeEntity.builder().idx(2L).build();
 
@@ -236,8 +227,8 @@ class FrontNoticeJpaServiceTest {
     }
 
     @Test
-    @DisplayName("다음 프로덕션 상세 조회 BDD 테스트")
-    void 다음프로덕션상세조회BDD테스트() {
+    @DisplayName("다음 공지사항 상세 조회 BDD 테스트")
+    void 다음공지사항상세조회BDD테스트() {
         // given
         FrontNoticeEntity frontNoticeEntity = FrontNoticeEntity.builder().idx(2L).build();
 
