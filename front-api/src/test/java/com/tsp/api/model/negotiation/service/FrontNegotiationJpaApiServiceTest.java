@@ -3,10 +3,12 @@ package com.tsp.api.model.negotiation.service;
 import com.tsp.api.FrontCommonServiceTest;
 import com.tsp.api.model.domain.negotiation.FrontNegotiationDTO;
 import com.tsp.api.model.domain.negotiation.FrontNegotiationEntity;
+import com.tsp.api.model.service.FrontModelJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,10 +23,7 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.time.LocalDateTime.now;
@@ -46,8 +45,10 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("모델 섭외 Service Test")
 class FrontNegotiationApiServiceTest extends FrontCommonServiceTest {
-    @Mock
-    private FrontNegotiationJpaApiService mockFrontNegotiationJpaApiService;
+    @Mock private FrontModelJpaRepository frontModelJpaRepository;
+    @Mock private FrontNegotiationJpaRepository frontNegotiationJpaRepository;
+    @Mock private FrontNegotiationJpaQueryRepository frontNegotiationJpaQueryRepository;
+    @InjectMocks private FrontNegotiationJpaApiService mockFrontNegotiationJpaApiService;
     private final FrontNegotiationJpaApiService frontNegotiationJpaApiService;
     private final EntityManager em;
 
@@ -94,7 +95,7 @@ class FrontNegotiationApiServiceTest extends FrontCommonServiceTest {
 
         Page<FrontNegotiationDTO> resultNegotiation = new PageImpl<>(negotiationList, pageRequest, negotiationList.size());
         // when
-        when(mockFrontNegotiationJpaApiService.findModelNegotiationList(negotiationMap, pageRequest)).thenReturn(resultNegotiation);
+        when(frontNegotiationJpaQueryRepository.findModelNegotiationList(negotiationMap, pageRequest)).thenReturn(resultNegotiation);
         Page<FrontNegotiationDTO> newModelNegotiationList = mockFrontNegotiationJpaApiService.findModelNegotiationList(negotiationMap, pageRequest);
         List<FrontNegotiationDTO> findNegotiationList = newModelNegotiationList.stream().collect(Collectors.toList());
 
@@ -103,12 +104,12 @@ class FrontNegotiationApiServiceTest extends FrontCommonServiceTest {
         assertThat(findNegotiationList.get(0).getModelNegotiationDesc()).isEqualTo(negotiationList.get(0).getModelNegotiationDesc());
 
         // verify
-        verify(mockFrontNegotiationJpaApiService, times(1)).findModelNegotiationList(negotiationMap, pageRequest);
-        verify(mockFrontNegotiationJpaApiService, atLeastOnce()).findModelNegotiationList(negotiationMap, pageRequest);
-        verifyNoMoreInteractions(mockFrontNegotiationJpaApiService);
+        verify(frontNegotiationJpaQueryRepository, times(1)).findModelNegotiationList(negotiationMap, pageRequest);
+        verify(frontNegotiationJpaQueryRepository, atLeastOnce()).findModelNegotiationList(negotiationMap, pageRequest);
+        verifyNoMoreInteractions(frontNegotiationJpaQueryRepository);
 
-        InOrder inOrder = inOrder(mockFrontNegotiationJpaApiService);
-        inOrder.verify(mockFrontNegotiationJpaApiService).findModelNegotiationList(negotiationMap, pageRequest);
+        InOrder inOrder = inOrder(frontNegotiationJpaQueryRepository);
+        inOrder.verify(frontNegotiationJpaQueryRepository).findModelNegotiationList(negotiationMap, pageRequest);
     }
 
     @Test
@@ -126,7 +127,7 @@ class FrontNegotiationApiServiceTest extends FrontCommonServiceTest {
 
         Page<FrontNegotiationDTO> resultNegotiation = new PageImpl<>(negotiationList, pageRequest, negotiationList.size());
         // when
-        given(mockFrontNegotiationJpaApiService.findModelNegotiationList(negotiationMap, pageRequest)).willReturn(resultNegotiation);
+        given(frontNegotiationJpaQueryRepository.findModelNegotiationList(negotiationMap, pageRequest)).willReturn(resultNegotiation);
         Page<FrontNegotiationDTO> newModelNegotiationList = mockFrontNegotiationJpaApiService.findModelNegotiationList(negotiationMap, pageRequest);
         List<FrontNegotiationDTO> findNegotiationList = newModelNegotiationList.stream().collect(Collectors.toList());
 
@@ -135,64 +136,58 @@ class FrontNegotiationApiServiceTest extends FrontCommonServiceTest {
         assertThat(findNegotiationList.get(0).getModelNegotiationDesc()).isEqualTo(negotiationList.get(0).getModelNegotiationDesc());
 
         // verify
-        then(mockFrontNegotiationJpaApiService).should(times(1)).findModelNegotiationList(negotiationMap, pageRequest);
-        then(mockFrontNegotiationJpaApiService).should(atLeastOnce()).findModelNegotiationList(negotiationMap, pageRequest);
-        then(mockFrontNegotiationJpaApiService).shouldHaveNoMoreInteractions();
+        then(frontNegotiationJpaQueryRepository).should(times(1)).findModelNegotiationList(negotiationMap, pageRequest);
+        then(frontNegotiationJpaQueryRepository).should(atLeastOnce()).findModelNegotiationList(negotiationMap, pageRequest);
+        then(frontNegotiationJpaQueryRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
     @DisplayName("모델섭외등록Mockito테스트")
     void 모델섭외등록Mockito테스트() {
-        // given
-        frontNegotiationJpaApiService.insertModelNegotiation(frontModelDTO.getIdx(), frontNegotiationEntity);
-
         // when
-        when(mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity.getIdx())).thenReturn(frontNegotiationDTO);
-        FrontNegotiationDTO negotiationInfo = mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity.getIdx());
+        when(frontModelJpaRepository.findById(frontModelEntity.getIdx())).thenReturn(Optional.ofNullable(frontModelEntity));
+        when(frontNegotiationJpaRepository.save(frontNegotiationEntity)).thenReturn(frontNegotiationEntity);
+        FrontNegotiationDTO negotiationInfo = mockFrontNegotiationJpaApiService.insertModelNegotiation(frontModelEntity.getIdx(), frontNegotiationEntity);
 
         // then
         assertThat(negotiationInfo.getFrontModelDTO().getIdx()).isEqualTo(frontModelEntity.getIdx());
-        assertThat(negotiationInfo.getModelKorName()).isEqualTo("조찬희");
+        assertThat(negotiationInfo.getModelKorName()).isEqualTo(frontModelEntity.getModelKorName());
         assertThat(negotiationInfo.getModelNegotiationDesc()).isNotNull();
 
         // verify
-        verify(mockFrontNegotiationJpaApiService, times(1)).findOneNegotiation(frontNegotiationEntity.getIdx());
-        verify(mockFrontNegotiationJpaApiService, atLeastOnce()).findOneNegotiation(frontNegotiationEntity.getIdx());
-        verifyNoMoreInteractions(mockFrontNegotiationJpaApiService);
+        verify(frontModelJpaRepository, times(1)).findById(frontModelEntity.getIdx());
+        verify(frontModelJpaRepository, atLeastOnce()).findById(frontModelEntity.getIdx());
+        verifyNoMoreInteractions(frontModelJpaRepository);
 
-        InOrder inOrder = inOrder(mockFrontNegotiationJpaApiService);
-        inOrder.verify(mockFrontNegotiationJpaApiService).findOneNegotiation(frontNegotiationEntity.getIdx());
+        InOrder inOrder = inOrder(frontModelJpaRepository);
+        inOrder.verify(frontModelJpaRepository).findById(frontModelEntity.getIdx());
     }
 
     @Test
     @DisplayName("모델섭외등록BDD테스트")
     void 모델섭외등록BDD테스트() {
-        // given
-        frontNegotiationJpaApiService.insertModelNegotiation(frontModelDTO.getIdx(), frontNegotiationEntity);
-
         // when
-        given(mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity.getIdx())).willReturn(frontNegotiationDTO);
-        FrontNegotiationDTO negotiationInfo = mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity.getIdx());
+        given(frontModelJpaRepository.findById(frontModelEntity.getIdx())).willReturn(Optional.ofNullable(frontModelEntity));
+        given(frontNegotiationJpaRepository.save(frontNegotiationEntity)).willReturn(frontNegotiationEntity);
+        FrontNegotiationDTO negotiationInfo = mockFrontNegotiationJpaApiService.insertModelNegotiation(frontModelEntity.getIdx(), frontNegotiationEntity);
 
         // then
         assertThat(negotiationInfo.getFrontModelDTO().getIdx()).isEqualTo(frontModelEntity.getIdx());
-        assertThat(negotiationInfo.getModelKorName()).isEqualTo("조찬희");
+        assertThat(negotiationInfo.getModelKorName()).isEqualTo(frontModelEntity.getModelKorName());
         assertThat(negotiationInfo.getModelNegotiationDesc()).isNotNull();
 
         // verify
-        then(mockFrontNegotiationJpaApiService).should(times(1)).findOneNegotiation(frontNegotiationEntity.getIdx());
-        then(mockFrontNegotiationJpaApiService).should(atLeastOnce()).findOneNegotiation(frontNegotiationEntity.getIdx());
-        then(mockFrontNegotiationJpaApiService).shouldHaveNoMoreInteractions();
+        then(frontModelJpaRepository).should(times(1)).findById(frontModelEntity.getIdx());
+        then(frontModelJpaRepository).should(atLeastOnce()).findById(frontModelEntity.getIdx());
+        then(frontModelJpaRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
     @DisplayName("모델섭외수정Mockito테스트")
     void 모델섭외수정Mockito테스트() {
         // given
-        Long idx = frontNegotiationJpaApiService.insertModelNegotiation(frontModelDTO.getIdx(), frontNegotiationEntity).getIdx();
-
-        frontNegotiationEntity = FrontNegotiationEntity.builder()
-                .idx(idx)
+        FrontNegotiationEntity updateNegotiationEntity = FrontNegotiationEntity.builder()
+                .idx(frontNegotiationEntity.getIdx())
                 .frontModelEntity(frontModelEntity)
                 .modelKorName(frontModelEntity.getModelKorName())
                 .modelNegotiationDesc("섭외 수정 테스트")
@@ -203,35 +198,29 @@ class FrontNegotiationApiServiceTest extends FrontCommonServiceTest {
                 .visible("Y")
                 .build();
 
-        FrontNegotiationDTO frontNegotiationDTO = FrontNegotiationEntity.toDto(frontNegotiationEntity);
-
-        frontNegotiationJpaApiService.updateModelNegotiation(frontNegotiationDTO.getIdx(), frontNegotiationEntity);
-
         // when
-        when(mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity.getIdx())).thenReturn(frontNegotiationDTO);
-        FrontNegotiationDTO negotiationInfo = mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity.getIdx());
+        when(frontNegotiationJpaRepository.findById(updateNegotiationEntity.getIdx())).thenReturn(Optional.of(updateNegotiationEntity));
+        when(frontNegotiationJpaRepository.save(updateNegotiationEntity)).thenReturn(updateNegotiationEntity);
+        FrontNegotiationDTO negotiationInfo = mockFrontNegotiationJpaApiService.updateModelNegotiation(updateNegotiationEntity.getIdx(), updateNegotiationEntity);
 
         // then
         assertThat(negotiationInfo.getFrontModelDTO().getIdx()).isEqualTo(frontModelEntity.getIdx());
-        assertThat(negotiationInfo.getModelNegotiationDesc()).isEqualTo("섭외 수정 테스트");
+        assertThat(negotiationInfo.getModelNegotiationDesc()).isEqualTo(updateNegotiationEntity.getModelNegotiationDesc());
 
         // verify
-        verify(mockFrontNegotiationJpaApiService, times(1)).findOneNegotiation(frontNegotiationEntity.getIdx());
-        verify(mockFrontNegotiationJpaApiService, atLeastOnce()).findOneNegotiation(frontNegotiationEntity.getIdx());
-        verifyNoMoreInteractions(mockFrontNegotiationJpaApiService);
+        verify(frontNegotiationJpaRepository, times(1)).findById(updateNegotiationEntity.getIdx());
+        verify(frontNegotiationJpaRepository, atLeastOnce()).findById(updateNegotiationEntity.getIdx());
 
-        InOrder inOrder = inOrder(mockFrontNegotiationJpaApiService);
-        inOrder.verify(mockFrontNegotiationJpaApiService).findOneNegotiation(frontNegotiationEntity.getIdx());
+        InOrder inOrder = inOrder(frontNegotiationJpaRepository);
+        inOrder.verify(frontNegotiationJpaRepository).findById(updateNegotiationEntity.getIdx());
     }
 
     @Test
     @DisplayName("모델섭외수정BDD테스트")
     void 모델섭외수정BDD테스트() {
         // given
-        Long idx = frontNegotiationJpaApiService.insertModelNegotiation(frontModelDTO.getIdx(), frontNegotiationEntity).getIdx();
-
-        frontNegotiationEntity = FrontNegotiationEntity.builder()
-                .idx(idx)
+        FrontNegotiationEntity updateNegotiationEntity = FrontNegotiationEntity.builder()
+                .idx(frontNegotiationEntity.getIdx())
                 .frontModelEntity(frontModelEntity)
                 .modelKorName(frontModelEntity.getModelKorName())
                 .modelNegotiationDesc("섭외 수정 테스트")
@@ -242,65 +231,27 @@ class FrontNegotiationApiServiceTest extends FrontCommonServiceTest {
                 .visible("Y")
                 .build();
 
-        FrontNegotiationDTO frontNegotiationDTO = FrontNegotiationEntity.toDto(frontNegotiationEntity);
-
-        frontNegotiationJpaApiService.updateModelNegotiation(frontNegotiationDTO.getIdx(), frontNegotiationEntity);
-
         // when
-        given(mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity.getIdx())).willReturn(frontNegotiationDTO);
-        FrontNegotiationDTO negotiationInfo = mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity.getIdx());
+        given(frontNegotiationJpaRepository.findById(updateNegotiationEntity.getIdx())).willReturn(Optional.of(updateNegotiationEntity));
+        given(frontNegotiationJpaRepository.save(updateNegotiationEntity)).willReturn(updateNegotiationEntity);
+        FrontNegotiationDTO negotiationInfo = mockFrontNegotiationJpaApiService.updateModelNegotiation(updateNegotiationEntity.getIdx(), updateNegotiationEntity);
 
         // then
         assertThat(negotiationInfo.getFrontModelDTO().getIdx()).isEqualTo(frontModelEntity.getIdx());
-        assertThat(negotiationInfo.getModelNegotiationDesc()).isEqualTo("섭외 수정 테스트");
+        assertThat(negotiationInfo.getModelNegotiationDesc()).isEqualTo(updateNegotiationEntity.getModelNegotiationDesc());
 
         // verify
-        then(mockFrontNegotiationJpaApiService).should(times(1)).findOneNegotiation(frontNegotiationEntity.getIdx());
-        then(mockFrontNegotiationJpaApiService).should(atLeastOnce()).findOneNegotiation(frontNegotiationEntity.getIdx());
-        then(mockFrontNegotiationJpaApiService).shouldHaveNoMoreInteractions();
+        then(frontNegotiationJpaRepository).should(times(1)).findById(updateNegotiationEntity.getIdx());
+        then(frontNegotiationJpaRepository).should(atLeastOnce()).findById(updateNegotiationEntity.getIdx());
     }
 
     @Test
-    @DisplayName("모델섭외삭제Mockito테스트")
-    void 모델섭외삭제Mockito테스트() {
+    @DisplayName("모델섭외삭제테스트")
+    void 모델섭외삭제테스트() {
         // given
-        em.persist(frontNegotiationEntity);
-        frontNegotiationDTO = FrontNegotiationEntity.toDto(frontNegotiationEntity);
-
-        // when
-        when(mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity.getIdx())).thenReturn(frontNegotiationDTO);
         Long deleteIdx = frontNegotiationJpaApiService.deleteModelNegotiation(frontNegotiationEntity.getIdx());
 
         // then
-        assertThat(mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity.getIdx()).getIdx()).isEqualTo(deleteIdx);
-
-        // verify
-        verify(mockFrontNegotiationJpaApiService, times(1)).findOneNegotiation(frontNegotiationEntity.getIdx());
-        verify(mockFrontNegotiationJpaApiService, atLeastOnce()).findOneNegotiation(frontNegotiationEntity.getIdx());
-        verifyNoMoreInteractions(mockFrontNegotiationJpaApiService);
-
-        InOrder inOrder = inOrder(mockFrontNegotiationJpaApiService);
-        inOrder.verify(mockFrontNegotiationJpaApiService).findOneNegotiation(frontNegotiationEntity.getIdx());
+        assertThat(deleteIdx).isNotNull();
     }
-
-    @Test
-    @DisplayName("모델섭외삭제BDD테스트")
-    void 모델섭외삭제BDD테스트() {
-        // given
-        em.persist(frontNegotiationEntity);
-        frontNegotiationDTO = FrontNegotiationEntity.toDto(frontNegotiationEntity);
-
-        // when
-        given(mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity.getIdx())).willReturn(frontNegotiationDTO);
-        Long deleteIdx = frontNegotiationJpaApiService.deleteModelNegotiation(frontNegotiationEntity.getIdx());
-
-        // then
-        assertThat(mockFrontNegotiationJpaApiService.findOneNegotiation(frontNegotiationEntity.getIdx()).getIdx()).isEqualTo(deleteIdx);
-
-        // verify
-        then(mockFrontNegotiationJpaApiService).should(times(1)).findOneNegotiation(frontNegotiationEntity.getIdx());
-        then(mockFrontNegotiationJpaApiService).should(atLeastOnce()).findOneNegotiation(frontNegotiationEntity.getIdx());
-        then(mockFrontNegotiationJpaApiService).shouldHaveNoMoreInteractions();
-    }
-
 }

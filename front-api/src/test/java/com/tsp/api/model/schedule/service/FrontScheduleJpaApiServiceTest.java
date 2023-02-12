@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -40,7 +41,8 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("모델 스케줄 Service Test")
 class FrontScheduleJpaApiServiceTest {
-    @Mock private FrontScheduleJpaApiService mockFrontScheduleJpaApiService;
+    @Mock private FrontScheduleJpaQueryRepository frontScheduleJpaQueryRepository;
+    @InjectMocks private FrontScheduleJpaApiService mockFrontScheduleJpaApiService;
     private final FrontScheduleJpaApiService frontScheduleJpaApiService;
 
     @Test
@@ -87,7 +89,7 @@ class FrontScheduleJpaApiServiceTest {
 
         Page<FrontScheduleDTO> resultSchedule = new PageImpl<>(scheduleList, pageRequest, scheduleList.size());
         // when
-        when(mockFrontScheduleJpaApiService.findScheduleList(scheduleMap, pageRequest)).thenReturn(resultSchedule);
+        when(frontScheduleJpaQueryRepository.findScheduleList(scheduleMap, pageRequest)).thenReturn(resultSchedule);
         Page<FrontScheduleDTO> newScheduleList = mockFrontScheduleJpaApiService.findScheduleList(scheduleMap, pageRequest);
         List<FrontScheduleDTO> findScheduleList = newScheduleList.stream().collect(Collectors.toList());
 
@@ -98,12 +100,12 @@ class FrontScheduleJpaApiServiceTest {
         assertThat(findScheduleList.get(0).getModelScheduleTime()).isEqualTo(scheduleList.get(0).getModelScheduleTime());
 
         // verify
-        verify(mockFrontScheduleJpaApiService, times(1)).findScheduleList(scheduleMap, pageRequest);
-        verify(mockFrontScheduleJpaApiService, atLeastOnce()).findScheduleList(scheduleMap, pageRequest);
-        verifyNoMoreInteractions(mockFrontScheduleJpaApiService);
+        verify(frontScheduleJpaQueryRepository, times(1)).findScheduleList(scheduleMap, pageRequest);
+        verify(frontScheduleJpaQueryRepository, atLeastOnce()).findScheduleList(scheduleMap, pageRequest);
+        verifyNoMoreInteractions(frontScheduleJpaQueryRepository);
 
-        InOrder inOrder = inOrder(mockFrontScheduleJpaApiService);
-        inOrder.verify(mockFrontScheduleJpaApiService).findScheduleList(scheduleMap, pageRequest);
+        InOrder inOrder = inOrder(frontScheduleJpaQueryRepository);
+        inOrder.verify(frontScheduleJpaQueryRepository).findScheduleList(scheduleMap, pageRequest);
     }
 
     @Test
@@ -119,7 +121,7 @@ class FrontScheduleJpaApiServiceTest {
 
         Page<FrontScheduleDTO> resultSchedule = new PageImpl<>(scheduleList, pageRequest, scheduleList.size());
         // when
-        given(mockFrontScheduleJpaApiService.findScheduleList(scheduleMap, pageRequest)).willReturn(resultSchedule);
+        given(frontScheduleJpaQueryRepository.findScheduleList(scheduleMap, pageRequest)).willReturn(resultSchedule);
         Page<FrontScheduleDTO> newScheduleList = mockFrontScheduleJpaApiService.findScheduleList(scheduleMap, pageRequest);
         List<FrontScheduleDTO> findScheduleList = newScheduleList.stream().collect(Collectors.toList());
 
@@ -130,8 +132,8 @@ class FrontScheduleJpaApiServiceTest {
         assertThat(findScheduleList.get(0).getModelScheduleTime()).isEqualTo(scheduleList.get(0).getModelScheduleTime());
 
         // verify
-        then(mockFrontScheduleJpaApiService).should(times(1)).findScheduleList(scheduleMap, pageRequest);
-        then(mockFrontScheduleJpaApiService).should(atLeastOnce()).findScheduleList(scheduleMap, pageRequest);
-        then(mockFrontScheduleJpaApiService).shouldHaveNoMoreInteractions();
+        then(frontScheduleJpaQueryRepository).should(times(1)).findScheduleList(scheduleMap, pageRequest);
+        then(frontScheduleJpaQueryRepository).should(atLeastOnce()).findScheduleList(scheduleMap, pageRequest);
+        then(frontScheduleJpaQueryRepository).shouldHaveNoMoreInteractions();
     }
 }

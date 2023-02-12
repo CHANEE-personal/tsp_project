@@ -38,7 +38,7 @@ public class EvaluationEntity extends NewCommonMappedClass {
     private String evaluateComment;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "support_idx", referencedColumnName = "idx", insertable = false, updatable = false)
+    @JoinColumn(name = "support_idx", referencedColumnName = "idx")
     private AdminSupportEntity adminSupportEntity;
 
     public void update(EvaluationEntity evaluationEntity) {

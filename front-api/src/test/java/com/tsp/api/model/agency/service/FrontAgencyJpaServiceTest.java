@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,10 +21,7 @@ import org.springframework.test.context.TestPropertySource;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,7 +41,9 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("Agency Service Test")
 class FrontAgencyJpaServiceTest extends FrontCommonServiceTest {
-    @Mock private FrontAgencyJpaService mockFrontAgencyJpaService;
+    @Mock private FrontAgencyJpaRepository frontAgencyJpaRepository;
+    @Mock private FrontAgencyJpaQueryRepository frontAgencyJpaQueryRepository;
+    @InjectMocks private FrontAgencyJpaService mockFrontAgencyJpaService;
     private final FrontAgencyJpaService frontAgencyJpaService;
     private final EntityManager em;
 
@@ -59,7 +59,7 @@ class FrontAgencyJpaServiceTest extends FrontCommonServiceTest {
 
         Page<FrontAgencyDTO> resultAgency = new PageImpl<>(agencyList, pageRequest, agencyList.size());
         // when
-        when(mockFrontAgencyJpaService.findAgencyList(agencyMap, pageRequest)).thenReturn(resultAgency);
+        when(frontAgencyJpaQueryRepository.findAgencyList(agencyMap, pageRequest)).thenReturn(resultAgency);
         Page<FrontAgencyDTO> newAgencyList = mockFrontAgencyJpaService.findAgencyList(agencyMap, pageRequest);
         List<FrontAgencyDTO> findAgencyList = newAgencyList.stream().collect(Collectors.toList());
 
@@ -75,12 +75,12 @@ class FrontAgencyJpaServiceTest extends FrontCommonServiceTest {
         assertThat(findAgencyList.get(0).getVisible()).isEqualTo(agencyList.get(0).getVisible());
 
         // verify
-        verify(mockFrontAgencyJpaService, times(1)).findAgencyList(agencyMap, pageRequest);
-        verify(mockFrontAgencyJpaService, atLeastOnce()).findAgencyList(agencyMap, pageRequest);
-        verifyNoMoreInteractions(mockFrontAgencyJpaService);
+        verify(frontAgencyJpaQueryRepository, times(1)).findAgencyList(agencyMap, pageRequest);
+        verify(frontAgencyJpaQueryRepository, atLeastOnce()).findAgencyList(agencyMap, pageRequest);
+        verifyNoMoreInteractions(frontAgencyJpaQueryRepository);
 
-        InOrder inOrder = inOrder(mockFrontAgencyJpaService);
-        inOrder.verify(mockFrontAgencyJpaService).findAgencyList(agencyMap, pageRequest);
+        InOrder inOrder = inOrder(frontAgencyJpaQueryRepository);
+        inOrder.verify(frontAgencyJpaQueryRepository).findAgencyList(agencyMap, pageRequest);
     }
 
     @Test
@@ -95,7 +95,7 @@ class FrontAgencyJpaServiceTest extends FrontCommonServiceTest {
 
         Page<FrontAgencyDTO> resultAgency = new PageImpl<>(agencyList, pageRequest, agencyList.size());
         // when
-        given(mockFrontAgencyJpaService.findAgencyList(agencyMap, pageRequest)).willReturn(resultAgency);
+        given(frontAgencyJpaQueryRepository.findAgencyList(agencyMap, pageRequest)).willReturn(resultAgency);
         Page<FrontAgencyDTO> newAgencyList = mockFrontAgencyJpaService.findAgencyList(agencyMap, pageRequest);
         List<FrontAgencyDTO> findAgencyList = newAgencyList.stream().collect(Collectors.toList());
 
@@ -111,119 +111,85 @@ class FrontAgencyJpaServiceTest extends FrontCommonServiceTest {
         assertThat(findAgencyList.get(0).getVisible()).isEqualTo(agencyList.get(0).getVisible());
 
         // verify
-        then(mockFrontAgencyJpaService).should(times(1)).findAgencyList(agencyMap, pageRequest);
-        then(mockFrontAgencyJpaService).should(atLeastOnce()).findAgencyList(agencyMap, pageRequest);
-        then(mockFrontAgencyJpaService).shouldHaveNoMoreInteractions();
+        then(frontAgencyJpaQueryRepository).should(times(1)).findAgencyList(agencyMap, pageRequest);
+        then(frontAgencyJpaQueryRepository).should(atLeastOnce()).findAgencyList(agencyMap, pageRequest);
+        then(frontAgencyJpaQueryRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
     @DisplayName("Agency상세조회Mockito테스트")
     void Agency상세조회Mockito테스트() {
-        // given
-        FrontAgencyEntity frontAgencyEntity = FrontAgencyEntity.builder().idx(1L).agencyName("agencyTest").agencyDescription("agencyTest").build();
-        FrontAgencyDTO frontAgencyDTO = FrontAgencyEntity.toDto(frontAgencyEntity);
-
         // when
-        when(mockFrontAgencyJpaService.findOneAgency(frontAgencyEntity.getIdx())).thenReturn(frontAgencyDTO);
+        when(frontAgencyJpaRepository.findById(frontAgencyEntity.getIdx())).thenReturn(Optional.ofNullable(frontAgencyEntity));
         FrontAgencyDTO agencyInfo = mockFrontAgencyJpaService.findOneAgency(frontAgencyEntity.getIdx());
 
         // then
-        assertThat(agencyInfo.getIdx()).isEqualTo(frontAgencyDTO.getIdx());
-        assertThat(agencyInfo.getAgencyName()).isEqualTo(frontAgencyDTO.getAgencyName());
-        assertThat(agencyInfo.getAgencyDescription()).isEqualTo(frontAgencyDTO.getAgencyDescription());
-        assertThat(agencyInfo.getVisible()).isEqualTo(frontAgencyDTO.getVisible());
+        assertThat(agencyInfo.getIdx()).isEqualTo(frontAgencyEntity.getIdx());
+        assertThat(agencyInfo.getAgencyName()).isEqualTo(frontAgencyEntity.getAgencyName());
+        assertThat(agencyInfo.getAgencyDescription()).isEqualTo(frontAgencyEntity.getAgencyDescription());
+        assertThat(agencyInfo.getVisible()).isEqualTo(frontAgencyEntity.getVisible());
 
         // verify
-        verify(mockFrontAgencyJpaService, times(1)).findOneAgency(frontAgencyEntity.getIdx());
-        verify(mockFrontAgencyJpaService, atLeastOnce()).findOneAgency(frontAgencyEntity.getIdx());
-        verifyNoMoreInteractions(mockFrontAgencyJpaService);
+        verify(frontAgencyJpaRepository, times(1)).findById(frontAgencyEntity.getIdx());
+        verify(frontAgencyJpaRepository, atLeastOnce()).findById(frontAgencyEntity.getIdx());
+        verifyNoMoreInteractions(frontAgencyJpaRepository);
 
-        InOrder inOrder = inOrder(mockFrontAgencyJpaService);
-        inOrder.verify(mockFrontAgencyJpaService).findOneAgency(frontAgencyEntity.getIdx());
+        InOrder inOrder = inOrder(frontAgencyJpaRepository);
+        inOrder.verify(frontAgencyJpaRepository).findById(frontAgencyEntity.getIdx());
     }
 
     @Test
     @DisplayName("Agency상세조회BDD테스트")
     void Agency상세조회BDD테스트() {
-        // given
-        FrontAgencyEntity frontAgencyEntity = FrontAgencyEntity.builder().idx(1L).agencyName("agencyTest").agencyDescription("agencyTest").build();
-        FrontAgencyDTO frontAgencyDTO = FrontAgencyEntity.toDto(frontAgencyEntity);
-
         // when
-        given(mockFrontAgencyJpaService.findOneAgency(frontAgencyEntity.getIdx())).willReturn(frontAgencyDTO);
+        given(frontAgencyJpaRepository.findById(frontAgencyEntity.getIdx())).willReturn(Optional.ofNullable(frontAgencyEntity));
         FrontAgencyDTO agencyInfo = mockFrontAgencyJpaService.findOneAgency(frontAgencyEntity.getIdx());
 
         // then
-        assertThat(agencyInfo.getIdx()).isEqualTo(frontAgencyDTO.getIdx());
-        assertThat(agencyInfo.getAgencyName()).isEqualTo(frontAgencyDTO.getAgencyName());
-        assertThat(agencyInfo.getAgencyDescription()).isEqualTo(frontAgencyDTO.getAgencyDescription());
-        assertThat(agencyInfo.getVisible()).isEqualTo(frontAgencyDTO.getVisible());
+        assertThat(agencyInfo.getIdx()).isEqualTo(frontAgencyEntity.getIdx());
+        assertThat(agencyInfo.getAgencyName()).isEqualTo(frontAgencyEntity.getAgencyName());
+        assertThat(agencyInfo.getAgencyDescription()).isEqualTo(frontAgencyEntity.getAgencyDescription());
+        assertThat(agencyInfo.getVisible()).isEqualTo(frontAgencyEntity.getVisible());
 
         // verify
-        then(mockFrontAgencyJpaService).should(times(1)).findOneAgency(frontAgencyEntity.getIdx());
-        then(mockFrontAgencyJpaService).should(atLeastOnce()).findOneAgency(frontAgencyEntity.getIdx());
-        then(mockFrontAgencyJpaService).shouldHaveNoMoreInteractions();
+        then(frontAgencyJpaRepository).should(times(1)).findById(frontAgencyEntity.getIdx());
+        then(frontAgencyJpaRepository).should(atLeastOnce()).findById(frontAgencyEntity.getIdx());
+        then(frontAgencyJpaRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
     @DisplayName("Agency 좋아요 Mockito 테스트")
     void Agency좋아요Mockito테스트() {
-        frontAgencyEntity = FrontAgencyEntity.builder()
-                .agencyName("agency")
-                .agencyDescription("agency")
-                .favoriteCount(1)
-                .visible("Y")
-                .build();
-
-        frontAgencyDTO = FrontAgencyEntity.toDto(frontAgencyEntity);
-        // given
-        em.persist(frontAgencyEntity);
-
-        Integer favoriteCount = frontAgencyJpaService.favoriteAgency(frontAgencyEntity.getIdx());
-
         // when
-        when(mockFrontAgencyJpaService.favoriteAgency(frontAgencyEntity.getIdx())).thenReturn(favoriteCount);
+        when(frontAgencyJpaQueryRepository.favoriteAgency(frontAgencyEntity.getIdx())).thenReturn(frontAgencyEntity.getFavoriteCount() + 1);
         Integer newFavoriteCount = mockFrontAgencyJpaService.favoriteAgency(frontAgencyEntity.getIdx());
 
         // then
-        assertThat(newFavoriteCount).isEqualTo(favoriteCount);
+        assertThat(newFavoriteCount).isEqualTo(frontAgencyEntity.getFavoriteCount() + 1);
 
         // verify
-        verify(mockFrontAgencyJpaService, times(1)).favoriteAgency(frontAgencyEntity.getIdx());
-        verify(mockFrontAgencyJpaService, atLeastOnce()).favoriteAgency(frontAgencyEntity.getIdx());
-        verifyNoMoreInteractions(mockFrontAgencyJpaService);
+        verify(frontAgencyJpaQueryRepository, times(1)).favoriteAgency(frontAgencyEntity.getIdx());
+        verify(frontAgencyJpaQueryRepository, atLeastOnce()).favoriteAgency(frontAgencyEntity.getIdx());
+        verifyNoMoreInteractions(frontAgencyJpaQueryRepository);
 
-        InOrder inOrder = inOrder(mockFrontAgencyJpaService);
-        inOrder.verify(mockFrontAgencyJpaService).favoriteAgency(frontAgencyEntity.getIdx());
+        InOrder inOrder = inOrder(frontAgencyJpaQueryRepository);
+        inOrder.verify(frontAgencyJpaQueryRepository).favoriteAgency(frontAgencyEntity.getIdx());
     }
 
     @Test
     @DisplayName("Agency 좋아요 BDD 테스트")
     void Agency좋아요BDD테스트() {
-        frontAgencyEntity = FrontAgencyEntity.builder()
-                .agencyName("agency")
-                .favoriteCount(1)
-                .agencyDescription("agency")
-                .visible("Y")
-                .build();
-
-        frontAgencyDTO = FrontAgencyEntity.toDto(frontAgencyEntity);
-        // given
-        em.persist(frontAgencyEntity);
-
-        Integer favoriteCount = frontAgencyJpaService.favoriteAgency(frontAgencyEntity.getIdx());
-
         // when
-        given(mockFrontAgencyJpaService.favoriteAgency(frontAgencyEntity.getIdx())).willReturn(favoriteCount);
+        given(frontAgencyJpaQueryRepository.favoriteAgency(frontAgencyEntity.getIdx())).willReturn(frontAgencyEntity.getFavoriteCount() + 1);
         Integer newFavoriteCount = mockFrontAgencyJpaService.favoriteAgency(frontAgencyEntity.getIdx());
 
         // then
-        assertThat(newFavoriteCount).isEqualTo(favoriteCount);
+        assertThat(newFavoriteCount).isEqualTo(frontAgencyEntity.getFavoriteCount() + 1);
 
         // verify
-        then(mockFrontAgencyJpaService).should(times(1)).favoriteAgency(frontAgencyEntity.getIdx());
-        then(mockFrontAgencyJpaService).should(atLeastOnce()).favoriteAgency(frontAgencyEntity.getIdx());
-        then(mockFrontAgencyJpaService).shouldHaveNoMoreInteractions();
+        then(frontAgencyJpaQueryRepository).should(times(1)).favoriteAgency(frontAgencyEntity.getIdx());
+        then(frontAgencyJpaQueryRepository).should(atLeastOnce()).favoriteAgency(frontAgencyEntity.getIdx());
+        then(frontAgencyJpaQueryRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test

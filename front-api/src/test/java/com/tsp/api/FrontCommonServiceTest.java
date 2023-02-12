@@ -17,6 +17,15 @@ import com.tsp.api.model.domain.negotiation.FrontNegotiationDTO;
 import com.tsp.api.model.domain.negotiation.FrontNegotiationEntity;
 import com.tsp.api.model.negotiation.service.FrontNegotiationJpaRepository;
 import com.tsp.api.model.service.FrontModelJpaRepository;
+import com.tsp.api.notice.domain.FrontNoticeDTO;
+import com.tsp.api.notice.domain.FrontNoticeEntity;
+import com.tsp.api.notice.service.FrontNoticeJpaRepository;
+import com.tsp.api.portfolio.domain.FrontPortFolioDTO;
+import com.tsp.api.portfolio.domain.FrontPortFolioEntity;
+import com.tsp.api.portfolio.service.FrontPortFolioJpaRepository;
+import com.tsp.api.production.domain.FrontProductionDTO;
+import com.tsp.api.production.domain.FrontProductionEntity;
+import com.tsp.api.production.service.FrontProductionJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -30,18 +39,15 @@ import static java.time.LocalDateTime.now;
 
 public abstract class FrontCommonServiceTest {
 
-    @Autowired
-    private FrontCommonJpaRepository frontCommonJpaRepository;
-    @Autowired
-    private FrontAgencyJpaRepository frontAgencyJpaRepository;
-    @Autowired
-    private FrontCommonImageJpaRepository frontCommonImageJpaRepository;
-    @Autowired
-    private FrontModelJpaRepository frontModelJpaRepository;
-    @Autowired
-    private FrontFestivalJpaRepository frontFestivalJpaRepository;
-    @Autowired
-    private FrontNegotiationJpaRepository frontNegotiationJpaRepository;
+    @Autowired private FrontCommonJpaRepository frontCommonJpaRepository;
+    @Autowired private FrontAgencyJpaRepository frontAgencyJpaRepository;
+    @Autowired private FrontCommonImageJpaRepository frontCommonImageJpaRepository;
+    @Autowired private FrontModelJpaRepository frontModelJpaRepository;
+    @Autowired private FrontFestivalJpaRepository frontFestivalJpaRepository;
+    @Autowired private FrontNoticeJpaRepository frontNoticeJpaRepository;
+    @Autowired private FrontNegotiationJpaRepository frontNegotiationJpaRepository;
+    @Autowired private FrontPortFolioJpaRepository frontPortFolioJpaRepository;
+    @Autowired private FrontProductionJpaRepository frontProductionJpaRepository;
     protected NewCodeEntity newCodeEntity;
     protected FrontAgencyEntity frontAgencyEntity;
     protected FrontAgencyDTO frontAgencyDTO;
@@ -53,6 +59,12 @@ public abstract class FrontCommonServiceTest {
     protected FrontFestivalDTO frontFestivalDTO;
     protected FrontNegotiationEntity frontNegotiationEntity;
     protected FrontNegotiationDTO frontNegotiationDTO;
+    protected FrontNoticeEntity frontNoticeEntity;
+    protected FrontNoticeDTO frontNoticeDTO;
+    protected FrontPortFolioEntity frontPortFolioEntity;
+    protected FrontPortFolioDTO frontPortFolioDTO;
+    protected FrontProductionEntity frontProductionEntity;
+    protected FrontProductionDTO frontProductionDTO;
 
     @BeforeEach
     @EventListener(ApplicationContext.class)
@@ -145,5 +157,40 @@ public abstract class FrontCommonServiceTest {
                         .build());
 
         frontNegotiationDTO = FrontNegotiationEntity.toDto(frontNegotiationEntity);
+
+        // 공지사항 등록
+        frontNoticeEntity = frontNoticeJpaRepository.save(
+                FrontNoticeEntity.builder()
+                        .title("공지사항")
+                        .description("공지사항")
+                        .viewCount(0)
+                        .visible("Y")
+                        .build());
+
+        frontNoticeDTO = FrontNoticeEntity.toDto(frontNoticeEntity);
+
+        // 포트폴리오 등록
+        frontPortFolioEntity = frontPortFolioJpaRepository.save(
+                FrontPortFolioEntity.builder()
+                        .categoryCd(100)
+                        .title("포트폴리오")
+                        .description("포트폴리오")
+                        .hashTag("#portfolio")
+                        .videoUrl("https://youtube.com")
+                        .visible("Y")
+                        .build());
+
+        frontPortFolioDTO = FrontPortFolioEntity.toDto(frontPortFolioEntity);
+
+        // 프로덕션 등록
+        frontProductionEntity = frontProductionJpaRepository.save(
+                FrontProductionEntity.builder()
+                        .title("프로덕션")
+                        .description("프로덕션")
+                        .viewCount(0)
+                        .visible("Y")
+                        .build());
+
+        frontProductionDTO = FrontProductionEntity.toDto(frontProductionEntity);
     }
 }

@@ -1,21 +1,23 @@
 package com.tsp.api.model.service;
 
-import com.tsp.api.comment.service.AdminCommentJpaService;
+import com.tsp.api.comment.service.AdminCommentJpaRepository;
 import com.tsp.api.comment.domain.AdminCommentDTO;
 import com.tsp.api.comment.domain.AdminCommentEntity;
 import com.tsp.api.common.domain.CommonImageDTO;
 import com.tsp.api.model.domain.AdminModelDTO;
 import com.tsp.api.model.domain.AdminModelEntity;
-import com.tsp.api.model.domain.agency.AdminAgencyDTO;
 import com.tsp.api.model.domain.recommend.AdminRecommendDTO;
 import com.tsp.api.model.domain.recommend.AdminRecommendEntity;
 import com.tsp.api.model.domain.schedule.AdminScheduleDTO;
-import com.tsp.api.model.service.agency.AdminAgencyJpaService;
+import com.tsp.api.model.domain.schedule.AdminScheduleEntity;
+import com.tsp.api.model.service.agency.AdminAgencyJpaRepository;
+import com.tsp.api.model.service.schedule.AdminScheduleJpaRepository;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -53,10 +55,14 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("모델 Service Test")
 class AdminModelJpaServiceTest extends AdminModelCommonServiceTest {
-    @Mock private AdminModelJpaService mockAdminModelJpaService;
-    @Mock private AdminCommentJpaService mockAdminCommentJpaService;
+    @Mock private AdminModelJpaRepository adminModelJpaRepository;
+    @Mock private AdminModelJpaQueryRepository adminModelJpaQueryRepository;
+    @InjectMocks private AdminModelJpaServiceImpl mockAdminModelJpaService;
+
+    @Mock private AdminAgencyJpaRepository adminAgencyJpaRepository;
+    @Mock private AdminScheduleJpaRepository adminScheduleJpaRepository;
+    @Mock private AdminCommentJpaRepository adminCommentJpaRepository;
     private final AdminModelJpaService adminModelJpaService;
-    private final AdminAgencyJpaService adminAgencyJpaService;
 
     private final EntityManager em;
 
@@ -110,7 +116,7 @@ class AdminModelJpaServiceTest extends AdminModelCommonServiceTest {
         Page<AdminModelDTO> resultModel = new PageImpl<>(returnModelList, pageRequest, returnModelList.size());
 
         // when
-        when(mockAdminModelJpaService.findModelList(modelMap, pageRequest)).thenReturn(resultModel);
+        when(adminModelJpaQueryRepository.findModelList(modelMap, pageRequest)).thenReturn(resultModel);
         Page<AdminModelDTO> modelList = mockAdminModelJpaService.findModelList(modelMap, pageRequest);
         List<AdminModelDTO> findModelList = modelList.stream().collect(Collectors.toList());
 
@@ -142,12 +148,12 @@ class AdminModelJpaServiceTest extends AdminModelCommonServiceTest {
         assertThat(findModelList.get(2).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyDescription());
 
         // verify
-        verify(mockAdminModelJpaService, times(1)).findModelList(modelMap, pageRequest);
-        verify(mockAdminModelJpaService, atLeastOnce()).findModelList(modelMap, pageRequest);
-        verifyNoMoreInteractions(mockAdminModelJpaService);
+        verify(adminModelJpaQueryRepository, times(1)).findModelList(modelMap, pageRequest);
+        verify(adminModelJpaQueryRepository, atLeastOnce()).findModelList(modelMap, pageRequest);
+        verifyNoMoreInteractions(adminModelJpaQueryRepository);
 
-        InOrder inOrder = inOrder(mockAdminModelJpaService);
-        inOrder.verify(mockAdminModelJpaService).findModelList(modelMap, pageRequest);
+        InOrder inOrder = inOrder(adminModelJpaQueryRepository);
+        inOrder.verify(adminModelJpaQueryRepository).findModelList(modelMap, pageRequest);
     }
 
     @Test
@@ -175,7 +181,7 @@ class AdminModelJpaServiceTest extends AdminModelCommonServiceTest {
         Page<AdminModelDTO> resultModel = new PageImpl<>(returnModelList, pageRequest, returnModelList.size());
 
         // when
-        given(mockAdminModelJpaService.findModelList(modelMap, pageRequest)).willReturn(resultModel);
+        given(adminModelJpaQueryRepository.findModelList(modelMap, pageRequest)).willReturn(resultModel);
         Page<AdminModelDTO> modelList = mockAdminModelJpaService.findModelList(modelMap, pageRequest);
         List<AdminModelDTO> findModelList = modelList.stream().collect(Collectors.toList());
 
@@ -207,9 +213,9 @@ class AdminModelJpaServiceTest extends AdminModelCommonServiceTest {
         assertThat(findModelList.get(2).getModelAgency().getAgencyDescription()).isEqualTo(returnModelList.get(2).getModelAgency().getAgencyDescription());
 
         // verify
-        then(mockAdminModelJpaService).should(times(1)).findModelList(modelMap, pageRequest);
-        then(mockAdminModelJpaService).should(atLeastOnce()).findModelList(modelMap, pageRequest);
-        then(mockAdminModelJpaService).shouldHaveNoMoreInteractions();
+        then(adminModelJpaQueryRepository).should(times(1)).findModelList(modelMap, pageRequest);
+        then(adminModelJpaQueryRepository).should(atLeastOnce()).findModelList(modelMap, pageRequest);
+        then(adminModelJpaQueryRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
@@ -226,54 +232,54 @@ class AdminModelJpaServiceTest extends AdminModelCommonServiceTest {
     @Test
     @DisplayName("모델 상세 조회 테스트")
     void 모델상세조회테스트() {
-        AdminModelDTO modelInfo = adminModelJpaService.findOneModel(143L);
+        AdminModelDTO modelInfo = adminModelJpaService.findOneModel(adminModelEntity.getIdx());
         // then
         assertThat(modelInfo).isNotNull();
-        assertThat(modelInfo.getIdx()).isEqualTo(143);
-        assertThat(modelInfo.getCategoryCd()).isEqualTo(2);
-        assertThat(modelInfo.getModelKorFirstName()).isEqualTo("김");
-        assertThat(modelInfo.getModelKorSecondName()).isEqualTo("예영");
+        assertThat(modelInfo.getIdx()).isEqualTo(adminModelEntity.getIdx());
+        assertThat(modelInfo.getCategoryCd()).isEqualTo(adminModelEntity.getCategoryCd());
+        assertThat(modelInfo.getModelKorFirstName()).isEqualTo(adminModelEntity.getModelKorFirstName());
+        assertThat(modelInfo.getModelKorSecondName()).isEqualTo(adminModelEntity.getModelKorSecondName());
     }
 
     @Test
     @DisplayName("모델 상세 조회 Mockito 테스트")
     void 모델상세조회Mockito테스트() {
         // when
-        when(mockAdminModelJpaService.findOneModel(adminModelDTO.getIdx())).thenReturn(adminModelDTO);
-        AdminModelDTO modelInfo = mockAdminModelJpaService.findOneModel(adminModelDTO.getIdx());
+        when(adminModelJpaRepository.findByIdx(adminModelEntity.getIdx())).thenReturn(Optional.ofNullable(adminModelEntity));
+        AdminModelDTO modelInfo = mockAdminModelJpaService.findOneModel(adminModelEntity.getIdx());
 
         // then
-        assertThat(modelInfo.getIdx()).isEqualTo(adminModelDTO.getIdx());
-        assertThat(modelInfo.getCategoryCd()).isEqualTo(adminModelDTO.getCategoryCd());
-        assertThat(modelInfo.getModelKorName()).isEqualTo(adminModelDTO.getModelKorName());
-        assertThat(modelInfo.getModelEngName()).isEqualTo(adminModelDTO.getModelEngName());
+        assertThat(modelInfo.getIdx()).isEqualTo(adminModelEntity.getIdx());
+        assertThat(modelInfo.getCategoryCd()).isEqualTo(adminModelEntity.getCategoryCd());
+        assertThat(modelInfo.getModelKorName()).isEqualTo(adminModelEntity.getModelKorName());
+        assertThat(modelInfo.getModelEngName()).isEqualTo(adminModelEntity.getModelEngName());
 
         // verify
-        verify(mockAdminModelJpaService, times(1)).findOneModel(adminModelDTO.getIdx());
-        verify(mockAdminModelJpaService, atLeastOnce()).findOneModel(adminModelDTO.getIdx());
-        verifyNoMoreInteractions(mockAdminModelJpaService);
+        verify(adminModelJpaRepository, times(1)).findByIdx(adminModelEntity.getIdx());
+        verify(adminModelJpaRepository, atLeastOnce()).findByIdx(adminModelEntity.getIdx());
+        verifyNoMoreInteractions(adminModelJpaRepository);
 
-        InOrder inOrder = inOrder(mockAdminModelJpaService);
-        inOrder.verify(mockAdminModelJpaService).findOneModel(adminModelDTO.getIdx());
+        InOrder inOrder = inOrder(adminModelJpaRepository);
+        inOrder.verify(adminModelJpaRepository).findByIdx(adminModelEntity.getIdx());
     }
 
     @Test
     @DisplayName("모델 상세 조회 BDD 테스트")
     void 모델상세조회BDD테스트() {
         // when
-        given(mockAdminModelJpaService.findOneModel(adminModelDTO.getIdx())).willReturn(adminModelDTO);
-        AdminModelDTO modelInfo = mockAdminModelJpaService.findOneModel(adminModelDTO.getIdx());
+        given(adminModelJpaRepository.findByIdx(adminModelEntity.getIdx())).willReturn(Optional.ofNullable(adminModelEntity));
+        AdminModelDTO modelInfo = mockAdminModelJpaService.findOneModel(adminModelEntity.getIdx());
 
         // then
-        assertThat(modelInfo.getIdx()).isEqualTo(adminModelDTO.getIdx());
-        assertThat(modelInfo.getCategoryCd()).isEqualTo(adminModelDTO.getCategoryCd());
-        assertThat(modelInfo.getModelKorName()).isEqualTo(adminModelDTO.getModelKorName());
-        assertThat(modelInfo.getModelEngName()).isEqualTo(adminModelDTO.getModelEngName());
+        assertThat(modelInfo.getIdx()).isEqualTo(adminModelEntity.getIdx());
+        assertThat(modelInfo.getCategoryCd()).isEqualTo(adminModelEntity.getCategoryCd());
+        assertThat(modelInfo.getModelKorName()).isEqualTo(adminModelEntity.getModelKorName());
+        assertThat(modelInfo.getModelEngName()).isEqualTo(adminModelEntity.getModelEngName());
 
         // verify
-        then(mockAdminModelJpaService).should(times(1)).findOneModel(adminModelDTO.getIdx());
-        then(mockAdminModelJpaService).should(atLeastOnce()).findOneModel(adminModelDTO.getIdx());
-        then(mockAdminModelJpaService).shouldHaveNoMoreInteractions();
+        then(adminModelJpaRepository).should(times(1)).findByIdx(adminModelEntity.getIdx());
+        then(adminModelJpaRepository).should(atLeastOnce()).findByIdx(adminModelEntity.getIdx());
+        then(adminModelJpaRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
@@ -381,39 +387,39 @@ class AdminModelJpaServiceTest extends AdminModelCommonServiceTest {
     @DisplayName("모델 등록 Mockito 테스트")
     void 모델등록Mockito테스트() {
         // when
-        when(mockAdminModelJpaService.findOneModel(adminModelDTO.getIdx())).thenReturn(adminModelDTO);
-        AdminModelDTO modelInfo = mockAdminModelJpaService.findOneModel(adminModelDTO.getIdx());
+        when(adminModelJpaRepository.save(adminModelEntity)).thenReturn(adminModelEntity);
+        AdminModelDTO modelInfo = mockAdminModelJpaService.insertModel(adminModelEntity);
 
         // then
-        assertThat(modelInfo.getCategoryCd()).isEqualTo(adminModelDTO.getCategoryCd());
-        assertThat(modelInfo.getModelKorFirstName()).isEqualTo(adminModelDTO.getModelKorFirstName());
-        assertThat(modelInfo.getModelKorSecondName()).isEqualTo(adminModelDTO.getModelKorSecondName());
+        assertThat(modelInfo.getCategoryCd()).isEqualTo(adminModelEntity.getCategoryCd());
+        assertThat(modelInfo.getModelKorFirstName()).isEqualTo(adminModelEntity.getModelKorFirstName());
+        assertThat(modelInfo.getModelKorSecondName()).isEqualTo(adminModelEntity.getModelKorSecondName());
 
         // verify
-        verify(mockAdminModelJpaService, times(1)).findOneModel(adminModelDTO.getIdx());
-        verify(mockAdminModelJpaService, atLeastOnce()).findOneModel(adminModelDTO.getIdx());
-        verifyNoMoreInteractions(mockAdminModelJpaService);
+        verify(adminModelJpaRepository, times(1)).save(adminModelEntity);
+        verify(adminModelJpaRepository, atLeastOnce()).save(adminModelEntity);
+        verifyNoMoreInteractions(adminModelJpaRepository);
 
-        InOrder inOrder = inOrder(mockAdminModelJpaService);
-        inOrder.verify(mockAdminModelJpaService).findOneModel(adminModelDTO.getIdx());
+        InOrder inOrder = inOrder(adminModelJpaRepository);
+        inOrder.verify(adminModelJpaRepository).save(adminModelEntity);
     }
 
     @Test
     @DisplayName("모델 등록 BDD 테스트")
     void 모델등록BDD테스트() {
         // when
-        given(mockAdminModelJpaService.findOneModel(adminModelDTO.getIdx())).willReturn(adminModelDTO);
-        AdminModelDTO modelInfo = mockAdminModelJpaService.findOneModel(adminModelDTO.getIdx());
+        given(adminModelJpaRepository.save(adminModelEntity)).willReturn(adminModelEntity);
+        AdminModelDTO modelInfo = mockAdminModelJpaService.insertModel(adminModelEntity);
 
         // then
-        assertThat(modelInfo.getCategoryCd()).isEqualTo(adminModelDTO.getCategoryCd());
-        assertThat(modelInfo.getModelKorFirstName()).isEqualTo(adminModelDTO.getModelKorFirstName());
-        assertThat(modelInfo.getModelKorSecondName()).isEqualTo(adminModelDTO.getModelKorSecondName());
+        assertThat(modelInfo.getCategoryCd()).isEqualTo(adminModelEntity.getCategoryCd());
+        assertThat(modelInfo.getModelKorFirstName()).isEqualTo(adminModelEntity.getModelKorFirstName());
+        assertThat(modelInfo.getModelKorSecondName()).isEqualTo(adminModelEntity.getModelKorSecondName());
 
         // verify
-        then(mockAdminModelJpaService).should(times(1)).findOneModel(adminModelDTO.getIdx());
-        then(mockAdminModelJpaService).should(atLeastOnce()).findOneModel(adminModelDTO.getIdx());
-        then(mockAdminModelJpaService).shouldHaveNoMoreInteractions();
+        then(adminModelJpaRepository).should(times(1)).save(adminModelEntity);
+        then(adminModelJpaRepository).should(atLeastOnce()).save(adminModelEntity);
+        then(adminModelJpaRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
@@ -445,11 +451,10 @@ class AdminModelJpaServiceTest extends AdminModelCommonServiceTest {
     @Test
     @DisplayName("모델 수정 Mockito 테스트")
     void 모델수정Mockito테스트() {
-        // given
-        adminModelEntity = AdminModelEntity.builder()
-                .idx(adminModelDTO.getIdx())
-                .categoryCd(2)
-                .categoryAge(3)
+        AdminModelEntity updateModelEntity = AdminModelEntity.builder()
+                .idx(adminModelEntity.getIdx())
+                .categoryCd(newCodeEntity.getCategoryCd())
+                .categoryAge(2)
                 .modelKorFirstName("조")
                 .modelKorSecondName("찬희")
                 .modelKorName("조찬희")
@@ -457,6 +462,10 @@ class AdminModelJpaServiceTest extends AdminModelCommonServiceTest {
                 .modelSecondName("CHANHEE")
                 .modelEngName("CHOCHANHEE")
                 .modelDescription("chaneeCho")
+                .favoriteCount(1)
+                .viewCount(1)
+                .adminAgencyEntity(adminAgencyEntity)
+                .commonImageEntityList(List.of(commonImageEntity))
                 .modelMainYn("Y")
                 .status("active")
                 .newYn("N")
@@ -466,38 +475,31 @@ class AdminModelJpaServiceTest extends AdminModelCommonServiceTest {
                 .visible("Y")
                 .build();
 
-        adminModelJpaService.updateModel(adminModelDTO.getIdx(), adminModelEntity);
-
-        em.flush();
-        em.clear();
-
-        adminModelDTO = AdminModelEntity.toDto(adminModelEntity);
-
         // when
-        when(mockAdminModelJpaService.findOneModel(adminModelDTO.getIdx())).thenReturn(adminModelDTO);
-        AdminModelDTO modelInfo = mockAdminModelJpaService.findOneModel(adminModelDTO.getIdx());
+        when(adminModelJpaRepository.findById(updateModelEntity.getIdx())).thenReturn(Optional.of(updateModelEntity));
+        when(adminModelJpaRepository.save(updateModelEntity)).thenReturn(updateModelEntity);
+        AdminModelDTO modelInfo = mockAdminModelJpaService.updateModel(updateModelEntity.getIdx(), updateModelEntity);
 
         // then
-        assertThat(modelInfo.getModelKorFirstName()).isEqualTo("조");
-        assertThat(modelInfo.getModelKorSecondName()).isEqualTo("찬희");
+        assertThat(modelInfo.getModelKorFirstName()).isEqualTo(updateModelEntity.getModelKorFirstName());
+        assertThat(modelInfo.getModelKorSecondName()).isEqualTo(updateModelEntity.getModelKorSecondName());
 
         // verify
-        verify(mockAdminModelJpaService, times(1)).findOneModel(adminModelDTO.getIdx());
-        verify(mockAdminModelJpaService, atLeastOnce()).findOneModel(adminModelDTO.getIdx());
-        verifyNoMoreInteractions(mockAdminModelJpaService);
+        verify(adminModelJpaRepository, times(1)).findById(updateModelEntity.getIdx());
+        verify(adminModelJpaRepository, atLeastOnce()).findById(updateModelEntity.getIdx());
+        verifyNoMoreInteractions(adminModelJpaRepository);
 
-        InOrder inOrder = inOrder(mockAdminModelJpaService);
-        inOrder.verify(mockAdminModelJpaService).findOneModel(adminModelDTO.getIdx());
+        InOrder inOrder = inOrder(adminModelJpaRepository);
+        inOrder.verify(adminModelJpaRepository).findById(updateModelEntity.getIdx());
     }
 
     @Test
     @DisplayName("모델 수정 BDD 테스트")
     void 모델수정BDD테스트() {
-        // given
-        adminModelEntity = AdminModelEntity.builder()
-                .idx(adminModelDTO.getIdx())
-                .categoryCd(2)
-                .categoryAge(3)
+        AdminModelEntity updateModelEntity = AdminModelEntity.builder()
+                .idx(adminModelEntity.getIdx())
+                .categoryCd(newCodeEntity.getCategoryCd())
+                .categoryAge(2)
                 .modelKorFirstName("조")
                 .modelKorSecondName("찬희")
                 .modelKorName("조찬희")
@@ -505,6 +507,10 @@ class AdminModelJpaServiceTest extends AdminModelCommonServiceTest {
                 .modelSecondName("CHANHEE")
                 .modelEngName("CHOCHANHEE")
                 .modelDescription("chaneeCho")
+                .favoriteCount(1)
+                .viewCount(1)
+                .adminAgencyEntity(adminAgencyEntity)
+                .commonImageEntityList(List.of(commonImageEntity))
                 .modelMainYn("Y")
                 .status("active")
                 .newYn("N")
@@ -514,22 +520,19 @@ class AdminModelJpaServiceTest extends AdminModelCommonServiceTest {
                 .visible("Y")
                 .build();
 
-        adminModelJpaService.updateModel(adminModelDTO.getIdx(), adminModelEntity);
-
-        adminModelDTO = AdminModelEntity.toDto(adminModelEntity);
-
         // when
-        given(mockAdminModelJpaService.findOneModel(adminModelDTO.getIdx())).willReturn(adminModelDTO);
-        AdminModelDTO modelInfo = mockAdminModelJpaService.findOneModel(adminModelDTO.getIdx());
+        given(adminModelJpaRepository.findById(updateModelEntity.getIdx())).willReturn(Optional.of(updateModelEntity));
+        given(adminModelJpaRepository.save(updateModelEntity)).willReturn(updateModelEntity);
+        AdminModelDTO modelInfo = mockAdminModelJpaService.updateModel(updateModelEntity.getIdx(), updateModelEntity);
 
         // then
-        assertThat(modelInfo.getModelKorFirstName()).isEqualTo("조");
-        assertThat(modelInfo.getModelKorSecondName()).isEqualTo("찬희");
+        assertThat(modelInfo.getModelKorFirstName()).isEqualTo(updateModelEntity.getModelKorFirstName());
+        assertThat(modelInfo.getModelKorSecondName()).isEqualTo(updateModelEntity.getModelKorSecondName());
 
         // verify
-        then(mockAdminModelJpaService).should(times(1)).findOneModel(adminModelDTO.getIdx());
-        then(mockAdminModelJpaService).should(atLeastOnce()).findOneModel(adminModelDTO.getIdx());
-        then(mockAdminModelJpaService).shouldHaveNoMoreInteractions();
+        then(adminModelJpaRepository).should(times(1)).findById(updateModelEntity.getIdx());
+        then(adminModelJpaRepository).should(atLeastOnce()).findById(updateModelEntity.getIdx());
+        then(adminModelJpaRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
@@ -544,38 +547,123 @@ class AdminModelJpaServiceTest extends AdminModelCommonServiceTest {
     @Test
     @DisplayName("모델 소속사 수정 Mockito 테스트")
     void 모델소속사수정Mockito테스트() {
-        System.out.println("===agency===");
-        System.out.println(adminAgencyDTO.getIdx());
-        AdminModelDTO updateModel = adminModelJpaService.updateModelAgency(adminAgencyDTO.getIdx(), adminModelEntity);
-
-        em.flush();
-        em.clear();
-
         // when
-        when(mockAdminModelJpaService.findOneModel(updateModel.getIdx())).thenReturn(updateModel);
-        AdminModelDTO modelInfo = mockAdminModelJpaService.findOneModel(updateModel.getIdx());
+        when(adminAgencyJpaRepository.findById(adminAgencyEntity.getIdx())).thenReturn(Optional.ofNullable(adminAgencyEntity));
+        when(adminModelJpaRepository.save(adminModelEntity)).thenReturn(adminModelEntity);
+        AdminModelDTO modelInfo = mockAdminModelJpaService.updateModelAgency(adminAgencyEntity.getIdx(), adminModelEntity);
 
         // then
-        assertThat(modelInfo.getModelAgency().getIdx()).isEqualTo(updateModel.getModelAgency().getIdx());
+        assertThat(modelInfo.getModelAgency().getIdx()).isEqualTo(adminModelEntity.getAdminAgencyEntity().getIdx());
 
         // verify
-        verify(mockAdminModelJpaService, times(1)).findOneModel(updateModel.getIdx());
-        verify(mockAdminModelJpaService, atLeastOnce()).findOneModel(updateModel.getIdx());
-        verifyNoMoreInteractions(mockAdminModelJpaService);
+        verify(adminAgencyJpaRepository, times(1)).findById(adminAgencyEntity.getIdx());
+        verify(adminAgencyJpaRepository, atLeastOnce()).findById(adminAgencyEntity.getIdx());
+        verifyNoMoreInteractions(adminAgencyJpaRepository);
 
-        InOrder inOrder = inOrder(mockAdminModelJpaService);
-        inOrder.verify(mockAdminModelJpaService).findOneModel(updateModel.getIdx());
+        InOrder inOrder = inOrder(adminAgencyJpaRepository);
+        inOrder.verify(adminAgencyJpaRepository).findById(adminAgencyEntity.getIdx());
     }
 
     @Test
     @DisplayName("모델 소속사 수정 BDD 테스트")
     void 모델소속사수정BDD테스트() {
-        // 소속사 등록
-        AdminAgencyDTO newAgencyDTO = adminAgencyJpaService.insertAgency(adminAgencyEntity);
-        Long agencyIdx = newAgencyDTO.getIdx();
+        // when
+        given(adminAgencyJpaRepository.findById(adminAgencyEntity.getIdx())).willReturn(Optional.ofNullable(adminAgencyEntity));
+        given(adminModelJpaRepository.save(adminModelEntity)).willReturn(adminModelEntity);
+        AdminModelDTO modelInfo = mockAdminModelJpaService.updateModelAgency(adminAgencyEntity.getIdx(), adminModelEntity);
 
-        adminModelEntity = AdminModelEntity.builder()
-                .categoryCd(1)
+        // then
+        assertThat(modelInfo.getModelAgency().getIdx()).isEqualTo(adminModelEntity.getAdminAgencyEntity().getIdx());
+
+        // verify
+        then(adminAgencyJpaRepository).should(times(1)).findById(adminAgencyEntity.getIdx());
+        then(adminAgencyJpaRepository).should(atLeastOnce()).findById(adminAgencyEntity.getIdx());
+        then(adminAgencyJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("어드민코멘트등록Mockito테스트")
+    void 어드민코멘트등록Mockito테스트() {
+        // when
+        when(adminModelJpaRepository.findById(adminModelEntity.getIdx())).thenReturn(Optional.ofNullable(adminModelEntity));
+        when(adminCommentJpaRepository.save(adminCommentEntity)).thenReturn(adminCommentEntity);
+        AdminCommentDTO commentInfo = mockAdminModelJpaService.insertModelAdminComment(adminModelEntity.getIdx(), adminCommentEntity);
+
+        // then
+        assertThat(commentInfo.getComment()).isEqualTo(adminCommentEntity.getComment());
+        assertThat(commentInfo.getCommentType()).isEqualTo(adminCommentEntity.getCommentType());
+        assertThat(commentInfo.getAdminModelDTO().getIdx()).isEqualTo(adminCommentEntity.getAdminModelEntity().getIdx());
+
+        // verify
+        then(adminModelJpaRepository).should(times(1)).findById(adminModelEntity.getIdx());
+        then(adminModelJpaRepository).should(atLeastOnce()).findById(adminModelEntity.getIdx());
+        then(adminModelJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("어드민코멘트등록BDD테스트")
+    void 어드민코멘트등록BDD테스트() {
+        // when
+        given(adminModelJpaRepository.findById(adminModelEntity.getIdx())).willReturn(Optional.ofNullable(adminModelEntity));
+        given(adminCommentJpaRepository.save(adminCommentEntity)).willReturn(adminCommentEntity);
+        AdminCommentDTO commentInfo = mockAdminModelJpaService.insertModelAdminComment(adminModelEntity.getIdx(), adminCommentEntity);
+
+        // then
+        assertThat(commentInfo.getComment()).isEqualTo(adminCommentEntity.getComment());
+        assertThat(commentInfo.getCommentType()).isEqualTo(adminCommentEntity.getCommentType());
+        assertThat(commentInfo.getAdminModelDTO().getIdx()).isEqualTo(adminCommentEntity.getAdminModelEntity().getIdx());
+
+        // verify
+        then(adminModelJpaRepository).should(times(1)).findById(adminModelEntity.getIdx());
+        then(adminModelJpaRepository).should(atLeastOnce()).findById(adminModelEntity.getIdx());
+        then(adminModelJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("모델 어드민 코멘트 조회 Mockito 테스트")
+    void 모델어드민코멘트조회Mockito테스트() {
+        List<AdminCommentEntity> adminCommentList = new ArrayList<>();
+        adminCommentList.add(adminCommentEntity);
+
+        when(adminCommentJpaRepository.findByAdminModelEntityIdxAndCommentType(adminModelEntity.getIdx(), "model")).thenReturn(adminCommentList);
+        List<AdminCommentDTO> newAdminCommentList = mockAdminModelJpaService.findModelAdminComment(adminModelEntity.getIdx());
+
+        assertThat(newAdminCommentList.get(0).getCommentType()).isEqualTo(adminCommentEntity.getCommentType());
+        assertThat(newAdminCommentList.get(0).getAdminModelDTO().getIdx()).isEqualTo(adminCommentEntity.getAdminModelEntity().getIdx());
+
+        // verify
+        verify(adminCommentJpaRepository, times(1)).findByAdminModelEntityIdxAndCommentType(adminModelEntity.getIdx(), "model");
+        verify(adminCommentJpaRepository, atLeastOnce()).findByAdminModelEntityIdxAndCommentType(adminModelEntity.getIdx(), "model");
+        verifyNoMoreInteractions(adminCommentJpaRepository);
+
+        InOrder inOrder = inOrder(adminCommentJpaRepository);
+        inOrder.verify(adminCommentJpaRepository).findByAdminModelEntityIdxAndCommentType(adminModelEntity.getIdx(), "model");
+    }
+
+    @Test
+    @DisplayName("모델 어드민 코멘트 조회 BDD 테스트")
+    void 모델어드민코멘트조회BDD테스트() {
+        List<AdminCommentEntity> adminCommentList = new ArrayList<>();
+        adminCommentList.add(adminCommentEntity);
+
+        given(adminCommentJpaRepository.findByAdminModelEntityIdxAndCommentType(adminModelEntity.getIdx(), "model")).willReturn(adminCommentList);
+        List<AdminCommentDTO> newAdminCommentList = mockAdminModelJpaService.findModelAdminComment(adminModelEntity.getIdx());
+
+        assertThat(newAdminCommentList.get(0).getCommentType()).isEqualTo(adminCommentEntity.getCommentType());
+        assertThat(newAdminCommentList.get(0).getAdminModelDTO().getIdx()).isEqualTo(adminCommentEntity.getAdminModelEntity().getIdx());
+
+        // verify
+        then(adminCommentJpaRepository).should(times(1)).findByAdminModelEntityIdxAndCommentType(adminModelEntity.getIdx(), "model");
+        then(adminCommentJpaRepository).should(atLeastOnce()).findByAdminModelEntityIdxAndCommentType(adminModelEntity.getIdx(), "model");
+        then(adminCommentJpaRepository).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("새로운 모델 설정 Mockito 테스트")
+    void 새로운모델설정Mockito테스트() {
+        AdminModelEntity updateModelEntity = AdminModelEntity.builder()
+                .idx(adminModelEntity.getIdx())
+                .categoryCd(newCodeEntity.getCategoryCd())
                 .categoryAge(2)
                 .modelKorFirstName("조")
                 .modelKorSecondName("찬희")
@@ -584,213 +672,124 @@ class AdminModelJpaServiceTest extends AdminModelCommonServiceTest {
                 .modelSecondName("CHANHEE")
                 .modelEngName("CHOCHANHEE")
                 .modelDescription("chaneeCho")
+                .favoriteCount(1)
+                .viewCount(1)
+                .adminAgencyEntity(adminAgencyEntity)
+                .commonImageEntityList(List.of(commonImageEntity))
                 .modelMainYn("Y")
                 .status("active")
                 .newYn("N")
-                .favoriteCount(1)
-                .viewCount(1)
                 .height(170)
                 .size3("34-24-34")
                 .shoes(270)
                 .visible("Y")
                 .build();
 
-        // 모델 소속사 수정
-        adminModelJpaService.insertModel(adminModelEntity).getIdx();
-
-        AdminModelDTO updateModel = adminModelJpaService.updateModelAgency(agencyIdx, adminModelEntity);
-
-        em.flush();
-        em.clear();
-
         // when
-        given(mockAdminModelJpaService.findOneModel(updateModel.getIdx())).willReturn(updateModel);
-        AdminModelDTO modelInfo = mockAdminModelJpaService.findOneModel(updateModel.getIdx());
-
-        // then
-        assertThat(modelInfo.getModelAgency().getIdx()).isEqualTo(updateModel.getModelAgency().getIdx());
-
-        // verify
-        then(mockAdminModelJpaService).should(times(1)).findOneModel(updateModel.getIdx());
-        then(mockAdminModelJpaService).should(atLeastOnce()).findOneModel(updateModel.getIdx());
-        then(mockAdminModelJpaService).shouldHaveNoMoreInteractions();
-    }
-
-    @Test
-    @DisplayName("어드민코멘트등록Mockito테스트")
-    void 어드민코멘트등록Mockito테스트() {
-        // when
-        when(mockAdminCommentJpaService.findOneAdminComment(adminCommentDTO.getIdx())).thenReturn(adminCommentDTO);
-        AdminCommentDTO commentInfo = mockAdminCommentJpaService.findOneAdminComment(adminCommentDTO.getIdx());
-
-        // then
-        assertThat(commentInfo.getComment()).isEqualTo("comment");
-        assertThat(commentInfo.getCommentType()).isEqualTo("model");
-        assertThat(commentInfo.getAdminModelDTO().getIdx()).isEqualTo(adminCommentDTO.getAdminModelDTO().getIdx());
-
-        // verify
-        then(mockAdminCommentJpaService).should(times(1)).findOneAdminComment(adminCommentDTO.getIdx());
-        then(mockAdminCommentJpaService).should(atLeastOnce()).findOneAdminComment(adminCommentDTO.getIdx());
-        then(mockAdminCommentJpaService).shouldHaveNoMoreInteractions();
-    }
-
-    @Test
-    @DisplayName("어드민코멘트등록BDD테스트")
-    void 어드민코멘트등록BDD테스트() {
-        // when
-        given(mockAdminCommentJpaService.findOneAdminComment(adminCommentDTO.getIdx())).willReturn(adminCommentDTO);
-        AdminCommentDTO commentInfo = mockAdminCommentJpaService.findOneAdminComment(adminCommentDTO.getIdx());
-
-        // then
-        assertThat(commentInfo.getComment()).isEqualTo("comment");
-        assertThat(commentInfo.getCommentType()).isEqualTo("model");
-        assertThat(commentInfo.getAdminModelDTO().getIdx()).isEqualTo(adminCommentDTO.getAdminModelDTO().getIdx());
-
-        // verify
-        then(mockAdminCommentJpaService).should(times(1)).findOneAdminComment(adminCommentDTO.getIdx());
-        then(mockAdminCommentJpaService).should(atLeastOnce()).findOneAdminComment(adminCommentDTO.getIdx());
-        then(mockAdminCommentJpaService).shouldHaveNoMoreInteractions();
-    }
-
-    @Test
-    @DisplayName("모델 어드민 코멘트 조회 Mockito 테스트")
-    void 모델어드민코멘트조회Mockito테스트() {
-        List<AdminCommentDTO> adminCommentList = new ArrayList<>();
-        adminCommentList.add(adminCommentDTO);
-
-        when(mockAdminModelJpaService.findModelAdminComment(adminModelDTO.getIdx())).thenReturn(adminCommentList);
-        List<AdminCommentDTO> newAdminCommentList = mockAdminModelJpaService.findModelAdminComment(adminModelDTO.getIdx());
-
-        assertThat(newAdminCommentList.get(0).getCommentType()).isEqualTo("model");
-        assertThat(newAdminCommentList.get(0).getAdminModelDTO().getIdx()).isEqualTo(adminCommentDTO.getAdminModelDTO().getIdx());
-
-        // verify
-        verify(mockAdminModelJpaService, times(1)).findModelAdminComment(adminModelDTO.getIdx());
-        verify(mockAdminModelJpaService, atLeastOnce()).findModelAdminComment(adminModelDTO.getIdx());
-        verifyNoMoreInteractions(mockAdminModelJpaService);
-
-        InOrder inOrder = inOrder(mockAdminModelJpaService);
-        inOrder.verify(mockAdminModelJpaService).findModelAdminComment(adminModelDTO.getIdx());
-    }
-
-    @Test
-    @DisplayName("모델 어드민 코멘트 조회 BDD 테스트")
-    void 모델어드민코멘트조회BDD테스트() {
-        List<AdminCommentDTO> adminCommentList = new ArrayList<>();
-        adminCommentList.add(adminCommentDTO);
-
-        given(mockAdminModelJpaService.findModelAdminComment(adminModelDTO.getIdx())).willReturn(adminCommentList);
-        List<AdminCommentDTO> newAdminCommentList = mockAdminModelJpaService.findModelAdminComment(adminModelDTO.getIdx());
-
-        assertThat(newAdminCommentList.get(0).getCommentType()).isEqualTo("model");
-        assertThat(newAdminCommentList.get(0).getAdminModelDTO().getIdx()).isEqualTo(adminCommentDTO.getAdminModelDTO().getIdx());
-
-        // verify
-        then(mockAdminModelJpaService).should(times(1)).findModelAdminComment(adminModelDTO.getIdx());
-        then(mockAdminModelJpaService).should(atLeastOnce()).findModelAdminComment(adminModelDTO.getIdx());
-        then(mockAdminModelJpaService).shouldHaveNoMoreInteractions();
-    }
-
-    @Test
-    @DisplayName("새로운 모델 설정 Mockito 테스트")
-    void 새로운모델설정Mockito테스트() {
-        AdminModelDTO newModel = adminModelJpaService.toggleModelNewYn(adminModelDTO.getIdx());
-
-        em.flush();
-        em.clear();
-
-        // when
-        when(mockAdminModelJpaService.findOneModel(newModel.getIdx())).thenReturn(newModel);
-        AdminModelDTO modelInfo = mockAdminModelJpaService.findOneModel(newModel.getIdx());
+        when(adminModelJpaRepository.findById(updateModelEntity.getIdx())).thenReturn(Optional.of(updateModelEntity));
+        when(adminModelJpaRepository.save(updateModelEntity)).thenReturn(updateModelEntity);
+        AdminModelDTO modelInfo = mockAdminModelJpaService.toggleModelNewYn(updateModelEntity.getIdx());
 
         assertThat(modelInfo.getNewYn()).isEqualTo("Y");
 
         // verify
-        verify(mockAdminModelJpaService, times(1)).findOneModel(newModel.getIdx());
-        verify(mockAdminModelJpaService, atLeastOnce()).findOneModel(newModel.getIdx());
-        verifyNoMoreInteractions(mockAdminModelJpaService);
+        verify(adminModelJpaRepository, times(1)).findById(updateModelEntity.getIdx());
+        verify(adminModelJpaRepository, atLeastOnce()).findById(updateModelEntity.getIdx());
+        verifyNoMoreInteractions(adminModelJpaRepository);
 
-        InOrder inOrder = inOrder(mockAdminModelJpaService);
-        inOrder.verify(mockAdminModelJpaService).findOneModel(newModel.getIdx());
+        InOrder inOrder = inOrder(adminModelJpaRepository);
+        inOrder.verify(adminModelJpaRepository).findById(updateModelEntity.getIdx());
     }
 
     @Test
     @DisplayName("새로운 모델 설정 BDD 테스트")
     void 새로운모델설정BDD테스트() {
-        AdminModelDTO newModel = adminModelJpaService.toggleModelNewYn(adminModelDTO.getIdx());
-
-        em.flush();
-        em.clear();
+        AdminModelEntity updateModelEntity = AdminModelEntity.builder()
+                .idx(adminModelEntity.getIdx())
+                .categoryCd(newCodeEntity.getCategoryCd())
+                .categoryAge(2)
+                .modelKorFirstName("조")
+                .modelKorSecondName("찬희")
+                .modelKorName("조찬희")
+                .modelFirstName("CHO")
+                .modelSecondName("CHANHEE")
+                .modelEngName("CHOCHANHEE")
+                .modelDescription("chaneeCho")
+                .favoriteCount(1)
+                .viewCount(1)
+                .adminAgencyEntity(adminAgencyEntity)
+                .commonImageEntityList(List.of(commonImageEntity))
+                .modelMainYn("Y")
+                .status("active")
+                .newYn("N")
+                .height(170)
+                .size3("34-24-34")
+                .shoes(270)
+                .visible("Y")
+                .build();
 
         // when
-        given(mockAdminModelJpaService.findOneModel(newModel.getIdx())).willReturn(newModel);
-        AdminModelDTO modelInfo = mockAdminModelJpaService.findOneModel(newModel.getIdx());
+        given(adminModelJpaRepository.findById(updateModelEntity.getIdx())).willReturn(Optional.of(updateModelEntity));
+        given(adminModelJpaRepository.save(updateModelEntity)).willReturn(updateModelEntity);
+        AdminModelDTO modelInfo = mockAdminModelJpaService.toggleModelNewYn(updateModelEntity.getIdx());
 
         assertThat(modelInfo.getNewYn()).isEqualTo("Y");
 
         // verify
-        then(mockAdminModelJpaService).should(times(1)).findOneModel(newModel.getIdx());
-        then(mockAdminModelJpaService).should(atLeastOnce()).findOneModel(newModel.getIdx());
-        then(mockAdminModelJpaService).shouldHaveNoMoreInteractions();
+        then(adminModelJpaRepository).should(times(1)).findById(updateModelEntity.getIdx());
+        then(adminModelJpaRepository).should(atLeastOnce()).findById(updateModelEntity.getIdx());
+        then(adminModelJpaRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
     @DisplayName("모델 스케줄 Mockito 조회 테스트")
     void 모델스케줄Mockito조회테스트() {
         // given
-        Map<String, Object> scheduleMap = new HashMap<>();
-        scheduleMap.put("jpaStartPage", 1);
-        scheduleMap.put("size", 3);
-
-        List<AdminScheduleDTO> scheduleList = new ArrayList<>();
-        scheduleList.add(AdminScheduleDTO.builder().idx(1L).modelIdx(adminModelDTO.getIdx())
+        List<AdminScheduleEntity> scheduleList = new ArrayList<>();
+        scheduleList.add(AdminScheduleEntity.builder().idx(1L).adminModelEntity(adminModelEntity)
                 .modelSchedule("스케줄 테스트").modelScheduleTime(now()).build());
 
         // when
-        when(mockAdminModelJpaService.findOneModelSchedule(adminModelDTO.getIdx())).thenReturn(scheduleList);
-        List<AdminScheduleDTO> newScheduleList = mockAdminModelJpaService.findOneModelSchedule(adminModelDTO.getIdx());
+        when(adminScheduleJpaRepository.findAllById(adminModelEntity.getIdx())).thenReturn(scheduleList);
+        List<AdminScheduleDTO> newScheduleList = mockAdminModelJpaService.findOneModelSchedule(adminModelEntity.getIdx());
 
         // then
         assertThat(newScheduleList.get(0).getIdx()).isEqualTo(scheduleList.get(0).getIdx());
-        assertThat(newScheduleList.get(0).getModelIdx()).isEqualTo(scheduleList.get(0).getModelIdx());
+        assertThat(newScheduleList.get(0).getModelIdx()).isEqualTo(scheduleList.get(0).getAdminModelEntity().getIdx());
         assertThat(newScheduleList.get(0).getModelSchedule()).isEqualTo(scheduleList.get(0).getModelSchedule());
         assertThat(newScheduleList.get(0).getModelScheduleTime()).isEqualTo(scheduleList.get(0).getModelScheduleTime());
 
         // verify
-        verify(mockAdminModelJpaService, times(1)).findOneModelSchedule(adminModelDTO.getIdx());
-        verify(mockAdminModelJpaService, atLeastOnce()).findOneModelSchedule(adminModelDTO.getIdx());
-        verifyNoMoreInteractions(mockAdminModelJpaService);
+        verify(adminScheduleJpaRepository, times(1)).findAllById(adminModelEntity.getIdx());
+        verify(adminScheduleJpaRepository, atLeastOnce()).findAllById(adminModelEntity.getIdx());
+        verifyNoMoreInteractions(adminScheduleJpaRepository);
 
-        InOrder inOrder = inOrder(mockAdminModelJpaService);
-        inOrder.verify(mockAdminModelJpaService).findOneModelSchedule(adminModelDTO.getIdx());
+        InOrder inOrder = inOrder(adminScheduleJpaRepository);
+        inOrder.verify(adminScheduleJpaRepository).findAllById(adminModelEntity.getIdx());
     }
 
     @Test
     @DisplayName("모델 스케줄 BDD 조회 테스트")
     void 모델스케줄BDD조회테스트() {
         // given
-        Map<String, Object> scheduleMap = new HashMap<>();
-        scheduleMap.put("jpaStartPage", 1);
-        scheduleMap.put("size", 3);
-
-        List<AdminScheduleDTO> scheduleList = new ArrayList<>();
-        scheduleList.add(AdminScheduleDTO.builder().idx(1L).modelIdx(adminModelDTO.getIdx())
+        List<AdminScheduleEntity> scheduleList = new ArrayList<>();
+        scheduleList.add(AdminScheduleEntity.builder().idx(1L).adminModelEntity(adminModelEntity)
                 .modelSchedule("스케줄 테스트").modelScheduleTime(now()).build());
 
         // when
-        given(mockAdminModelJpaService.findOneModelSchedule(adminModelDTO.getIdx())).willReturn(scheduleList);
-        List<AdminScheduleDTO> newScheduleList = mockAdminModelJpaService.findOneModelSchedule(adminModelDTO.getIdx());
+        given(adminScheduleJpaRepository.findAllById(adminModelEntity.getIdx())).willReturn(scheduleList);
+        List<AdminScheduleDTO> newScheduleList = mockAdminModelJpaService.findOneModelSchedule(adminModelEntity.getIdx());
 
         // then
         assertThat(newScheduleList.get(0).getIdx()).isEqualTo(scheduleList.get(0).getIdx());
-        assertThat(newScheduleList.get(0).getModelIdx()).isEqualTo(scheduleList.get(0).getModelIdx());
+        assertThat(newScheduleList.get(0).getModelIdx()).isEqualTo(scheduleList.get(0).getAdminModelEntity().getIdx());
         assertThat(newScheduleList.get(0).getModelSchedule()).isEqualTo(scheduleList.get(0).getModelSchedule());
         assertThat(newScheduleList.get(0).getModelScheduleTime()).isEqualTo(scheduleList.get(0).getModelScheduleTime());
 
         // verify
-        then(mockAdminModelJpaService).should(times(1)).findOneModelSchedule(adminModelDTO.getIdx());
-        then(mockAdminModelJpaService).should(atLeastOnce()).findOneModelSchedule(adminModelDTO.getIdx());
-        then(mockAdminModelJpaService).shouldHaveNoMoreInteractions();
+        then(adminScheduleJpaRepository).should(times(1)).findAllById(adminModelEntity.getIdx());
+        then(adminScheduleJpaRepository).should(atLeastOnce()).findAllById(adminModelEntity.getIdx());
+        then(adminScheduleJpaRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test

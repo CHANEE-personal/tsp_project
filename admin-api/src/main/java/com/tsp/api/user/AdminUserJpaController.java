@@ -148,8 +148,8 @@ public class AdminUserJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PostMapping("/signUp")
-    public ResponseEntity<AdminUserDTO> insertAdminUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        return ResponseEntity.created(URI.create("")).body(adminUserJpaService.insertAdminUser(signUpRequest));
+    public ResponseEntity<AdminUserDTO> insertAdminUser(@Valid @RequestBody AdminUserEntity adminUserEntity) {
+        return ResponseEntity.created(URI.create("")).body(adminUserJpaService.insertAdminUser(adminUserEntity));
     }
 
     /**

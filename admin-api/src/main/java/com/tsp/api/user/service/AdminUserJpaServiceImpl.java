@@ -114,20 +114,13 @@ public class AdminUserJpaServiceImpl implements AdminUserJpaService {
      */
     @Override
     @Transactional
-    public AdminUserDTO insertAdminUser(SignUpRequest signUpRequest) {
+    public AdminUserDTO insertAdminUser(AdminUserEntity adminUserEntity) {
         try {
-            if (adminUserJpaRepository.findByUserId(signUpRequest.getUserId()).isPresent()) {
+            if (adminUserJpaRepository.findByUserId(adminUserEntity.getUserId()).isPresent()) {
                 throw new TspException(EXIST_USER);
             }
 
-            return AdminUserEntity.toDto(adminUserJpaRepository.save(AdminUserEntity.builder()
-                    .userId(signUpRequest.getUserId())
-                    .password(passwordEncoder.encode(signUpRequest.getPassword()))
-                    .name(signUpRequest.getName())
-                    .email(signUpRequest.getEmail())
-                    .role(Role.ROLE_ADMIN)
-                    .visible("Y")
-                    .build()));
+            return AdminUserEntity.toDto(adminUserJpaRepository.save(adminUserEntity));
 
         } catch (Exception e) {
             throw new TspException(ERROR_USER);

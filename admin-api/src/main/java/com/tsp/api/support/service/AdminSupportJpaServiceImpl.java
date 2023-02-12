@@ -162,7 +162,7 @@ public class AdminSupportJpaServiceImpl implements AdminSupportJpaService {
     public EvaluationDTO evaluationSupportModel(Long idx, EvaluationEntity evaluationEntity) {
         try {
             oneSupport(idx).addSupport(evaluationEntity);
-            return adminSupportJpaQueryRepository.evaluationSupportModel(evaluationEntity);
+            return EvaluationEntity.toDto(adminEvaluationJpaRepository.save(evaluationEntity));
         } catch (Exception e) {
             throw new TspException(ERROR_EVALUATION);
         }

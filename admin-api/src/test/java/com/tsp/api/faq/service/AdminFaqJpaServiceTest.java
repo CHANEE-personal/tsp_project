@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,10 +20,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,7 +40,10 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("FAQ Service Test")
 class AdminFaqJpaServiceTest extends AdminModelCommonServiceTest {
-    @Mock AdminFaqJpaService mockAdminFaqJpaService;
+
+    @Mock AdminFaqJpaRepository adminFaqJpaRepository;
+    @Mock AdminFaqJpaQueryRepository adminFaqJpaQueryRepository;
+    @InjectMocks AdminFaqJpaServiceImpl mockAdminFaqJpaService;
     private final AdminFaqJpaService adminFaqJpaService;
 
     @Test
@@ -71,7 +72,7 @@ class AdminFaqJpaServiceTest extends AdminModelCommonServiceTest {
         Page<AdminFaqDTO> resultFaq = new PageImpl<>(returnFaqList, pageRequest, returnFaqList.size());
 
         // when
-        when(mockAdminFaqJpaService.findFaqList(faqMap, pageRequest)).thenReturn(resultFaq);
+        when(adminFaqJpaQueryRepository.findFaqList(faqMap, pageRequest)).thenReturn(resultFaq);
         Page<AdminFaqDTO> faqList = mockAdminFaqJpaService.findFaqList(faqMap, pageRequest);
         List<AdminFaqDTO> findFaqList = faqList.stream().collect(Collectors.toList());
 
@@ -87,12 +88,12 @@ class AdminFaqJpaServiceTest extends AdminModelCommonServiceTest {
         assertThat(findFaqList.get(0).getVisible()).isEqualTo(returnFaqList.get(0).getVisible());
 
         // verify
-        verify(mockAdminFaqJpaService, times(1)).findFaqList(faqMap, pageRequest);
-        verify(mockAdminFaqJpaService, atLeastOnce()).findFaqList(faqMap, pageRequest);
-        verifyNoMoreInteractions(mockAdminFaqJpaService);
+        verify(adminFaqJpaQueryRepository, times(1)).findFaqList(faqMap, pageRequest);
+        verify(adminFaqJpaQueryRepository, atLeastOnce()).findFaqList(faqMap, pageRequest);
+        verifyNoMoreInteractions(adminFaqJpaQueryRepository);
 
-        InOrder inOrder = inOrder(mockAdminFaqJpaService);
-        inOrder.verify(mockAdminFaqJpaService).findFaqList(faqMap, pageRequest);
+        InOrder inOrder = inOrder(adminFaqJpaQueryRepository);
+        inOrder.verify(adminFaqJpaQueryRepository).findFaqList(faqMap, pageRequest);
     }
 
     @Test
@@ -110,7 +111,7 @@ class AdminFaqJpaServiceTest extends AdminModelCommonServiceTest {
         Page<AdminFaqDTO> resultFaq = new PageImpl<>(returnFaqList, pageRequest, returnFaqList.size());
 
         // when
-        given(mockAdminFaqJpaService.findFaqList(faqMap, pageRequest)).willReturn(resultFaq);
+        given(adminFaqJpaQueryRepository.findFaqList(faqMap, pageRequest)).willReturn(resultFaq);
         Page<AdminFaqDTO> faqList = mockAdminFaqJpaService.findFaqList(faqMap, pageRequest);
         List<AdminFaqDTO> findFaqList = faqList.stream().collect(Collectors.toList());
 
@@ -126,70 +127,50 @@ class AdminFaqJpaServiceTest extends AdminModelCommonServiceTest {
         assertThat(findFaqList.get(0).getVisible()).isEqualTo(returnFaqList.get(0).getVisible());
 
         // verify
-        then(mockAdminFaqJpaService).should(times(1)).findFaqList(faqMap, pageRequest);
-        then(mockAdminFaqJpaService).should(atLeastOnce()).findFaqList(faqMap, pageRequest);
-        then(mockAdminFaqJpaService).shouldHaveNoMoreInteractions();
+        then(adminFaqJpaQueryRepository).should(times(1)).findFaqList(faqMap, pageRequest);
+        then(adminFaqJpaQueryRepository).should(atLeastOnce()).findFaqList(faqMap, pageRequest);
+        then(adminFaqJpaQueryRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
     @DisplayName("FAQ상세Mockito조회테스트")
     void FAQ상세Mockito조회테스트() {
-        // given
-        AdminFaqEntity adminFaqEntity = AdminFaqEntity.builder()
-                .idx(1L)
-                .title("FAQ 테스트")
-                .description("FAQ 테스트")
-                .visible("Y")
-                .build();
-
-        adminFaqDTO = AdminFaqEntity.toDto(adminFaqEntity);
-
         // when
-        when(mockAdminFaqJpaService.findOneFaq(adminFaqEntity.getIdx())).thenReturn(adminFaqDTO);
+        when(adminFaqJpaRepository.findById(adminFaqEntity.getIdx())).thenReturn(Optional.ofNullable(adminFaqEntity));
         AdminFaqDTO faqInfo = mockAdminFaqJpaService.findOneFaq(adminFaqEntity.getIdx());
 
         // then
-        assertThat(faqInfo.getIdx()).isEqualTo(1);
-        assertThat(faqInfo.getTitle()).isEqualTo("FAQ 테스트");
-        assertThat(faqInfo.getDescription()).isEqualTo("FAQ 테스트");
-        assertThat(faqInfo.getVisible()).isEqualTo("Y");
+        assertThat(faqInfo.getIdx()).isEqualTo(adminFaqEntity.getIdx());
+        assertThat(faqInfo.getTitle()).isEqualTo(adminFaqEntity.getTitle());
+        assertThat(faqInfo.getDescription()).isEqualTo(adminFaqEntity.getDescription());
+        assertThat(faqInfo.getVisible()).isEqualTo(adminFaqEntity.getVisible());
 
         // verify
-        verify(mockAdminFaqJpaService, times(1)).findOneFaq(adminFaqEntity.getIdx());
-        verify(mockAdminFaqJpaService, atLeastOnce()).findOneFaq(adminFaqEntity.getIdx());
-        verifyNoMoreInteractions(mockAdminFaqJpaService);
+        verify(adminFaqJpaRepository, times(1)).findById(adminFaqEntity.getIdx());
+        verify(adminFaqJpaRepository, atLeastOnce()).findById(adminFaqEntity.getIdx());
+        verifyNoMoreInteractions(adminFaqJpaRepository);
 
-        InOrder inOrder = inOrder(mockAdminFaqJpaService);
-        inOrder.verify(mockAdminFaqJpaService).findOneFaq(adminFaqEntity.getIdx());
+        InOrder inOrder = inOrder(adminFaqJpaRepository);
+        inOrder.verify(adminFaqJpaRepository).findById(adminFaqEntity.getIdx());
     }
 
     @Test
     @DisplayName("FAQ상세BDD조회테스트")
     void FAQ상세BDD조회테스트() {
-        // given
-        AdminFaqEntity adminFaqEntity = AdminFaqEntity.builder()
-                .idx(1L)
-                .title("FAQ 테스트")
-                .description("FAQ 테스트")
-                .visible("Y")
-                .build();
-
-        adminFaqDTO = AdminFaqEntity.toDto(adminFaqEntity);
-
         // when
-        given(mockAdminFaqJpaService.findOneFaq(adminFaqEntity.getIdx())).willReturn(adminFaqDTO);
+        given(adminFaqJpaRepository.findById(adminFaqEntity.getIdx())).willReturn(Optional.ofNullable(adminFaqEntity));
         AdminFaqDTO faqInfo = mockAdminFaqJpaService.findOneFaq(adminFaqEntity.getIdx());
 
         // then
-        assertThat(faqInfo.getIdx()).isEqualTo(1);
-        assertThat(faqInfo.getTitle()).isEqualTo("FAQ 테스트");
-        assertThat(faqInfo.getDescription()).isEqualTo("FAQ 테스트");
-        assertThat(faqInfo.getVisible()).isEqualTo("Y");
+        assertThat(faqInfo.getIdx()).isEqualTo(adminFaqEntity.getIdx());
+        assertThat(faqInfo.getTitle()).isEqualTo(adminFaqEntity.getTitle());
+        assertThat(faqInfo.getDescription()).isEqualTo(adminFaqEntity.getDescription());
+        assertThat(faqInfo.getVisible()).isEqualTo(adminFaqEntity.getVisible());
 
         // verify
-        then(mockAdminFaqJpaService).should(times(1)).findOneFaq(adminFaqEntity.getIdx());
-        then(mockAdminFaqJpaService).should(atLeastOnce()).findOneFaq(adminFaqEntity.getIdx());
-        then(mockAdminFaqJpaService).shouldHaveNoMoreInteractions();
+        then(adminFaqJpaRepository).should(times(1)).findById(adminFaqEntity.getIdx());
+        then(adminFaqJpaRepository).should(atLeastOnce()).findById(adminFaqEntity.getIdx());
+        then(adminFaqJpaRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
@@ -300,111 +281,95 @@ class AdminFaqJpaServiceTest extends AdminModelCommonServiceTest {
     @Test
     @DisplayName("FAQ등록Mockito테스트")
     void FAQ등록Mockito테스트() {
-        // given
-        adminFaqJpaService.insertFaq(adminFaqEntity);
-
         // when
-        when(mockAdminFaqJpaService.findOneFaq(adminFaqEntity.getIdx())).thenReturn(adminFaqDTO);
-        AdminFaqDTO faqInfo = mockAdminFaqJpaService.findOneFaq(adminFaqEntity.getIdx());
+        when(adminFaqJpaRepository.save(adminFaqEntity)).thenReturn(adminFaqEntity);
+        AdminFaqDTO faqInfo = mockAdminFaqJpaService.insertFaq(adminFaqEntity);
 
         // then
-        assertThat(faqInfo.getTitle()).isEqualTo("FAQ 테스트");
-        assertThat(faqInfo.getDescription()).isEqualTo("FAQ 테스트");
-        assertThat(faqInfo.getVisible()).isEqualTo("Y");
+        assertThat(faqInfo.getTitle()).isEqualTo(adminFaqEntity.getTitle());
+        assertThat(faqInfo.getDescription()).isEqualTo(adminFaqEntity.getDescription());
+        assertThat(faqInfo.getVisible()).isEqualTo(adminFaqEntity.getVisible());
 
         // verify
-        verify(mockAdminFaqJpaService, times(1)).findOneFaq(adminFaqEntity.getIdx());
-        verify(mockAdminFaqJpaService, atLeastOnce()).findOneFaq(adminFaqEntity.getIdx());
-        verifyNoMoreInteractions(mockAdminFaqJpaService);
+        verify(adminFaqJpaRepository, times(1)).save(adminFaqEntity);
+        verify(adminFaqJpaRepository, atLeastOnce()).save(adminFaqEntity);
+        verifyNoMoreInteractions(adminFaqJpaRepository);
 
-        InOrder inOrder = inOrder(mockAdminFaqJpaService);
-        inOrder.verify(mockAdminFaqJpaService).findOneFaq(adminFaqEntity.getIdx());
+        InOrder inOrder = inOrder(adminFaqJpaRepository);
+        inOrder.verify(adminFaqJpaRepository).save(adminFaqEntity);
     }
 
     @Test
     @DisplayName("FAQ등록BDD테스트")
     void FAQ등록BDD테스트() {
-        // given
-        adminFaqJpaService.insertFaq(adminFaqEntity);
-
         // when
-        given(mockAdminFaqJpaService.findOneFaq(adminFaqEntity.getIdx())).willReturn(adminFaqDTO);
-        AdminFaqDTO faqInfo = mockAdminFaqJpaService.findOneFaq(adminFaqEntity.getIdx());
+        given(adminFaqJpaRepository.save(adminFaqEntity)).willReturn(adminFaqEntity);
+        AdminFaqDTO faqInfo = mockAdminFaqJpaService.insertFaq(adminFaqEntity);
 
         // then
-        assertThat(faqInfo.getTitle()).isEqualTo("FAQ 테스트");
-        assertThat(faqInfo.getDescription()).isEqualTo("FAQ 테스트");
-        assertThat(faqInfo.getVisible()).isEqualTo("Y");
+        assertThat(faqInfo.getTitle()).isEqualTo(adminFaqEntity.getTitle());
+        assertThat(faqInfo.getDescription()).isEqualTo(adminFaqEntity.getDescription());
+        assertThat(faqInfo.getVisible()).isEqualTo(adminFaqEntity.getVisible());
 
         // verify
-        then(mockAdminFaqJpaService).should(times(1)).findOneFaq(adminFaqEntity.getIdx());
-        then(mockAdminFaqJpaService).should(atLeastOnce()).findOneFaq(adminFaqEntity.getIdx());
-        then(mockAdminFaqJpaService).shouldHaveNoMoreInteractions();
+        then(adminFaqJpaRepository).should(times(1)).save(adminFaqEntity);
+        then(adminFaqJpaRepository).should(atLeastOnce()).save(adminFaqEntity);
+        then(adminFaqJpaRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
     @DisplayName("FAQ수정Mockito테스트")
     void FAQ수정Mockito테스트() {
         // given
-        Long idx = adminFaqJpaService.insertFaq(adminFaqEntity).getIdx();
-
-        adminFaqEntity = AdminFaqEntity.builder()
-                .idx(idx)
+        AdminFaqEntity updateFaqEntity = AdminFaqEntity.builder()
+                .idx(adminFaqEntity.getIdx())
                 .title("FAQ 테스트1")
                 .description("FAQ 테스트1")
                 .visible("Y")
                 .build();
 
-        AdminFaqDTO adminFaqDTO = AdminFaqEntity.toDto(adminFaqEntity);
-
-        adminFaqJpaService.updateFaq(idx, adminFaqEntity);
-
         // when
-        when(mockAdminFaqJpaService.findOneFaq(adminFaqEntity.getIdx())).thenReturn(adminFaqDTO);
-        AdminFaqDTO faqInfo = mockAdminFaqJpaService.findOneFaq(adminFaqEntity.getIdx());
+        when(adminFaqJpaRepository.findById(updateFaqEntity.getIdx())).thenReturn(Optional.of(updateFaqEntity));
+        when(adminFaqJpaRepository.save(updateFaqEntity)).thenReturn(updateFaqEntity);
+        AdminFaqDTO faqInfo = mockAdminFaqJpaService.updateFaq(updateFaqEntity.getIdx(), updateFaqEntity);
 
         // then
-        assertThat(faqInfo.getTitle()).isEqualTo("FAQ 테스트1");
-        assertThat(faqInfo.getDescription()).isEqualTo("FAQ 테스트1");
+        assertThat(faqInfo.getTitle()).isEqualTo(updateFaqEntity.getTitle());
+        assertThat(faqInfo.getDescription()).isEqualTo(updateFaqEntity.getDescription());
 
         // verify
-        verify(mockAdminFaqJpaService, times(1)).findOneFaq(adminFaqEntity.getIdx());
-        verify(mockAdminFaqJpaService, atLeastOnce()).findOneFaq(adminFaqEntity.getIdx());
-        verifyNoMoreInteractions(mockAdminFaqJpaService);
+        verify(adminFaqJpaRepository, times(1)).findById(updateFaqEntity.getIdx());
+        verify(adminFaqJpaRepository, atLeastOnce()).findById(updateFaqEntity.getIdx());
+        verifyNoMoreInteractions(adminFaqJpaRepository);
 
-        InOrder inOrder = inOrder(mockAdminFaqJpaService);
-        inOrder.verify(mockAdminFaqJpaService).findOneFaq(adminFaqEntity.getIdx());
+        InOrder inOrder = inOrder(adminFaqJpaRepository);
+        inOrder.verify(adminFaqJpaRepository).findById(updateFaqEntity.getIdx());
     }
 
     @Test
     @DisplayName("FAQ수정BDD테스트")
     void FAQ수정BDD테스트() {
         // given
-        Long idx = adminFaqJpaService.insertFaq(adminFaqEntity).getIdx();
-
-        adminFaqEntity = AdminFaqEntity.builder()
-                .idx(idx)
+        AdminFaqEntity updateFaqEntity = AdminFaqEntity.builder()
+                .idx(adminFaqEntity.getIdx())
                 .title("FAQ 테스트1")
                 .description("FAQ 테스트1")
                 .visible("Y")
                 .build();
 
-        AdminFaqDTO adminFaqDTO = AdminFaqEntity.toDto(adminFaqEntity);
-
-        adminFaqJpaService.updateFaq(idx, adminFaqEntity);
-
         // when
-        when(mockAdminFaqJpaService.findOneFaq(adminFaqEntity.getIdx())).thenReturn(adminFaqDTO);
-        AdminFaqDTO faqInfo = mockAdminFaqJpaService.findOneFaq(adminFaqEntity.getIdx());
+        given(adminFaqJpaRepository.findById(updateFaqEntity.getIdx())).willReturn(Optional.of(updateFaqEntity));
+        given(adminFaqJpaRepository.save(updateFaqEntity)).willReturn(updateFaqEntity);
+        AdminFaqDTO faqInfo = mockAdminFaqJpaService.updateFaq(updateFaqEntity.getIdx(), updateFaqEntity);
 
         // then
-        assertThat(faqInfo.getTitle()).isEqualTo("FAQ 테스트1");
-        assertThat(faqInfo.getDescription()).isEqualTo("FAQ 테스트1");
+        assertThat(faqInfo.getTitle()).isEqualTo(updateFaqEntity.getTitle());
+        assertThat(faqInfo.getDescription()).isEqualTo(updateFaqEntity.getDescription());
 
         // verify
-        then(mockAdminFaqJpaService).should(times(1)).findOneFaq(adminFaqEntity.getIdx());
-        then(mockAdminFaqJpaService).should(atLeastOnce()).findOneFaq(adminFaqEntity.getIdx());
-        then(mockAdminFaqJpaService).shouldHaveNoMoreInteractions();
+        then(adminFaqJpaRepository).should(times(1)).findById(updateFaqEntity.getIdx());
+        then(adminFaqJpaRepository).should(atLeastOnce()).findById(updateFaqEntity.getIdx());
+        then(adminFaqJpaRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
@@ -418,48 +383,5 @@ class AdminFaqJpaServiceTest extends AdminModelCommonServiceTest {
 
         // then
         assertThat(entityIdx).isEqualTo(idx);
-    }
-
-    @Test
-    @DisplayName("FAQ삭제Mockito테스트")
-    void FAQ삭제Mockito테스트() {
-        // given
-        adminFaqJpaService.insertFaq(adminFaqEntity);
-        adminFaqDTO = AdminFaqEntity.toDto(adminFaqEntity);
-
-        // when
-        when(mockAdminFaqJpaService.findOneFaq(adminFaqEntity.getIdx())).thenReturn(adminFaqDTO);
-        Long deleteIdx = adminFaqJpaService.deleteFaq(adminFaqEntity.getIdx());
-
-        // then
-        assertThat(mockAdminFaqJpaService.findOneFaq(adminFaqEntity.getIdx()).getIdx()).isEqualTo(deleteIdx);
-
-        // verify
-        verify(mockAdminFaqJpaService, times(1)).findOneFaq(adminFaqEntity.getIdx());
-        verify(mockAdminFaqJpaService, atLeastOnce()).findOneFaq(adminFaqEntity.getIdx());
-        verifyNoMoreInteractions(mockAdminFaqJpaService);
-
-        InOrder inOrder = inOrder(mockAdminFaqJpaService);
-        inOrder.verify(mockAdminFaqJpaService).findOneFaq(adminFaqEntity.getIdx());
-    }
-
-    @Test
-    @DisplayName("FAQ삭제BDD테스트")
-    void FAQ삭제BDD테스트() {
-        // given
-        adminFaqJpaService.insertFaq(adminFaqEntity);
-        adminFaqDTO = AdminFaqEntity.toDto(adminFaqEntity);
-
-        // when
-        when(mockAdminFaqJpaService.findOneFaq(adminFaqEntity.getIdx())).thenReturn(adminFaqDTO);
-        Long deleteIdx = adminFaqJpaService.deleteFaq(adminFaqEntity.getIdx());
-
-        // then
-        assertThat(mockAdminFaqJpaService.findOneFaq(adminFaqEntity.getIdx()).getIdx()).isEqualTo(deleteIdx);
-
-        // verify
-        then(mockAdminFaqJpaService).should(times(1)).findOneFaq(adminFaqEntity.getIdx());
-        then(mockAdminFaqJpaService).should(atLeastOnce()).findOneFaq(adminFaqEntity.getIdx());
-        then(mockAdminFaqJpaService).shouldHaveNoMoreInteractions();
     }
 }

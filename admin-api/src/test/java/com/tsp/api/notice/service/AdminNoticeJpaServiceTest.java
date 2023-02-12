@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,10 +21,7 @@ import org.springframework.test.context.TestPropertySource;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,8 +41,9 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("공지사항 Service Test")
 class AdminNoticeJpaServiceTest extends AdminModelCommonServiceTest {
-    @Mock
-    private AdminNoticeJpaService mockAdminNoticeJpaService;
+    @Mock private AdminNoticeJpaRepository adminNoticeJpaRepository;
+    @Mock private AdminNoticeJpaQueryRepository adminNoticeJpaQueryRepository;
+    @InjectMocks private AdminNoticeJpaServiceImpl mockAdminNoticeJpaService;
     private final AdminNoticeJpaService adminNoticeJpaService;
 
     private final EntityManager em;
@@ -74,7 +73,7 @@ class AdminNoticeJpaServiceTest extends AdminModelCommonServiceTest {
         Page<AdminNoticeDTO> resultNotice = new PageImpl<>(returnNoticeList, pageRequest, returnNoticeList.size());
 
         // when
-        when(mockAdminNoticeJpaService.findNoticeList(noticeMap, pageRequest)).thenReturn(resultNotice);
+        when(adminNoticeJpaQueryRepository.findNoticeList(noticeMap, pageRequest)).thenReturn(resultNotice);
         Page<AdminNoticeDTO> noticeList = mockAdminNoticeJpaService.findNoticeList(noticeMap, pageRequest);
         List<AdminNoticeDTO> findNoticeList = noticeList.stream().collect(Collectors.toList());
 
@@ -90,12 +89,12 @@ class AdminNoticeJpaServiceTest extends AdminModelCommonServiceTest {
         assertThat(findNoticeList.get(0).getVisible()).isEqualTo(returnNoticeList.get(0).getVisible());
 
         // verify
-        verify(mockAdminNoticeJpaService, times(1)).findNoticeList(noticeMap, pageRequest);
-        verify(mockAdminNoticeJpaService, atLeastOnce()).findNoticeList(noticeMap, pageRequest);
-        verifyNoMoreInteractions(mockAdminNoticeJpaService);
+        verify(adminNoticeJpaQueryRepository, times(1)).findNoticeList(noticeMap, pageRequest);
+        verify(adminNoticeJpaQueryRepository, atLeastOnce()).findNoticeList(noticeMap, pageRequest);
+        verifyNoMoreInteractions(adminNoticeJpaQueryRepository);
 
-        InOrder inOrder = inOrder(mockAdminNoticeJpaService);
-        inOrder.verify(mockAdminNoticeJpaService).findNoticeList(noticeMap, pageRequest);
+        InOrder inOrder = inOrder(adminNoticeJpaQueryRepository);
+        inOrder.verify(adminNoticeJpaQueryRepository).findNoticeList(noticeMap, pageRequest);
     }
 
     @Test
@@ -112,7 +111,7 @@ class AdminNoticeJpaServiceTest extends AdminModelCommonServiceTest {
         Page<AdminNoticeDTO> resultNotice = new PageImpl<>(returnNoticeList, pageRequest, returnNoticeList.size());
 
         // when
-        given(mockAdminNoticeJpaService.findNoticeList(noticeMap, pageRequest)).willReturn(resultNotice);
+        given(adminNoticeJpaQueryRepository.findNoticeList(noticeMap, pageRequest)).willReturn(resultNotice);
         Page<AdminNoticeDTO> noticeList = mockAdminNoticeJpaService.findNoticeList(noticeMap, pageRequest);
         List<AdminNoticeDTO> findNoticeList = noticeList.stream().collect(Collectors.toList());
 
@@ -128,50 +127,50 @@ class AdminNoticeJpaServiceTest extends AdminModelCommonServiceTest {
         assertThat(findNoticeList.get(0).getVisible()).isEqualTo(returnNoticeList.get(0).getVisible());
 
         // verify
-        then(mockAdminNoticeJpaService).should(times(1)).findNoticeList(noticeMap, pageRequest);
-        then(mockAdminNoticeJpaService).should(atLeastOnce()).findNoticeList(noticeMap, pageRequest);
-        then(mockAdminNoticeJpaService).shouldHaveNoMoreInteractions();
+        then(adminNoticeJpaQueryRepository).should(times(1)).findNoticeList(noticeMap, pageRequest);
+        then(adminNoticeJpaQueryRepository).should(atLeastOnce()).findNoticeList(noticeMap, pageRequest);
+        then(adminNoticeJpaQueryRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
     @DisplayName("공지사항상세Mockito조회테스트")
     void 공지사항상세Mockito조회테스트() {
         // when
-        when(mockAdminNoticeJpaService.findOneNotice(adminNoticeDTO.getIdx())).thenReturn(adminNoticeDTO);
-        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.findOneNotice(adminNoticeDTO.getIdx());
+        when(adminNoticeJpaRepository.findById(adminNoticeEntity.getIdx())).thenReturn(Optional.ofNullable(adminNoticeEntity));
+        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.findOneNotice(adminNoticeEntity.getIdx());
 
         // then
-        assertThat(noticeInfo.getIdx()).isEqualTo(adminNoticeDTO.getIdx());
-        assertThat(noticeInfo.getTitle()).isEqualTo("공지사항 테스트");
-        assertThat(noticeInfo.getDescription()).isEqualTo("공지사항 테스트");
+        assertThat(noticeInfo.getIdx()).isEqualTo(adminNoticeEntity.getIdx());
+        assertThat(noticeInfo.getTitle()).isEqualTo(adminNoticeEntity.getTitle());
+        assertThat(noticeInfo.getDescription()).isEqualTo(adminNoticeEntity.getDescription());
         assertThat(noticeInfo.getVisible()).isEqualTo("Y");
 
         // verify
-        verify(mockAdminNoticeJpaService, times(1)).findOneNotice(adminNoticeDTO.getIdx());
-        verify(mockAdminNoticeJpaService, atLeastOnce()).findOneNotice(adminNoticeDTO.getIdx());
-        verifyNoMoreInteractions(mockAdminNoticeJpaService);
+        verify(adminNoticeJpaRepository, times(1)).findById(adminNoticeEntity.getIdx());
+        verify(adminNoticeJpaRepository, atLeastOnce()).findById(adminNoticeEntity.getIdx());
+        verifyNoMoreInteractions(adminNoticeJpaRepository);
 
-        InOrder inOrder = inOrder(mockAdminNoticeJpaService);
-        inOrder.verify(mockAdminNoticeJpaService).findOneNotice(adminNoticeDTO.getIdx());
+        InOrder inOrder = inOrder(adminNoticeJpaRepository);
+        inOrder.verify(adminNoticeJpaRepository).findById(adminNoticeEntity.getIdx());
     }
 
     @Test
     @DisplayName("공지사항상세BDD조회테스트")
     void 공지사항상세BDD조회테스트() {
         // when
-        given(mockAdminNoticeJpaService.findOneNotice(adminNoticeDTO.getIdx())).willReturn(adminNoticeDTO);
-        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.findOneNotice(adminNoticeDTO.getIdx());
+        given(adminNoticeJpaRepository.findById(adminNoticeEntity.getIdx())).willReturn(Optional.ofNullable(adminNoticeEntity));
+        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.findOneNotice(adminNoticeEntity.getIdx());
 
         // then
-        assertThat(noticeInfo.getIdx()).isEqualTo(adminNoticeDTO.getIdx());
-        assertThat(noticeInfo.getTitle()).isEqualTo("공지사항 테스트");
-        assertThat(noticeInfo.getDescription()).isEqualTo("공지사항 테스트");
+        assertThat(noticeInfo.getIdx()).isEqualTo(adminNoticeEntity.getIdx());
+        assertThat(noticeInfo.getTitle()).isEqualTo(adminNoticeEntity.getTitle());
+        assertThat(noticeInfo.getDescription()).isEqualTo(adminNoticeEntity.getDescription());
         assertThat(noticeInfo.getVisible()).isEqualTo("Y");
 
         // verify
-        then(mockAdminNoticeJpaService).should(times(1)).findOneNotice(adminNoticeDTO.getIdx());
-        then(mockAdminNoticeJpaService).should(atLeastOnce()).findOneNotice(adminNoticeDTO.getIdx());
-        then(mockAdminNoticeJpaService).shouldHaveNoMoreInteractions();
+        then(adminNoticeJpaRepository).should(times(1)).findById(adminNoticeEntity.getIdx());
+        then(adminNoticeJpaRepository).should(atLeastOnce()).findById(adminNoticeEntity.getIdx());
+        then(adminNoticeJpaRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
@@ -283,160 +282,145 @@ class AdminNoticeJpaServiceTest extends AdminModelCommonServiceTest {
     @DisplayName("공지사항등록Mockito테스트")
     void 공지사항등록Mockito테스트() {
         // when
-        when(mockAdminNoticeJpaService.findOneNotice(adminNoticeDTO.getIdx())).thenReturn(adminNoticeDTO);
-        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.findOneNotice(adminNoticeDTO.getIdx());
+        when(adminNoticeJpaRepository.save(adminNoticeEntity)).thenReturn(adminNoticeEntity);
+        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.insertNotice(adminNoticeEntity);
 
         // then
-        assertThat(noticeInfo.getTitle()).isEqualTo("공지사항 테스트");
-        assertThat(noticeInfo.getDescription()).isEqualTo("공지사항 테스트");
+        assertThat(noticeInfo.getTitle()).isEqualTo(adminNoticeEntity.getTitle());
+        assertThat(noticeInfo.getDescription()).isEqualTo(adminNoticeEntity.getDescription());
         assertThat(noticeInfo.getVisible()).isEqualTo("Y");
 
         // verify
-        verify(mockAdminNoticeJpaService, times(1)).findOneNotice(adminNoticeDTO.getIdx());
-        verify(mockAdminNoticeJpaService, atLeastOnce()).findOneNotice(adminNoticeDTO.getIdx());
-        verifyNoMoreInteractions(mockAdminNoticeJpaService);
+        verify(adminNoticeJpaRepository, times(1)).save(adminNoticeEntity);
+        verify(adminNoticeJpaRepository, atLeastOnce()).save(adminNoticeEntity);
+        verifyNoMoreInteractions(adminNoticeJpaRepository);
 
-        InOrder inOrder = inOrder(mockAdminNoticeJpaService);
-        inOrder.verify(mockAdminNoticeJpaService).findOneNotice(adminNoticeDTO.getIdx());
+        InOrder inOrder = inOrder(adminNoticeJpaRepository);
+        inOrder.verify(adminNoticeJpaRepository).save(adminNoticeEntity);
     }
 
     @Test
     @DisplayName("공지사항등록BDD테스트")
     void 공지사항등록BDD테스트() {
         // when
-        given(mockAdminNoticeJpaService.findOneNotice(adminNoticeDTO.getIdx())).willReturn(adminNoticeDTO);
-        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.findOneNotice(adminNoticeDTO.getIdx());
+        given(adminNoticeJpaRepository.save(adminNoticeEntity)).willReturn(adminNoticeEntity);
+        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.insertNotice(adminNoticeEntity);
 
         // then
-        assertThat(noticeInfo.getTitle()).isEqualTo("공지사항 테스트");
-        assertThat(noticeInfo.getDescription()).isEqualTo("공지사항 테스트");
+        assertThat(noticeInfo.getTitle()).isEqualTo(adminNoticeEntity.getTitle());
+        assertThat(noticeInfo.getDescription()).isEqualTo(adminNoticeEntity.getDescription());
         assertThat(noticeInfo.getVisible()).isEqualTo("Y");
 
         // verify
-        then(mockAdminNoticeJpaService).should(times(1)).findOneNotice(adminNoticeDTO.getIdx());
-        then(mockAdminNoticeJpaService).should(atLeastOnce()).findOneNotice(adminNoticeDTO.getIdx());
-        then(mockAdminNoticeJpaService).shouldHaveNoMoreInteractions();
+        then(adminNoticeJpaRepository).should(times(1)).save(adminNoticeEntity);
+        then(adminNoticeJpaRepository).should(atLeastOnce()).save(adminNoticeEntity);
+        then(adminNoticeJpaRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
     @DisplayName("공지사항수정Mockito테스트")
     void 공지사항수정Mockito테스트() {
-        adminNoticeEntity = AdminNoticeEntity.builder()
-                .idx(adminNoticeDTO.getIdx())
+        AdminNoticeEntity updateNoticeEntity = AdminNoticeEntity.builder()
+                .idx(adminNoticeEntity.getIdx())
                 .title("공지사항 테스트1")
                 .description("공지사항 테스트1")
                 .visible("Y")
                 .build();
 
-        AdminNoticeDTO updateNotice = adminNoticeJpaService.updateNotice(adminNoticeDTO.getIdx(), adminNoticeEntity);
-
         // when
-        when(mockAdminNoticeJpaService.findOneNotice(updateNotice.getIdx())).thenReturn(updateNotice);
-        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.findOneNotice(updateNotice.getIdx());
+        when(adminNoticeJpaRepository.findById(updateNoticeEntity.getIdx())).thenReturn(Optional.of(updateNoticeEntity));
+        when(adminNoticeJpaRepository.save(updateNoticeEntity)).thenReturn(updateNoticeEntity);
+        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.updateNotice(updateNoticeEntity.getIdx(), updateNoticeEntity);
 
         // then
-        assertThat(noticeInfo.getTitle()).isEqualTo("공지사항 테스트1");
-        assertThat(noticeInfo.getDescription()).isEqualTo("공지사항 테스트1");
+        assertThat(noticeInfo.getTitle()).isEqualTo(updateNoticeEntity.getTitle());
+        assertThat(noticeInfo.getDescription()).isEqualTo(updateNoticeEntity.getDescription());
 
         // verify
-        verify(mockAdminNoticeJpaService, times(1)).findOneNotice(updateNotice.getIdx());
-        verify(mockAdminNoticeJpaService, atLeastOnce()).findOneNotice(updateNotice.getIdx());
-        verifyNoMoreInteractions(mockAdminNoticeJpaService);
+        verify(adminNoticeJpaRepository, times(1)).findById(updateNoticeEntity.getIdx());
+        verify(adminNoticeJpaRepository, atLeastOnce()).findById(updateNoticeEntity.getIdx());
+        verifyNoMoreInteractions(adminNoticeJpaRepository);
 
-        InOrder inOrder = inOrder(mockAdminNoticeJpaService);
-        inOrder.verify(mockAdminNoticeJpaService).findOneNotice(updateNotice.getIdx());
+        InOrder inOrder = inOrder(adminNoticeJpaRepository);
+        inOrder.verify(adminNoticeJpaRepository).findById(updateNoticeEntity.getIdx());
     }
 
     @Test
     @DisplayName("공지사항수정BDD테스트")
     void 공지사항수정BDD테스트() {
-        adminNoticeEntity = AdminNoticeEntity.builder()
-                .idx(adminNoticeDTO.getIdx())
+        AdminNoticeEntity updateNoticeEntity = AdminNoticeEntity.builder()
+                .idx(adminNoticeEntity.getIdx())
                 .title("공지사항 테스트1")
                 .description("공지사항 테스트1")
                 .visible("Y")
                 .build();
 
-        AdminNoticeDTO updateNotice = adminNoticeJpaService.updateNotice(adminNoticeDTO.getIdx(), adminNoticeEntity);
-
         // when
-        when(mockAdminNoticeJpaService.findOneNotice(updateNotice.getIdx())).thenReturn(updateNotice);
-        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.findOneNotice(updateNotice.getIdx());
+        given(adminNoticeJpaRepository.findById(updateNoticeEntity.getIdx())).willReturn(Optional.of(updateNoticeEntity));
+        given(adminNoticeJpaRepository.save(updateNoticeEntity)).willReturn(updateNoticeEntity);
+        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.updateNotice(updateNoticeEntity.getIdx(), updateNoticeEntity);
 
         // then
-        assertThat(noticeInfo.getTitle()).isEqualTo("공지사항 테스트1");
-        assertThat(noticeInfo.getDescription()).isEqualTo("공지사항 테스트1");
+        assertThat(noticeInfo.getTitle()).isEqualTo(updateNoticeEntity.getTitle());
+        assertThat(noticeInfo.getDescription()).isEqualTo(updateNoticeEntity.getDescription());
 
         // verify
-        then(mockAdminNoticeJpaService).should(times(1)).findOneNotice(updateNotice.getIdx());
-        then(mockAdminNoticeJpaService).should(atLeastOnce()).findOneNotice(updateNotice.getIdx());
-        then(mockAdminNoticeJpaService).shouldHaveNoMoreInteractions();
+        then(adminNoticeJpaRepository).should(times(1)).findById(updateNoticeEntity.getIdx());
+        then(adminNoticeJpaRepository).should(atLeastOnce()).findById(updateNoticeEntity.getIdx());
+        then(adminNoticeJpaRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
     @DisplayName("공지사항상단고정Mockito테스트")
     void 공지사항상단고정Mockito테스트() {
-        Boolean fixed = adminNoticeJpaService.toggleFixed(adminNoticeDTO.getIdx());
-        em.flush();
-        em.clear();
-
         adminNoticeEntity = AdminNoticeEntity.builder()
                 .idx(adminNoticeDTO.getIdx())
                 .title("공지사항 테스트1")
                 .description("공지사항 테스트1")
-                .topFixed(fixed)
+                .topFixed(false)
                 .visible("Y")
                 .build();
 
-        AdminNoticeDTO adminNoticeDTO = AdminNoticeEntity.toDto(adminNoticeEntity);
-
         // when
-        when(mockAdminNoticeJpaService.findOneNotice(adminNoticeEntity.getIdx())).thenReturn(adminNoticeDTO);
-        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.findOneNotice(adminNoticeEntity.getIdx());
+        when(adminNoticeJpaRepository.findById(adminNoticeEntity.getIdx())).thenReturn(Optional.ofNullable(adminNoticeEntity));
+        when(adminNoticeJpaRepository.save(adminNoticeEntity)).thenReturn(adminNoticeEntity);
+        Boolean updateBool = mockAdminNoticeJpaService.toggleFixed(adminNoticeEntity.getIdx());
 
         // then
-        assertThat(noticeInfo.getTopFixed()).isTrue();
+        assertThat(updateBool).isTrue();
 
         // verify
-        verify(mockAdminNoticeJpaService, times(1)).findOneNotice(adminNoticeEntity.getIdx());
-        verify(mockAdminNoticeJpaService, atLeastOnce()).findOneNotice(adminNoticeEntity.getIdx());
-        verifyNoMoreInteractions(mockAdminNoticeJpaService);
+        verify(adminNoticeJpaRepository, times(1)).findById(adminNoticeEntity.getIdx());
+        verify(adminNoticeJpaRepository, atLeastOnce()).findById(adminNoticeEntity.getIdx());
+        verifyNoMoreInteractions(adminNoticeJpaRepository);
 
-        InOrder inOrder = inOrder(mockAdminNoticeJpaService);
-        inOrder.verify(mockAdminNoticeJpaService).findOneNotice(adminNoticeEntity.getIdx());
+        InOrder inOrder = inOrder(adminNoticeJpaRepository);
+        inOrder.verify(adminNoticeJpaRepository).findById(adminNoticeEntity.getIdx());
     }
 
     @Test
     @DisplayName("공지사항상단고정BDD테스트")
     void 공지사항상단고정BDD테스트() {
-        // given
-        Long idx = adminNoticeJpaService.insertNotice(adminNoticeEntity).getIdx();
-
-        Boolean fixed = adminNoticeJpaService.toggleFixed(idx);
-        em.flush();
-        em.clear();
-
         adminNoticeEntity = AdminNoticeEntity.builder()
-                .idx(idx)
+                .idx(adminNoticeDTO.getIdx())
                 .title("공지사항 테스트1")
                 .description("공지사항 테스트1")
-                .topFixed(fixed)
+                .topFixed(false)
                 .visible("Y")
                 .build();
 
-        AdminNoticeDTO adminNoticeDTO = AdminNoticeEntity.toDto(adminNoticeEntity);
-
         // when
-        given(mockAdminNoticeJpaService.findOneNotice(adminNoticeEntity.getIdx())).willReturn(adminNoticeDTO);
-        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.findOneNotice(adminNoticeEntity.getIdx());
+        given(adminNoticeJpaRepository.findById(adminNoticeEntity.getIdx())).willReturn(Optional.ofNullable(adminNoticeEntity));
+        given(adminNoticeJpaRepository.save(adminNoticeEntity)).willReturn(adminNoticeEntity);
+        Boolean updateBool = mockAdminNoticeJpaService.toggleFixed(adminNoticeEntity.getIdx());
 
         // then
-        assertThat(noticeInfo.getTopFixed()).isTrue();
+        assertThat(updateBool).isTrue();
 
         // verify
-        then(mockAdminNoticeJpaService).should(times(1)).findOneNotice(adminNoticeEntity.getIdx());
-        then(mockAdminNoticeJpaService).should(atLeastOnce()).findOneNotice(adminNoticeEntity.getIdx());
-        then(mockAdminNoticeJpaService).shouldHaveNoMoreInteractions();
+        then(adminNoticeJpaRepository).should(times(1)).findById(adminNoticeEntity.getIdx());
+        then(adminNoticeJpaRepository).should(atLeastOnce()).findById(adminNoticeEntity.getIdx());
+        then(adminNoticeJpaRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
@@ -447,40 +431,5 @@ class AdminNoticeJpaServiceTest extends AdminModelCommonServiceTest {
 
         // then
         assertThat(adminNoticeDTO.getIdx()).isEqualTo(deleteIdx);
-    }
-
-    @Test
-    @DisplayName("공지사항삭제Mockito테스트")
-    void 공지사항삭제Mockito테스트() {
-        // when
-        when(mockAdminNoticeJpaService.findOneNotice(adminNoticeEntity.getIdx())).thenReturn(adminNoticeDTO);
-        Long deleteIdx = adminNoticeJpaService.deleteNotice(adminNoticeEntity.getIdx());
-
-        // then
-        assertThat(mockAdminNoticeJpaService.findOneNotice(adminNoticeEntity.getIdx()).getIdx()).isEqualTo(deleteIdx);
-
-        // verify
-        verify(mockAdminNoticeJpaService, times(1)).findOneNotice(adminNoticeEntity.getIdx());
-        verify(mockAdminNoticeJpaService, atLeastOnce()).findOneNotice(adminNoticeEntity.getIdx());
-        verifyNoMoreInteractions(mockAdminNoticeJpaService);
-
-        InOrder inOrder = inOrder(mockAdminNoticeJpaService);
-        inOrder.verify(mockAdminNoticeJpaService).findOneNotice(adminNoticeEntity.getIdx());
-    }
-
-    @Test
-    @DisplayName("공지사항삭제BDD테스트")
-    void 공지사항삭제BDD테스트() {
-        // when
-        given(mockAdminNoticeJpaService.findOneNotice(adminNoticeEntity.getIdx())).willReturn(adminNoticeDTO);
-        Long deleteIdx = adminNoticeJpaService.deleteNotice(adminNoticeEntity.getIdx());
-
-        // then
-        assertThat(mockAdminNoticeJpaService.findOneNotice(adminNoticeEntity.getIdx()).getIdx()).isEqualTo(deleteIdx);
-
-        // verify
-        then(mockAdminNoticeJpaService).should(times(1)).findOneNotice(adminNoticeEntity.getIdx());
-        then(mockAdminNoticeJpaService).should(atLeastOnce()).findOneNotice(adminNoticeEntity.getIdx());
-        then(mockAdminNoticeJpaService).shouldHaveNoMoreInteractions();
     }
 }

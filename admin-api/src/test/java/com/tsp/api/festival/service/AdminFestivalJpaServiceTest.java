@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,10 +21,7 @@ import org.springframework.test.context.TestPropertySource;
 import javax.transaction.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,8 +38,10 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @AutoConfigureTestDatabase(replace = NONE)
 @DisplayName("행사 Service Test")
 class AdminFestivalJpaServiceTest extends AdminModelCommonServiceTest {
-    @Mock
-    private AdminFestivalJpaService mockAdminFestivalJpaService;
+
+    @Mock private AdminFestivalJpaRepository adminFestivalJpaRepository;
+    @Mock private AdminFestivalJpaQueryRepository adminFestivalJpaQueryRepository;
+    @InjectMocks private AdminFestivalJpaServiceImpl mockAdminFestivalJpaService;
     private final AdminFestivalJpaService adminFestivalJpaService;
 
     @Test
@@ -64,7 +64,7 @@ class AdminFestivalJpaServiceTest extends AdminModelCommonServiceTest {
         Page<AdminFestivalDTO> resultFestival = new PageImpl<>(festivalList, pageRequest, festivalList.size());
 
         // when
-        when(mockAdminFestivalJpaService.findFestivalList(festivalMap, pageRequest)).thenReturn(resultFestival);
+        when(adminFestivalJpaQueryRepository.findFestivalList(festivalMap, pageRequest)).thenReturn(resultFestival);
         Page<AdminFestivalDTO> findFestivalList = mockAdminFestivalJpaService.findFestivalList(festivalMap, pageRequest);
         List<AdminFestivalDTO> newFestivalList = findFestivalList.stream().collect(Collectors.toList());
 
@@ -73,12 +73,12 @@ class AdminFestivalJpaServiceTest extends AdminModelCommonServiceTest {
         assertThat(newFestivalList.get(0).getFestivalDescription()).isEqualTo("축제 내용");
 
         // verify
-        verify(mockAdminFestivalJpaService, times(1)).findFestivalList(festivalMap, pageRequest);
-        verify(mockAdminFestivalJpaService, atLeastOnce()).findFestivalList(festivalMap, pageRequest);
-        verifyNoMoreInteractions(mockAdminFestivalJpaService);
+        verify(adminFestivalJpaQueryRepository, times(1)).findFestivalList(festivalMap, pageRequest);
+        verify(adminFestivalJpaQueryRepository, atLeastOnce()).findFestivalList(festivalMap, pageRequest);
+        verifyNoMoreInteractions(adminFestivalJpaQueryRepository);
 
-        InOrder inOrder = inOrder(mockAdminFestivalJpaService);
-        inOrder.verify(mockAdminFestivalJpaService).findFestivalList(festivalMap, pageRequest);
+        InOrder inOrder = inOrder(adminFestivalJpaQueryRepository);
+        inOrder.verify(adminFestivalJpaQueryRepository).findFestivalList(festivalMap, pageRequest);
     }
 
     @Test
@@ -93,21 +93,21 @@ class AdminFestivalJpaServiceTest extends AdminModelCommonServiceTest {
     @DisplayName("축제 상세 조회 Mockito 테스트")
     void 축제상세조회Mockito테스트() {
         // when
-        when(mockAdminFestivalJpaService.findOneFestival(adminFestivalDTO.getIdx())).thenReturn(adminFestivalDTO);
-        AdminFestivalDTO oneFestival = mockAdminFestivalJpaService.findOneFestival(adminFestivalDTO.getIdx());
+        when(adminFestivalJpaRepository.findById(adminFestivalEntity.getIdx())).thenReturn(Optional.ofNullable(adminFestivalEntity));
+        AdminFestivalDTO oneFestival = mockAdminFestivalJpaService.findOneFestival(adminFestivalEntity.getIdx());
 
         // then
-        assertThat(oneFestival.getFestivalTitle()).isEqualTo("축제 제목");
-        assertThat(oneFestival.getFestivalDescription()).isEqualTo("축제 내용");
+        assertThat(oneFestival.getFestivalTitle()).isEqualTo(adminFestivalEntity.getFestivalTitle());
+        assertThat(oneFestival.getFestivalDescription()).isEqualTo(adminFestivalEntity.getFestivalDescription());
 
 
         // verify
-        verify(mockAdminFestivalJpaService, times(1)).findOneFestival(adminFestivalDTO.getIdx());
-        verify(mockAdminFestivalJpaService, atLeastOnce()).findOneFestival(adminFestivalDTO.getIdx());
-        verifyNoMoreInteractions(mockAdminFestivalJpaService);
+        verify(adminFestivalJpaRepository, times(1)).findById(adminFestivalEntity.getIdx());
+        verify(adminFestivalJpaRepository, atLeastOnce()).findById(adminFestivalEntity.getIdx());
+        verifyNoMoreInteractions(adminFestivalJpaRepository);
 
-        InOrder inOrder = inOrder(mockAdminFestivalJpaService);
-        inOrder.verify(mockAdminFestivalJpaService).findOneFestival(adminFestivalDTO.getIdx());
+        InOrder inOrder = inOrder(adminFestivalJpaRepository);
+        inOrder.verify(adminFestivalJpaRepository).findById(adminFestivalEntity.getIdx());
     }
 
     @Test
@@ -142,24 +142,22 @@ class AdminFestivalJpaServiceTest extends AdminModelCommonServiceTest {
                 .festivalTime(dateTime)
                 .build();
 
-        AdminFestivalDTO insertFestivalDTO = AdminFestivalEntity.toDto(insertFestivalEntity);
-
         // when
-        when(mockAdminFestivalJpaService.insertFestival(insertFestivalEntity)).thenReturn(insertFestivalDTO);
+        when(adminFestivalJpaRepository.save(insertFestivalEntity)).thenReturn(insertFestivalEntity);
         AdminFestivalDTO oneFestival = mockAdminFestivalJpaService.insertFestival(insertFestivalEntity);
 
         // then
-        assertThat(oneFestival.getIdx()).isEqualTo(insertFestivalDTO.getIdx());
-        assertThat(oneFestival.getFestivalTitle()).isEqualTo("축제 등록 제목");
-        assertThat(oneFestival.getFestivalDescription()).isEqualTo("축제 등록 내용");
+        assertThat(oneFestival.getIdx()).isEqualTo(insertFestivalEntity.getIdx());
+        assertThat(oneFestival.getFestivalTitle()).isEqualTo(insertFestivalEntity.getFestivalTitle());
+        assertThat(oneFestival.getFestivalDescription()).isEqualTo(insertFestivalEntity.getFestivalDescription());
 
         // verify
-        verify(mockAdminFestivalJpaService, times(1)).insertFestival(insertFestivalEntity);
-        verify(mockAdminFestivalJpaService, atLeastOnce()).insertFestival(insertFestivalEntity);
-        verifyNoMoreInteractions(mockAdminFestivalJpaService);
+        verify(adminFestivalJpaRepository, times(1)).save(insertFestivalEntity);
+        verify(adminFestivalJpaRepository, atLeastOnce()).save(insertFestivalEntity);
+        verifyNoMoreInteractions(adminFestivalJpaRepository);
 
-        InOrder inOrder = inOrder(mockAdminFestivalJpaService);
-        inOrder.verify(mockAdminFestivalJpaService).insertFestival(insertFestivalEntity);
+        InOrder inOrder = inOrder(adminFestivalJpaRepository);
+        inOrder.verify(adminFestivalJpaRepository).save(insertFestivalEntity);
     }
 
     @Test
@@ -187,7 +185,7 @@ class AdminFestivalJpaServiceTest extends AdminModelCommonServiceTest {
         LocalDateTime dateTime = LocalDateTime.now();
 
         AdminFestivalEntity updateFestivalEntity = AdminFestivalEntity.builder()
-                .idx(adminFestivalDTO.getIdx())
+                .idx(adminFestivalEntity.getIdx())
                 .festivalTitle("축제 수정 제목")
                 .festivalDescription("축제 수정 내용")
                 .festivalMonth(dateTime.getMonthValue())
@@ -195,24 +193,23 @@ class AdminFestivalJpaServiceTest extends AdminModelCommonServiceTest {
                 .festivalTime(dateTime)
                 .build();
 
-        AdminFestivalDTO updateFestivalDTO = AdminFestivalEntity.toDto(updateFestivalEntity);
-
         // when
-        when(mockAdminFestivalJpaService.updateFestival(adminFestivalDTO.getIdx(), updateFestivalEntity)).thenReturn(updateFestivalDTO);
-        AdminFestivalDTO oneFestival = mockAdminFestivalJpaService.updateFestival(adminFestivalDTO.getIdx(), updateFestivalEntity);
+        when(adminFestivalJpaRepository.findById(updateFestivalEntity.getIdx())).thenReturn(Optional.of(updateFestivalEntity));
+        when(adminFestivalJpaRepository.save(updateFestivalEntity)).thenReturn(updateFestivalEntity);
+        AdminFestivalDTO oneFestival = mockAdminFestivalJpaService.updateFestival(updateFestivalEntity.getIdx(), updateFestivalEntity);
 
         // then
-        assertThat(oneFestival.getIdx()).isEqualTo(updateFestivalDTO.getIdx());
-        assertThat(oneFestival.getFestivalTitle()).isEqualTo("축제 수정 제목");
-        assertThat(oneFestival.getFestivalDescription()).isEqualTo("축제 수정 내용");
+        assertThat(oneFestival.getIdx()).isEqualTo(updateFestivalEntity.getIdx());
+        assertThat(oneFestival.getFestivalTitle()).isEqualTo(updateFestivalEntity.getFestivalTitle());
+        assertThat(oneFestival.getFestivalDescription()).isEqualTo(updateFestivalEntity.getFestivalDescription());
 
         // verify
-        verify(mockAdminFestivalJpaService, times(1)).updateFestival(adminFestivalDTO.getIdx(), updateFestivalEntity);
-        verify(mockAdminFestivalJpaService, atLeastOnce()).updateFestival(adminFestivalDTO.getIdx(), updateFestivalEntity);
-        verifyNoMoreInteractions(mockAdminFestivalJpaService);
+        verify(adminFestivalJpaRepository, times(1)).findById(updateFestivalEntity.getIdx());
+        verify(adminFestivalJpaRepository, atLeastOnce()).findById(updateFestivalEntity.getIdx());
+        verifyNoMoreInteractions(adminFestivalJpaRepository);
 
-        InOrder inOrder = inOrder(mockAdminFestivalJpaService);
-        inOrder.verify(mockAdminFestivalJpaService).updateFestival(adminFestivalDTO.getIdx(), updateFestivalEntity);
+        InOrder inOrder = inOrder(adminFestivalJpaRepository);
+        inOrder.verify(adminFestivalJpaRepository).findById(updateFestivalEntity.getIdx());
     }
 
     @Test
@@ -220,24 +217,5 @@ class AdminFestivalJpaServiceTest extends AdminModelCommonServiceTest {
     void 축제삭제테스트() {
         Long deleteIdx = adminFestivalJpaService.deleteFestival(adminFestivalDTO.getIdx());
         assertThat(deleteIdx).isEqualTo(adminFestivalDTO.getIdx());
-    }
-
-    @Test
-    @DisplayName("축제 삭제 Mockito 테스트")
-    void 축제삭제Mockito테스트() {
-        // when
-        when(mockAdminFestivalJpaService.deleteFestival(adminFestivalDTO.getIdx())).thenReturn(adminFestivalDTO.getIdx());
-        Long deleteIdx = mockAdminFestivalJpaService.deleteFestival(adminFestivalDTO.getIdx());
-
-        // then
-        assertThat(deleteIdx).isEqualTo(adminFestivalDTO.getIdx());
-
-        // verify
-        verify(mockAdminFestivalJpaService, times(1)).deleteFestival(adminFestivalDTO.getIdx());
-        verify(mockAdminFestivalJpaService, atLeastOnce()).deleteFestival(adminFestivalDTO.getIdx());
-        verifyNoMoreInteractions(mockAdminFestivalJpaService);
-
-        InOrder inOrder = inOrder(mockAdminFestivalJpaService);
-        inOrder.verify(mockAdminFestivalJpaService).deleteFestival(adminFestivalDTO.getIdx());
     }
 }
