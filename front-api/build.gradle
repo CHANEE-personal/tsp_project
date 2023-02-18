@@ -31,55 +31,39 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.projectlombok:lombok:1.18.22'
 
-    // restdocs 추가
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-
-    providedRuntime 'org.springframework.boot:spring-boot-starter'
-
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'mysql:mysql-connector-java'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
-    // querydsl 추가
-    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
-    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
-
-//    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.8'
-
-    // https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
-    implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
-    implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
-
-    // Gradle
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-
-    // log4jdbc
-    compile group: 'org.bgee.log4jdbc-log4j2', name: 'log4jdbc-log4j2-jdbc4.1', version: '1.16'
-
-    // log4j
-    implementation group: 'log4j', name: 'log4j', version: '1.2.16'
-    compileOnly 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4:1.16'
-
-    compileOnly "org.projectlombok:lombok:1.18.22"
+    // dependencies alphabet order
     annotationProcessor "org.projectlombok:lombok:1.18.22"
 
-    // JUnit
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.2'
-    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.2'
-
-    compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'
-
-    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-
-    // cache 추가
     compile('org.springframework.boot:spring-boot-starter-cache')
+    compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'
+    compile group: 'org.bgee.log4jdbc-log4j2', name: 'log4jdbc-log4j2-jdbc4.1', version: '1.16'
+    compileOnly 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4:1.16'
+    compileOnly "org.projectlombok:lombok:1.18.22"
 
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    implementation 'org.projectlombok:lombok:1.18.22'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+    implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+    implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation group: 'log4j', name: 'log4j', version: '1.2.16'
     implementation group: 'com.vladmihalcea', name: 'hibernate-types-52', version: '1.0.0'
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
+
+    providedRuntime 'org.springframework.boot:spring-boot-starter'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+
+    runtimeOnly 'mysql:mysql-connector-java'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.2'
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.2'
 }
 
 //test {
