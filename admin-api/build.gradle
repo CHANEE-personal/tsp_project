@@ -102,6 +102,7 @@ dependencies {
     compile 'org.flywaydb:flyway-core:9.2.2'
 
     implementation group: 'com.vladmihalcea', name: 'hibernate-types-52', version: '1.0.0'
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
 }
 
 ext {
