@@ -34,6 +34,7 @@ dependencies {
 
     // dependencies alphabet order
     annotationProcessor "org.projectlombok:lombok:1.18.22"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     compile('org.springframework.boot:spring-boot-starter-cache')
     compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'
