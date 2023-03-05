@@ -67,9 +67,9 @@ dependencies {
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.2'
 }
 
-//test {
-//    useJUnitPlatform()
-//}
+bootJar {
+    enabled = false
+}
 
 // build시 junit 제외
 test {
@@ -100,7 +100,7 @@ compileQuerydsl.doFirst {
 // API 문서(html) 생성 Task
 asciidoctor {
     sourceDir 'src/main/asciidoc'
-    attributes \
-    'snippets': file('target/snippets')
+    attributes  \
+     'snippets': file('target/snippets')
 }
 //querydsl 추가 끝
