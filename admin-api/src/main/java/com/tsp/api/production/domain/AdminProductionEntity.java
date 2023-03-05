@@ -3,7 +3,6 @@ package com.tsp.api.production.domain;
 import com.tsp.api.common.domain.CommonImageEntity;
 import com.tsp.api.common.domain.NewCommonMappedClass;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Where;
 
