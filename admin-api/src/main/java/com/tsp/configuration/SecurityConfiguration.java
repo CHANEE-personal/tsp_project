@@ -3,6 +3,7 @@ package com.tsp.configuration;
 import com.tsp.jwt.JwtAuthenticationEntryPoint;
 import com.tsp.jwt.JwtAuthenticationFilter;
 import com.tsp.jwt.JwtAuthorizationFilter;
+import com.tsp.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +34,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
+    private final JwtUtil jwtUtil;
 
 
     /**
@@ -43,27 +45,29 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      * 4. 작성자      : CHO
      * 5. 작성일      : 2021. 07. 07.
      * </pre>
-     *
      */
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(authenticationManager());
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, authenticationManager());
         filter.setAuthenticationManager(authenticationManager());
         return filter;
     }
 
+
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/v2/api-docs",
-                "/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger/**");
+        web.ignoring()
+                .antMatchers("/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger/**");
 
         web.httpFirewall(defaultHttpFirewall());
     }
+
 
     @Bean
     public HttpFirewall defaultHttpFirewall() {
         return new DefaultHttpFirewall();
     }
+
 
     /**
      * <pre>
@@ -80,6 +84,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+
     /**
      * <pre>
      * 1. MethodName : passwordEncoder
@@ -94,6 +99,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return createDelegatingPasswordEncoder();
     }
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // JWT 토큰 유효성 관련
@@ -102,16 +108,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // 로그인 인증 관련
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         // 그 외
-        http.csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .and().headers().frameOptions().sameOrigin()
-                .and().sessionManagement().sessionCreationPolicy(STATELESS)
-                .and().authorizeRequests()
-                .antMatchers("/api/").hasRole("ADMIN")
-                .antMatchers("/api/user/login").permitAll()
-                .antMatchers("/api/user/signUp").permitAll()
-                .anyRequest().authenticated();
+        http.csrf().disable().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().headers()
+                .frameOptions().sameOrigin().and().sessionManagement().sessionCreationPolicy(STATELESS).and()
+                .authorizeRequests().antMatchers("/api/").hasRole("ADMIN").antMatchers("/api/user/login").permitAll()
+                .antMatchers("/api/user/signUp").permitAll().anyRequest().authenticated();
     }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

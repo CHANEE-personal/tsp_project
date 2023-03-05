@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tsp.api.user.domain.AuthenticationRequest;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,54 +30,52 @@ import static org.springframework.security.core.context.SecurityContextHolder.cl
 @Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    @Value("${spring.jwt.secret}")
-    private String SECRET_KEY;
+    private final JwtUtil jwtUtil;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
+
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
         super(authenticationManager);
+        this.jwtUtil = jwtUtil;
     }
 
+
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+            throws AuthenticationException {
         try {
             log.info("UsernamePasswordFilter");
 
-            AuthenticationRequest credentialUser = new ObjectMapper().readValue(request.getInputStream(), AuthenticationRequest.class);
+            AuthenticationRequest credentialUser =
+                    new ObjectMapper().readValue(request.getInputStream(), AuthenticationRequest.class);
 
             return getAuthenticationManager().authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            credentialUser.getUserId(),
-                            credentialUser.getPassword(),
-                            new ArrayList<>()
-                    )
-            );
-        } catch (IOException e) {
+                    new UsernamePasswordAuthenticationToken(credentialUser.getUserId(), credentialUser.getPassword(),
+                            new ArrayList<>()));
+        } catch(IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+
     @Override
-    protected void successfulAuthentication(HttpServletRequest request,
-                                            HttpServletResponse response,
-                                            FilterChain chain,
-                                            Authentication authResult) throws IOException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
+            Authentication authResult) throws IOException {
         Claims claims = claims();
         claims.put("username", ((User) authResult.getPrincipal()).getUsername());
 
-        String token = builder()
-                .setClaims(claims)
-                .setIssuedAt(new Date(currentTimeMillis()))
+        String token = builder().setClaims(claims).setIssuedAt(new Date(currentTimeMillis()))
                 .setExpiration(new Date(currentTimeMillis() + 1000L * 10))
-                .signWith(hmacShaKeyFor(SECRET_KEY.getBytes(UTF_8)), HS256)
-                .compact();
+                .signWith(hmacShaKeyFor(jwtUtil.getSecretKey().getBytes(UTF_8)), HS256).compact();
 
         response.addHeader("Authorization", "Bearer " + token);
         response.getWriter().write("Bearer " + token);
         response.getWriter().flush();
     }
 
+
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+            AuthenticationException failed) throws IOException, ServletException {
         clearContext();
         getFailureHandler().onAuthenticationFailure(request, response, failed);
     }
