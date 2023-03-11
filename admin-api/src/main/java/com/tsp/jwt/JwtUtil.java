@@ -2,13 +2,13 @@ package com.tsp.jwt;
 
 import com.tsp.api.user.domain.AdminUserEntity;
 import com.tsp.api.user.service.repository.AdminUserJpaRepository;
+import com.tsp.configuration.info.JwtInfo;
 import com.tsp.exception.TspException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,6 +32,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @Component
 @RequiredArgsConstructor
 public class JwtUtil implements Serializable {
+
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String ACCESS_TOKEN = "X-ACCESS-TOKEN";
     public static final String REFRESH_TOKEN = "X-REFRESH-TOKEN";
@@ -39,13 +40,16 @@ public class JwtUtil implements Serializable {
     public final static long REFRESH_TOKEN_VALIDATION_SECOND = 1000L * 60 * 24 * 2;
     private final MyUserDetailsService myUserDetailsService;
     private final AdminUserJpaRepository adminUserJpaRepository;
+    private final JwtInfo jwtInfo;
+
 
     @Getter
     public static class TokenInfo {
 
         private static final String type = TOKEN_PREFIX;
-        private String accessToken;
-        private String refreshToken;
+        private final String accessToken;
+        private final String refreshToken;
+
 
         public TokenInfo(String accessToken, String refreshToken) {
             this.accessToken = TOKEN_PREFIX + accessToken;
@@ -53,16 +57,16 @@ public class JwtUtil implements Serializable {
         }
     }
 
+
     public TokenInfo getJwtTokens(String accessToken, String refreshToken) {
         return new TokenInfo(accessToken, refreshToken);
     }
 
-    @Value("${spring.jwt.secret}")
-    private String SECRET_KEY;
 
     private Key getSigningKey(String secretKey) {
         return hmacShaKeyFor(secretKey.getBytes(UTF_8));
     }
+
 
     /**
      * <pre>
@@ -74,26 +78,26 @@ public class JwtUtil implements Serializable {
      * </pre>
      */
     public Claims extractAllClaims(String token) throws ExpiredJwtException {
-        return parserBuilder()
-                .setSigningKey(getSigningKey(SECRET_KEY))
-                .build()
-                .parseClaimsJws(token)
+        return parserBuilder().setSigningKey(getSigningKey(jwtInfo.getSecretKey())).build().parseClaimsJws(token)
                 .getBody();
     }
 
+
     public String resolveAccessToken(HttpServletRequest request) {
-        if (request.getHeader("Authorization") != null && !Objects.equals(request.getHeader("Authorization"), "")) {
+        if(request.getHeader("Authorization") != null && !Objects.equals(request.getHeader("Authorization"), "")) {
             return request.getHeader("Authorization").substring(7);
         }
         return null;
     }
 
+
     public String resolveRefreshToken(HttpServletRequest request) {
-        if (request.getHeader("refreshToken") != null && !Objects.equals(request.getHeader("refreshToken"), "")) {
+        if(request.getHeader("refreshToken") != null && !Objects.equals(request.getHeader("refreshToken"), "")) {
             return request.getHeader("refreshToken").substring(7);
         }
         return null;
     }
+
 
     /**
      * <pre>
@@ -107,10 +111,11 @@ public class JwtUtil implements Serializable {
     public Boolean isTokenExpired(String token) {
         try {
             return extractAllClaims(token).getExpiration().before(new Date());
-        } catch (ExpiredJwtException e) {
+        } catch(ExpiredJwtException e) {
             return false;
         }
     }
+
 
     /**
      * <pre>
@@ -125,6 +130,7 @@ public class JwtUtil implements Serializable {
         return doGenerateToken(userDetails.getUsername());
     }
 
+
     /**
      * <pre>
      * 1. MethodName : generateRefreshToken
@@ -138,6 +144,7 @@ public class JwtUtil implements Serializable {
         return doGenerateToken(userDetails.getUsername());
     }
 
+
     /**
      * <pre>
      * 1. MethodName : doGenerateToken
@@ -150,24 +157,20 @@ public class JwtUtil implements Serializable {
     public String doGenerateToken(String userPk) {
         Claims claims = Jwts.claims().setSubject(userPk);
         Date now = new Date();
-        return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
+        return Jwts.builder().setClaims(claims).setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + TOKEN_VALIDATION_SECOND))
-                .signWith(getSigningKey(SECRET_KEY), HS256)
-                .compact();
+                .signWith(getSigningKey(jwtInfo.getSecretKey()), HS256).compact();
     }
+
 
     public String doGenerateRefreshToken(String userPk) {
         Claims claims = Jwts.claims().setSubject(userPk);
         Date now = new Date();
-        return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
+        return Jwts.builder().setClaims(claims).setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_VALIDATION_SECOND))
-                .signWith(getSigningKey(SECRET_KEY), HS256)
-                .compact();
+                .signWith(getSigningKey(jwtInfo.getSecretKey()), HS256).compact();
     }
+
 
     /**
      * <pre>
@@ -180,22 +183,23 @@ public class JwtUtil implements Serializable {
      */
     public Boolean validateToken(String token) {
         try {
-            parser().setSigningKey(getSigningKey(SECRET_KEY)).parseClaimsJws(token);
+            parser().setSigningKey(getSigningKey(jwtInfo.getSecretKey())).parseClaimsJws(token);
             return true;
-        } catch (SignatureException e) {
+        } catch(SignatureException e) {
             log.error("Invalid JWT signature: {}", e.getMessage());
-        } catch (MalformedJwtException e) {
+        } catch(MalformedJwtException e) {
             log.error("Invalid JWT token: {}", e.getMessage());
-        } catch (ExpiredJwtException e) {
+        } catch(ExpiredJwtException e) {
             log.error("JWT token is expired: {}", e.getMessage());
-        } catch (UnsupportedJwtException e) {
+        } catch(UnsupportedJwtException e) {
             log.error("JWT token is unsupported: {}", e.getMessage());
-        } catch (IllegalArgumentException e) {
+        } catch(IllegalArgumentException e) {
             log.error("JWT claims string is empty: {}", e.getMessage());
         }
 
         return false;
     }
+
 
     /**
      * <pre>
@@ -208,15 +212,16 @@ public class JwtUtil implements Serializable {
      */
     public Authentication getAuthentication(String token) throws TspException {
         try {
-            AdminUserEntity oneUser = adminUserJpaRepository.findByUserToken(token)
-                    .orElseThrow(() -> new TspException(NOT_FOUND_USER));
+            AdminUserEntity oneUser =
+                    adminUserJpaRepository.findByUserToken(token).orElseThrow(() -> new TspException(NOT_FOUND_USER));
 
             UserDetails userDetails = myUserDetailsService.loadUserByUsername(oneUser.getUserId());
             return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-        } catch (Exception e) {
+        } catch(Exception e) {
             throw new TspException(NOT_FOUND_USER);
         }
     }
+
 
     /**
      * <pre>
@@ -231,6 +236,7 @@ public class JwtUtil implements Serializable {
         response.setHeader(ACCESS_TOKEN, TOKEN_PREFIX + accessToken);
     }
 
+
     /**
      * <pre>
      * 1. MethodName : setHeaderRefreshToken
@@ -242,5 +248,10 @@ public class JwtUtil implements Serializable {
      */
     public void setHeaderRefreshToken(HttpServletResponse response, String refreshToken) {
         response.setHeader(REFRESH_TOKEN, TOKEN_PREFIX + refreshToken);
+    }
+
+
+    public String getSecretKey() {
+        return jwtInfo.getSecretKey();
     }
 }
