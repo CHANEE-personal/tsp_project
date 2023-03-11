@@ -2,7 +2,7 @@ package com.tsp.api.comment.service;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tsp.api.comment.domain.AdminCommentDTO;
+import com.tsp.api.comment.domain.AdminCommentDto;
 import com.tsp.api.comment.domain.AdminCommentEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,7 @@ public class AdminCommentJpaQueryRepository {
      * 5. 작성일      : 2022. 08. 24.
      * </pre>
      */
-    public Page<AdminCommentDTO> findAdminCommentList(Map<String, Object> commentMap, PageRequest pageRequest) {
+    public Page<AdminCommentDto> findAdminCommentList(Map<String, Object> commentMap, PageRequest pageRequest) {
         List<AdminCommentEntity> commentList = queryFactory
                 .selectFrom(adminCommentEntity)
                 .orderBy(adminCommentEntity.idx.desc())

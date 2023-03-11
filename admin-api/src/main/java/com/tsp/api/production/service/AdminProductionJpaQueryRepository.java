@@ -4,7 +4,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tsp.api.common.EntityType;
 import com.tsp.api.common.domain.CommonImageEntity;
-import com.tsp.api.production.domain.AdminProductionDTO;
+import com.tsp.api.production.domain.AdminProductionDto;
 import com.tsp.api.production.domain.AdminProductionEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +58,7 @@ public class AdminProductionJpaQueryRepository {
      * 5. 작성일      : 2022. 05. 09.
      * </pre>
      */
-    public Page<AdminProductionDTO> findProductionList(Map<String, Object> productionMap, PageRequest pageRequest) {
+    public Page<AdminProductionDto> findProductionList(Map<String, Object> productionMap, PageRequest pageRequest) {
         List<AdminProductionEntity> productionList = queryFactory
                 .selectFrom(adminProductionEntity)
                 .orderBy(adminProductionEntity.idx.desc())
@@ -79,7 +79,7 @@ public class AdminProductionJpaQueryRepository {
      * 5. 작성일      : 2022. 05. 09.
      * </pre>
      */
-    public AdminProductionDTO findOneProduction(Long idx) {
+    public AdminProductionDto findOneProduction(Long idx) {
         AdminProductionEntity findOneProduction = Optional.ofNullable(queryFactory
                 .selectFrom(adminProductionEntity)
                 .orderBy(adminProductionEntity.idx.desc())
@@ -102,7 +102,7 @@ public class AdminProductionJpaQueryRepository {
      * 5. 작성일      : 2022. 09. 13.
      * </pre>
      */
-    public AdminProductionDTO findPrevOneProduction(Long idx) {
+    public AdminProductionDto findPrevOneProduction(Long idx) {
         // 이전 프로덕션 조회
         AdminProductionEntity findPrevOneProduction = Optional.ofNullable(queryFactory
                 .selectFrom(adminProductionEntity)
@@ -123,7 +123,7 @@ public class AdminProductionJpaQueryRepository {
      * 5. 작성일      : 2022. 09. 13.
      * </pre>
      */
-    public AdminProductionDTO findNextOneProduction(Long idx) {
+    public AdminProductionDto findNextOneProduction(Long idx) {
         // 다음 프로덕션 조회
         AdminProductionEntity findNextOneProduction = Optional.ofNullable(queryFactory
                 .selectFrom(adminProductionEntity)

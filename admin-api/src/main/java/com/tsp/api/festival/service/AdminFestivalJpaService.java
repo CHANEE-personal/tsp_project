@@ -1,6 +1,6 @@
 package com.tsp.api.festival.service;
 
-import com.tsp.api.festival.domain.AdminFestivalDTO;
+import com.tsp.api.festival.domain.AdminFestivalDto;
 import com.tsp.api.festival.domain.AdminFestivalEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +18,7 @@ public interface AdminFestivalJpaService {
      * 5. 작성일      : 2023. 01. 09.
      * </pre>
      */
-    Page<AdminFestivalDTO> findFestivalList(Map<String, Object> festivalMap, PageRequest pageRequest);
+    Page<AdminFestivalDto> findFestivalList(Map<String, Object> festivalMap, PageRequest pageRequest);
 
     /**
      * <pre>
@@ -29,7 +29,7 @@ public interface AdminFestivalJpaService {
      * 5. 작성일      : 2023. 01. 09.
      * </pre>
      */
-    AdminFestivalDTO findOneFestival(Long idx);
+    AdminFestivalDto findOneFestival(Long idx);
 
     /**
      * <pre>
@@ -40,7 +40,7 @@ public interface AdminFestivalJpaService {
      * 5. 작성일      : 2023. 01. 09.
      * </pre>
      */
-    AdminFestivalDTO insertFestival(AdminFestivalEntity adminFestivalEntity);
+    AdminFestivalDto insertFestival(AdminFestivalEntity adminFestivalEntity);
 
     /**
      * <pre>
@@ -51,7 +51,7 @@ public interface AdminFestivalJpaService {
      * 5. 작성일      : 2023. 01. 09.
      * </pre>
      */
-    AdminFestivalDTO updateFestival(Long idx, AdminFestivalEntity adminFestivalEntity);
+    AdminFestivalDto updateFestival(Long idx, AdminFestivalEntity adminFestivalEntity);
 
     /**
      * <pre>

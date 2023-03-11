@@ -1,6 +1,6 @@
 package com.tsp.api.comment.service;
 
-import com.tsp.api.comment.domain.AdminCommentDTO;
+import com.tsp.api.comment.domain.AdminCommentDto;
 import com.tsp.api.comment.domain.AdminCommentEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +18,7 @@ public interface AdminCommentJpaService {
      * 5. 작성일      : 2022. 08. 24.
      * </pre>
      */
-    Page<AdminCommentDTO> findAdminCommentList(Map<String, Object> commentMap, PageRequest pageRequest);
+    Page<AdminCommentDto> findAdminCommentList(Map<String, Object> commentMap, PageRequest pageRequest);
 
     /**
      * <pre>
@@ -29,7 +29,7 @@ public interface AdminCommentJpaService {
      * 5. 작성일      : 2022. 08. 24.
      * </pre>
      */
-    AdminCommentDTO findOneAdminComment(Long idx);
+    AdminCommentDto findOneAdminComment(Long idx);
 
     /**
      * <pre>
@@ -40,7 +40,7 @@ public interface AdminCommentJpaService {
      * 5. 작성일      : 2022. 08. 24.
      * </pre>
      */
-    AdminCommentDTO updateAdminComment(Long idx, AdminCommentEntity adminCommentEntity);
+    AdminCommentDto updateAdminComment(Long idx, AdminCommentEntity adminCommentEntity);
 
     /**
      * <pre>

@@ -1,6 +1,6 @@
 package com.tsp.api.user.service.repository;
 
-import com.tsp.api.user.domain.AdminUserDTO;
+import com.tsp.api.user.domain.AdminUserDto;
 import com.tsp.api.user.domain.AdminUserEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +48,7 @@ class AdminUserJpaQueryRepositoryTest {
     private final AdminUserJpaQueryRepository adminUserJpaQueryRepository;
 
     private AdminUserEntity adminUserEntity;
-    private AdminUserDTO adminUserDTO;
+    private AdminUserDto adminUserDTO;
 
     void createUser() {
         adminUserEntity = AdminUserEntity.builder().idx(2L).userId("admin01").build();
@@ -79,8 +79,8 @@ class AdminUserJpaQueryRepositoryTest {
         Map<String, Object> userMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<AdminUserDTO> userList = new ArrayList<>();
-        AdminUserDTO adminUserDTO = AdminUserDTO.builder()
+        List<AdminUserDto> userList = new ArrayList<>();
+        AdminUserDto adminUserDTO = AdminUserDto.builder()
                 .userId("test")
                 .password("test")
                 .name("test")
@@ -89,12 +89,12 @@ class AdminUserJpaQueryRepositoryTest {
                 .build();
         userList.add(adminUserDTO);
 
-        Page<AdminUserDTO> resultUser = new PageImpl<>(userList, pageRequest, userList.size());
+        Page<AdminUserDto> resultUser = new PageImpl<>(userList, pageRequest, userList.size());
 
         // when
         when(mockAdminUserJpaQueryRepository.findUserList(userMap, pageRequest)).thenReturn(resultUser);
-        Page<AdminUserDTO> newUserList = mockAdminUserJpaQueryRepository.findUserList(userMap, pageRequest);
-        List<AdminUserDTO> findUserList = newUserList.stream().collect(Collectors.toList());
+        Page<AdminUserDto> newUserList = mockAdminUserJpaQueryRepository.findUserList(userMap, pageRequest);
+        List<AdminUserDto> findUserList = newUserList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findUserList.get(0).getUserId()).isEqualTo(userList.get(0).getUserId());
@@ -118,8 +118,8 @@ class AdminUserJpaQueryRepositoryTest {
         Map<String, Object> userMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<AdminUserDTO> userList = new ArrayList<>();
-        AdminUserDTO adminUserDTO = AdminUserDTO.builder()
+        List<AdminUserDto> userList = new ArrayList<>();
+        AdminUserDto adminUserDTO = AdminUserDto.builder()
                 .userId("test")
                 .password("test")
                 .name("test")
@@ -128,12 +128,12 @@ class AdminUserJpaQueryRepositoryTest {
                 .build();
         userList.add(adminUserDTO);
 
-        Page<AdminUserDTO> resultUser = new PageImpl<>(userList, pageRequest, userList.size());
+        Page<AdminUserDto> resultUser = new PageImpl<>(userList, pageRequest, userList.size());
 
         // when
         given(mockAdminUserJpaQueryRepository.findUserList(userMap, pageRequest)).willReturn(resultUser);
-        Page<AdminUserDTO> newUserList = mockAdminUserJpaQueryRepository.findUserList(userMap, pageRequest);
-        List<AdminUserDTO> findUserList = newUserList.stream().collect(Collectors.toList());
+        Page<AdminUserDto> newUserList = mockAdminUserJpaQueryRepository.findUserList(userMap, pageRequest);
+        List<AdminUserDto> findUserList = newUserList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findUserList.get(0).getUserId()).isEqualTo(userList.get(0).getUserId());

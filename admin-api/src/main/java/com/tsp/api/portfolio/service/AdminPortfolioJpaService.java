@@ -1,6 +1,6 @@
 package com.tsp.api.portfolio.service;
 
-import com.tsp.api.portfolio.domain.AdminPortFolioDTO;
+import com.tsp.api.portfolio.domain.AdminPortFolioDto;
 import com.tsp.api.portfolio.domain.AdminPortFolioEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +18,7 @@ public interface AdminPortfolioJpaService {
      * 5. 작성일      : 2022. 05. 14.
      * </pre>
      */
-    Page<AdminPortFolioDTO> findPortfolioList(Map<String, Object> portfolioMap, PageRequest pageRequest);
+    Page<AdminPortFolioDto> findPortfolioList(Map<String, Object> portfolioMap, PageRequest pageRequest);
 
     /**
      * <pre>
@@ -29,7 +29,7 @@ public interface AdminPortfolioJpaService {
      * 5. 작성일      : 2022. 05. 18.
      * </pre>
      */
-    AdminPortFolioDTO findOnePortfolio(Long idx);
+    AdminPortFolioDto findOnePortfolio(Long idx);
 
     /**
      * <pre>
@@ -40,7 +40,7 @@ public interface AdminPortfolioJpaService {
      * 5. 작성일      : 2022. 09. 14.
      * </pre>
      */
-    AdminPortFolioDTO findPrevOnePortfolio(Long idx);
+    AdminPortFolioDto findPrevOnePortfolio(Long idx);
 
     /**
      * <pre>
@@ -51,7 +51,7 @@ public interface AdminPortfolioJpaService {
      * 5. 작성일      : 2022. 09. 14.
      * </pre>
      */
-    AdminPortFolioDTO findNextOnePortfolio(Long idx);
+    AdminPortFolioDto findNextOnePortfolio(Long idx);
 
     /**
      * <pre>
@@ -62,7 +62,7 @@ public interface AdminPortfolioJpaService {
      * 5. 작성일      : 2022. 05. 18.
      * </pre>
      */
-    AdminPortFolioDTO insertPortfolio(AdminPortFolioEntity adminPortFolioEntity);
+    AdminPortFolioDto insertPortfolio(AdminPortFolioEntity adminPortFolioEntity);
 
     /**
      * <pre>
@@ -73,7 +73,7 @@ public interface AdminPortfolioJpaService {
      * 5. 작성일      : 2022. 05. 18.
      * </pre>
      */
-    AdminPortFolioDTO updatePortfolio(Long idx, AdminPortFolioEntity adminPortFolioEntity);
+    AdminPortFolioDto updatePortfolio(Long idx, AdminPortFolioEntity adminPortFolioEntity);
 
     /**
      * <pre>

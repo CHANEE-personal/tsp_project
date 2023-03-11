@@ -51,18 +51,31 @@ public class AdminCommentEntity extends NewCommonMappedClass {
         this.visible = adminCommentEntity.visible;
     }
 
-    public static AdminCommentDTO toDto(AdminCommentEntity entity) {
+    public static AdminCommentDto toDto(AdminCommentEntity entity) {
         if (entity == null) return null;
-        return AdminCommentDTO.builder()
-                .idx(entity.getIdx())
-                .comment(entity.getComment())
-                .commentType(entity.getCommentType())
-                .adminModelDTO(AdminModelEntity.toDto(entity.getAdminModelEntity()))
+        return AdminCommentDto.builder()
+                .idx(entity.idx)
+                .comment(entity.comment)
+                .commentType(entity.commentType)
+                .modelIdx(entity.adminModelEntity.getIdx())
+                .categoryCd(entity.adminModelEntity.getCategoryCd())
+                .categoryAge(entity.adminModelEntity.getCategoryAge())
+                .modelKorName(entity.adminModelEntity.getModelKorName())
+                .modelEngName(entity.adminModelEntity.getModelEngName())
+                .modelDescription(entity.adminModelEntity.getModelDescription())
+                .height(entity.adminModelEntity.getHeight())
+                .size3(entity.adminModelEntity.getSize3())
+                .shoes(entity.adminModelEntity.getShoes())
+                .modelMainYn(entity.adminModelEntity.getModelMainYn())
+                .modelFirstName(entity.adminModelEntity.getModelFirstName())
+                .modelSecondName(entity.adminModelEntity.getModelSecondName())
+                .modelKorFirstName(entity.adminModelEntity.getModelKorFirstName())
+                .modelKorSecondName(entity.adminModelEntity.getModelKorSecondName())
                 .visible(entity.getVisible())
                 .build();
     }
 
-    public static List<AdminCommentDTO> toDtoList(List<AdminCommentEntity> entityList) {
+    public static List<AdminCommentDto> toDtoList(List<AdminCommentEntity> entityList) {
         if (entityList == null) return null;
         return entityList.stream()
                 .map(AdminCommentEntity::toDto)

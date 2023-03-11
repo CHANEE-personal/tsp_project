@@ -61,19 +61,19 @@ public class AdminProductionEntity extends NewCommonMappedClass {
         this.commonImageEntityList.add(commonImageEntity);
     }
 
-    public static AdminProductionDTO toDto(AdminProductionEntity entity) {
+    public static AdminProductionDto toDto(AdminProductionEntity entity) {
         if (entity == null) return null;
-        return AdminProductionDTO.builder()
-                .idx(entity.getIdx())
-                .title(entity.getTitle())
-                .description(entity.getDescription())
-                .viewCount(entity.getViewCount())
-                .visible(entity.getVisible())
-                .productionImage(CommonImageEntity.toDtoList(entity.getCommonImageEntityList()))
+        return AdminProductionDto.builder()
+                .idx(entity.idx)
+                .title(entity.title)
+                .description(entity.description)
+                .viewCount(entity.viewCount)
+                .visible(entity.visible)
+                .productionImage(CommonImageEntity.toDtoList(entity.commonImageEntityList))
                 .build();
     }
 
-    public static List<AdminProductionDTO> toDtoList(List<AdminProductionEntity> entityList) {
+    public static List<AdminProductionDto> toDtoList(List<AdminProductionEntity> entityList) {
         if (entityList == null) return null;
         return entityList.stream()
                 .map(AdminProductionEntity::toDto)

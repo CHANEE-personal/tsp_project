@@ -1,12 +1,10 @@
 package com.tsp.api.portfolio.service;
 
 import com.tsp.api.common.EntityType;
-import com.tsp.api.comment.domain.AdminCommentDTO;
-import com.tsp.api.comment.domain.AdminCommentEntity;
-import com.tsp.api.common.domain.CommonImageDTO;
+import com.tsp.api.common.domain.CommonImageDto;
 import com.tsp.api.common.domain.CommonImageEntity;
 import com.tsp.api.common.domain.NewCodeEntity;
-import com.tsp.api.portfolio.domain.AdminPortFolioDTO;
+import com.tsp.api.portfolio.domain.AdminPortFolioDto;
 import com.tsp.api.portfolio.domain.AdminPortFolioEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,9 +54,9 @@ class AdminPortfolioJpaQueryRepositoryTest {
     private final AdminPortfolioJpaRepository adminPortfolioJpaRepository;
 
     private AdminPortFolioEntity adminPortFolioEntity;
-    private AdminPortFolioDTO adminPortFolioDTO;
+    private AdminPortFolioDto adminPortFolioDTO;
     private CommonImageEntity commonImageEntity;
-    private CommonImageDTO commonImageDTO;
+    private CommonImageDto commonImageDTO;
     private NewCodeEntity newCodeEntity;
 
     void createPortfolioAndImage() {
@@ -144,20 +142,20 @@ class AdminPortfolioJpaQueryRepositoryTest {
         Map<String, Object> portfolioMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
+        List<CommonImageDto> commonImageDtoList = new ArrayList<>();
         commonImageDtoList.add(commonImageDTO);
 
-        List<AdminPortFolioDTO> portfolioList = new ArrayList<>();
-        portfolioList.add(AdminPortFolioDTO.builder().idx(1L)
+        List<AdminPortFolioDto> portfolioList = new ArrayList<>();
+        portfolioList.add(AdminPortFolioDto.builder().idx(1L)
                 .title("포트폴리오 테스트").description("포트폴리오 테스트")
                 .portfolioImage(commonImageDtoList).build());
 
-        Page<AdminPortFolioDTO> resultPortfolio = new PageImpl<>(portfolioList, pageRequest, portfolioList.size());
+        Page<AdminPortFolioDto> resultPortfolio = new PageImpl<>(portfolioList, pageRequest, portfolioList.size());
 
         // when
         when(mockAdminPortfolioJpaQueryRepository.findPortfolioList(portfolioMap, pageRequest)).thenReturn(resultPortfolio);
-        Page<AdminPortFolioDTO> newPortfolioList = mockAdminPortfolioJpaQueryRepository.findPortfolioList(portfolioMap, pageRequest);
-        List<AdminPortFolioDTO> findPortfolioList = newPortfolioList.stream().collect(Collectors.toList());
+        Page<AdminPortFolioDto> newPortfolioList = mockAdminPortfolioJpaQueryRepository.findPortfolioList(portfolioMap, pageRequest);
+        List<AdminPortFolioDto> findPortfolioList = newPortfolioList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findPortfolioList.get(0).getIdx()).isEqualTo(portfolioList.get(0).getIdx());
@@ -180,20 +178,20 @@ class AdminPortfolioJpaQueryRepositoryTest {
         Map<String, Object> portfolioMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
+        List<CommonImageDto> commonImageDtoList = new ArrayList<>();
         commonImageDtoList.add(commonImageDTO);
 
-        List<AdminPortFolioDTO> portfolioList = new ArrayList<>();
-        portfolioList.add(AdminPortFolioDTO.builder().idx(1L)
+        List<AdminPortFolioDto> portfolioList = new ArrayList<>();
+        portfolioList.add(AdminPortFolioDto.builder().idx(1L)
                 .title("포트폴리오 테스트").description("포트폴리오 테스트")
                 .portfolioImage(commonImageDtoList).build());
 
-        Page<AdminPortFolioDTO> resultPortfolio = new PageImpl<>(portfolioList, pageRequest, portfolioList.size());
+        Page<AdminPortFolioDto> resultPortfolio = new PageImpl<>(portfolioList, pageRequest, portfolioList.size());
 
         // when
         given(mockAdminPortfolioJpaQueryRepository.findPortfolioList(portfolioMap, pageRequest)).willReturn(resultPortfolio);
-        Page<AdminPortFolioDTO> newPortfolioList = mockAdminPortfolioJpaQueryRepository.findPortfolioList(portfolioMap, pageRequest);
-        List<AdminPortFolioDTO> findPortfolioList = newPortfolioList.stream().collect(Collectors.toList());
+        Page<AdminPortFolioDto> newPortfolioList = mockAdminPortfolioJpaQueryRepository.findPortfolioList(portfolioMap, pageRequest);
+        List<AdminPortFolioDto> findPortfolioList = newPortfolioList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findPortfolioList.get(0).getIdx()).isEqualTo(portfolioList.get(0).getIdx());
@@ -215,7 +213,7 @@ class AdminPortfolioJpaQueryRepositoryTest {
 
         adminPortFolioEntity = AdminPortFolioEntity.builder().idx(1L).commonImageEntityList(commonImageEntityList).build();
 
-        adminPortFolioDTO = AdminPortFolioDTO.builder()
+        adminPortFolioDTO = AdminPortFolioDto.builder()
                 .idx(1L)
                 .title("포트폴리오 테스트")
                 .description("포트폴리오 테스트")
@@ -227,7 +225,7 @@ class AdminPortfolioJpaQueryRepositoryTest {
 
         // when
         when(mockAdminPortfolioJpaQueryRepository.findOnePortfolio(adminPortFolioEntity.getIdx())).thenReturn(adminPortFolioDTO);
-        AdminPortFolioDTO portfolioInfo = mockAdminPortfolioJpaQueryRepository.findOnePortfolio(adminPortFolioEntity.getIdx());
+        AdminPortFolioDto portfolioInfo = mockAdminPortfolioJpaQueryRepository.findOnePortfolio(adminPortFolioEntity.getIdx());
 
         // then
         assertThat(portfolioInfo.getIdx()).isEqualTo(1);
@@ -254,7 +252,7 @@ class AdminPortfolioJpaQueryRepositoryTest {
 
         adminPortFolioEntity = AdminPortFolioEntity.builder().idx(1L).commonImageEntityList(commonImageEntityList).build();
 
-        adminPortFolioDTO = AdminPortFolioDTO.builder()
+        adminPortFolioDTO = AdminPortFolioDto.builder()
                 .idx(1L)
                 .title("포트폴리오 테스트")
                 .description("포트폴리오 테스트")
@@ -266,7 +264,7 @@ class AdminPortfolioJpaQueryRepositoryTest {
 
         // when
         given(mockAdminPortfolioJpaQueryRepository.findOnePortfolio(adminPortFolioEntity.getIdx())).willReturn(adminPortFolioDTO);
-        AdminPortFolioDTO portfolioInfo = mockAdminPortfolioJpaQueryRepository.findOnePortfolio(adminPortFolioEntity.getIdx());
+        AdminPortFolioDto portfolioInfo = mockAdminPortfolioJpaQueryRepository.findOnePortfolio(adminPortFolioEntity.getIdx());
 
         // then
         assertThat(portfolioInfo.getIdx()).isEqualTo(1);
@@ -322,7 +320,7 @@ class AdminPortfolioJpaQueryRepositoryTest {
         adminPortFolioDTO = adminPortfolioJpaQueryRepository.findOnePortfolio(adminPortFolioEntity.getIdx());
 
         when(mockAdminPortfolioJpaQueryRepository.findPrevOnePortfolio(adminPortFolioEntity.getIdx())).thenReturn(adminPortFolioDTO);
-        AdminPortFolioDTO portfolioInfo = mockAdminPortfolioJpaQueryRepository.findPrevOnePortfolio(adminPortFolioEntity.getIdx());
+        AdminPortFolioDto portfolioInfo = mockAdminPortfolioJpaQueryRepository.findPrevOnePortfolio(adminPortFolioEntity.getIdx());
 
         // then
         assertThat(portfolioInfo.getIdx()).isEqualTo(1);
@@ -354,7 +352,7 @@ class AdminPortfolioJpaQueryRepositoryTest {
         adminPortFolioDTO = adminPortfolioJpaQueryRepository.findOnePortfolio(adminPortFolioEntity.getIdx());
 
         given(mockAdminPortfolioJpaQueryRepository.findPrevOnePortfolio(adminPortFolioEntity.getIdx())).willReturn(adminPortFolioDTO);
-        AdminPortFolioDTO portfolioInfo = mockAdminPortfolioJpaQueryRepository.findPrevOnePortfolio(adminPortFolioEntity.getIdx());
+        AdminPortFolioDto portfolioInfo = mockAdminPortfolioJpaQueryRepository.findPrevOnePortfolio(adminPortFolioEntity.getIdx());
 
         // then
         assertThat(portfolioInfo.getIdx()).isEqualTo(1);
@@ -383,7 +381,7 @@ class AdminPortfolioJpaQueryRepositoryTest {
         adminPortFolioDTO = adminPortfolioJpaQueryRepository.findOnePortfolio(adminPortFolioEntity.getIdx());
 
         when(mockAdminPortfolioJpaQueryRepository.findPrevOnePortfolio(adminPortFolioEntity.getIdx())).thenReturn(adminPortFolioDTO);
-        AdminPortFolioDTO portfolioInfo = mockAdminPortfolioJpaQueryRepository.findPrevOnePortfolio(adminPortFolioEntity.getIdx());
+        AdminPortFolioDto portfolioInfo = mockAdminPortfolioJpaQueryRepository.findPrevOnePortfolio(adminPortFolioEntity.getIdx());
 
         // then
         assertThat(portfolioInfo.getIdx()).isEqualTo(3);
@@ -415,7 +413,7 @@ class AdminPortfolioJpaQueryRepositoryTest {
         adminPortFolioDTO = adminPortfolioJpaQueryRepository.findOnePortfolio(adminPortFolioEntity.getIdx());
 
         given(mockAdminPortfolioJpaQueryRepository.findPrevOnePortfolio(adminPortFolioEntity.getIdx())).willReturn(adminPortFolioDTO);
-        AdminPortFolioDTO portfolioInfo = mockAdminPortfolioJpaQueryRepository.findPrevOnePortfolio(adminPortFolioEntity.getIdx());
+        AdminPortFolioDto portfolioInfo = mockAdminPortfolioJpaQueryRepository.findPrevOnePortfolio(adminPortFolioEntity.getIdx());
 
         // then
         assertThat(portfolioInfo.getIdx()).isEqualTo(3);

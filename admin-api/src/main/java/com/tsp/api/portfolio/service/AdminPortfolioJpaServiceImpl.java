@@ -2,7 +2,7 @@ package com.tsp.api.portfolio.service;
 
 import com.tsp.api.common.service.AdminCommonJpaRepository;
 import com.tsp.api.common.domain.NewCodeEntity;
-import com.tsp.api.portfolio.domain.AdminPortFolioDTO;
+import com.tsp.api.portfolio.domain.AdminPortFolioDto;
 import com.tsp.api.portfolio.domain.AdminPortFolioEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class AdminPortfolioJpaServiceImpl implements AdminPortfolioJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<AdminPortFolioDTO> findPortfolioList(Map<String, Object> portfolioMap, PageRequest pageRequest) {
+    public Page<AdminPortFolioDto> findPortfolioList(Map<String, Object> portfolioMap, PageRequest pageRequest) {
         return adminPortfolioJpaQueryRepository.findPortfolioList(portfolioMap, pageRequest);
     }
 
@@ -59,7 +59,7 @@ public class AdminPortfolioJpaServiceImpl implements AdminPortfolioJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminPortFolioDTO findOnePortfolio(Long idx) {
+    public AdminPortFolioDto findOnePortfolio(Long idx) {
         return AdminPortFolioEntity.toDto(adminPortfolioJpaRepository.findByIdx(idx)
                 .orElseThrow(() -> new TspException(NOT_FOUND_PORTFOLIO)));
     }
@@ -75,7 +75,7 @@ public class AdminPortfolioJpaServiceImpl implements AdminPortfolioJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminPortFolioDTO findPrevOnePortfolio(Long idx) {
+    public AdminPortFolioDto findPrevOnePortfolio(Long idx) {
         return adminPortfolioJpaQueryRepository.findPrevOnePortfolio(idx);
     }
 
@@ -90,7 +90,7 @@ public class AdminPortfolioJpaServiceImpl implements AdminPortfolioJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminPortFolioDTO findNextOnePortfolio(Long idx) {
+    public AdminPortFolioDto findNextOnePortfolio(Long idx) {
         return adminPortfolioJpaQueryRepository.findNextOnePortfolio(idx);
     }
 
@@ -105,7 +105,7 @@ public class AdminPortfolioJpaServiceImpl implements AdminPortfolioJpaService {
      */
     @Override
     @Transactional
-    public AdminPortFolioDTO insertPortfolio(AdminPortFolioEntity adminPortFolioEntity) {
+    public AdminPortFolioDto insertPortfolio(AdminPortFolioEntity adminPortFolioEntity) {
         try {
             oneCommon(adminPortFolioEntity.getNewPortFolioJpaDTO().getCategoryCd())
                     .ifPresent(adminCommon -> adminCommon.addPortfolio(adminPortFolioEntity));
@@ -126,7 +126,7 @@ public class AdminPortfolioJpaServiceImpl implements AdminPortfolioJpaService {
      */
     @Override
     @Transactional
-    public AdminPortFolioDTO updatePortfolio(Long idx, AdminPortFolioEntity adminPortFolioEntity) {
+    public AdminPortFolioDto updatePortfolio(Long idx, AdminPortFolioEntity adminPortFolioEntity) {
         try {
             Optional.ofNullable(onePortfolio(idx))
                     .ifPresent(adminPortFolio -> adminPortFolio.update(adminPortFolioEntity));

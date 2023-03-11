@@ -2,9 +2,9 @@ package com.tsp.api.model.service.agency;
 
 import com.tsp.api.common.SaveImage;
 import com.tsp.api.common.image.AdminCommonImageJpaRepository;
-import com.tsp.api.common.domain.CommonImageDTO;
+import com.tsp.api.common.domain.CommonImageDto;
 import com.tsp.api.common.domain.CommonImageEntity;
-import com.tsp.api.model.domain.agency.AdminAgencyDTO;
+import com.tsp.api.model.domain.agency.AdminAgencyDto;
 import com.tsp.api.model.domain.agency.AdminAgencyEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class AdminAgencyJpaServiceImpl implements AdminAgencyJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<AdminAgencyDTO> findAgencyList(Map<String, Object> agencyMap, PageRequest pageRequest) {
+    public Page<AdminAgencyDto> findAgencyList(Map<String, Object> agencyMap, PageRequest pageRequest) {
         return adminAgencyJpaQueryRepository.findAgencyList(agencyMap, pageRequest);
     }
 
@@ -59,7 +59,7 @@ public class AdminAgencyJpaServiceImpl implements AdminAgencyJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminAgencyDTO findOneAgency(Long idx) {
+    public AdminAgencyDto findOneAgency(Long idx) {
         return adminAgencyJpaQueryRepository.findOneAgency(idx);
     }
 
@@ -74,7 +74,7 @@ public class AdminAgencyJpaServiceImpl implements AdminAgencyJpaService {
      */
     @Override
     @Transactional
-    public AdminAgencyDTO insertAgency(AdminAgencyEntity adminAgencyEntity) {
+    public AdminAgencyDto insertAgency(AdminAgencyEntity adminAgencyEntity) {
         try {
             return AdminAgencyEntity.toDto(adminAgencyJpaRepository.save(adminAgencyEntity));
         } catch (Exception e) {
@@ -93,7 +93,7 @@ public class AdminAgencyJpaServiceImpl implements AdminAgencyJpaService {
      */
     @Override
     @Transactional
-    public AdminAgencyDTO updateAgency(Long idx, AdminAgencyEntity adminAgencyEntity) {
+    public AdminAgencyDto updateAgency(Long idx, AdminAgencyEntity adminAgencyEntity) {
         try {
             Optional.ofNullable(oneAgency(idx))
                     .ifPresent(adminAgency -> adminAgency.update(adminAgencyEntity));
@@ -133,7 +133,7 @@ public class AdminAgencyJpaServiceImpl implements AdminAgencyJpaService {
      * </pre>
      */
     @Override
-    public List<CommonImageDTO> insertAgencyImage(CommonImageEntity commonImageEntity, List<MultipartFile> fileName) {
+    public List<CommonImageDto> insertAgencyImage(CommonImageEntity commonImageEntity, List<MultipartFile> fileName) {
         try {
             return saveImage.saveFile(fileName, commonImageEntity);
         } catch (Exception e) {

@@ -1,7 +1,7 @@
 package com.tsp.api.model.service.negotiation;
 
 import com.tsp.api.model.domain.AdminModelEntity;
-import com.tsp.api.model.domain.negotiation.AdminNegotiationDTO;
+import com.tsp.api.model.domain.negotiation.AdminNegotiationDto;
 import com.tsp.api.model.domain.negotiation.AdminNegotiationEntity;
 import com.tsp.api.model.service.AdminModelJpaRepository;
 import com.tsp.exception.TspException;
@@ -45,7 +45,7 @@ public class AdminNegotiationJpaServiceImpl implements AdminNegotiationJpaServic
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<AdminNegotiationDTO> findNegotiationList(Map<String, Object> negotiationMap, PageRequest pageRequest) {
+    public Page<AdminNegotiationDto> findNegotiationList(Map<String, Object> negotiationMap, PageRequest pageRequest) {
         return adminNegotiationJpaQueryRepository.findNegotiationList(negotiationMap, pageRequest);
     }
 
@@ -60,7 +60,7 @@ public class AdminNegotiationJpaServiceImpl implements AdminNegotiationJpaServic
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminNegotiationDTO findOneNegotiation(Long idx) {
+    public AdminNegotiationDto findOneNegotiation(Long idx) {
         return AdminNegotiationEntity.toDto(oneNegotiation(idx));
     }
 
@@ -75,7 +75,7 @@ public class AdminNegotiationJpaServiceImpl implements AdminNegotiationJpaServic
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminNegotiationDTO findPrevOneNegotiation(Long idx) {
+    public AdminNegotiationDto findPrevOneNegotiation(Long idx) {
         return adminNegotiationJpaQueryRepository.findPrevOneNegotiation(idx);
     }
 
@@ -90,7 +90,7 @@ public class AdminNegotiationJpaServiceImpl implements AdminNegotiationJpaServic
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminNegotiationDTO findNextOneNegotiation(Long idx) {
+    public AdminNegotiationDto findNextOneNegotiation(Long idx) {
         return adminNegotiationJpaQueryRepository.findNextOneNegotiation(idx);
     }
 
@@ -105,7 +105,7 @@ public class AdminNegotiationJpaServiceImpl implements AdminNegotiationJpaServic
      */
     @Override
     @Transactional
-    public AdminNegotiationDTO insertModelNegotiation(Long modelIdx, AdminNegotiationEntity adminNegotiationEntity) {
+    public AdminNegotiationDto insertModelNegotiation(Long modelIdx, AdminNegotiationEntity adminNegotiationEntity) {
         oneModel(modelIdx).addNegotiation(adminNegotiationEntity);
         return AdminNegotiationEntity.toDto(adminNegotiationJpaRepository.save(adminNegotiationEntity));
     }
@@ -121,7 +121,7 @@ public class AdminNegotiationJpaServiceImpl implements AdminNegotiationJpaServic
      */
     @Override
     @Transactional
-    public AdminNegotiationDTO updateModelNegotiation(Long idx, AdminNegotiationEntity adminNegotiationEntity) {
+    public AdminNegotiationDto updateModelNegotiation(Long idx, AdminNegotiationEntity adminNegotiationEntity) {
         try {
             Optional.ofNullable(oneNegotiation(idx))
                     .ifPresent(adminNegotiation -> adminNegotiation.update(adminNegotiationEntity));

@@ -1,13 +1,12 @@
 package com.tsp.api.support.domain.evaluation;
 
 import com.tsp.api.common.domain.NewCommonDTO;
-import com.tsp.api.support.domain.AdminSupportDTO;
+import com.tsp.api.support.domain.AdminSupportDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -16,13 +15,13 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ApiModel(value = "지원모델 평가 관련 변수")
-public class EvaluationDTO extends NewCommonDTO {
+public class EvaluationDto extends NewCommonDTO {
 
     @ApiModelProperty(required = true, value = "idx", hidden = true, example = "1")
     private Long idx;
 
     @ApiModelProperty(value = "adminSupportDTO", hidden = true)
-    private AdminSupportDTO adminSupportDTO;
+    private AdminSupportDto adminSupportDTO;
 
     @NotEmpty(message = "지원모델 평가 내용 입력은 필수입니다.")
     @ApiModelProperty(required = true, value = "지원모델 평가내용")

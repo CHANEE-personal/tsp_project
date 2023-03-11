@@ -1,9 +1,9 @@
 package com.tsp.api.support;
 
-import com.tsp.api.comment.domain.AdminCommentDTO;
-import com.tsp.api.support.domain.AdminSupportDTO;
+import com.tsp.api.comment.domain.AdminCommentDto;
+import com.tsp.api.support.domain.AdminSupportDto;
 import com.tsp.api.support.domain.AdminSupportEntity;
-import com.tsp.api.support.domain.evaluation.EvaluationDTO;
+import com.tsp.api.support.domain.evaluation.EvaluationDto;
 import com.tsp.api.support.domain.evaluation.EvaluationEntity;
 import com.tsp.api.support.service.AdminSupportJpaService;
 import com.tsp.common.Paging;
@@ -57,7 +57,7 @@ public class AdminSupportJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping
-    public ResponseEntity<Page<AdminSupportDTO>> findSupportList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
+    public ResponseEntity<Page<AdminSupportDto>> findSupportList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
         return ResponseEntity.ok().body(adminSupportJpaService.findSupportList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }
 
@@ -73,7 +73,7 @@ public class AdminSupportJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "지원모델 수정", notes = "지원모델을 수정한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "지원모델 수정 성공", response = AdminSupportDTO.class),
+            @ApiResponse(code = 200, message = "지원모델 수정 성공", response = AdminSupportDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -81,7 +81,7 @@ public class AdminSupportJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PutMapping("/{idx}")
-    public ResponseEntity<AdminSupportDTO> updateSupportModel(@PathVariable Long idx, @Valid @RequestBody AdminSupportEntity adminSupportEntity) {
+    public ResponseEntity<AdminSupportDto> updateSupportModel(@PathVariable Long idx, @Valid @RequestBody AdminSupportEntity adminSupportEntity) {
         return ResponseEntity.ok(adminSupportJpaService.updateSupportModel(idx, adminSupportEntity));
     }
 
@@ -130,7 +130,7 @@ public class AdminSupportJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PostMapping("/evaluation")
-    public ResponseEntity<List<EvaluationDTO>> findEvaluationList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
+    public ResponseEntity<List<EvaluationDto>> findEvaluationList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
         return ResponseEntity.ok().body(adminSupportJpaService.findEvaluationList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }
 
@@ -146,7 +146,7 @@ public class AdminSupportJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "지원모델 평가 상세 조회", notes = "지원모델 평가를 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "지원모델 평가 상세 조회성공", response = EvaluationDTO.class),
+            @ApiResponse(code = 200, message = "지원모델 평가 상세 조회성공", response = EvaluationDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -154,7 +154,7 @@ public class AdminSupportJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/evaluation/{idx}")
-    public ResponseEntity<EvaluationDTO> findOneEvaluation(@PathVariable Long idx) {
+    public ResponseEntity<EvaluationDto> findOneEvaluation(@PathVariable Long idx) {
         return ResponseEntity.ok(adminSupportJpaService.findOneEvaluation(idx));
     }
 
@@ -170,7 +170,7 @@ public class AdminSupportJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "지원모델 평가", notes = "지원모델을 평가한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "지원모델 평가성공", response = EvaluationDTO.class),
+            @ApiResponse(code = 201, message = "지원모델 평가성공", response = EvaluationDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -178,8 +178,8 @@ public class AdminSupportJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PostMapping("/{idx}/evaluation")
-    public ResponseEntity<EvaluationDTO> evaluationSupportModel(@Valid @RequestBody EvaluationEntity evaluationEntity,
-                                                @PathVariable("idx") Long idx) {
+    public ResponseEntity<EvaluationDto> evaluationSupportModel(@Valid @RequestBody EvaluationEntity evaluationEntity,
+                                                                @PathVariable("idx") Long idx) {
         return ResponseEntity.created(URI.create("")).body(adminSupportJpaService.evaluationSupportModel(idx, evaluationEntity));
     }
 
@@ -195,7 +195,7 @@ public class AdminSupportJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "지원모델 평가 수정", notes = "지원모델을 평가를 수정한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "지원모델 평가 수정성공", response = EvaluationDTO.class),
+            @ApiResponse(code = 200, message = "지원모델 평가 수정성공", response = EvaluationDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -203,7 +203,7 @@ public class AdminSupportJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PutMapping("/{idx}/evaluation")
-    public ResponseEntity<EvaluationDTO> updateEvaluation(@PathVariable Long idx, @Valid @RequestBody EvaluationEntity evaluationEntity) {
+    public ResponseEntity<EvaluationDto> updateEvaluation(@PathVariable Long idx, @Valid @RequestBody EvaluationEntity evaluationEntity) {
         return ResponseEntity.ok(adminSupportJpaService.updateEvaluation(idx, evaluationEntity));
     }
 
@@ -244,7 +244,7 @@ public class AdminSupportJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "지원모델 합격 처리", notes = "지원모델을 합격 처리한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "지원모델 합격 처리성공", response = AdminSupportDTO.class),
+            @ApiResponse(code = 200, message = "지원모델 합격 처리성공", response = AdminSupportDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -252,7 +252,7 @@ public class AdminSupportJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PutMapping("/{idx}/pass")
-    public ResponseEntity<AdminSupportDTO> updatePass(@PathVariable Long idx) {
+    public ResponseEntity<AdminSupportDto> updatePass(@PathVariable Long idx) {
         return ResponseEntity.ok(adminSupportJpaService.updatePass(idx));
     }
 
@@ -276,7 +276,7 @@ public class AdminSupportJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}/admin-comment")
-    public ResponseEntity<List<AdminCommentDTO>> findSupportAdminComment(@PathVariable Long idx) {
+    public ResponseEntity<List<AdminCommentDto>> findSupportAdminComment(@PathVariable Long idx) {
         return ResponseEntity.ok(adminSupportJpaService.findSupportAdminComment(idx));
     }
 }

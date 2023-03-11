@@ -2,7 +2,7 @@ package com.tsp.api.model.domain.schedule;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tsp.api.common.domain.NewCommonDTO;
-import com.tsp.api.model.domain.AdminModelDTO;
+import com.tsp.api.model.domain.AdminModelDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -20,7 +20,7 @@ import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ApiModel(value = "모델 스케줄 관련 변수")
-public class AdminScheduleDTO extends NewCommonDTO {
+public class AdminScheduleDto extends NewCommonDTO {
 
     @ApiModelProperty(required = true, value = "idx", hidden = true, example = "1")
     private Long idx;
@@ -43,5 +43,44 @@ public class AdminScheduleDTO extends NewCommonDTO {
     private String visible;
 
     @ApiModelProperty(value = "adminModelDTO", hidden = true)
-    private AdminModelDTO adminModelDTO;
+    private AdminModelDto adminModelDTO;
+
+    @ApiModelProperty(value = "categoryCd", hidden = true)
+    private Integer categoryCd;
+
+    @ApiModelProperty(value = "categoryAge", hidden = true)
+    private Integer categoryAge;
+
+    @ApiModelProperty(value = "modelKorName", hidden = true)
+    private String modelKorName;
+
+    @ApiModelProperty(value = "modelEngName", hidden = true)
+    private String modelEngName;
+
+    @ApiModelProperty(value = "modelDescription", hidden = true)
+    private String modelDescription;
+
+    @ApiModelProperty(value = "height", hidden = true)
+    private Integer height;
+
+    @ApiModelProperty(value = "size3", hidden = true)
+    private String size3;
+
+    @ApiModelProperty(value = "shoes", hidden = true)
+    private Integer shoes;
+
+    @ApiModelProperty(value = "modelMainYn", hidden = true)
+    private String modelMainYn;
+
+    @ApiModelProperty(value = "modelFirstName", hidden = true)
+    private String modelFirstName;
+
+    @ApiModelProperty(value = "modelSecondName", hidden = true)
+    private String modelSecondName;
+
+    @ApiModelProperty(value = "modelKorFirstName", hidden = true)
+    private String modelKorFirstName;
+
+    @ApiModelProperty(value = "modelKorSecondName", hidden = true)
+    private String modelKorSecondName;
 }

@@ -55,19 +55,27 @@ public class AdminScheduleEntity extends NewCommonMappedClass {
         this.visible = adminScheduleEntity.visible;
     }
 
-    public static AdminScheduleDTO toDto(AdminScheduleEntity entity) {
+    public static AdminScheduleDto toDto(AdminScheduleEntity entity) {
         if (entity == null) return null;
-        return AdminScheduleDTO.builder()
-                .idx(entity.getIdx())
-                .modelIdx(entity.getAdminModelEntity().getIdx())
-                .adminModelDTO(AdminModelEntity.toDto(entity.getAdminModelEntity()))
-                .modelSchedule(entity.getModelSchedule())
-                .modelScheduleTime(entity.getModelScheduleTime())
-                .visible(entity.getVisible())
+        return AdminScheduleDto.builder()
+                .idx(entity.idx)
+                .categoryCd(entity.adminModelEntity.getCategoryCd())
+                .categoryAge(entity.adminModelEntity.getCategoryAge())
+                .modelKorName(entity.adminModelEntity.getModelKorName())
+                .modelEngName(entity.adminModelEntity.getModelEngName())
+                .modelKorFirstName(entity.adminModelEntity.getModelKorFirstName())
+                .modelKorSecondName(entity.adminModelEntity.getModelKorSecondName())
+                .modelFirstName(entity.adminModelEntity.getModelFirstName())
+                .modelSecondName(entity.adminModelEntity.getModelSecondName())
+                .height(entity.adminModelEntity.getHeight())
+                .shoes(entity.adminModelEntity.getShoes())
+                .modelSchedule(entity.modelSchedule)
+                .modelScheduleTime(entity.modelScheduleTime)
+                .visible(entity.visible)
                 .build();
     }
 
-    public static List<AdminScheduleDTO> toDtoList(List<AdminScheduleEntity> entityList) {
+    public static List<AdminScheduleDto> toDtoList(List<AdminScheduleEntity> entityList) {
         if (entityList == null) return null;
         return entityList.stream()
                 .map(AdminScheduleEntity::toDto)

@@ -1,7 +1,6 @@
 package com.tsp.api.model.service.negotiation;
 
-import com.tsp.api.model.domain.AdminModelEntity;
-import com.tsp.api.model.domain.negotiation.AdminNegotiationDTO;
+import com.tsp.api.model.domain.negotiation.AdminNegotiationDto;
 import com.tsp.api.model.domain.negotiation.AdminNegotiationEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +18,7 @@ public interface AdminNegotiationJpaService {
      * 5. 작성일      : 2022. 09. 09.
      * </pre>
      */
-    Page<AdminNegotiationDTO> findNegotiationList(Map<String, Object> negotiationMap, PageRequest pageRequest);
+    Page<AdminNegotiationDto> findNegotiationList(Map<String, Object> negotiationMap, PageRequest pageRequest);
 
     /**
      * <pre>
@@ -30,7 +29,7 @@ public interface AdminNegotiationJpaService {
      * 5. 작성일      : 2022. 09. 09.
      * </pre>
      */
-    AdminNegotiationDTO findOneNegotiation(Long idx);
+    AdminNegotiationDto findOneNegotiation(Long idx);
 
     /**
      * <pre>
@@ -41,7 +40,7 @@ public interface AdminNegotiationJpaService {
      * 5. 작성일      : 2022. 09. 21.
      * </pre>
      */
-    AdminNegotiationDTO findPrevOneNegotiation(Long idx);
+    AdminNegotiationDto findPrevOneNegotiation(Long idx);
 
     /**
      * <pre>
@@ -52,7 +51,7 @@ public interface AdminNegotiationJpaService {
      * 5. 작성일      : 2022. 09. 21.
      * </pre>
      */
-    AdminNegotiationDTO findNextOneNegotiation(Long idx);
+    AdminNegotiationDto findNextOneNegotiation(Long idx);
 
     /**
      * <pre>
@@ -63,7 +62,7 @@ public interface AdminNegotiationJpaService {
      * 5. 작성일      : 2022. 09. 09.
      * </pre>
      */
-    AdminNegotiationDTO insertModelNegotiation(Long modelIdx, AdminNegotiationEntity adminNegotiationEntity);
+    AdminNegotiationDto insertModelNegotiation(Long modelIdx, AdminNegotiationEntity adminNegotiationEntity);
 
     /**
      * <pre>
@@ -74,7 +73,7 @@ public interface AdminNegotiationJpaService {
      * 5. 작성일      : 2022. 09. 09.
      * </pre>
      */
-    AdminNegotiationDTO updateModelNegotiation(Long idx, AdminNegotiationEntity adminNegotiationEntity);
+    AdminNegotiationDto updateModelNegotiation(Long idx, AdminNegotiationEntity adminNegotiationEntity);
 
     /**
      * <pre>

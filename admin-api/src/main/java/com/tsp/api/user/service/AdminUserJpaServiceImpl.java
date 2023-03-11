@@ -48,7 +48,7 @@ public class AdminUserJpaServiceImpl implements AdminUserJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<AdminUserDTO> findUserList(Map<String, Object> userMap, PageRequest pageRequest) {
+    public Page<AdminUserDto> findUserList(Map<String, Object> userMap, PageRequest pageRequest) {
         return adminUserJpaQueryRepository.findUserList(userMap, pageRequest);
     }
 
@@ -63,7 +63,7 @@ public class AdminUserJpaServiceImpl implements AdminUserJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminUserDTO findOneUser(String id) {
+    public AdminUserDto findOneUser(String id) {
         AdminUserEntity oneUser = adminUserJpaRepository.findByUserId(id)
                 .orElseThrow(() -> new TspException(NOT_FOUND_USER));
         return AdminUserEntity.toDto(oneUser);
@@ -84,6 +84,8 @@ public class AdminUserJpaServiceImpl implements AdminUserJpaService {
         // 패스워드 일치할 시
         if (passwordEncoder.matches(loginRequest.getPassword(), findOneUser(loginRequest.getUserId()).getPassword())) {
             Authentication authentication = authenticate(loginRequest.getUserId(), loginRequest.getPassword());
+            System.out.println("===authentication===");
+            System.out.println(authentication.getPrincipal());
             if (authentication != null) {
                 Object principal = authentication.getPrincipal();
                 if (principal instanceof AuthenticationRequest) {
@@ -114,7 +116,7 @@ public class AdminUserJpaServiceImpl implements AdminUserJpaService {
      */
     @Override
     @Transactional
-    public AdminUserDTO insertAdminUser(AdminUserEntity adminUserEntity) {
+    public AdminUserDto insertAdminUser(AdminUserEntity adminUserEntity) {
         try {
             if (adminUserJpaRepository.findByUserId(adminUserEntity.getUserId()).isPresent()) {
                 throw new TspException(EXIST_USER);
@@ -138,7 +140,7 @@ public class AdminUserJpaServiceImpl implements AdminUserJpaService {
      */
     @Override
     @Transactional
-    public AdminUserDTO updateAdminUser(Long idx, AdminUserEntity adminUserEntity) {
+    public AdminUserDto updateAdminUser(Long idx, AdminUserEntity adminUserEntity) {
         try {
             oneUser(idx).update(adminUserEntity);
             return AdminUserEntity.toDto(adminUserEntity);

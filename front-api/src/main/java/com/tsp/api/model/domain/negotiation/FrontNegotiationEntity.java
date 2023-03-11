@@ -79,15 +79,23 @@ public class FrontNegotiationEntity extends NewCommonMappedClass {
     public static FrontNegotiationDTO toDto(FrontNegotiationEntity entity) {
         if (entity == null) return null;
         return FrontNegotiationDTO.builder()
-                .idx(entity.getIdx())
-                .frontModelDTO(FrontModelEntity.toDto(entity.frontModelEntity))
-                .modelKorName(entity.getModelKorName())
-                .modelNegotiationDesc(entity.getModelNegotiationDesc())
-                .modelNegotiationDate(entity.getModelNegotiationDate())
-                .name(entity.getName())
-                .email(entity.getEmail())
-                .phone(entity.getPhone())
-                .visible(entity.getVisible())
+                .idx(entity.idx)
+                .categoryCd(entity.frontModelEntity.getCategoryCd())
+                .categoryAge(entity.frontModelEntity.getCategoryAge())
+                .modelKorName(entity.frontModelEntity.getModelKorName())
+                .modelEngName(entity.frontModelEntity.getModelEngName())
+                .modelKorFirstName(entity.frontModelEntity.getModelKorFirstName())
+                .modelKorSecondName(entity.frontModelEntity.getModelKorSecondName())
+                .modelFirstName(entity.frontModelEntity.getModelFirstName())
+                .modelSecondName(entity.frontModelEntity.getModelSecondName())
+                .height(entity.frontModelEntity.getHeight())
+                .shoes(entity.frontModelEntity.getShoes())
+                .modelNegotiationDesc(entity.modelNegotiationDesc)
+                .modelNegotiationDate(entity.modelNegotiationDate)
+                .name(entity.name)
+                .email(entity.email)
+                .phone(entity.phone)
+                .visible(entity.visible)
                 .build();
     }
 

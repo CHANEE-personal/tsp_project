@@ -1,7 +1,6 @@
 package com.tsp.api.model;
 
-import com.tsp.api.model.domain.AdminModelEntity;
-import com.tsp.api.model.domain.negotiation.AdminNegotiationDTO;
+import com.tsp.api.model.domain.negotiation.AdminNegotiationDto;
 import com.tsp.api.model.domain.negotiation.AdminNegotiationEntity;
 import com.tsp.api.model.service.negotiation.AdminNegotiationJpaService;
 import com.tsp.common.Paging;
@@ -51,7 +50,7 @@ public class AdminNegotiationJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping
-    public ResponseEntity<Page<AdminNegotiationDTO>> findModelNegotiationList(@RequestParam(required = false) Map<String, Object> paramMap,
+    public ResponseEntity<Page<AdminNegotiationDto>> findModelNegotiationList(@RequestParam(required = false) Map<String, Object> paramMap,
                                                                               @RequestParam(value = "searchStartTime", required = false) String searchStartTime,
                                                                               @RequestParam(value = "searchEndTime", required = false) String searchEndTime,
                                                                               Paging paging) {
@@ -76,7 +75,7 @@ public class AdminNegotiationJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "모델 섭외 상세 조회", notes = "모델 섭외를 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "모델 섭외 상세 조회 성공", response = AdminNegotiationDTO.class),
+            @ApiResponse(code = 200, message = "모델 섭외 상세 조회 성공", response = AdminNegotiationDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -84,7 +83,7 @@ public class AdminNegotiationJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}")
-    public ResponseEntity<AdminNegotiationDTO> findOneNegotiation(@PathVariable Long idx) {
+    public ResponseEntity<AdminNegotiationDto> findOneNegotiation(@PathVariable Long idx) {
         return ResponseEntity.ok(adminNegotiationJpaService.findOneNegotiation(idx));
     }
 
@@ -100,7 +99,7 @@ public class AdminNegotiationJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "모델 섭외 이전 상세 조회", notes = "모델 섭외를 이전 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "모델 섭외 이전 상세 조회 성공", response = AdminNegotiationDTO.class),
+            @ApiResponse(code = 200, message = "모델 섭외 이전 상세 조회 성공", response = AdminNegotiationDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -108,7 +107,7 @@ public class AdminNegotiationJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}/prev")
-    public ResponseEntity<AdminNegotiationDTO> findPrevOneNegotiation(@PathVariable Long idx) {
+    public ResponseEntity<AdminNegotiationDto> findPrevOneNegotiation(@PathVariable Long idx) {
         return ResponseEntity.ok(adminNegotiationJpaService.findPrevOneNegotiation(idx));
     }
 
@@ -124,7 +123,7 @@ public class AdminNegotiationJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "모델 섭외 다음 상세 조회", notes = "모델 섭외를 다음 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "모델 섭외 다음 상세 조회 성공", response = AdminNegotiationDTO.class),
+            @ApiResponse(code = 200, message = "모델 섭외 다음 상세 조회 성공", response = AdminNegotiationDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -132,7 +131,7 @@ public class AdminNegotiationJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}/next")
-    public ResponseEntity<AdminNegotiationDTO> findNextOneNegotiation(@PathVariable Long idx) {
+    public ResponseEntity<AdminNegotiationDto> findNextOneNegotiation(@PathVariable Long idx) {
         return ResponseEntity.ok(adminNegotiationJpaService.findNextOneNegotiation(idx));
     }
 
@@ -148,7 +147,7 @@ public class AdminNegotiationJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "모델 섭외 저장", notes = "모델 섭외를 저장한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "모델 섭외 등록성공", response = AdminNegotiationDTO.class),
+            @ApiResponse(code = 201, message = "모델 섭외 등록성공", response = AdminNegotiationDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -156,7 +155,7 @@ public class AdminNegotiationJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PostMapping("/model/{modelIdx}")
-    public ResponseEntity<AdminNegotiationDTO> insertModelNegotiation(@PathVariable Long modelIdx, @Valid @RequestBody AdminNegotiationEntity adminNegotiationEntity) {
+    public ResponseEntity<AdminNegotiationDto> insertModelNegotiation(@PathVariable Long modelIdx, @Valid @RequestBody AdminNegotiationEntity adminNegotiationEntity) {
         return ResponseEntity.created(URI.create("")).body(adminNegotiationJpaService.insertModelNegotiation(modelIdx, adminNegotiationEntity));
     }
 
@@ -172,7 +171,7 @@ public class AdminNegotiationJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "모델 섭외 수정", notes = "모델 섭외를 수정한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "모델 섭외 수정성공", response = AdminNegotiationDTO.class),
+            @ApiResponse(code = 200, message = "모델 섭외 수정성공", response = AdminNegotiationDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -180,7 +179,7 @@ public class AdminNegotiationJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PutMapping("/{idx}")
-    public ResponseEntity<AdminNegotiationDTO> updateModelNegotiation(@PathVariable Long idx, @Valid @RequestBody AdminNegotiationEntity adminNegotiationEntity) {
+    public ResponseEntity<AdminNegotiationDto> updateModelNegotiation(@PathVariable Long idx, @Valid @RequestBody AdminNegotiationEntity adminNegotiationEntity) {
         return ResponseEntity.ok(adminNegotiationJpaService.updateModelNegotiation(idx, adminNegotiationEntity));
     }
 

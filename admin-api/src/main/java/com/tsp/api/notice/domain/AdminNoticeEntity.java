@@ -57,19 +57,19 @@ public class AdminNoticeEntity extends NewCommonMappedClass {
         this.topFixed = !topFixed;
     }
 
-    public static AdminNoticeDTO toDto(AdminNoticeEntity entity) {
+    public static AdminNoticeDto toDto(AdminNoticeEntity entity) {
         if (entity == null) return null;
-        return AdminNoticeDTO.builder()
-                .idx(entity.getIdx())
-                .title(entity.getTitle())
-                .description(entity.getDescription())
-                .viewCount(entity.getViewCount())
-                .topFixed(entity.getTopFixed())
-                .visible(entity.getVisible())
+        return AdminNoticeDto.builder()
+                .idx(entity.idx)
+                .title(entity.title)
+                .description(entity.description)
+                .viewCount(entity.viewCount)
+                .topFixed(entity.topFixed)
+                .visible(entity.visible)
                 .build();
     }
 
-    public static List<AdminNoticeDTO> toDtoList(List<AdminNoticeEntity> entityList) {
+    public static List<AdminNoticeDto> toDtoList(List<AdminNoticeEntity> entityList) {
         if (entityList == null) return null;
         return entityList.stream()
                 .map(AdminNoticeEntity::toDto)

@@ -69,17 +69,18 @@ public class NewCodeEntity extends NewCommonMappedClass {
         this.adminPortFolioEntityList.add(adminPortFolioEntity);
     }
 
-    public static NewCodeDTO toDto(NewCodeEntity entity) {
+    public static NewCodeDto toDto(NewCodeEntity entity) {
         if (entity == null) return null;
-        return NewCodeDTO.builder().idx(entity.getIdx())
-                .categoryCd(entity.getCategoryCd())
-                .categoryNm(entity.getCategoryNm())
-                .cmmType(entity.getCmmType())
-                .visible(entity.getVisible())
+        return NewCodeDto.builder()
+                .idx(entity.idx)
+                .categoryCd(entity.categoryCd)
+                .categoryNm(entity.categoryNm)
+                .cmmType(entity.cmmType)
+                .visible(entity.visible)
                 .build();
     }
 
-    public static List<NewCodeDTO> toDtoList(List<NewCodeEntity> entityList) {
+    public static List<NewCodeDto> toDtoList(List<NewCodeEntity> entityList) {
         if (entityList == null) return null;
         return entityList.stream()
                 .map(NewCodeEntity::toDto)

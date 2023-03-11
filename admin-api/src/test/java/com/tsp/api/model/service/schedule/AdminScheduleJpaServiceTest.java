@@ -1,6 +1,6 @@
 package com.tsp.api.model.service.schedule;
 
-import com.tsp.api.model.domain.schedule.AdminScheduleDTO;
+import com.tsp.api.model.domain.schedule.AdminScheduleDto;
 import com.tsp.api.model.domain.schedule.AdminScheduleEntity;
 import com.tsp.api.model.service.AdminModelCommonServiceTest;
 import com.tsp.api.model.service.AdminModelJpaRepository;
@@ -86,18 +86,18 @@ class AdminScheduleJpaServiceTest extends AdminModelCommonServiceTest {
         Map<String, Object> scheduleMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(0, 3);
 
-        List<AdminScheduleDTO> scheduleList = new ArrayList<>();
-        scheduleList.add(AdminScheduleDTO.builder().modelIdx(adminModelEntity.getIdx())
+        List<AdminScheduleDto> scheduleList = new ArrayList<>();
+        scheduleList.add(AdminScheduleDto.builder().modelIdx(adminModelEntity.getIdx())
                 .modelSchedule("스케줄 테스트").modelScheduleTime(now()).build());
-        scheduleList.add(AdminScheduleDTO.builder().modelIdx(adminModelEntity.getIdx())
+        scheduleList.add(AdminScheduleDto.builder().modelIdx(adminModelEntity.getIdx())
                 .modelSchedule("스케줄 테스트 두번째").modelScheduleTime(now()).build());
 
-        Page<AdminScheduleDTO> resultSchedule = new PageImpl<>(scheduleList, pageRequest, scheduleList.size());
+        Page<AdminScheduleDto> resultSchedule = new PageImpl<>(scheduleList, pageRequest, scheduleList.size());
 
         // when
         when(adminScheduleJpaQueryRepository.findScheduleList(scheduleMap, pageRequest)).thenReturn(resultSchedule);
-        Page<AdminScheduleDTO> newModelScheduleList = mockAdminScheduleJpaService.findScheduleList(scheduleMap, pageRequest);
-        List<AdminScheduleDTO> findScheduleList = newModelScheduleList.stream().collect(Collectors.toList());
+        Page<AdminScheduleDto> newModelScheduleList = mockAdminScheduleJpaService.findScheduleList(scheduleMap, pageRequest);
+        List<AdminScheduleDto> findScheduleList = newModelScheduleList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findScheduleList.get(0).getIdx()).isEqualTo(scheduleList.get(0).getIdx());
@@ -119,18 +119,18 @@ class AdminScheduleJpaServiceTest extends AdminModelCommonServiceTest {
         Map<String, Object> scheduleMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(0, 3);
 
-        List<AdminScheduleDTO> scheduleList = new ArrayList<>();
-        scheduleList.add(AdminScheduleDTO.builder().modelIdx(adminModelEntity.getIdx())
+        List<AdminScheduleDto> scheduleList = new ArrayList<>();
+        scheduleList.add(AdminScheduleDto.builder().modelIdx(adminModelEntity.getIdx())
                 .modelSchedule("스케줄 테스트").modelScheduleTime(now()).build());
-        scheduleList.add(AdminScheduleDTO.builder().modelIdx(adminModelEntity.getIdx())
+        scheduleList.add(AdminScheduleDto.builder().modelIdx(adminModelEntity.getIdx())
                 .modelSchedule("스케줄 테스트 두번째").modelScheduleTime(now()).build());
 
-        Page<AdminScheduleDTO> resultSchedule = new PageImpl<>(scheduleList, pageRequest, scheduleList.size());
+        Page<AdminScheduleDto> resultSchedule = new PageImpl<>(scheduleList, pageRequest, scheduleList.size());
 
         // when
         given(adminScheduleJpaQueryRepository.findScheduleList(scheduleMap, pageRequest)).willReturn(resultSchedule);
-        Page<AdminScheduleDTO> newModelScheduleList = mockAdminScheduleJpaService.findScheduleList(scheduleMap, pageRequest);
-        List<AdminScheduleDTO> findScheduleList = newModelScheduleList.stream().collect(Collectors.toList());
+        Page<AdminScheduleDto> newModelScheduleList = mockAdminScheduleJpaService.findScheduleList(scheduleMap, pageRequest);
+        List<AdminScheduleDto> findScheduleList = newModelScheduleList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findScheduleList.get(0).getIdx()).isEqualTo(scheduleList.get(0).getIdx());
@@ -147,7 +147,7 @@ class AdminScheduleJpaServiceTest extends AdminModelCommonServiceTest {
     void 모델스케줄상세Mockito조회테스트() {
         // when
         when(adminScheduleJpaRepository.findById(adminScheduleEntity.getIdx())).thenReturn(Optional.ofNullable(adminScheduleEntity));
-        AdminScheduleDTO scheduleInfo = mockAdminScheduleJpaService.findOneSchedule(adminScheduleEntity.getIdx());
+        AdminScheduleDto scheduleInfo = mockAdminScheduleJpaService.findOneSchedule(adminScheduleEntity.getIdx());
 
         // then
         assertThat(scheduleInfo.getIdx()).isEqualTo(adminScheduleEntity.getIdx());
@@ -169,7 +169,7 @@ class AdminScheduleJpaServiceTest extends AdminModelCommonServiceTest {
     void 모델스케줄상세BDD조회테스트() {
         // when
         given(adminScheduleJpaRepository.findById(adminScheduleEntity.getIdx())).willReturn(Optional.ofNullable(adminScheduleEntity));
-        AdminScheduleDTO scheduleInfo = mockAdminScheduleJpaService.findOneSchedule(adminScheduleEntity.getIdx());
+        AdminScheduleDto scheduleInfo = mockAdminScheduleJpaService.findOneSchedule(adminScheduleEntity.getIdx());
 
         // then
         assertThat(scheduleInfo.getIdx()).isEqualTo(adminScheduleEntity.getIdx());
@@ -208,7 +208,7 @@ class AdminScheduleJpaServiceTest extends AdminModelCommonServiceTest {
         adminScheduleDTO = adminScheduleJpaService.findOneSchedule(adminScheduleEntity.getIdx());
 
         when(mockAdminScheduleJpaService.findPrevOneSchedule(adminScheduleEntity.getIdx())).thenReturn(adminScheduleDTO);
-        AdminScheduleDTO scheduleInfo = mockAdminScheduleJpaService.findPrevOneSchedule(adminScheduleEntity.getIdx());
+        AdminScheduleDto scheduleInfo = mockAdminScheduleJpaService.findPrevOneSchedule(adminScheduleEntity.getIdx());
 
         // then
         assertThat(scheduleInfo.getIdx()).isEqualTo(1);
@@ -232,7 +232,7 @@ class AdminScheduleJpaServiceTest extends AdminModelCommonServiceTest {
         adminScheduleDTO = adminScheduleJpaService.findOneSchedule(adminScheduleEntity.getIdx());
 
         given(mockAdminScheduleJpaService.findPrevOneSchedule(adminScheduleEntity.getIdx())).willReturn(adminScheduleDTO);
-        AdminScheduleDTO scheduleInfo = mockAdminScheduleJpaService.findPrevOneSchedule(adminScheduleEntity.getIdx());
+        AdminScheduleDto scheduleInfo = mockAdminScheduleJpaService.findPrevOneSchedule(adminScheduleEntity.getIdx());
 
         // then
         assertThat(scheduleInfo.getIdx()).isEqualTo(1);
@@ -253,7 +253,7 @@ class AdminScheduleJpaServiceTest extends AdminModelCommonServiceTest {
         adminScheduleDTO = adminScheduleJpaService.findOneSchedule(adminScheduleEntity.getIdx());
 
         when(mockAdminScheduleJpaService.findNextOneSchedule(adminScheduleEntity.getIdx())).thenReturn(adminScheduleDTO);
-        AdminScheduleDTO scheduleInfo = mockAdminScheduleJpaService.findNextOneSchedule(adminScheduleEntity.getIdx());
+        AdminScheduleDto scheduleInfo = mockAdminScheduleJpaService.findNextOneSchedule(adminScheduleEntity.getIdx());
 
         // then
         assertThat(scheduleInfo.getIdx()).isEqualTo(3);
@@ -277,7 +277,7 @@ class AdminScheduleJpaServiceTest extends AdminModelCommonServiceTest {
         adminScheduleDTO = adminScheduleJpaService.findOneSchedule(adminScheduleEntity.getIdx());
 
         given(mockAdminScheduleJpaService.findNextOneSchedule(adminScheduleEntity.getIdx())).willReturn(adminScheduleDTO);
-        AdminScheduleDTO scheduleInfo = mockAdminScheduleJpaService.findNextOneSchedule(adminScheduleEntity.getIdx());
+        AdminScheduleDto scheduleInfo = mockAdminScheduleJpaService.findNextOneSchedule(adminScheduleEntity.getIdx());
 
         // then
         assertThat(scheduleInfo.getIdx()).isEqualTo(3);
@@ -294,7 +294,7 @@ class AdminScheduleJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         when(adminModelJpaRepository.findById(adminModelEntity.getIdx())).thenReturn(Optional.ofNullable(adminModelEntity));
         when(adminScheduleJpaRepository.save(adminScheduleEntity)).thenReturn(adminScheduleEntity);
-        AdminScheduleDTO scheduleInfo = mockAdminScheduleJpaService.insertSchedule(adminModelEntity.getIdx(), adminScheduleEntity);
+        AdminScheduleDto scheduleInfo = mockAdminScheduleJpaService.insertSchedule(adminModelEntity.getIdx(), adminScheduleEntity);
 
         // then
         assertThat(scheduleInfo.getModelIdx()).isEqualTo(adminModelEntity.getIdx());
@@ -316,7 +316,7 @@ class AdminScheduleJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         given(adminModelJpaRepository.findById(adminModelEntity.getIdx())).willReturn(Optional.ofNullable(adminModelEntity));
         given(adminScheduleJpaRepository.save(adminScheduleEntity)).willReturn(adminScheduleEntity);
-        AdminScheduleDTO scheduleInfo = mockAdminScheduleJpaService.insertSchedule(adminModelEntity.getIdx(), adminScheduleEntity);
+        AdminScheduleDto scheduleInfo = mockAdminScheduleJpaService.insertSchedule(adminModelEntity.getIdx(), adminScheduleEntity);
 
         // then
         assertThat(scheduleInfo.getModelIdx()).isEqualTo(adminModelEntity.getIdx());
@@ -344,7 +344,7 @@ class AdminScheduleJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         when(adminScheduleJpaRepository.findById(updateScheduleEntity.getIdx())).thenReturn(Optional.of(updateScheduleEntity));
         when(adminScheduleJpaRepository.save(updateScheduleEntity)).thenReturn(updateScheduleEntity);
-        AdminScheduleDTO scheduleInfo = mockAdminScheduleJpaService.updateSchedule(updateScheduleEntity.getIdx(), updateScheduleEntity);
+        AdminScheduleDto scheduleInfo = mockAdminScheduleJpaService.updateSchedule(updateScheduleEntity.getIdx(), updateScheduleEntity);
 
         // then
         assertThat(scheduleInfo.getModelIdx()).isEqualTo(updateScheduleEntity.getAdminModelEntity().getIdx());
@@ -374,7 +374,7 @@ class AdminScheduleJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         given(adminScheduleJpaRepository.findById(updateScheduleEntity.getIdx())).willReturn(Optional.of(updateScheduleEntity));
         given(adminScheduleJpaRepository.save(updateScheduleEntity)).willReturn(updateScheduleEntity);
-        AdminScheduleDTO scheduleInfo = mockAdminScheduleJpaService.updateSchedule(updateScheduleEntity.getIdx(), updateScheduleEntity);
+        AdminScheduleDto scheduleInfo = mockAdminScheduleJpaService.updateSchedule(updateScheduleEntity.getIdx(), updateScheduleEntity);
 
         // then
         assertThat(scheduleInfo.getModelIdx()).isEqualTo(updateScheduleEntity.getAdminModelEntity().getIdx());

@@ -1,6 +1,6 @@
 package com.tsp.api.notice.service;
 
-import com.tsp.api.notice.domain.AdminNoticeDTO;
+import com.tsp.api.notice.domain.AdminNoticeDto;
 import com.tsp.api.notice.domain.AdminNoticeEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +18,7 @@ public interface AdminNoticeJpaService {
      * 5. 작성일       : 2022. 08. 16.
      * </pre>
      */
-    Page<AdminNoticeDTO> findNoticeList(Map<String, Object> noticeMap, PageRequest pageRequest);
+    Page<AdminNoticeDto> findNoticeList(Map<String, Object> noticeMap, PageRequest pageRequest);
 
     /**
      * <pre>
@@ -29,7 +29,7 @@ public interface AdminNoticeJpaService {
      * 5. 작성일       : 2022. 08. 16.
      * </pre>
      */
-    AdminNoticeDTO findOneNotice(Long idx);
+    AdminNoticeDto findOneNotice(Long idx);
 
     /**
      * <pre>
@@ -40,7 +40,7 @@ public interface AdminNoticeJpaService {
      * 5. 작성일       : 2022. 09. 18.
      * </pre>
      */
-    AdminNoticeDTO findPrevOneNotice(Long idx);
+    AdminNoticeDto findPrevOneNotice(Long idx);
 
     /**
      * <pre>
@@ -51,7 +51,7 @@ public interface AdminNoticeJpaService {
      * 5. 작성일       : 2022. 09. 18.
      * </pre>
      */
-    AdminNoticeDTO findNextOneNotice(Long idx);
+    AdminNoticeDto findNextOneNotice(Long idx);
 
     /**
      * <pre>
@@ -62,7 +62,7 @@ public interface AdminNoticeJpaService {
      * 5. 작성일       : 2022. 08. 16.
      * </pre>
      */
-    AdminNoticeDTO insertNotice(AdminNoticeEntity adminNoticeEntity);
+    AdminNoticeDto insertNotice(AdminNoticeEntity adminNoticeEntity);
 
     /**
      * <pre>
@@ -73,7 +73,7 @@ public interface AdminNoticeJpaService {
      * 5. 작성일       : 2022. 08. 16.
      * </pre>
      */
-    AdminNoticeDTO updateNotice(Long idx, AdminNoticeEntity adminNoticeEntity);
+    AdminNoticeDto updateNotice(Long idx, AdminNoticeEntity adminNoticeEntity);
 
     /**
      * <pre>

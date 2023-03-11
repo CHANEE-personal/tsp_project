@@ -1,6 +1,6 @@
 package com.tsp.api.common.service;
 
-import com.tsp.api.common.domain.NewCodeDTO;
+import com.tsp.api.common.domain.NewCodeDto;
 import com.tsp.api.common.domain.NewCodeEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class AdminCommonJpaServiceImpl implements AdminCommonJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<NewCodeDTO> findCommonCodeList(Map<String, Object> commonMap, PageRequest pageRequest) {
+    public Page<NewCodeDto> findCommonCodeList(Map<String, Object> commonMap, PageRequest pageRequest) {
         return adminCommonJpaQueryRepository.findCommonCodeList(commonMap, pageRequest);
     }
 
@@ -51,7 +51,7 @@ public class AdminCommonJpaServiceImpl implements AdminCommonJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public NewCodeDTO findOneCommonCode(Long idx) {
+    public NewCodeDto findOneCommonCode(Long idx) {
         return NewCodeEntity.toDto(oneCommon(idx));
     }
 
@@ -66,7 +66,7 @@ public class AdminCommonJpaServiceImpl implements AdminCommonJpaService {
      */
     @Override
     @Transactional
-    public NewCodeDTO insertCommonCode(NewCodeEntity newCodeEntity) {
+    public NewCodeDto insertCommonCode(NewCodeEntity newCodeEntity) {
         try {
             return NewCodeEntity.toDto(adminCommonJpaRepository.save(newCodeEntity));
         } catch (Exception e) {
@@ -85,7 +85,7 @@ public class AdminCommonJpaServiceImpl implements AdminCommonJpaService {
      */
     @Override
     @Transactional
-    public NewCodeDTO updateCommonCode(Long idx, NewCodeEntity newCodeEntity) {
+    public NewCodeDto updateCommonCode(Long idx, NewCodeEntity newCodeEntity) {
         try {
             oneCommon(idx).update(newCodeEntity);
             return NewCodeEntity.toDto(newCodeEntity);

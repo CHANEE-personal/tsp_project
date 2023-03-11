@@ -39,15 +39,15 @@ public class AdminRecommendEntity extends NewCommonMappedClass {
         this.recommendKeyword = adminRecommendEntity.recommendKeyword;
     }
 
-    public static AdminRecommendDTO toDto(AdminRecommendEntity entity) {
+    public static AdminRecommendDto toDto(AdminRecommendEntity entity) {
         if (entity == null) return null;
-        return AdminRecommendDTO.builder()
-                .idx(entity.getIdx())
-                .recommendKeyword(entity.getRecommendKeyword())
+        return AdminRecommendDto.builder()
+                .idx(entity.idx)
+                .recommendKeyword(entity.recommendKeyword)
                 .build();
     }
 
-    public static List<AdminRecommendDTO> toDtoList(List<AdminRecommendEntity> entityList) {
+    public static List<AdminRecommendDto> toDtoList(List<AdminRecommendEntity> entityList) {
         if (entityList == null) return null;
         return entityList.stream()
                 .map(AdminRecommendEntity::toDto)

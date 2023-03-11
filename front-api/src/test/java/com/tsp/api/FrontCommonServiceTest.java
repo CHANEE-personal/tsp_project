@@ -109,6 +109,7 @@ public abstract class FrontCommonServiceTest {
         frontModelEntity = frontModelJpaRepository.save(
                 FrontModelEntity.builder()
                         .newModelCodeJpaDTO(newCodeEntity)
+                        .categoryCd(1)
                         .categoryAge(2)
                         .modelKorFirstName("조")
                         .modelKorSecondName("찬희")

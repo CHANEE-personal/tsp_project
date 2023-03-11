@@ -1,8 +1,8 @@
 package com.tsp.api.comment.service;
 
-import com.tsp.api.comment.domain.AdminCommentDTO;
+import com.tsp.api.comment.domain.AdminCommentDto;
 import com.tsp.api.comment.domain.AdminCommentEntity;
-import com.tsp.api.model.domain.AdminModelDTO;
+import com.tsp.api.model.domain.AdminModelDto;
 import com.tsp.api.model.domain.AdminModelEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +54,7 @@ class AdminCommentJpaQueryRepositoryTest {
 
     private AdminModelEntity adminModelEntity;
     private AdminCommentEntity adminCommentEntity;
-    private AdminCommentDTO adminCommentDTO;
+    private AdminCommentDto adminCommentDTO;
 
     void createAdminComment() {
         adminModelEntity = AdminModelEntity.builder()
@@ -79,7 +79,7 @@ class AdminCommentJpaQueryRepositoryTest {
                 .build();
 
         em.persist(adminModelEntity);
-        AdminModelDTO adminModelDTO = AdminModelEntity.toDto(adminModelEntity);
+        AdminModelDto adminModelDTO = AdminModelEntity.toDto(adminModelEntity);
 
         adminCommentEntity = AdminCommentEntity.builder()
                 .comment("코멘트 테스트")
@@ -114,16 +114,16 @@ class AdminCommentJpaQueryRepositoryTest {
         Map<String, Object> commentMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<AdminCommentDTO> commentList = new ArrayList<>();
-        commentList.add(AdminCommentDTO.builder().idx(1L)
+        List<AdminCommentDto> commentList = new ArrayList<>();
+        commentList.add(AdminCommentDto.builder().idx(1L)
                 .commentType("model").commentTypeIdx(adminModelEntity.getIdx())
                 .comment("model").build());
-        Page<AdminCommentDTO> resultComment = new PageImpl<>(commentList, pageRequest, commentList.size());
+        Page<AdminCommentDto> resultComment = new PageImpl<>(commentList, pageRequest, commentList.size());
 
         // when
         when(mockAdminCommentJpaQueryRepository.findAdminCommentList(commentMap, pageRequest)).thenReturn(resultComment);
-        Page<AdminCommentDTO> newCommentList = mockAdminCommentJpaQueryRepository.findAdminCommentList(commentMap, pageRequest);
-        List<AdminCommentDTO> findCommentList = newCommentList.stream().collect(Collectors.toList());
+        Page<AdminCommentDto> newCommentList = mockAdminCommentJpaQueryRepository.findAdminCommentList(commentMap, pageRequest);
+        List<AdminCommentDto> findCommentList = newCommentList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findCommentList.get(0).getComment()).isEqualTo(commentList.get(0).getComment());
@@ -146,16 +146,16 @@ class AdminCommentJpaQueryRepositoryTest {
         Map<String, Object> commentMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<AdminCommentDTO> commentList = new ArrayList<>();
-        commentList.add(AdminCommentDTO.builder().idx(1L)
+        List<AdminCommentDto> commentList = new ArrayList<>();
+        commentList.add(AdminCommentDto.builder().idx(1L)
                 .commentType("model").commentTypeIdx(adminModelEntity.getIdx())
                 .comment("model").build());
-        Page<AdminCommentDTO> resultComment = new PageImpl<>(commentList, pageRequest, commentList.size());
+        Page<AdminCommentDto> resultComment = new PageImpl<>(commentList, pageRequest, commentList.size());
 
         // when
         given(mockAdminCommentJpaQueryRepository.findAdminCommentList(commentMap, pageRequest)).willReturn(resultComment);
-        Page<AdminCommentDTO> newCommentList = mockAdminCommentJpaQueryRepository.findAdminCommentList(commentMap, pageRequest);
-        List<AdminCommentDTO> findCommentList = newCommentList.stream().collect(Collectors.toList());
+        Page<AdminCommentDto> newCommentList = mockAdminCommentJpaQueryRepository.findAdminCommentList(commentMap, pageRequest);
+        List<AdminCommentDto> findCommentList = newCommentList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findCommentList.get(0).getComment()).isEqualTo(commentList.get(0).getComment());

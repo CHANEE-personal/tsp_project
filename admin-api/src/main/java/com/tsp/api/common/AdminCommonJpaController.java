@@ -1,7 +1,7 @@
 package com.tsp.api.common;
 
 import com.tsp.api.common.service.AdminCommonJpaService;
-import com.tsp.api.common.domain.NewCodeDTO;
+import com.tsp.api.common.domain.NewCodeDto;
 import com.tsp.api.common.domain.NewCodeEntity;
 import com.tsp.common.Paging;
 import io.swagger.annotations.Api;
@@ -51,7 +51,7 @@ public class AdminCommonJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping
-    public ResponseEntity<Page<NewCodeDTO>> commonCodeList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
+    public ResponseEntity<Page<NewCodeDto>> commonCodeList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
         return ResponseEntity.ok().body(adminCommonJpaService.findCommonCodeList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }
 
@@ -67,7 +67,7 @@ public class AdminCommonJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "공통코드 상세 조회", notes = "공통코드를 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "공통코드 상세 조회 성공", response = NewCodeDTO.class),
+            @ApiResponse(code = 200, message = "공통코드 상세 조회 성공", response = NewCodeDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -75,7 +75,7 @@ public class AdminCommonJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}")
-    public ResponseEntity<NewCodeDTO> findOneCommon(@PathVariable Long idx) {
+    public ResponseEntity<NewCodeDto> findOneCommon(@PathVariable Long idx) {
         return ResponseEntity.ok(adminCommonJpaService.findOneCommonCode(idx));
     }
 
@@ -91,7 +91,7 @@ public class AdminCommonJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "공통코드 저장", notes = "공통코드를 저장한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "공통코드 등록성공", response = NewCodeDTO.class),
+            @ApiResponse(code = 201, message = "공통코드 등록성공", response = NewCodeDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -99,7 +99,7 @@ public class AdminCommonJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PostMapping
-    public ResponseEntity<NewCodeDTO> insertCommonCode(@Valid @RequestBody NewCodeEntity newCodeEntity) {
+    public ResponseEntity<NewCodeDto> insertCommonCode(@Valid @RequestBody NewCodeEntity newCodeEntity) {
         return ResponseEntity.created(URI.create("")).body(adminCommonJpaService.insertCommonCode(newCodeEntity));
     }
 
@@ -115,7 +115,7 @@ public class AdminCommonJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "공통코드 수정", notes = "공통코드를 수정한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "공통코드 수정성공", response = NewCodeDTO.class),
+            @ApiResponse(code = 200, message = "공통코드 수정성공", response = NewCodeDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -123,7 +123,7 @@ public class AdminCommonJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PutMapping("/{idx}")
-    public ResponseEntity<NewCodeDTO> updateCommonCode(@PathVariable Long idx, @Valid @RequestBody NewCodeEntity commonCodeEntity) {
+    public ResponseEntity<NewCodeDto> updateCommonCode(@PathVariable Long idx, @Valid @RequestBody NewCodeEntity commonCodeEntity) {
         return ResponseEntity.ok(adminCommonJpaService.updateCommonCode(idx, commonCodeEntity));
     }
 

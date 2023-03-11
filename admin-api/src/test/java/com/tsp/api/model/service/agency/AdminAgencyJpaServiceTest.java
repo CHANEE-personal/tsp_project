@@ -1,6 +1,6 @@
 package com.tsp.api.model.service.agency;
 
-import com.tsp.api.model.domain.agency.AdminAgencyDTO;
+import com.tsp.api.model.domain.agency.AdminAgencyDto;
 import com.tsp.api.model.domain.agency.AdminAgencyEntity;
 import com.tsp.api.model.service.AdminModelCommonServiceTest;
 import lombok.RequiredArgsConstructor;
@@ -64,17 +64,17 @@ class AdminAgencyJpaServiceTest extends AdminModelCommonServiceTest {
         Map<String, Object> agencyMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<AdminAgencyDTO> returnAgencyList = new ArrayList<>();
+        List<AdminAgencyDto> returnAgencyList = new ArrayList<>();
 
-        returnAgencyList.add(AdminAgencyDTO.builder().idx(1L).agencyName("agency1").agencyDescription("agency1").visible("Y").build());
-        returnAgencyList.add(AdminAgencyDTO.builder().idx(2L).agencyName("agency2").agencyDescription("agency2").visible("Y").build());
+        returnAgencyList.add(AdminAgencyDto.builder().idx(1L).agencyName("agency1").agencyDescription("agency1").visible("Y").build());
+        returnAgencyList.add(AdminAgencyDto.builder().idx(2L).agencyName("agency2").agencyDescription("agency2").visible("Y").build());
 
-        Page<AdminAgencyDTO> resultAgency = new PageImpl<>(returnAgencyList, pageRequest, returnAgencyList.size());
+        Page<AdminAgencyDto> resultAgency = new PageImpl<>(returnAgencyList, pageRequest, returnAgencyList.size());
 
         // when
         when(adminAgencyJpaQueryRepository.findAgencyList(agencyMap, pageRequest)).thenReturn(resultAgency);
-        Page<AdminAgencyDTO> agencyList = mockAdminAgencyJpaService.findAgencyList(agencyMap, pageRequest);
-        List<AdminAgencyDTO> findAgencyList = agencyList.stream().collect(Collectors.toList());
+        Page<AdminAgencyDto> agencyList = mockAdminAgencyJpaService.findAgencyList(agencyMap, pageRequest);
+        List<AdminAgencyDto> findAgencyList = agencyList.stream().collect(Collectors.toList());
 
         // then
         assertAll(
@@ -108,17 +108,17 @@ class AdminAgencyJpaServiceTest extends AdminModelCommonServiceTest {
         Map<String, Object> agencyMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<AdminAgencyDTO> returnAgencyList = new ArrayList<>();
+        List<AdminAgencyDto> returnAgencyList = new ArrayList<>();
 
-        returnAgencyList.add(AdminAgencyDTO.builder().idx(1L).agencyName("agency1").agencyDescription("agency1").visible("Y").build());
-        returnAgencyList.add(AdminAgencyDTO.builder().idx(2L).agencyName("agency2").agencyDescription("agency2").visible("Y").build());
+        returnAgencyList.add(AdminAgencyDto.builder().idx(1L).agencyName("agency1").agencyDescription("agency1").visible("Y").build());
+        returnAgencyList.add(AdminAgencyDto.builder().idx(2L).agencyName("agency2").agencyDescription("agency2").visible("Y").build());
 
-        Page<AdminAgencyDTO> resultAgency = new PageImpl<>(returnAgencyList, pageRequest, returnAgencyList.size());
+        Page<AdminAgencyDto> resultAgency = new PageImpl<>(returnAgencyList, pageRequest, returnAgencyList.size());
 
         // when
         given(adminAgencyJpaQueryRepository.findAgencyList(agencyMap, pageRequest)).willReturn(resultAgency);
-        Page<AdminAgencyDTO> agencyList = mockAdminAgencyJpaService.findAgencyList(agencyMap, pageRequest);
-        List<AdminAgencyDTO> findAgencyList = agencyList.stream().collect(Collectors.toList());
+        Page<AdminAgencyDto> agencyList = mockAdminAgencyJpaService.findAgencyList(agencyMap, pageRequest);
+        List<AdminAgencyDto> findAgencyList = agencyList.stream().collect(Collectors.toList());
 
         // then
         assertAll(
@@ -154,7 +154,7 @@ class AdminAgencyJpaServiceTest extends AdminModelCommonServiceTest {
     void 소속사상세조회Mockito테스트() {
         // when
         when(adminAgencyJpaRepository.findByIdx(adminAgencyEntity.getIdx())).thenReturn(Optional.ofNullable(adminAgencyEntity));
-        AdminAgencyDTO agencyInfo = mockAdminAgencyJpaService.findOneAgency(adminAgencyEntity.getIdx());
+        AdminAgencyDto agencyInfo = mockAdminAgencyJpaService.findOneAgency(adminAgencyEntity.getIdx());
 
         // then
         assertThat(agencyInfo.getIdx()).isEqualTo(adminAgencyEntity.getIdx());
@@ -176,7 +176,7 @@ class AdminAgencyJpaServiceTest extends AdminModelCommonServiceTest {
     void 소속사상세조회BDD테스트() {
         // when
         given(adminAgencyJpaRepository.findByIdx(adminAgencyEntity.getIdx())).willReturn(Optional.ofNullable(adminAgencyEntity));
-        AdminAgencyDTO agencyInfo = mockAdminAgencyJpaService.findOneAgency(adminAgencyEntity.getIdx());
+        AdminAgencyDto agencyInfo = mockAdminAgencyJpaService.findOneAgency(adminAgencyEntity.getIdx());
 
         // then
         assertThat(agencyInfo.getIdx()).isEqualTo(adminAgencyEntity.getIdx());
@@ -204,7 +204,7 @@ class AdminAgencyJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         when(adminAgencyJpaRepository.findByIdx(updateAgencyEntity.getIdx())).thenReturn(Optional.of(updateAgencyEntity));
         when(adminAgencyJpaRepository.save(updateAgencyEntity)).thenReturn(updateAgencyEntity);
-        AdminAgencyDTO agencyInfo = mockAdminAgencyJpaService.updateAgency(updateAgencyEntity.getIdx(), updateAgencyEntity);
+        AdminAgencyDto agencyInfo = mockAdminAgencyJpaService.updateAgency(updateAgencyEntity.getIdx(), updateAgencyEntity);
 
         // then
         assertThat(agencyInfo.getAgencyName()).isEqualTo(updateAgencyEntity.getAgencyName());
@@ -233,7 +233,7 @@ class AdminAgencyJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         given(adminAgencyJpaRepository.findByIdx(updateAgencyEntity.getIdx())).willReturn(Optional.of(updateAgencyEntity));
         given(adminAgencyJpaRepository.save(updateAgencyEntity)).willReturn(updateAgencyEntity);
-        AdminAgencyDTO agencyInfo = mockAdminAgencyJpaService.updateAgency(updateAgencyEntity.getIdx(), updateAgencyEntity);
+        AdminAgencyDto agencyInfo = mockAdminAgencyJpaService.updateAgency(updateAgencyEntity.getIdx(), updateAgencyEntity);
 
         // then
         assertThat(agencyInfo.getAgencyName()).isEqualTo(updateAgencyEntity.getAgencyName());

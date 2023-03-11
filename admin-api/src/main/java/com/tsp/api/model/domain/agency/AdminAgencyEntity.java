@@ -72,19 +72,19 @@ public class AdminAgencyEntity extends NewCommonMappedClass {
         this.commonImageEntityList.add(commonImageEntity);
     }
 
-    public static AdminAgencyDTO toDto(AdminAgencyEntity entity) {
+    public static AdminAgencyDto toDto(AdminAgencyEntity entity) {
         if (entity == null) return null;
-        return AdminAgencyDTO.builder()
-                .idx(entity.getIdx())
-                .agencyName(entity.getAgencyName())
-                .agencyDescription(entity.getAgencyDescription())
-                .favoriteCount(entity.getFavoriteCount())
-                .visible(entity.getVisible())
-                .agencyImage(CommonImageEntity.toDtoList(entity.getCommonImageEntityList()))
+        return AdminAgencyDto.builder()
+                .idx(entity.idx)
+                .agencyName(entity.agencyName)
+                .agencyDescription(entity.agencyDescription)
+                .favoriteCount(entity.favoriteCount)
+                .visible(entity.visible)
+                .agencyImage(CommonImageEntity.toDtoList(entity.commonImageEntityList))
                 .build();
     }
 
-    public static List<AdminAgencyDTO> toDtoList(List<AdminAgencyEntity> entityList) {
+    public static List<AdminAgencyDto> toDtoList(List<AdminAgencyEntity> entityList) {
         if (entityList == null) return null;
         return entityList.stream()
                 .map(AdminAgencyEntity::toDto)

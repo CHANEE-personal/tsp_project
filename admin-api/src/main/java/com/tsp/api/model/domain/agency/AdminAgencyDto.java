@@ -1,6 +1,6 @@
 package com.tsp.api.model.domain.agency;
 
-import com.tsp.api.common.domain.CommonImageDTO;
+import com.tsp.api.common.domain.CommonImageDto;
 import com.tsp.api.common.domain.NewCommonDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ApiModel(value = "소속사 관련 변수")
-public class AdminAgencyDTO extends NewCommonDTO {
+public class AdminAgencyDto extends NewCommonDTO {
 
     @ApiModelProperty(required = true, value = "idx", hidden = true, example = "1")
     private Long idx;
@@ -38,5 +38,5 @@ public class AdminAgencyDTO extends NewCommonDTO {
     private String visible;
 
     @ApiModelProperty(required = true, value = "agencyImageList", hidden = true)
-    private List<CommonImageDTO> agencyImage = new ArrayList<>();
+    private List<CommonImageDto> agencyImage = new ArrayList<>();
 }

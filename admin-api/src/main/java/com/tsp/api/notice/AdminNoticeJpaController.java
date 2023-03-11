@@ -1,6 +1,6 @@
 package com.tsp.api.notice;
 
-import com.tsp.api.notice.domain.AdminNoticeDTO;
+import com.tsp.api.notice.domain.AdminNoticeDto;
 import com.tsp.api.notice.domain.AdminNoticeEntity;
 import com.tsp.api.notice.service.AdminNoticeJpaService;
 import com.tsp.common.Paging;
@@ -50,7 +50,7 @@ public class AdminNoticeJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping
-    public ResponseEntity<Page<AdminNoticeDTO>> findNoticeList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
+    public ResponseEntity<Page<AdminNoticeDto>> findNoticeList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
         return ResponseEntity.ok().body(adminNoticeJpaService.findNoticeList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }
 
@@ -66,7 +66,7 @@ public class AdminNoticeJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "공지사항 상세 조회", notes = "공지사항을 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "공지사항 상세 조회 성공", response = AdminNoticeDTO.class),
+            @ApiResponse(code = 200, message = "공지사항 상세 조회 성공", response = AdminNoticeDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -74,7 +74,7 @@ public class AdminNoticeJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}")
-    public ResponseEntity<AdminNoticeDTO> findOneNotice(@PathVariable Long idx) {
+    public ResponseEntity<AdminNoticeDto> findOneNotice(@PathVariable Long idx) {
         return ResponseEntity.ok(adminNoticeJpaService.findOneNotice(idx));
     }
 
@@ -90,7 +90,7 @@ public class AdminNoticeJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "이전 공지사항 상세 조회", notes = "이전 공지사항을 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "이전 공지사항 상세 조회 성공", response = AdminNoticeDTO.class),
+            @ApiResponse(code = 200, message = "이전 공지사항 상세 조회 성공", response = AdminNoticeDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -98,7 +98,7 @@ public class AdminNoticeJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}/prev")
-    public ResponseEntity<AdminNoticeDTO> findPrevOneNotice(@PathVariable Long idx) {
+    public ResponseEntity<AdminNoticeDto> findPrevOneNotice(@PathVariable Long idx) {
         return ResponseEntity.ok(adminNoticeJpaService.findPrevOneNotice(idx));
     }
 
@@ -114,7 +114,7 @@ public class AdminNoticeJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "다음 공지사항 상세 조회", notes = "다음 공지사항을 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "다음 공지사항 상세 조회 성공", response = AdminNoticeDTO.class),
+            @ApiResponse(code = 200, message = "다음 공지사항 상세 조회 성공", response = AdminNoticeDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -122,7 +122,7 @@ public class AdminNoticeJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}/next")
-    public ResponseEntity<AdminNoticeDTO> findNextOneNotice(@PathVariable Long idx) {
+    public ResponseEntity<AdminNoticeDto> findNextOneNotice(@PathVariable Long idx) {
         return ResponseEntity.ok(adminNoticeJpaService.findNextOneNotice(idx));
     }
 
@@ -138,7 +138,7 @@ public class AdminNoticeJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "공지사항 저장", notes = "공지사항을 저장한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "공지사항 등록성공", response = AdminNoticeDTO.class),
+            @ApiResponse(code = 201, message = "공지사항 등록성공", response = AdminNoticeDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -146,7 +146,7 @@ public class AdminNoticeJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<AdminNoticeDTO> insertNotice(@Valid @RequestBody AdminNoticeEntity adminNoticeEntity) {
+    public ResponseEntity<AdminNoticeDto> insertNotice(@Valid @RequestBody AdminNoticeEntity adminNoticeEntity) {
         return ResponseEntity.created(URI.create("")).body(adminNoticeJpaService.insertNotice(adminNoticeEntity));
     }
 
@@ -162,7 +162,7 @@ public class AdminNoticeJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "공지사항 수정", notes = "공지사항을 수정한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "공지사항 수정 성공", response = AdminNoticeDTO.class),
+            @ApiResponse(code = 200, message = "공지사항 수정 성공", response = AdminNoticeDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -170,7 +170,7 @@ public class AdminNoticeJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PutMapping(value = "/{idx}", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<AdminNoticeDTO> updateNotice(@PathVariable Long idx, @Valid @RequestBody AdminNoticeEntity adminNoticeEntity) {
+    public ResponseEntity<AdminNoticeDto> updateNotice(@PathVariable Long idx, @Valid @RequestBody AdminNoticeEntity adminNoticeEntity) {
         return ResponseEntity.ok(adminNoticeJpaService.updateNotice(idx, adminNoticeEntity));
     }
 

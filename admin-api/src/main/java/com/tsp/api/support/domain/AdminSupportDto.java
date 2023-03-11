@@ -2,7 +2,7 @@ package com.tsp.api.support.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tsp.api.common.domain.NewCommonDTO;
-import com.tsp.api.support.domain.evaluation.EvaluationDTO;
+import com.tsp.api.support.domain.evaluation.EvaluationDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -22,7 +22,7 @@ import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ApiModel
-public class AdminSupportDTO extends NewCommonDTO {
+public class AdminSupportDto extends NewCommonDTO {
 
     @ApiModelProperty(value = "지원모델 IDX", required = true, hidden = true, example = "1")
     private Long idx;
@@ -68,5 +68,5 @@ public class AdminSupportDTO extends NewCommonDTO {
     private LocalDateTime passTime;
 
     @ApiModelProperty(required = true, value = "evaluationList", hidden = true)
-    private List<EvaluationDTO> evaluationList = new ArrayList<>();
+    private List<EvaluationDto> evaluationList = new ArrayList<>();
 }

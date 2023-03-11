@@ -1,6 +1,6 @@
 package com.tsp.api.faq.service;
 
-import com.tsp.api.faq.domain.AdminFaqDTO;
+import com.tsp.api.faq.domain.AdminFaqDto;
 import com.tsp.api.faq.domain.AdminFaqEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +18,7 @@ public interface AdminFaqJpaService {
      * 5. 작성일       : 2022. 08. 22.
      * </pre>
      */
-    Page<AdminFaqDTO> findFaqList(Map<String, Object> faqMap, PageRequest pageRequest);
+    Page<AdminFaqDto> findFaqList(Map<String, Object> faqMap, PageRequest pageRequest);
 
     /**
      * <pre>
@@ -29,7 +29,7 @@ public interface AdminFaqJpaService {
      * 5. 작성일       : 2022. 08. 22.
      * </pre>
      */
-    AdminFaqDTO findOneFaq(Long idx);
+    AdminFaqDto findOneFaq(Long idx);
 
     /**
      * <pre>
@@ -40,7 +40,7 @@ public interface AdminFaqJpaService {
      * 5. 작성일       : 2022. 09. 18.
      * </pre>
      */
-    AdminFaqDTO findPrevOneFaq(Long idx);
+    AdminFaqDto findPrevOneFaq(Long idx);
 
     /**
      * <pre>
@@ -51,7 +51,7 @@ public interface AdminFaqJpaService {
      * 5. 작성일       : 2022. 09. 18.
      * </pre>
      */
-    AdminFaqDTO findNextOneFaq(Long idx);
+    AdminFaqDto findNextOneFaq(Long idx);
 
     /**
      * <pre>
@@ -62,7 +62,7 @@ public interface AdminFaqJpaService {
      * 5. 작성일       : 2022. 08. 22.
      * </pre>
      */
-    AdminFaqDTO insertFaq(AdminFaqEntity adminFaqEntity);
+    AdminFaqDto insertFaq(AdminFaqEntity adminFaqEntity);
 
     /**
      * <pre>
@@ -73,7 +73,7 @@ public interface AdminFaqJpaService {
      * 5. 작성일       : 2022. 08. 22.
      * </pre>
      */
-    AdminFaqDTO updateFaq(Long idx, AdminFaqEntity adminFaqEntity);
+    AdminFaqDto updateFaq(Long idx, AdminFaqEntity adminFaqEntity);
 
     /**
      * <pre>

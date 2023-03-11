@@ -61,19 +61,19 @@ public class AdminFestivalEntity extends NewCommonMappedClass {
         this.festivalDay = adminFestival.festivalDay;
     }
 
-    public static AdminFestivalDTO toDto(AdminFestivalEntity entity) {
+    public static AdminFestivalDto toDto(AdminFestivalEntity entity) {
         if (entity == null) return null;
-        return AdminFestivalDTO.builder()
-                .idx(entity.getIdx())
-                .festivalTitle(entity.getFestivalTitle())
-                .festivalDescription(entity.getFestivalDescription())
-                .festivalMonth(entity.getFestivalMonth())
-                .festivalDay(entity.getFestivalDay())
-                .festivalTime(entity.getFestivalTime())
+        return AdminFestivalDto.builder()
+                .idx(entity.idx)
+                .festivalTitle(entity.festivalTitle)
+                .festivalDescription(entity.festivalDescription)
+                .festivalMonth(entity.festivalMonth)
+                .festivalDay(entity.festivalDay)
+                .festivalTime(entity.festivalTime)
                 .build();
     }
 
-    public static List<AdminFestivalDTO> toDtoList(List<AdminFestivalEntity> entityList) {
+    public static List<AdminFestivalDto> toDtoList(List<AdminFestivalEntity> entityList) {
         if (entityList == null) return null;
         return entityList.stream()
                 .map(AdminFestivalEntity::toDto)

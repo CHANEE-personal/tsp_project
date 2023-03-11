@@ -1,6 +1,6 @@
 package com.tsp.api.portfolio.domain;
 
-import com.tsp.api.common.domain.CommonImageDTO;
+import com.tsp.api.common.domain.CommonImageDto;
 import com.tsp.api.common.domain.NewCommonDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ApiModel
-public class AdminPortFolioDTO extends NewCommonDTO {
+public class AdminPortFolioDto extends NewCommonDTO {
 
     @ApiModelProperty(required = true, value = "idx", hidden = true, example = "1")
     private Long idx;
@@ -48,5 +48,5 @@ public class AdminPortFolioDTO extends NewCommonDTO {
     private String visible;
 
     @ApiModelProperty(required = true, value = "portfolioImageList", hidden = true)
-    private List<CommonImageDTO> portfolioImage = new ArrayList<>();
+    private List<CommonImageDto> portfolioImage = new ArrayList<>();
 }

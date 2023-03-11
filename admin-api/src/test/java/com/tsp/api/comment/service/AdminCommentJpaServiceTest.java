@@ -1,6 +1,6 @@
 package com.tsp.api.comment.service;
 
-import com.tsp.api.comment.domain.AdminCommentDTO;
+import com.tsp.api.comment.domain.AdminCommentDto;
 import com.tsp.api.model.service.AdminModelCommonServiceTest;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
@@ -64,16 +64,16 @@ class AdminCommentJpaServiceTest extends AdminModelCommonServiceTest {
         Map<String, Object> commentMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(0, 3);
 
-        List<AdminCommentDTO> returnCommentList = new ArrayList<>();
+        List<AdminCommentDto> returnCommentList = new ArrayList<>();
 
-        returnCommentList.add(AdminCommentDTO.builder().idx(1L).comment("코멘트테스트").commentType("model").commentTypeIdx(adminModelEntity.getIdx()).visible("Y").build());
-        returnCommentList.add(AdminCommentDTO.builder().idx(2L).comment("코멘트테스트2").commentType("model").commentTypeIdx(adminModelEntity.getIdx()).visible("Y").build());
+        returnCommentList.add(AdminCommentDto.builder().idx(1L).comment("코멘트테스트").commentType("model").commentTypeIdx(adminModelEntity.getIdx()).visible("Y").build());
+        returnCommentList.add(AdminCommentDto.builder().idx(2L).comment("코멘트테스트2").commentType("model").commentTypeIdx(adminModelEntity.getIdx()).visible("Y").build());
 
-        Page<AdminCommentDTO> resultComment = new PageImpl<>(returnCommentList, pageRequest, returnCommentList.size());
+        Page<AdminCommentDto> resultComment = new PageImpl<>(returnCommentList, pageRequest, returnCommentList.size());
         // when
         when(adminCommentJpaQueryRepository.findAdminCommentList(commentMap, pageRequest)).thenReturn(resultComment);
-        Page<AdminCommentDTO> commentList = mockAdminCommentJpaService.findAdminCommentList(commentMap, pageRequest);
-        List<AdminCommentDTO> findCommentList = commentList.stream().collect(Collectors.toList());
+        Page<AdminCommentDto> commentList = mockAdminCommentJpaService.findAdminCommentList(commentMap, pageRequest);
+        List<AdminCommentDto> findCommentList = commentList.stream().collect(Collectors.toList());
 
         // then
         assertAll(
@@ -102,16 +102,16 @@ class AdminCommentJpaServiceTest extends AdminModelCommonServiceTest {
         Map<String, Object> commentMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(0, 3);
 
-        List<AdminCommentDTO> returnCommentList = new ArrayList<>();
+        List<AdminCommentDto> returnCommentList = new ArrayList<>();
 
-        returnCommentList.add(AdminCommentDTO.builder().idx(1L).comment("코멘트테스트").commentType("model").commentTypeIdx(adminModelEntity.getIdx()).visible("Y").build());
-        returnCommentList.add(AdminCommentDTO.builder().idx(2L).comment("코멘트테스트2").commentType("model").commentTypeIdx(adminModelEntity.getIdx()).visible("Y").build());
+        returnCommentList.add(AdminCommentDto.builder().idx(1L).comment("코멘트테스트").commentType("model").commentTypeIdx(adminModelEntity.getIdx()).visible("Y").build());
+        returnCommentList.add(AdminCommentDto.builder().idx(2L).comment("코멘트테스트2").commentType("model").commentTypeIdx(adminModelEntity.getIdx()).visible("Y").build());
 
-        Page<AdminCommentDTO> resultComment = new PageImpl<>(returnCommentList, pageRequest, returnCommentList.size());
+        Page<AdminCommentDto> resultComment = new PageImpl<>(returnCommentList, pageRequest, returnCommentList.size());
         // when
         given(adminCommentJpaQueryRepository.findAdminCommentList(commentMap, pageRequest)).willReturn(resultComment);
-        Page<AdminCommentDTO> commentList = mockAdminCommentJpaService.findAdminCommentList(commentMap, pageRequest);
-        List<AdminCommentDTO> findCommentList = commentList.stream().collect(Collectors.toList());
+        Page<AdminCommentDto> commentList = mockAdminCommentJpaService.findAdminCommentList(commentMap, pageRequest);
+        List<AdminCommentDto> findCommentList = commentList.stream().collect(Collectors.toList());
 
         // then
         assertAll(

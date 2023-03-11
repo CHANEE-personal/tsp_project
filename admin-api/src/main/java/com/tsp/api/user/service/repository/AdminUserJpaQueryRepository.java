@@ -1,7 +1,7 @@
 package com.tsp.api.user.service.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tsp.api.user.domain.AdminUserDTO;
+import com.tsp.api.user.domain.AdminUserDto;
 import com.tsp.api.user.domain.AdminUserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +30,7 @@ public class AdminUserJpaQueryRepository {
      * 5. 작성일      : 2022. 05. 02.
      * </pre>
      */
-    public Page<AdminUserDTO> findUserList(Map<String, Object> userMap, PageRequest pageRequest) {
+    public Page<AdminUserDto> findUserList(Map<String, Object> userMap, PageRequest pageRequest) {
         List<AdminUserEntity> userList = queryFactory.selectFrom(adminUserEntity)
                 .where(adminUserEntity.visible.eq("Y"))
                 .orderBy(adminUserEntity.idx.desc())

@@ -4,7 +4,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tsp.api.common.EntityType;
 import com.tsp.api.common.domain.CommonImageEntity;
-import com.tsp.api.portfolio.domain.AdminPortFolioDTO;
+import com.tsp.api.portfolio.domain.AdminPortFolioDto;
 import com.tsp.api.portfolio.domain.AdminPortFolioEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +59,7 @@ public class AdminPortfolioJpaQueryRepository {
      * 5. 작성일      : 2022. 05. 13.
      * </pre>
      */
-    public Page<AdminPortFolioDTO> findPortfolioList(Map<String, Object> portfolioMap, PageRequest pageRequest) {
+    public Page<AdminPortFolioDto> findPortfolioList(Map<String, Object> portfolioMap, PageRequest pageRequest) {
         List<AdminPortFolioEntity> portfolioList = queryFactory
                 .selectFrom(adminPortFolioEntity)
                 .orderBy(adminPortFolioEntity.idx.desc())
@@ -80,7 +80,7 @@ public class AdminPortfolioJpaQueryRepository {
      * 5. 작성일      : 2022. 05. 13.
      * </pre>
      */
-    public AdminPortFolioDTO findOnePortfolio(Long idx) {
+    public AdminPortFolioDto findOnePortfolio(Long idx) {
         // 포트폴리오 상세 조회
         AdminPortFolioEntity findOnePortfolio = Optional.ofNullable(queryFactory
                 .selectFrom(adminPortFolioEntity)
@@ -103,7 +103,7 @@ public class AdminPortfolioJpaQueryRepository {
      * 5. 작성일      : 2022. 09. 14.
      * </pre>
      */
-    public AdminPortFolioDTO findPrevOnePortfolio(Long idx) {
+    public AdminPortFolioDto findPrevOnePortfolio(Long idx) {
         // 이전 포트폴리오 조회
         AdminPortFolioEntity findPrevOnePortfolio = Optional.ofNullable(queryFactory
                 .selectFrom(adminPortFolioEntity)
@@ -124,7 +124,7 @@ public class AdminPortfolioJpaQueryRepository {
      * 5. 작성일      : 2022. 09. 14.
      * </pre>
      */
-    public AdminPortFolioDTO findNextOnePortfolio(Long idx) {
+    public AdminPortFolioDto findNextOnePortfolio(Long idx) {
         // 다음 포트폴리오 조회
         AdminPortFolioEntity findPrevOnePortfolio = Optional.ofNullable(queryFactory
                 .selectFrom(adminPortFolioEntity)

@@ -1,9 +1,9 @@
 package com.tsp.api.model;
 
 import com.tsp.api.common.EntityType;
-import com.tsp.api.common.domain.CommonImageDTO;
+import com.tsp.api.common.domain.CommonImageDto;
 import com.tsp.api.common.domain.CommonImageEntity;
-import com.tsp.api.model.domain.agency.AdminAgencyDTO;
+import com.tsp.api.model.domain.agency.AdminAgencyDto;
 import com.tsp.api.model.domain.agency.AdminAgencyEntity;
 import com.tsp.api.model.service.agency.AdminAgencyJpaService;
 import com.tsp.common.Paging;
@@ -57,7 +57,7 @@ public class AdminAgencyJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping
-    public ResponseEntity<Page<AdminAgencyDTO>> findAgencyList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
+    public ResponseEntity<Page<AdminAgencyDto>> findAgencyList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
         return ResponseEntity.ok().body(adminAgencyJpaService.findAgencyList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }
 
@@ -73,7 +73,7 @@ public class AdminAgencyJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "소속사 상세 조회", notes = "소속사를 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "성공", response = AdminAgencyDTO.class),
+            @ApiResponse(code = 200, message = "성공", response = AdminAgencyDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -81,7 +81,7 @@ public class AdminAgencyJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}")
-    public ResponseEntity<AdminAgencyDTO> findOneAgency(@PathVariable Long idx) {
+    public ResponseEntity<AdminAgencyDto> findOneAgency(@PathVariable Long idx) {
         return ResponseEntity.ok(adminAgencyJpaService.findOneAgency(idx));
     }
 
@@ -97,7 +97,7 @@ public class AdminAgencyJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "소속사 저장", notes = "소속사를 저장한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "소속사 등록성공", response = AdminAgencyDTO.class),
+            @ApiResponse(code = 201, message = "소속사 등록성공", response = AdminAgencyDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -105,7 +105,7 @@ public class AdminAgencyJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PostMapping
-    public ResponseEntity<AdminAgencyDTO> insertAgency(@Valid @RequestBody AdminAgencyEntity adminAgencyEntity) {
+    public ResponseEntity<AdminAgencyDto> insertAgency(@Valid @RequestBody AdminAgencyEntity adminAgencyEntity) {
         return ResponseEntity.created(URI.create("")).body(adminAgencyJpaService.insertAgency(adminAgencyEntity));
     }
 
@@ -121,7 +121,7 @@ public class AdminAgencyJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "소속사 수정", notes = "소속사를 수정한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "소속사 수정성공", response = AdminAgencyDTO.class),
+            @ApiResponse(code = 200, message = "소속사 수정성공", response = AdminAgencyDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -129,7 +129,7 @@ public class AdminAgencyJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PutMapping("/{idx}")
-    public ResponseEntity<AdminAgencyDTO> updateAgency(@PathVariable Long idx, @Valid @RequestBody AdminAgencyEntity adminAgencyEntity) {
+    public ResponseEntity<AdminAgencyDto> updateAgency(@PathVariable Long idx, @Valid @RequestBody AdminAgencyEntity adminAgencyEntity) {
         return ResponseEntity.ok(adminAgencyJpaService.updateAgency(idx, adminAgencyEntity));
     }
 
@@ -178,7 +178,7 @@ public class AdminAgencyJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PostMapping(value = "/{idx}/images", consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<List<CommonImageDTO>> insertAgencyImage(@PathVariable Long idx, @RequestParam("images") List<MultipartFile> fileName) {
+    public ResponseEntity<List<CommonImageDto>> insertAgencyImage(@PathVariable Long idx, @RequestParam("images") List<MultipartFile> fileName) {
         return ResponseEntity.created(URI.create("")).body(adminAgencyJpaService.insertAgencyImage(CommonImageEntity.builder().typeName(EntityType.AGENCY).typeIdx(idx).build(), fileName));
     }
 

@@ -1,6 +1,6 @@
 package com.tsp.api.faq;
 
-import com.tsp.api.faq.domain.AdminFaqDTO;
+import com.tsp.api.faq.domain.AdminFaqDto;
 import com.tsp.api.faq.domain.AdminFaqEntity;
 import com.tsp.api.faq.service.AdminFaqJpaService;
 import com.tsp.common.Paging;
@@ -50,7 +50,7 @@ public class AdminFaqJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping
-    public ResponseEntity<Page<AdminFaqDTO>> findFaqList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
+    public ResponseEntity<Page<AdminFaqDto>> findFaqList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
         return ResponseEntity.ok().body(adminFaqJpaService.findFaqList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }
 
@@ -66,7 +66,7 @@ public class AdminFaqJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "FAQ 상세 조회", notes = "FAQ를 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "FAQ 상세 조회 성공", response = AdminFaqDTO.class),
+            @ApiResponse(code = 200, message = "FAQ 상세 조회 성공", response = AdminFaqDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -74,7 +74,7 @@ public class AdminFaqJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}")
-    public ResponseEntity<AdminFaqDTO> findOneFaq(@PathVariable Long idx) {
+    public ResponseEntity<AdminFaqDto> findOneFaq(@PathVariable Long idx) {
         return ResponseEntity.ok(adminFaqJpaService.findOneFaq(idx));
     }
 
@@ -90,7 +90,7 @@ public class AdminFaqJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "이전 FAQ 상세 조회", notes = "이전 FAQ를 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "이전 FAQ 상세 조회 성공", response = AdminFaqDTO.class),
+            @ApiResponse(code = 200, message = "이전 FAQ 상세 조회 성공", response = AdminFaqDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -98,7 +98,7 @@ public class AdminFaqJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}/prev")
-    public ResponseEntity<AdminFaqDTO> findPrevOneFaq(@PathVariable Long idx) {
+    public ResponseEntity<AdminFaqDto> findPrevOneFaq(@PathVariable Long idx) {
         return ResponseEntity.ok(adminFaqJpaService.findPrevOneFaq(idx));
     }
 
@@ -114,7 +114,7 @@ public class AdminFaqJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "다음 FAQ 상세 조회", notes = "다음 FAQ를 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "다음 FAQ 상세 조회 성공", response = AdminFaqDTO.class),
+            @ApiResponse(code = 200, message = "다음 FAQ 상세 조회 성공", response = AdminFaqDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -122,7 +122,7 @@ public class AdminFaqJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}/next")
-    public ResponseEntity<AdminFaqDTO> findNextOneFaq(@PathVariable Long idx) {
+    public ResponseEntity<AdminFaqDto> findNextOneFaq(@PathVariable Long idx) {
         return ResponseEntity.ok(adminFaqJpaService.findNextOneFaq(idx));
     }
 
@@ -138,7 +138,7 @@ public class AdminFaqJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "FAQ 저장", notes = "FAQ를 저장한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "FAQ 등록성공", response = AdminFaqDTO.class),
+            @ApiResponse(code = 201, message = "FAQ 등록성공", response = AdminFaqDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -146,7 +146,7 @@ public class AdminFaqJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PostMapping
-    public ResponseEntity<AdminFaqDTO> insertFaq(@Valid @RequestBody AdminFaqEntity adminFaqEntity) {
+    public ResponseEntity<AdminFaqDto> insertFaq(@Valid @RequestBody AdminFaqEntity adminFaqEntity) {
         return ResponseEntity.created(URI.create("")).body(adminFaqJpaService.insertFaq(adminFaqEntity));
     }
 
@@ -162,7 +162,7 @@ public class AdminFaqJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "FAQ 수정", notes = "FAQ를 수정한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "FAQ 수정 성공", response = AdminFaqDTO.class),
+            @ApiResponse(code = 200, message = "FAQ 수정 성공", response = AdminFaqDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -170,7 +170,7 @@ public class AdminFaqJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PutMapping(value = "/{idx}", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<AdminFaqDTO> updateFaq(@PathVariable Long idx, @Valid @RequestBody AdminFaqEntity adminFaqEntity) {
+    public ResponseEntity<AdminFaqDto> updateFaq(@PathVariable Long idx, @Valid @RequestBody AdminFaqEntity adminFaqEntity) {
         return ResponseEntity.ok(adminFaqJpaService.updateFaq(idx, adminFaqEntity));
     }
 

@@ -1,9 +1,8 @@
 package com.tsp.api.user.service;
 
-import com.tsp.api.user.domain.AdminUserDTO;
+import com.tsp.api.user.domain.AdminUserDto;
 import com.tsp.api.user.domain.AdminUserEntity;
 import com.tsp.api.user.domain.LoginRequest;
-import com.tsp.api.user.domain.SignUpRequest;
 import com.tsp.jwt.JwtUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +20,7 @@ public interface AdminUserJpaService {
      * 5. 작성일      : 2022. 05. 02.
      * </pre>
      */
-    Page<AdminUserDTO> findUserList(Map<String, Object> userMap, PageRequest pageRequest);
+    Page<AdminUserDto> findUserList(Map<String, Object> userMap, PageRequest pageRequest);
 
     /**
      * <pre>
@@ -32,7 +31,7 @@ public interface AdminUserJpaService {
      * 5. 작성일      : 2022. 05. 02.
      * </pre>
      */
-    AdminUserDTO findOneUser(String id);
+    AdminUserDto findOneUser(String id);
 
     /**
      * <pre>
@@ -54,7 +53,7 @@ public interface AdminUserJpaService {
      * 5. 작성일      : 2022. 05. 11.
      * </pre>
      */
-    AdminUserDTO insertAdminUser(AdminUserEntity adminUserEntity);
+    AdminUserDto insertAdminUser(AdminUserEntity adminUserEntity);
 
     /**
      * <pre>
@@ -65,7 +64,7 @@ public interface AdminUserJpaService {
      * 5. 작성일      : 2022. 05. 11.
      * </pre>
      */
-    AdminUserDTO updateAdminUser(Long idx, AdminUserEntity adminUserEntity);
+    AdminUserDto updateAdminUser(Long idx, AdminUserEntity adminUserEntity);
 
     /**
      * <pre>

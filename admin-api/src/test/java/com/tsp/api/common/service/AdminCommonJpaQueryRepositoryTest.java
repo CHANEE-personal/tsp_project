@@ -1,6 +1,6 @@
 package com.tsp.api.common.service;
 
-import com.tsp.api.common.domain.NewCodeDTO;
+import com.tsp.api.common.domain.NewCodeDto;
 import com.tsp.api.common.domain.NewCodeEntity;
 import com.tsp.api.user.domain.AdminUserEntity;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +49,7 @@ class AdminCommonJpaQueryRepositoryTest {
     private final AdminCommonJpaQueryRepository adminCommonJpaQueryRepository;
 
     private NewCodeEntity commonCodeEntity;
-    private NewCodeDTO commonCodeDTO;
+    private NewCodeDto commonCodeDTO;
 
     public void createModelAndImage() {
         AdminUserEntity adminUserEntity = AdminUserEntity.builder()
@@ -92,13 +92,13 @@ class AdminCommonJpaQueryRepositoryTest {
         Map<String, Object> commonMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 100);
 
-        List<NewCodeDTO> commonCodeList = new ArrayList<>();
-        commonCodeList.add(NewCodeDTO.builder().idx(1L).categoryCd(1).categoryNm("men").cmmType("model").visible("Y").build());
-        Page<NewCodeDTO> resultCommon = new PageImpl<>(commonCodeList, pageRequest, commonCodeList.size());
+        List<NewCodeDto> commonCodeList = new ArrayList<>();
+        commonCodeList.add(NewCodeDto.builder().idx(1L).categoryCd(1).categoryNm("men").cmmType("model").visible("Y").build());
+        Page<NewCodeDto> resultCommon = new PageImpl<>(commonCodeList, pageRequest, commonCodeList.size());
         // when
         when(mockAdminCommonJpaQueryRepository.findCommonCodeList(commonMap, pageRequest)).thenReturn(resultCommon);
-        Page<NewCodeDTO> newCommonCodeList = mockAdminCommonJpaQueryRepository.findCommonCodeList(commonMap, pageRequest);
-        List<NewCodeDTO> findCommonCodeList = newCommonCodeList.stream().collect(Collectors.toList());
+        Page<NewCodeDto> newCommonCodeList = mockAdminCommonJpaQueryRepository.findCommonCodeList(commonMap, pageRequest);
+        List<NewCodeDto> findCommonCodeList = newCommonCodeList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findCommonCodeList.get(0).getIdx()).isEqualTo(commonCodeList.get(0).getIdx());
@@ -121,13 +121,13 @@ class AdminCommonJpaQueryRepositoryTest {
         Map<String, Object> commonMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 100);
 
-        List<NewCodeDTO> commonCodeList = new ArrayList<>();
-        commonCodeList.add(NewCodeDTO.builder().idx(1L).categoryCd(1).categoryNm("men").cmmType("model").visible("Y").build());
-        Page<NewCodeDTO> resultCommon = new PageImpl<>(commonCodeList, pageRequest, commonCodeList.size());
+        List<NewCodeDto> commonCodeList = new ArrayList<>();
+        commonCodeList.add(NewCodeDto.builder().idx(1L).categoryCd(1).categoryNm("men").cmmType("model").visible("Y").build());
+        Page<NewCodeDto> resultCommon = new PageImpl<>(commonCodeList, pageRequest, commonCodeList.size());
         // when
         when(mockAdminCommonJpaQueryRepository.findCommonCodeList(commonMap, pageRequest)).thenReturn(resultCommon);
-        Page<NewCodeDTO> newCommonCodeList = mockAdminCommonJpaQueryRepository.findCommonCodeList(commonMap, pageRequest);
-        List<NewCodeDTO> findCommonCodeList = newCommonCodeList.stream().collect(Collectors.toList());
+        Page<NewCodeDto> newCommonCodeList = mockAdminCommonJpaQueryRepository.findCommonCodeList(commonMap, pageRequest);
+        List<NewCodeDto> findCommonCodeList = newCommonCodeList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findCommonCodeList.get(0).getIdx()).isEqualTo(commonCodeList.get(0).getIdx());

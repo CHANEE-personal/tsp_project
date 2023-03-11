@@ -1,7 +1,7 @@
 package com.tsp.api.common.service;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tsp.api.common.domain.NewCodeDTO;
+import com.tsp.api.common.domain.NewCodeDto;
 import com.tsp.api.common.domain.NewCodeEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class AdminCommonJpaQueryRepository {
      * 5. 작성일      : 2022. 05. 02.
      * </pre>
      */
-    public Page<NewCodeDTO> findCommonCodeList(Map<String, Object> commonMap, PageRequest pageRequest) {
+    public Page<NewCodeDto> findCommonCodeList(Map<String, Object> commonMap, PageRequest pageRequest) {
         List<NewCodeEntity> commonCodeList = queryFactory
                 .selectFrom(newCodeEntity)
                 .offset(pageRequest.getOffset())

@@ -2,14 +2,13 @@ package com.tsp.api.model.domain.negotiation;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tsp.api.common.domain.NewCommonDTO;
-import com.tsp.api.model.domain.AdminModelDTO;
+import com.tsp.api.model.domain.AdminModelDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
@@ -21,14 +20,10 @@ import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ApiModel(value = "모델 섭외 관련 변수")
-public class AdminNegotiationDTO extends NewCommonDTO {
+public class AdminNegotiationDto extends NewCommonDTO {
 
     @ApiModelProperty(required = true, value = "idx", hidden = true, example = "1")
     private Long idx;
-
-    @NotEmpty(message = "모델 국문 이름 입력은 필수입니다.")
-    @ApiModelProperty(required = true, value = "model Kor Name", hidden = true)
-    private String modelKorName;
 
     @NotEmpty(message = "모델 섭외 내용 입력은 필수입니다.")
     @ApiModelProperty(required = true, value = "modelNegotiationDesc")
@@ -56,5 +51,44 @@ public class AdminNegotiationDTO extends NewCommonDTO {
     private String visible;
 
     @ApiModelProperty(value = "adminModelDTO", hidden = true)
-    private AdminModelDTO adminModelDTO;
+    private AdminModelDto adminModelDTO;
+
+    @ApiModelProperty(value = "categoryCd", hidden = true)
+    private Integer categoryCd;
+
+    @ApiModelProperty(value = "categoryAge", hidden = true)
+    private Integer categoryAge;
+
+    @ApiModelProperty(value = "modelKorName", hidden = true)
+    private String modelKorName;
+
+    @ApiModelProperty(value = "modelEngName", hidden = true)
+    private String modelEngName;
+
+    @ApiModelProperty(value = "modelDescription", hidden = true)
+    private String modelDescription;
+
+    @ApiModelProperty(value = "height", hidden = true)
+    private Integer height;
+
+    @ApiModelProperty(value = "size3", hidden = true)
+    private String size3;
+
+    @ApiModelProperty(value = "shoes", hidden = true)
+    private Integer shoes;
+
+    @ApiModelProperty(value = "modelMainYn", hidden = true)
+    private String modelMainYn;
+
+    @ApiModelProperty(value = "modelFirstName", hidden = true)
+    private String modelFirstName;
+
+    @ApiModelProperty(value = "modelSecondName", hidden = true)
+    private String modelSecondName;
+
+    @ApiModelProperty(value = "modelKorFirstName", hidden = true)
+    private String modelKorFirstName;
+
+    @ApiModelProperty(value = "modelKorSecondName", hidden = true)
+    private String modelKorSecondName;
 }

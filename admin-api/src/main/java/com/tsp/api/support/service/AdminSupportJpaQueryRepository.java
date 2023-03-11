@@ -2,12 +2,12 @@ package com.tsp.api.support.service;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tsp.api.comment.domain.AdminCommentDTO;
+import com.tsp.api.comment.domain.AdminCommentDto;
 import com.tsp.api.comment.domain.AdminCommentEntity;
 import com.tsp.api.comment.domain.QAdminCommentEntity;
-import com.tsp.api.support.domain.AdminSupportDTO;
+import com.tsp.api.support.domain.AdminSupportDto;
 import com.tsp.api.support.domain.AdminSupportEntity;
-import com.tsp.api.support.domain.evaluation.EvaluationDTO;
+import com.tsp.api.support.domain.evaluation.EvaluationDto;
 import com.tsp.api.support.domain.evaluation.EvaluationEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,7 +60,7 @@ public class AdminSupportJpaQueryRepository {
      * 5. 작성일      : 2022. 05. 02.
      * </pre>
      */
-    public Page<AdminSupportDTO> findSupportList(Map<String, Object> supportMap, PageRequest pageRequest) {
+    public Page<AdminSupportDto> findSupportList(Map<String, Object> supportMap, PageRequest pageRequest) {
         List<AdminSupportEntity> supportList = queryFactory.selectFrom(adminSupportEntity)
                 .where(searchSupport(supportMap))
                 .orderBy(adminSupportEntity.idx.desc())
@@ -80,7 +80,7 @@ public class AdminSupportJpaQueryRepository {
      * 5. 작성일       : 2022. 05. 02.
      * </pre>
      */
-    public Page<EvaluationDTO> findEvaluationList(Map<String, Object> evaluationMap, PageRequest pageRequest) {
+    public Page<EvaluationDto> findEvaluationList(Map<String, Object> evaluationMap, PageRequest pageRequest) {
         List<EvaluationEntity> evaluationList = queryFactory.selectFrom(evaluationEntity)
                 .where(evaluationEntity.visible.eq("Y"))
                 .orderBy(adminSupportEntity.idx.desc())
@@ -100,7 +100,7 @@ public class AdminSupportJpaQueryRepository {
      * 5. 작성일      : 2022. 05. 02.
      * </pre>
      */
-    public EvaluationDTO evaluationSupportModel(EvaluationEntity evaluationEntity) {
+    public EvaluationDto evaluationSupportModel(EvaluationEntity evaluationEntity) {
         em.persist(evaluationEntity);
         return toDto(evaluationEntity);
     }
@@ -114,7 +114,7 @@ public class AdminSupportJpaQueryRepository {
      * 5. 작성일      : 2022. 05. 02.
      * </pre>
      */
-    public AdminSupportDTO updatePass(Long idx) {
+    public AdminSupportDto updatePass(Long idx) {
         queryFactory.update(adminSupportEntity)
                 .set(adminSupportEntity.passYn, "Y")
                 .set(adminSupportEntity.passTime, LocalDateTime.now())
@@ -136,7 +136,7 @@ public class AdminSupportJpaQueryRepository {
      * 5. 작성일      : 2022. 08. 26.
      * </pre>
      */
-    public List<AdminCommentDTO> findSupportAdminComment(Long idx) {
+    public List<AdminCommentDto> findSupportAdminComment(Long idx) {
         List<AdminCommentEntity> adminCommentEntity = queryFactory
                 .selectFrom(QAdminCommentEntity.adminCommentEntity)
                 .where(QAdminCommentEntity.adminCommentEntity.commentType.eq("support")

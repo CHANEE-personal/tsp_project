@@ -1,15 +1,14 @@
 package com.tsp.api.support.service;
 
-import com.tsp.api.comment.domain.AdminCommentDTO;
+import com.tsp.api.comment.domain.AdminCommentDto;
 import com.tsp.api.comment.domain.AdminCommentEntity;
 import com.tsp.api.model.service.AdminModelCommonServiceTest;
-import com.tsp.api.support.domain.AdminSupportDTO;
+import com.tsp.api.support.domain.AdminSupportDto;
 import com.tsp.api.support.domain.AdminSupportEntity;
-import com.tsp.api.support.domain.evaluation.EvaluationDTO;
+import com.tsp.api.support.domain.evaluation.EvaluationDto;
 import com.tsp.api.support.domain.evaluation.EvaluationEntity;
 import com.tsp.api.support.evaluation.AdminEvaluationJpaRepository;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
@@ -78,16 +77,16 @@ class AdminSupportJpaServiceTest extends AdminModelCommonServiceTest {
         Map<String, Object> supportMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(0, 3);
 
-        List<AdminSupportDTO> returnSupportList = new ArrayList<>();
-        returnSupportList.add(AdminSupportDTO.builder()
+        List<AdminSupportDto> returnSupportList = new ArrayList<>();
+        returnSupportList.add(AdminSupportDto.builder()
                 .idx(1L).supportName("조찬희").supportHeight(170).supportMessage("조찬희")
                 .supportPhone("010-1234-5678").supportSize3("31-24-31").supportInstagram("https://instagram.com").visible("Y").build());
-        Page<AdminSupportDTO> resultSupport = new PageImpl<>(returnSupportList, pageRequest, returnSupportList.size());
+        Page<AdminSupportDto> resultSupport = new PageImpl<>(returnSupportList, pageRequest, returnSupportList.size());
 
         // when
         when(adminSupportJpaQueryRepository.findSupportList(supportMap, pageRequest)).thenReturn(resultSupport);
-        Page<AdminSupportDTO> supportsList = mockAdminSupportJpaService.findSupportList(supportMap, pageRequest);
-        List<AdminSupportDTO> findSupportList = supportsList.stream().collect(Collectors.toList());
+        Page<AdminSupportDto> supportsList = mockAdminSupportJpaService.findSupportList(supportMap, pageRequest);
+        List<AdminSupportDto> findSupportList = supportsList.stream().collect(Collectors.toList());
 
         // then
         assertAll(
@@ -117,16 +116,16 @@ class AdminSupportJpaServiceTest extends AdminModelCommonServiceTest {
         Map<String, Object> supportMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<AdminSupportDTO> returnSupportList = new ArrayList<>();
-        returnSupportList.add(AdminSupportDTO.builder()
+        List<AdminSupportDto> returnSupportList = new ArrayList<>();
+        returnSupportList.add(AdminSupportDto.builder()
                 .idx(1L).supportName("조찬희").supportHeight(170).supportMessage("조찬희")
                 .supportPhone("010-1234-5678").supportSize3("31-24-31").supportInstagram("https://instagram.com").visible("Y").build());
-        Page<AdminSupportDTO> resultSupport = new PageImpl<>(returnSupportList, pageRequest, returnSupportList.size());
+        Page<AdminSupportDto> resultSupport = new PageImpl<>(returnSupportList, pageRequest, returnSupportList.size());
 
         // when
         given(adminSupportJpaQueryRepository.findSupportList(supportMap, pageRequest)).willReturn(resultSupport);
-        Page<AdminSupportDTO> supportsList = mockAdminSupportJpaService.findSupportList(supportMap, pageRequest);
-        List<AdminSupportDTO> findSupportList = supportsList.stream().collect(Collectors.toList());
+        Page<AdminSupportDto> supportsList = mockAdminSupportJpaService.findSupportList(supportMap, pageRequest);
+        List<AdminSupportDto> findSupportList = supportsList.stream().collect(Collectors.toList());
 
         // then
         assertAll(
@@ -158,7 +157,7 @@ class AdminSupportJpaServiceTest extends AdminModelCommonServiceTest {
     void 지원모델상세조회Mockito테스트() {
         // when
         when(adminSupportJpaRepository.findById(adminSupportEntity.getIdx())).thenReturn(Optional.ofNullable(adminSupportEntity));
-        AdminSupportDTO supportInfo = mockAdminSupportJpaService.findOneSupportModel(adminSupportEntity.getIdx());
+        AdminSupportDto supportInfo = mockAdminSupportJpaService.findOneSupportModel(adminSupportEntity.getIdx());
 
         // then
         assertThat(supportInfo.getIdx()).isEqualTo(adminSupportEntity.getIdx());
@@ -180,7 +179,7 @@ class AdminSupportJpaServiceTest extends AdminModelCommonServiceTest {
     void 지원모델상세조회BDD테스트() {
         // when
         given(adminSupportJpaRepository.findById(adminSupportEntity.getIdx())).willReturn(Optional.ofNullable(adminSupportEntity));
-        AdminSupportDTO supportInfo = mockAdminSupportJpaService.findOneSupportModel(adminSupportEntity.getIdx());
+        AdminSupportDto supportInfo = mockAdminSupportJpaService.findOneSupportModel(adminSupportEntity.getIdx());
 
         // then
         assertThat(supportInfo.getIdx()).isEqualTo(adminSupportEntity.getIdx());
@@ -212,7 +211,7 @@ class AdminSupportJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         when(adminSupportJpaRepository.findById(updateSupport.getIdx())).thenReturn(Optional.of(updateSupport));
         when(adminSupportJpaRepository.save(updateSupport)).thenReturn(updateSupport);
-        AdminSupportDTO supportInfo = mockAdminSupportJpaService.updateSupportModel(updateSupport.getIdx(), updateSupport);
+        AdminSupportDto supportInfo = mockAdminSupportJpaService.updateSupportModel(updateSupport.getIdx(), updateSupport);
 
         // then
         assertThat(supportInfo.getSupportName()).isEqualTo(updateSupport.getSupportName());
@@ -245,7 +244,7 @@ class AdminSupportJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         given(adminSupportJpaRepository.findById(updateSupport.getIdx())).willReturn(Optional.of(updateSupport));
         given(adminSupportJpaRepository.save(updateSupport)).willReturn(updateSupport);
-        AdminSupportDTO supportInfo = mockAdminSupportJpaService.updateSupportModel(updateSupport.getIdx(), updateSupport);
+        AdminSupportDto supportInfo = mockAdminSupportJpaService.updateSupportModel(updateSupport.getIdx(), updateSupport);
 
         // then
         assertThat(supportInfo.getSupportName()).isEqualTo(updateSupport.getSupportName());
@@ -279,7 +278,7 @@ class AdminSupportJpaServiceTest extends AdminModelCommonServiceTest {
 
         // when
         when(adminEvaluationJpaRepository.findAll(pageRequest)).thenReturn(resultPage);
-        List<EvaluationDTO> findEvaluateList = mockAdminSupportJpaService.findEvaluationList(evaluationMap, pageRequest);
+        List<EvaluationDto> findEvaluateList = mockAdminSupportJpaService.findEvaluationList(evaluationMap, pageRequest);
 
         // then
         assertThat(findEvaluateList.get(0).getIdx()).isEqualTo(evaluationList.get(0).getIdx());
@@ -310,7 +309,7 @@ class AdminSupportJpaServiceTest extends AdminModelCommonServiceTest {
 
         // when
         given(adminEvaluationJpaRepository.findAll(pageRequest)).willReturn(resultPage);
-        List<EvaluationDTO> findEvaluateList = mockAdminSupportJpaService.findEvaluationList(evaluationMap, pageRequest);
+        List<EvaluationDto> findEvaluateList = mockAdminSupportJpaService.findEvaluationList(evaluationMap, pageRequest);
 
         // then
         assertThat(findEvaluateList.get(0).getIdx()).isEqualTo(evaluationList.get(0).getIdx());
@@ -328,7 +327,7 @@ class AdminSupportJpaServiceTest extends AdminModelCommonServiceTest {
     void 지원모델평가상세조회Mockito테스트() {
         // when
         when(adminEvaluationJpaRepository.findById(evaluationEntity.getIdx())).thenReturn(Optional.ofNullable(evaluationEntity));
-        EvaluationDTO evaluationInfo = mockAdminSupportJpaService.findOneEvaluation(evaluationEntity.getIdx());
+        EvaluationDto evaluationInfo = mockAdminSupportJpaService.findOneEvaluation(evaluationEntity.getIdx());
 
         // then
         assertThat(evaluationInfo.getIdx()).isEqualTo(evaluationEntity.getIdx());
@@ -349,7 +348,7 @@ class AdminSupportJpaServiceTest extends AdminModelCommonServiceTest {
     void 지원모델평가상세조회BDD테스트() {
         // when
         given(adminEvaluationJpaRepository.findById(evaluationEntity.getIdx())).willReturn(Optional.ofNullable(evaluationEntity));
-        EvaluationDTO evaluationInfo = mockAdminSupportJpaService.findOneEvaluation(evaluationEntity.getIdx());
+        EvaluationDto evaluationInfo = mockAdminSupportJpaService.findOneEvaluation(evaluationEntity.getIdx());
 
         // then
         assertThat(evaluationInfo.getIdx()).isEqualTo(evaluationEntity.getIdx());
@@ -368,7 +367,7 @@ class AdminSupportJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         when(adminSupportJpaRepository.findById(adminSupportEntity.getIdx())).thenReturn(Optional.ofNullable(adminSupportEntity));
         when(adminEvaluationJpaRepository.save(evaluationEntity)).thenReturn(evaluationEntity);
-        EvaluationDTO evaluationInfo = mockAdminSupportJpaService.evaluationSupportModel(adminSupportEntity.getIdx(), evaluationEntity);
+        EvaluationDto evaluationInfo = mockAdminSupportJpaService.evaluationSupportModel(adminSupportEntity.getIdx(), evaluationEntity);
 
         // then
         assertThat(evaluationInfo.getAdminSupportDTO().getIdx()).isEqualTo(adminSupportEntity.getIdx());
@@ -389,7 +388,7 @@ class AdminSupportJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         given(adminSupportJpaRepository.findById(adminSupportEntity.getIdx())).willReturn(Optional.ofNullable(adminSupportEntity));
         given(adminEvaluationJpaRepository.save(evaluationEntity)).willReturn(evaluationEntity);
-        EvaluationDTO evaluationInfo = mockAdminSupportJpaService.evaluationSupportModel(adminSupportEntity.getIdx(), evaluationEntity);
+        EvaluationDto evaluationInfo = mockAdminSupportJpaService.evaluationSupportModel(adminSupportEntity.getIdx(), evaluationEntity);
 
         // then
         assertThat(evaluationInfo.getAdminSupportDTO().getIdx()).isEqualTo(adminSupportEntity.getIdx());
@@ -429,7 +428,7 @@ class AdminSupportJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         when(adminSupportJpaRepository.findById(adminSupportEntity.getIdx())).thenReturn(Optional.ofNullable(adminSupportEntity));
         when(adminSupportJpaRepository.save(updateSupport)).thenReturn(updateSupport);
-        AdminSupportDTO supportInfo = mockAdminSupportJpaService.updatePass(adminSupportEntity.getIdx());
+        AdminSupportDto supportInfo = mockAdminSupportJpaService.updatePass(adminSupportEntity.getIdx());
 
         // then
         assertThat(supportInfo.getIdx()).isEqualTo(adminSupportEntity.getIdx());
@@ -463,7 +462,7 @@ class AdminSupportJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         given(adminSupportJpaRepository.findById(adminSupportEntity.getIdx())).willReturn(Optional.ofNullable(adminSupportEntity));
         given(adminSupportJpaRepository.save(updateSupport)).willReturn(updateSupport);
-        AdminSupportDTO supportInfo = mockAdminSupportJpaService.updatePass(adminSupportEntity.getIdx());
+        AdminSupportDto supportInfo = mockAdminSupportJpaService.updatePass(adminSupportEntity.getIdx());
 
         // then
         assertThat(supportInfo.getIdx()).isEqualTo(adminSupportEntity.getIdx());
@@ -497,8 +496,8 @@ class AdminSupportJpaServiceTest extends AdminModelCommonServiceTest {
                 .visible("Y")
                 .build();
 
-        List<AdminCommentDTO> adminCommentList = new ArrayList<>();
-        adminCommentList.add(AdminCommentDTO.builder()
+        List<AdminCommentDto> adminCommentList = new ArrayList<>();
+        adminCommentList.add(AdminCommentDto.builder()
                 .comment("코멘트 테스트")
                 .commentType("support")
                 .commentTypeIdx(supportIdx)
@@ -506,7 +505,7 @@ class AdminSupportJpaServiceTest extends AdminModelCommonServiceTest {
                 .build());
 
         when(mockAdminSupportJpaService.findSupportAdminComment(adminSupportEntity.getIdx())).thenReturn(adminCommentList);
-        List<AdminCommentDTO> newAdminCommentList = mockAdminSupportJpaService.findSupportAdminComment(adminSupportEntity.getIdx());
+        List<AdminCommentDto> newAdminCommentList = mockAdminSupportJpaService.findSupportAdminComment(adminSupportEntity.getIdx());
 
         assertThat(newAdminCommentList.get(0).getCommentType()).isEqualTo("support");
         assertThat(newAdminCommentList.get(0).getCommentTypeIdx()).isEqualTo(adminSupportEntity.getIdx());
@@ -540,8 +539,8 @@ class AdminSupportJpaServiceTest extends AdminModelCommonServiceTest {
                 .visible("Y")
                 .build();
 
-        List<AdminCommentDTO> adminCommentList = new ArrayList<>();
-        adminCommentList.add(AdminCommentDTO.builder()
+        List<AdminCommentDto> adminCommentList = new ArrayList<>();
+        adminCommentList.add(AdminCommentDto.builder()
                 .comment("코멘트 테스트")
                 .commentType("support")
                 .commentTypeIdx(supportIdx)
@@ -549,7 +548,7 @@ class AdminSupportJpaServiceTest extends AdminModelCommonServiceTest {
                 .build());
 
         given(mockAdminSupportJpaService.findSupportAdminComment(adminSupportEntity.getIdx())).willReturn(adminCommentList);
-        List<AdminCommentDTO> newAdminCommentList = mockAdminSupportJpaService.findSupportAdminComment(adminSupportEntity.getIdx());
+        List<AdminCommentDto> newAdminCommentList = mockAdminSupportJpaService.findSupportAdminComment(adminSupportEntity.getIdx());
 
         assertThat(newAdminCommentList.get(0).getCommentType()).isEqualTo("support");
         assertThat(newAdminCommentList.get(0).getCommentTypeIdx()).isEqualTo(adminSupportEntity.getIdx());

@@ -1,9 +1,9 @@
 package com.tsp.api.support.service;
 
-import com.tsp.api.comment.domain.AdminCommentDTO;
-import com.tsp.api.support.domain.AdminSupportDTO;
+import com.tsp.api.comment.domain.AdminCommentDto;
+import com.tsp.api.support.domain.AdminSupportDto;
 import com.tsp.api.support.domain.AdminSupportEntity;
-import com.tsp.api.support.domain.evaluation.EvaluationDTO;
+import com.tsp.api.support.domain.evaluation.EvaluationDto;
 import com.tsp.api.support.domain.evaluation.EvaluationEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +22,7 @@ public interface AdminSupportJpaService {
      * 5. 작성일       : 2022. 05. 02.
      * </pre>
      */
-    Page<AdminSupportDTO> findSupportList(Map<String, Object> supportMap, PageRequest pageRequest);
+    Page<AdminSupportDto> findSupportList(Map<String, Object> supportMap, PageRequest pageRequest);
 
     /**
      * <pre>
@@ -33,7 +33,7 @@ public interface AdminSupportJpaService {
      * 5. 작성일       : 2022. 05. 02.
      * </pre>
      */
-    AdminSupportDTO findOneSupportModel(Long idx);
+    AdminSupportDto findOneSupportModel(Long idx);
 
     /**
      * <pre>
@@ -44,7 +44,7 @@ public interface AdminSupportJpaService {
      * 5. 작성일       : 2022. 05. 02.
      * </pre>
      */
-    AdminSupportDTO insertSupportModel(AdminSupportEntity adminSupportEntity);
+    AdminSupportDto insertSupportModel(AdminSupportEntity adminSupportEntity);
 
     /**
      * <pre>
@@ -55,7 +55,7 @@ public interface AdminSupportJpaService {
      * 5. 작성일       : 2022. 05. 02.
      * </pre>
      */
-    AdminSupportDTO updateSupportModel(Long idx, AdminSupportEntity adminSupportEntity);
+    AdminSupportDto updateSupportModel(Long idx, AdminSupportEntity adminSupportEntity);
 
     /**
      * <pre>
@@ -77,7 +77,7 @@ public interface AdminSupportJpaService {
      * 5. 작성일       : 2022. 05. 02.
      * </pre>
      */
-    List<EvaluationDTO> findEvaluationList(Map<String, Object> evaluationMap, PageRequest pageRequest);
+    List<EvaluationDto> findEvaluationList(Map<String, Object> evaluationMap, PageRequest pageRequest);
 
     /**
      * <pre>
@@ -88,7 +88,7 @@ public interface AdminSupportJpaService {
      * 5. 작성일       : 2022. 05. 02.
      * </pre>
      */
-    EvaluationDTO findOneEvaluation(Long idx);
+    EvaluationDto findOneEvaluation(Long idx);
 
     /**
      * <pre>
@@ -99,7 +99,7 @@ public interface AdminSupportJpaService {
      * 5. 작성일       : 2022. 05. 02.
      * </pre>
      */
-    EvaluationDTO evaluationSupportModel(Long idx, EvaluationEntity evaluationEntity);
+    EvaluationDto evaluationSupportModel(Long idx, EvaluationEntity evaluationEntity);
 
     /**
      * <pre>
@@ -110,7 +110,7 @@ public interface AdminSupportJpaService {
      * 5. 작성일       : 2022. 05. 02.
      * </pre>
      */
-    EvaluationDTO updateEvaluation(Long idx, EvaluationEntity evaluationEntity);
+    EvaluationDto updateEvaluation(Long idx, EvaluationEntity evaluationEntity);
 
     /**
      * <pre>
@@ -132,7 +132,7 @@ public interface AdminSupportJpaService {
      * 5. 작성일       : 2022. 05. 02.
      * </pre>
      */
-    AdminSupportDTO updatePass(Long idx);
+    AdminSupportDto updatePass(Long idx);
 
     /**
      * <pre>
@@ -143,5 +143,5 @@ public interface AdminSupportJpaService {
      * 5. 작성일       : 2022. 08. 26.
      * </pre>
      */
-    List<AdminCommentDTO> findSupportAdminComment(Long idx);
+    List<AdminCommentDto> findSupportAdminComment(Long idx);
 }

@@ -1,6 +1,6 @@
 package com.tsp.api.model.service.schedule;
 
-import com.tsp.api.model.domain.schedule.AdminScheduleDTO;
+import com.tsp.api.model.domain.schedule.AdminScheduleDto;
 import com.tsp.api.model.domain.schedule.AdminScheduleEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +18,7 @@ public interface AdminScheduleJpaService {
      * 5. 작성일      : 2022. 08. 31.
      * </pre>
      */
-    Page<AdminScheduleDTO> findScheduleList(Map<String, Object> scheduleMap, PageRequest pageRequest);
+    Page<AdminScheduleDto> findScheduleList(Map<String, Object> scheduleMap, PageRequest pageRequest);
 
     /**
      * <pre>
@@ -29,7 +29,7 @@ public interface AdminScheduleJpaService {
      * 5. 작성일      : 2022. 08. 31.
      * </pre>
      */
-    AdminScheduleDTO findOneSchedule(Long idx);
+    AdminScheduleDto findOneSchedule(Long idx);
 
     /**
      * <pre>
@@ -40,7 +40,7 @@ public interface AdminScheduleJpaService {
      * 5. 작성일       : 2022. 09. 22.
      * </pre>
      */
-    AdminScheduleDTO findPrevOneSchedule(Long idx);
+    AdminScheduleDto findPrevOneSchedule(Long idx);
 
     /**
      * <pre>
@@ -51,7 +51,7 @@ public interface AdminScheduleJpaService {
      * 5. 작성일       : 2022. 09. 22.
      * </pre>
      */
-    AdminScheduleDTO findNextOneSchedule(Long idx);
+    AdminScheduleDto findNextOneSchedule(Long idx);
 
     /**
      * <pre>
@@ -62,7 +62,7 @@ public interface AdminScheduleJpaService {
      * 5. 작성일       : 2022. 08. 31.
      * </pre>
      */
-    AdminScheduleDTO insertSchedule(Long idx, AdminScheduleEntity adminScheduleEntity);
+    AdminScheduleDto insertSchedule(Long idx, AdminScheduleEntity adminScheduleEntity);
 
     /**
      * <pre>
@@ -73,7 +73,7 @@ public interface AdminScheduleJpaService {
      * 5. 작성일       : 2022. 08. 31.
      * </pre>
      */
-    AdminScheduleDTO updateSchedule(Long idx, AdminScheduleEntity adminScheduleEntity);
+    AdminScheduleDto updateSchedule(Long idx, AdminScheduleEntity adminScheduleEntity);
 
     /**
      * <pre>
