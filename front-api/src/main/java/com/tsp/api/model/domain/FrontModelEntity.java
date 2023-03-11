@@ -8,7 +8,6 @@ import com.tsp.api.model.domain.negotiation.FrontNegotiationEntity;
 import com.tsp.api.model.domain.schedule.FrontScheduleEntity;
 import com.tsp.common.CustomConverter;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Where;
@@ -43,6 +42,11 @@ public class FrontModelEntity extends NewCommonMappedClass {
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "idx")
     private Long idx;
+
+    @Column(name = "category_cd")
+    @Range(min = 1, max = 3, message = "모델 categoryCd는 1~3 사이 값만 입력할 수 있습니다.")
+    @NotNull(message = "모델 카테고리 선택은 필수입니다.")
+    private Integer categoryCd;
 
     @Column(name = "category_age")
     @Range(min = 2, max = 6, message = "모델 연령대 값은 2~6 사이 값만 입력할 수 있습니다")
@@ -118,7 +122,7 @@ public class FrontModelEntity extends NewCommonMappedClass {
     private ArrayList<CareerJson> careerList;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "category_cd")
+    @JoinColumn(name = "category_cd", insertable = false, updatable = false)
     private NewCodeEntity newModelCodeJpaDTO;
 
     @Builder.Default
@@ -157,6 +161,8 @@ public class FrontModelEntity extends NewCommonMappedClass {
                 .idx(entity.getIdx())
                 .categoryCd(entity.getNewModelCodeJpaDTO().getCategoryCd())
                 .agencyIdx(entity.getFrontAgencyEntity().getIdx())
+                .agencyName(entity.getFrontAgencyEntity().getAgencyName())
+                .agencyDescription(entity.getFrontAgencyEntity().getAgencyDescription())
                 .modelKorName(entity.getModelKorName())
                 .modelEngName(entity.getModelEngName())
                 .modelDescription(entity.getModelDescription())

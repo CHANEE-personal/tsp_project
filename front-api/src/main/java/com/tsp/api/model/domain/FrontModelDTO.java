@@ -96,6 +96,12 @@ public class FrontModelDTO extends NewCommonDTO {
     @ApiModelProperty(value = "소속사 idx((ex)1")
     private Long agencyIdx;
 
+    @ApiModelProperty(position = 10, value = "소속사명((ex)소속사", example = "소속사")
+    private String agencyName;
+
+    @ApiModelProperty(position = 10, value = "소속사 내용((ex)소속사", example = "소속사")
+    private String agencyDescription;
+
     @Convert(converter = CustomConverter.class)
     @ApiModelProperty(value = "model career")
     private ArrayList<CareerJson> careerList;

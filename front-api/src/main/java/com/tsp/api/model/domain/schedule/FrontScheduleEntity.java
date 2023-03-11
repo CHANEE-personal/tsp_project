@@ -3,7 +3,6 @@ package com.tsp.api.model.domain.schedule;
 import com.tsp.api.common.domain.NewCommonMappedClass;
 import com.tsp.api.model.domain.FrontModelEntity;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -52,11 +51,20 @@ public class FrontScheduleEntity extends NewCommonMappedClass {
     public static FrontScheduleDTO toDto(FrontScheduleEntity entity) {
         if (entity == null) return null;
         return FrontScheduleDTO.builder()
-                .idx(entity.getIdx())
-                .frontModelDTO(FrontModelEntity.toDto(entity.frontModelEntity))
-                .modelSchedule(entity.getModelSchedule())
-                .modelScheduleTime(entity.getModelScheduleTime())
-                .visible(entity.getVisible())
+                .idx(entity.idx)
+                .categoryCd(entity.frontModelEntity.getCategoryCd())
+                .categoryAge(entity.frontModelEntity.getCategoryAge())
+                .modelKorName(entity.frontModelEntity.getModelKorName())
+                .modelEngName(entity.frontModelEntity.getModelEngName())
+                .modelKorFirstName(entity.frontModelEntity.getModelKorFirstName())
+                .modelKorSecondName(entity.frontModelEntity.getModelKorSecondName())
+                .modelFirstName(entity.frontModelEntity.getModelFirstName())
+                .modelSecondName(entity.frontModelEntity.getModelSecondName())
+                .height(entity.frontModelEntity.getHeight())
+                .shoes(entity.frontModelEntity.getShoes())
+                .modelSchedule(entity.modelSchedule)
+                .modelScheduleTime(entity.modelScheduleTime)
+                .visible(entity.visible)
                 .build();
     }
 
