@@ -1,6 +1,6 @@
 package com.tsp.api.production.service;
 
-import com.tsp.api.production.domain.AdminProductionDTO;
+import com.tsp.api.production.domain.AdminProductionDto;
 import com.tsp.api.production.domain.AdminProductionEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ public class AdminProductionJpaServiceImpl implements AdminProductionJpaService 
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<AdminProductionDTO> findProductionList(Map<String, Object> productionMap, PageRequest pageRequest) {
+    public Page<AdminProductionDto> findProductionList(Map<String, Object> productionMap, PageRequest pageRequest) {
         return adminProductionJpaQueryRepository.findProductionList(productionMap, pageRequest);
     }
 
@@ -50,7 +50,7 @@ public class AdminProductionJpaServiceImpl implements AdminProductionJpaService 
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminProductionDTO findOneProduction(Long idx) {
+    public AdminProductionDto findOneProduction(Long idx) {
         return AdminProductionEntity.toDto(adminProductionJpaRepository.findByIdx(idx)
                 .orElseThrow(() -> new TspException(NOT_FOUND_PRODUCTION)));
     }
@@ -66,7 +66,7 @@ public class AdminProductionJpaServiceImpl implements AdminProductionJpaService 
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminProductionDTO findPrevOneProduction(Long idx) {
+    public AdminProductionDto findPrevOneProduction(Long idx) {
         return adminProductionJpaQueryRepository.findPrevOneProduction(idx);
     }
 
@@ -81,7 +81,7 @@ public class AdminProductionJpaServiceImpl implements AdminProductionJpaService 
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminProductionDTO findNextOneProduction(Long idx) {
+    public AdminProductionDto findNextOneProduction(Long idx) {
         return adminProductionJpaQueryRepository.findNextOneProduction(idx);
     }
 
@@ -96,7 +96,7 @@ public class AdminProductionJpaServiceImpl implements AdminProductionJpaService 
      */
     @Override
     @Transactional
-    public AdminProductionDTO insertProduction(AdminProductionEntity adminProductionEntity) {
+    public AdminProductionDto insertProduction(AdminProductionEntity adminProductionEntity) {
         try {
             return AdminProductionEntity.toDto(adminProductionJpaRepository.save(adminProductionEntity));
         } catch (Exception e) {
@@ -115,7 +115,7 @@ public class AdminProductionJpaServiceImpl implements AdminProductionJpaService 
      */
     @Override
     @Transactional
-    public AdminProductionDTO updateProduction(Long idx, AdminProductionEntity adminProductionEntity) {
+    public AdminProductionDto updateProduction(Long idx, AdminProductionEntity adminProductionEntity) {
         try {
             oneProduction(idx).update(adminProductionEntity);
             return AdminProductionEntity.toDto(adminProductionEntity);

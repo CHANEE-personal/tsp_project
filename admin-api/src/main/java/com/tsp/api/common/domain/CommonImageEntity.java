@@ -93,9 +93,9 @@ public class CommonImageEntity {
     @JoinColumn(name = "type_idx", referencedColumnName = "idx", insertable = false, updatable = false)
     private AdminAgencyEntity adminAgencyEntity;
 
-    public static CommonImageDTO toDto(CommonImageEntity entity) {
+    public static CommonImageDto toDto(CommonImageEntity entity) {
         if (entity == null) return null;
-        return CommonImageDTO.builder()
+        return CommonImageDto.builder()
                 .idx(entity.getIdx())
                 .typeIdx(entity.getTypeIdx())
                 .typeName(entity.getTypeName())
@@ -110,7 +110,7 @@ public class CommonImageEntity {
                 .build();
     }
 
-    public static List<CommonImageDTO> toDtoList(List<CommonImageEntity> entityList) {
+    public static List<CommonImageDto> toDtoList(List<CommonImageEntity> entityList) {
         if (entityList == null) return null;
         return entityList.stream()
                 .map(CommonImageEntity::toDto)

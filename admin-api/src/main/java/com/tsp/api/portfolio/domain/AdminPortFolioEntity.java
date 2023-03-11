@@ -10,7 +10,6 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -81,22 +80,22 @@ public class AdminPortFolioEntity extends NewCommonMappedClass {
         this.commonImageEntityList.add(commonImageEntity);
     }
 
-    public static AdminPortFolioDTO toDto(AdminPortFolioEntity entity) {
+    public static AdminPortFolioDto toDto(AdminPortFolioEntity entity) {
         if (entity == null) return null;
-        return AdminPortFolioDTO.builder()
-                .idx(entity.getIdx())
-                .categoryCd(entity.getNewPortFolioJpaDTO().getCategoryCd())
-                .title(entity.getTitle())
-                .description(entity.getDescription())
-                .hashTag(entity.getHashTag())
-                .videoUrl(entity.getVideoUrl())
-                .viewCount(entity.getViewCount())
-                .visible(entity.getVisible())
+        return AdminPortFolioDto.builder()
+                .idx(entity.idx)
+                .categoryCd(entity.newPortFolioJpaDTO.getCategoryCd())
+                .title(entity.title)
+                .description(entity.description)
+                .hashTag(entity.hashTag)
+                .videoUrl(entity.videoUrl)
+                .viewCount(entity.viewCount)
+                .visible(entity.visible)
                 .portfolioImage(CommonImageEntity.toDtoList(entity.getCommonImageEntityList()))
                 .build();
     }
 
-    public static List<AdminPortFolioDTO> toDtoList(List<AdminPortFolioEntity> entityList) {
+    public static List<AdminPortFolioDto> toDtoList(List<AdminPortFolioEntity> entityList) {
         if (entityList == null) return null;
         return entityList.stream()
                 .map(AdminPortFolioEntity::toDto)

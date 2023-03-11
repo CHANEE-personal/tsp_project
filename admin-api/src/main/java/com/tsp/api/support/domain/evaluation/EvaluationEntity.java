@@ -46,9 +46,9 @@ public class EvaluationEntity extends NewCommonMappedClass {
         this.evaluateComment = evaluationEntity.evaluateComment;
     }
 
-    public static EvaluationDTO toDto(EvaluationEntity entity) {
+    public static EvaluationDto toDto(EvaluationEntity entity) {
         if (entity == null) return null;
-        return EvaluationDTO.builder()
+        return EvaluationDto.builder()
                 .idx(entity.getIdx())
                 .adminSupportDTO(AdminSupportEntity.toDto(entity.getAdminSupportEntity()))
                 .evaluateComment(entity.getEvaluateComment())
@@ -56,7 +56,7 @@ public class EvaluationEntity extends NewCommonMappedClass {
                 .build();
     }
 
-    public static List<EvaluationDTO> toDtoList(List<EvaluationEntity> entityList) {
+    public static List<EvaluationDto> toDtoList(List<EvaluationEntity> entityList) {
         if (entityList == null) return null;
         return entityList.stream()
                 .map(EvaluationEntity::toDto)

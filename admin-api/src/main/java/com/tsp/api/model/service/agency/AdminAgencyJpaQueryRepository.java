@@ -2,7 +2,7 @@ package com.tsp.api.model.service.agency;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tsp.api.model.domain.agency.AdminAgencyDTO;
+import com.tsp.api.model.domain.agency.AdminAgencyDto;
 import com.tsp.api.model.domain.agency.AdminAgencyEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -55,7 +55,7 @@ public class AdminAgencyJpaQueryRepository {
      * 5. 작성일      : 2022. 08. 14.
      * </pre>
      */
-    public Page<AdminAgencyDTO> findAgencyList(Map<String, Object> agencyMap, PageRequest pageRequest) {
+    public Page<AdminAgencyDto> findAgencyList(Map<String, Object> agencyMap, PageRequest pageRequest) {
         List<AdminAgencyEntity> agencyList = queryFactory
                 .selectFrom(adminAgencyEntity)
                 .orderBy(adminAgencyEntity.idx.desc())
@@ -77,7 +77,7 @@ public class AdminAgencyJpaQueryRepository {
      * 5. 작성일      : 2022. 08. 14.
      * </pre>
      */
-    public AdminAgencyDTO findOneAgency(Long idx) {
+    public AdminAgencyDto findOneAgency(Long idx) {
         AdminAgencyEntity findOneAgency = Optional.ofNullable(queryFactory
                 .selectFrom(adminAgencyEntity)
                 .orderBy(adminAgencyEntity.idx.desc())

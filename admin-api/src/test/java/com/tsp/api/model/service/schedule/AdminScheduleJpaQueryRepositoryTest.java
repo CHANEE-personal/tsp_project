@@ -1,11 +1,11 @@
 package com.tsp.api.model.service.schedule;
 
-import com.tsp.api.model.domain.AdminModelDTO;
+import com.tsp.api.model.domain.AdminModelDto;
 import com.tsp.api.model.domain.AdminModelEntity;
 import com.tsp.api.model.domain.CareerJson;
-import com.tsp.api.model.domain.agency.AdminAgencyDTO;
+import com.tsp.api.model.domain.agency.AdminAgencyDto;
 import com.tsp.api.model.domain.agency.AdminAgencyEntity;
-import com.tsp.api.model.domain.schedule.AdminScheduleDTO;
+import com.tsp.api.model.domain.schedule.AdminScheduleDto;
 import com.tsp.api.model.domain.schedule.AdminScheduleEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,11 +56,11 @@ class AdminScheduleJpaQueryRepositoryTest {
     private final EntityManager em;
 
     private AdminModelEntity adminModelEntity;
-    private AdminModelDTO adminModelDTO;
+    private AdminModelDto adminModelDTO;
     private AdminScheduleEntity adminScheduleEntity;
-    private AdminScheduleDTO adminScheduleDTO;
+    private AdminScheduleDto adminScheduleDTO;
     private AdminAgencyEntity adminAgencyEntity;
-    private AdminAgencyDTO adminAgencyDTO;
+    private AdminAgencyDto adminAgencyDTO;
 
     void createModelAndSchedule() {
         adminAgencyEntity = AdminAgencyEntity.builder()
@@ -151,18 +151,18 @@ class AdminScheduleJpaQueryRepositoryTest {
         Map<String, Object> scheduleMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<AdminScheduleDTO> scheduleList = new ArrayList<>();
-        scheduleList.add(AdminScheduleDTO.builder().modelIdx(adminModelEntity.getIdx())
+        List<AdminScheduleDto> scheduleList = new ArrayList<>();
+        scheduleList.add(AdminScheduleDto.builder().modelIdx(adminModelEntity.getIdx())
                 .modelSchedule("스케줄 테스트").modelScheduleTime(now()).build());
-        scheduleList.add(AdminScheduleDTO.builder().modelIdx(adminModelEntity.getIdx())
+        scheduleList.add(AdminScheduleDto.builder().modelIdx(adminModelEntity.getIdx())
                 .modelSchedule("스케줄 테스트 두번째").modelScheduleTime(now()).build());
 
-        Page<AdminScheduleDTO> resultSchedule = new PageImpl<>(scheduleList, pageRequest, scheduleList.size());
+        Page<AdminScheduleDto> resultSchedule = new PageImpl<>(scheduleList, pageRequest, scheduleList.size());
 
         // when
         when(mockAdminScheduleJpaQueryRepository.findScheduleList(scheduleMap, pageRequest)).thenReturn(resultSchedule);
-        Page<AdminScheduleDTO> newModelScheduleList = mockAdminScheduleJpaQueryRepository.findScheduleList(scheduleMap, pageRequest);
-        List<AdminScheduleDTO> findScheduleList = newModelScheduleList.stream().collect(Collectors.toList());
+        Page<AdminScheduleDto> newModelScheduleList = mockAdminScheduleJpaQueryRepository.findScheduleList(scheduleMap, pageRequest);
+        List<AdminScheduleDto> findScheduleList = newModelScheduleList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findScheduleList.get(0).getIdx()).isEqualTo(scheduleList.get(0).getIdx());
@@ -184,18 +184,18 @@ class AdminScheduleJpaQueryRepositoryTest {
         Map<String, Object> scheduleMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<AdminScheduleDTO> scheduleList = new ArrayList<>();
-        scheduleList.add(AdminScheduleDTO.builder().modelIdx(adminModelEntity.getIdx())
+        List<AdminScheduleDto> scheduleList = new ArrayList<>();
+        scheduleList.add(AdminScheduleDto.builder().modelIdx(adminModelEntity.getIdx())
                 .modelSchedule("스케줄 테스트").modelScheduleTime(now()).build());
-        scheduleList.add(AdminScheduleDTO.builder().modelIdx(adminModelEntity.getIdx())
+        scheduleList.add(AdminScheduleDto.builder().modelIdx(adminModelEntity.getIdx())
                 .modelSchedule("스케줄 테스트 두번째").modelScheduleTime(now()).build());
 
-        Page<AdminScheduleDTO> resultSchedule = new PageImpl<>(scheduleList, pageRequest, scheduleList.size());
+        Page<AdminScheduleDto> resultSchedule = new PageImpl<>(scheduleList, pageRequest, scheduleList.size());
 
         // when
         given(mockAdminScheduleJpaQueryRepository.findScheduleList(scheduleMap, pageRequest)).willReturn(resultSchedule);
-        Page<AdminScheduleDTO> newModelScheduleList = mockAdminScheduleJpaQueryRepository.findScheduleList(scheduleMap, pageRequest);
-        List<AdminScheduleDTO> findScheduleList = newModelScheduleList.stream().collect(Collectors.toList());
+        Page<AdminScheduleDto> newModelScheduleList = mockAdminScheduleJpaQueryRepository.findScheduleList(scheduleMap, pageRequest);
+        List<AdminScheduleDto> findScheduleList = newModelScheduleList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findScheduleList.get(0).getIdx()).isEqualTo(scheduleList.get(0).getIdx());
@@ -214,18 +214,18 @@ class AdminScheduleJpaQueryRepositoryTest {
         Map<String, Object> scheduleMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<AdminScheduleDTO> scheduleList = new ArrayList<>();
-        scheduleList.add(AdminScheduleDTO.builder().modelIdx(adminModelEntity.getIdx())
+        List<AdminScheduleDto> scheduleList = new ArrayList<>();
+        scheduleList.add(AdminScheduleDto.builder().modelIdx(adminModelEntity.getIdx())
                 .modelSchedule("스케줄 테스트").modelScheduleTime(now()).build());
-        scheduleList.add(AdminScheduleDTO.builder().modelIdx(adminModelEntity.getIdx())
+        scheduleList.add(AdminScheduleDto.builder().modelIdx(adminModelEntity.getIdx())
                 .modelSchedule("스케줄 테스트 두번째").modelScheduleTime(now()).build());
 
-        Page<AdminScheduleDTO> resultSchedule = new PageImpl<>(scheduleList, pageRequest, scheduleList.size());
+        Page<AdminScheduleDto> resultSchedule = new PageImpl<>(scheduleList, pageRequest, scheduleList.size());
 
         // when
         when(mockAdminScheduleJpaQueryRepository.findScheduleList(scheduleMap, pageRequest)).thenReturn(resultSchedule);
-        Page<AdminScheduleDTO> newModelScheduleList = mockAdminScheduleJpaQueryRepository.findScheduleList(scheduleMap, pageRequest);
-        List<AdminScheduleDTO> findScheduleList = newModelScheduleList.stream().collect(Collectors.toList());
+        Page<AdminScheduleDto> newModelScheduleList = mockAdminScheduleJpaQueryRepository.findScheduleList(scheduleMap, pageRequest);
+        List<AdminScheduleDto> findScheduleList = newModelScheduleList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findScheduleList.get(0).getIdx()).isEqualTo(scheduleList.get(0).getIdx());

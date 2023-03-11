@@ -1,6 +1,6 @@
 package com.tsp.api.festival;
 
-import com.tsp.api.festival.domain.AdminFestivalDTO;
+import com.tsp.api.festival.domain.AdminFestivalDto;
 import com.tsp.api.festival.domain.AdminFestivalEntity;
 import com.tsp.api.festival.service.AdminFestivalJpaService;
 import com.tsp.common.Paging;
@@ -50,7 +50,7 @@ public class AdminFestivalJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping
-    public ResponseEntity<Page<AdminFestivalDTO>> findFestivalList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
+    public ResponseEntity<Page<AdminFestivalDto>> findFestivalList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
         return ResponseEntity.ok().body(adminFestivalJpaService.findFestivalList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }
 
@@ -66,7 +66,7 @@ public class AdminFestivalJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "행사 상세 조회", notes = "행사 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "행사 상세 조회 성공", response = AdminFestivalDTO.class),
+            @ApiResponse(code = 200, message = "행사 상세 조회 성공", response = AdminFestivalDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -74,7 +74,7 @@ public class AdminFestivalJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/{idx}")
-    public ResponseEntity<AdminFestivalDTO> findOneFestival(@PathVariable Long idx) {
+    public ResponseEntity<AdminFestivalDto> findOneFestival(@PathVariable Long idx) {
         return ResponseEntity.ok(adminFestivalJpaService.findOneFestival(idx));
     }
 
@@ -90,7 +90,7 @@ public class AdminFestivalJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "행사 등록", notes = "행사를 등록한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "행사 등록 성공", response = AdminFestivalDTO.class),
+            @ApiResponse(code = 201, message = "행사 등록 성공", response = AdminFestivalDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -98,7 +98,7 @@ public class AdminFestivalJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PostMapping
-    public ResponseEntity<AdminFestivalDTO> insertFestival(@Valid @RequestBody AdminFestivalEntity adminFestivalEntity) {
+    public ResponseEntity<AdminFestivalDto> insertFestival(@Valid @RequestBody AdminFestivalEntity adminFestivalEntity) {
         return ResponseEntity.created(URI.create("")).body(adminFestivalJpaService.insertFestival(adminFestivalEntity));
     }
 
@@ -114,7 +114,7 @@ public class AdminFestivalJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "행사 수정", notes = "행사를 수정한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "행사 수정 성공", response = AdminFestivalDTO.class),
+            @ApiResponse(code = 200, message = "행사 수정 성공", response = AdminFestivalDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -122,7 +122,7 @@ public class AdminFestivalJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PutMapping("/{idx}")
-    public ResponseEntity<AdminFestivalDTO> updateFestival(@PathVariable Long idx, @Valid @RequestBody AdminFestivalEntity adminFestivalEntity) {
+    public ResponseEntity<AdminFestivalDto> updateFestival(@PathVariable Long idx, @Valid @RequestBody AdminFestivalEntity adminFestivalEntity) {
         return ResponseEntity.ok(adminFestivalJpaService.updateFestival(idx, adminFestivalEntity));
     }
 

@@ -1,9 +1,9 @@
 package com.tsp.api.model.service.agency;
 
 import com.tsp.api.common.EntityType;
-import com.tsp.api.common.domain.CommonImageDTO;
+import com.tsp.api.common.domain.CommonImageDto;
 import com.tsp.api.common.domain.CommonImageEntity;
-import com.tsp.api.model.domain.agency.AdminAgencyDTO;
+import com.tsp.api.model.domain.agency.AdminAgencyDto;
 import com.tsp.api.model.domain.agency.AdminAgencyEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,9 +56,9 @@ class AdminAgencyJpaQueryRepositoryTest {
     private final EntityManager em;
 
     private AdminAgencyEntity adminAgencyEntity;
-    private AdminAgencyDTO adminAgencyDTO;
+    private AdminAgencyDto adminAgencyDTO;
     private CommonImageEntity commonImageEntity;
-    private CommonImageDTO commonImageDTO;
+    private CommonImageDto commonImageDTO;
 
     void createAgency() {
         adminAgencyEntity = AdminAgencyEntity.builder()
@@ -131,15 +131,15 @@ class AdminAgencyJpaQueryRepositoryTest {
         Map<String, Object> agencyMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<AdminAgencyDTO> agencyList = new ArrayList<>();
-        agencyList.add(AdminAgencyDTO.builder().idx(1L)
+        List<AdminAgencyDto> agencyList = new ArrayList<>();
+        agencyList.add(AdminAgencyDto.builder().idx(1L)
                 .agencyName("agency").agencyDescription("agency").build());
-        Page<AdminAgencyDTO> resultAgency = new PageImpl<>(agencyList, pageRequest, agencyList.size());
+        Page<AdminAgencyDto> resultAgency = new PageImpl<>(agencyList, pageRequest, agencyList.size());
 
         // when
         when(mockAdminAgencyJpaQueryRepository.findAgencyList(agencyMap, pageRequest)).thenReturn(resultAgency);
-        Page<AdminAgencyDTO> newAgencyList = mockAdminAgencyJpaQueryRepository.findAgencyList(agencyMap, pageRequest);
-        List<AdminAgencyDTO> findAgencyList = newAgencyList.stream().collect(Collectors.toList());
+        Page<AdminAgencyDto> newAgencyList = mockAdminAgencyJpaQueryRepository.findAgencyList(agencyMap, pageRequest);
+        List<AdminAgencyDto> findAgencyList = newAgencyList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findAgencyList.get(0).getIdx()).isEqualTo(agencyList.get(0).getIdx());
@@ -163,15 +163,15 @@ class AdminAgencyJpaQueryRepositoryTest {
         Map<String, Object> agencyMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<AdminAgencyDTO> agencyList = new ArrayList<>();
-        agencyList.add(AdminAgencyDTO.builder().idx(1L)
+        List<AdminAgencyDto> agencyList = new ArrayList<>();
+        agencyList.add(AdminAgencyDto.builder().idx(1L)
                 .agencyName("agency").agencyDescription("agency").build());
-        Page<AdminAgencyDTO> resultAgency = new PageImpl<>(agencyList, pageRequest, agencyList.size());
+        Page<AdminAgencyDto> resultAgency = new PageImpl<>(agencyList, pageRequest, agencyList.size());
 
         // when
         given(mockAdminAgencyJpaQueryRepository.findAgencyList(agencyMap, pageRequest)).willReturn(resultAgency);
-        Page<AdminAgencyDTO> newAgencyList = mockAdminAgencyJpaQueryRepository.findAgencyList(agencyMap, pageRequest);
-        List<AdminAgencyDTO> findAgencyList = newAgencyList.stream().collect(Collectors.toList());
+        Page<AdminAgencyDto> newAgencyList = mockAdminAgencyJpaQueryRepository.findAgencyList(agencyMap, pageRequest);
+        List<AdminAgencyDto> findAgencyList = newAgencyList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findAgencyList.get(0).getIdx()).isEqualTo(agencyList.get(0).getIdx());
@@ -193,7 +193,7 @@ class AdminAgencyJpaQueryRepositoryTest {
         commonImageEntityList.add(commonImageEntity);
 
         AdminAgencyEntity adminAgencyEntity = AdminAgencyEntity.builder().idx(1L).commonImageEntityList(commonImageEntityList).build();
-        AdminAgencyDTO adminAgencyDTO = AdminAgencyDTO.builder()
+        AdminAgencyDto adminAgencyDTO = AdminAgencyDto.builder()
                 .idx(1L)
                 .agencyName("agency")
                 .agencyDescription("agency")
@@ -203,7 +203,7 @@ class AdminAgencyJpaQueryRepositoryTest {
 
         // when
         when(mockAdminAgencyJpaQueryRepository.findOneAgency(adminAgencyEntity.getIdx())).thenReturn(adminAgencyDTO);
-        AdminAgencyDTO agencyInfo = mockAdminAgencyJpaQueryRepository.findOneAgency(adminAgencyEntity.getIdx());
+        AdminAgencyDto agencyInfo = mockAdminAgencyJpaQueryRepository.findOneAgency(adminAgencyEntity.getIdx());
 
         // then
         assertThat(agencyInfo.getIdx()).isEqualTo(1);
@@ -233,7 +233,7 @@ class AdminAgencyJpaQueryRepositoryTest {
         commonImageEntityList.add(commonImageEntity);
 
         AdminAgencyEntity adminAgencyEntity = AdminAgencyEntity.builder().idx(1L).commonImageEntityList(commonImageEntityList).build();
-        AdminAgencyDTO adminAgencyDTO = AdminAgencyDTO.builder()
+        AdminAgencyDto adminAgencyDTO = AdminAgencyDto.builder()
                 .idx(1L)
                 .agencyName("agency")
                 .agencyDescription("agency")
@@ -243,7 +243,7 @@ class AdminAgencyJpaQueryRepositoryTest {
 
         // when
         given(mockAdminAgencyJpaQueryRepository.findOneAgency(adminAgencyEntity.getIdx())).willReturn(adminAgencyDTO);
-        AdminAgencyDTO agencyInfo = mockAdminAgencyJpaQueryRepository.findOneAgency(adminAgencyEntity.getIdx());
+        AdminAgencyDto agencyInfo = mockAdminAgencyJpaQueryRepository.findOneAgency(adminAgencyEntity.getIdx());
 
         // then
         assertThat(agencyInfo.getIdx()).isEqualTo(1);

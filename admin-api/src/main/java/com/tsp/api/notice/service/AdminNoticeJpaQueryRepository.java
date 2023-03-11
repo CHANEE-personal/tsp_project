@@ -2,7 +2,7 @@ package com.tsp.api.notice.service;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tsp.api.notice.domain.AdminNoticeDTO;
+import com.tsp.api.notice.domain.AdminNoticeDto;
 import com.tsp.api.notice.domain.AdminNoticeEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -57,7 +57,7 @@ public class AdminNoticeJpaQueryRepository {
      * 5. 작성일      : 2022. 08. 16.
      * </pre>
      */
-    public Page<AdminNoticeDTO> findNoticeList(Map<String, Object> noticeMap, PageRequest pageRequest) {
+    public Page<AdminNoticeDto> findNoticeList(Map<String, Object> noticeMap, PageRequest pageRequest) {
         List<AdminNoticeEntity> noticeList = queryFactory
                 .selectFrom(adminNoticeEntity)
                 .orderBy(adminNoticeEntity.idx.desc())
@@ -78,7 +78,7 @@ public class AdminNoticeJpaQueryRepository {
      * 5. 작성일      : 2022. 09. 18.
      * </pre>
      */
-    AdminNoticeDTO findPrevOneNotice(Long idx) {
+    AdminNoticeDto findPrevOneNotice(Long idx) {
         AdminNoticeEntity findPrevOneNotice = Optional.ofNullable(queryFactory
                 .selectFrom(adminNoticeEntity)
                 .orderBy(adminNoticeEntity.idx.desc())
@@ -98,7 +98,7 @@ public class AdminNoticeJpaQueryRepository {
      * 5. 작성일      : 2022. 09. 18.
      * </pre>
      */
-    AdminNoticeDTO findNextOneNotice(Long idx) {
+    AdminNoticeDto findNextOneNotice(Long idx) {
         AdminNoticeEntity findNextOneNotice = Optional.ofNullable(queryFactory
                 .selectFrom(adminNoticeEntity)
                 .orderBy(adminNoticeEntity.idx.desc())

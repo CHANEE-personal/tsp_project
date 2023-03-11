@@ -1,6 +1,6 @@
 package com.tsp.api.model.service.negotiation;
 
-import com.tsp.api.model.domain.negotiation.AdminNegotiationDTO;
+import com.tsp.api.model.domain.negotiation.AdminNegotiationDto;
 import com.tsp.api.model.domain.negotiation.AdminNegotiationEntity;
 import com.tsp.api.model.service.AdminModelCommonServiceTest;
 import com.tsp.api.model.service.AdminModelJpaRepository;
@@ -88,18 +88,18 @@ class AdminNegotiationJpaServiceTest extends AdminModelCommonServiceTest {
         Map<String, Object> negotiationMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<AdminNegotiationDTO> negotiationList = new ArrayList<>();
-        negotiationList.add(AdminNegotiationDTO.builder().adminModelDTO(adminModelDTO)
+        List<AdminNegotiationDto> negotiationList = new ArrayList<>();
+        negotiationList.add(AdminNegotiationDto.builder().adminModelDTO(adminModelDTO)
                 .modelNegotiationDesc("영화 프로젝트 참여 테스트 첫번째").modelNegotiationDate(now()).build());
-        negotiationList.add(AdminNegotiationDTO.builder().adminModelDTO(adminModelDTO)
+        negotiationList.add(AdminNegotiationDto.builder().adminModelDTO(adminModelDTO)
                 .modelNegotiationDesc("영화 프로젝트 참여 테스트 두번째").modelNegotiationDate(now()).build());
 
-        Page<AdminNegotiationDTO> resultNegotiation = new PageImpl<>(negotiationList, pageRequest, negotiationList.size());
+        Page<AdminNegotiationDto> resultNegotiation = new PageImpl<>(negotiationList, pageRequest, negotiationList.size());
 
         // when
         when(adminNegotiationJpaQueryRepository.findNegotiationList(negotiationMap, pageRequest)).thenReturn(resultNegotiation);
-        Page<AdminNegotiationDTO> newModelNegotiationList = mockAdminNegotiationJpaService.findNegotiationList(negotiationMap, pageRequest);
-        List<AdminNegotiationDTO> findNegotiationList = newModelNegotiationList.stream().collect(Collectors.toList());
+        Page<AdminNegotiationDto> newModelNegotiationList = mockAdminNegotiationJpaService.findNegotiationList(negotiationMap, pageRequest);
+        List<AdminNegotiationDto> findNegotiationList = newModelNegotiationList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findNegotiationList.get(0).getIdx()).isEqualTo(negotiationList.get(0).getIdx());
@@ -121,18 +121,18 @@ class AdminNegotiationJpaServiceTest extends AdminModelCommonServiceTest {
         Map<String, Object> negotiationMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<AdminNegotiationDTO> negotiationList = new ArrayList<>();
-        negotiationList.add(AdminNegotiationDTO.builder().adminModelDTO(adminModelDTO)
+        List<AdminNegotiationDto> negotiationList = new ArrayList<>();
+        negotiationList.add(AdminNegotiationDto.builder().adminModelDTO(adminModelDTO)
                 .modelNegotiationDesc("영화 프로젝트 참여 테스트 첫번째").modelNegotiationDate(now()).build());
-        negotiationList.add(AdminNegotiationDTO.builder().adminModelDTO(adminModelDTO)
+        negotiationList.add(AdminNegotiationDto.builder().adminModelDTO(adminModelDTO)
                 .modelNegotiationDesc("영화 프로젝트 참여 테스트 두번째").modelNegotiationDate(now()).build());
 
-        Page<AdminNegotiationDTO> resultNegotiation = new PageImpl<>(negotiationList, pageRequest, negotiationList.size());
+        Page<AdminNegotiationDto> resultNegotiation = new PageImpl<>(negotiationList, pageRequest, negotiationList.size());
 
         // when
         given(adminNegotiationJpaQueryRepository.findNegotiationList(negotiationMap, pageRequest)).willReturn(resultNegotiation);
-        Page<AdminNegotiationDTO> newModelNegotiationList = mockAdminNegotiationJpaService.findNegotiationList(negotiationMap, pageRequest);
-        List<AdminNegotiationDTO> findNegotiationList = newModelNegotiationList.stream().collect(Collectors.toList());
+        Page<AdminNegotiationDto> newModelNegotiationList = mockAdminNegotiationJpaService.findNegotiationList(negotiationMap, pageRequest);
+        List<AdminNegotiationDto> findNegotiationList = newModelNegotiationList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findNegotiationList.get(0).getIdx()).isEqualTo(negotiationList.get(0).getIdx());
@@ -169,7 +169,7 @@ class AdminNegotiationJpaServiceTest extends AdminModelCommonServiceTest {
         adminNegotiationDTO = adminNegotiationJpaService.findOneNegotiation(adminNegotiationEntity.getIdx());
 
         when(mockAdminNegotiationJpaService.findPrevOneNegotiation(adminNegotiationEntity.getIdx())).thenReturn(adminNegotiationDTO);
-        AdminNegotiationDTO negotiationInfo = mockAdminNegotiationJpaService.findPrevOneNegotiation(adminNegotiationEntity.getIdx());
+        AdminNegotiationDto negotiationInfo = mockAdminNegotiationJpaService.findPrevOneNegotiation(adminNegotiationEntity.getIdx());
 
         // then
         assertThat(negotiationInfo.getIdx()).isEqualTo(1);
@@ -193,7 +193,7 @@ class AdminNegotiationJpaServiceTest extends AdminModelCommonServiceTest {
         adminNegotiationDTO = adminNegotiationJpaService.findOneNegotiation(adminNegotiationEntity.getIdx());
 
         given(mockAdminNegotiationJpaService.findPrevOneNegotiation(adminNegotiationEntity.getIdx())).willReturn(adminNegotiationDTO);
-        AdminNegotiationDTO negotiationInfo = mockAdminNegotiationJpaService.findPrevOneNegotiation(adminNegotiationEntity.getIdx());
+        AdminNegotiationDto negotiationInfo = mockAdminNegotiationJpaService.findPrevOneNegotiation(adminNegotiationEntity.getIdx());
 
         // then
         assertThat(negotiationInfo.getIdx()).isEqualTo(1);
@@ -214,7 +214,7 @@ class AdminNegotiationJpaServiceTest extends AdminModelCommonServiceTest {
         adminNegotiationDTO = adminNegotiationJpaService.findOneNegotiation(adminNegotiationEntity.getIdx());
 
         when(mockAdminNegotiationJpaService.findNextOneNegotiation(adminNegotiationEntity.getIdx())).thenReturn(adminNegotiationDTO);
-        AdminNegotiationDTO negotiationInfo = mockAdminNegotiationJpaService.findNextOneNegotiation(adminNegotiationEntity.getIdx());
+        AdminNegotiationDto negotiationInfo = mockAdminNegotiationJpaService.findNextOneNegotiation(adminNegotiationEntity.getIdx());
 
         // then
         assertThat(negotiationInfo.getIdx()).isEqualTo(3);
@@ -232,13 +232,13 @@ class AdminNegotiationJpaServiceTest extends AdminModelCommonServiceTest {
     @DisplayName("다음 모델 섭외 상세 조회 BDD 테스트")
     void 다음모델섭외상세조회BDD테스트() {
         // given
-        AdminNegotiationDTO oneNegotiation = adminNegotiationJpaService.insertModelNegotiation(adminModelEntity.getIdx(), adminNegotiationEntity);
+        AdminNegotiationDto oneNegotiation = adminNegotiationJpaService.insertModelNegotiation(adminModelEntity.getIdx(), adminNegotiationEntity);
 
         // when
         adminNegotiationDTO = adminNegotiationJpaService.findOneNegotiation(oneNegotiation.getIdx());
 
         given(mockAdminNegotiationJpaService.findNextOneNegotiation(adminNegotiationEntity.getIdx())).willReturn(adminNegotiationDTO);
-        AdminNegotiationDTO negotiationInfo = mockAdminNegotiationJpaService.findNextOneNegotiation(adminNegotiationEntity.getIdx());
+        AdminNegotiationDto negotiationInfo = mockAdminNegotiationJpaService.findNextOneNegotiation(adminNegotiationEntity.getIdx());
 
         // then
         assertThat(negotiationInfo.getIdx()).isEqualTo(3);
@@ -255,7 +255,7 @@ class AdminNegotiationJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         when(adminModelJpaRepository.findById(adminModelEntity.getIdx())).thenReturn(Optional.ofNullable(adminModelEntity));
         when(adminNegotiationJpaRepository.save(adminNegotiationEntity)).thenReturn(adminNegotiationEntity);
-        AdminNegotiationDTO negotiationInfo = mockAdminNegotiationJpaService.insertModelNegotiation(adminModelEntity.getIdx(), adminNegotiationEntity);
+        AdminNegotiationDto negotiationInfo = mockAdminNegotiationJpaService.insertModelNegotiation(adminModelEntity.getIdx(), adminNegotiationEntity);
 
         // then
         assertThat(negotiationInfo.getAdminModelDTO().getIdx()).isEqualTo(adminModelEntity.getIdx());
@@ -277,7 +277,7 @@ class AdminNegotiationJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         given(adminModelJpaRepository.findById(adminModelEntity.getIdx())).willReturn(Optional.ofNullable(adminModelEntity));
         given(adminNegotiationJpaRepository.save(adminNegotiationEntity)).willReturn(adminNegotiationEntity);
-        AdminNegotiationDTO negotiationInfo = mockAdminNegotiationJpaService.insertModelNegotiation(adminModelEntity.getIdx(), adminNegotiationEntity);
+        AdminNegotiationDto negotiationInfo = mockAdminNegotiationJpaService.insertModelNegotiation(adminModelEntity.getIdx(), adminNegotiationEntity);
 
         // then
         assertThat(negotiationInfo.getAdminModelDTO().getIdx()).isEqualTo(adminModelEntity.getIdx());
@@ -309,7 +309,7 @@ class AdminNegotiationJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         when(adminNegotiationJpaRepository.findById(updateNegotiationEntity.getIdx())).thenReturn(Optional.of(updateNegotiationEntity));
         when(adminNegotiationJpaRepository.save(updateNegotiationEntity)).thenReturn(updateNegotiationEntity);
-        AdminNegotiationDTO negotiationInfo = mockAdminNegotiationJpaService.updateModelNegotiation(updateNegotiationEntity.getIdx(), updateNegotiationEntity);
+        AdminNegotiationDto negotiationInfo = mockAdminNegotiationJpaService.updateModelNegotiation(updateNegotiationEntity.getIdx(), updateNegotiationEntity);
 
         // then
         assertThat(negotiationInfo.getAdminModelDTO().getIdx()).isEqualTo(adminModelDTO.getIdx());
@@ -343,7 +343,7 @@ class AdminNegotiationJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         given(adminNegotiationJpaRepository.findById(updateNegotiationEntity.getIdx())).willReturn(Optional.of(updateNegotiationEntity));
         given(adminNegotiationJpaRepository.save(updateNegotiationEntity)).willReturn(updateNegotiationEntity);
-        AdminNegotiationDTO negotiationInfo = mockAdminNegotiationJpaService.updateModelNegotiation(updateNegotiationEntity.getIdx(), updateNegotiationEntity);
+        AdminNegotiationDto negotiationInfo = mockAdminNegotiationJpaService.updateModelNegotiation(updateNegotiationEntity.getIdx(), updateNegotiationEntity);
 
         // then
         assertThat(negotiationInfo.getAdminModelDTO().getIdx()).isEqualTo(adminModelEntity.getIdx());

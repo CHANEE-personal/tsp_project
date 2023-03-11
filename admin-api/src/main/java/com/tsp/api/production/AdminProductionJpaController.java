@@ -1,6 +1,6 @@
 package com.tsp.api.production;
 
-import com.tsp.api.production.domain.AdminProductionDTO;
+import com.tsp.api.production.domain.AdminProductionDto;
 import com.tsp.api.production.domain.AdminProductionEntity;
 import com.tsp.api.production.service.AdminProductionJpaService;
 import com.tsp.common.Paging;
@@ -52,7 +52,7 @@ public class AdminProductionJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping
-    public ResponseEntity<Page<AdminProductionDTO>> findProductionList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
+    public ResponseEntity<Page<AdminProductionDto>> findProductionList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
         return ResponseEntity.ok().body(adminProductionJpaService.findProductionList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }
 
@@ -68,7 +68,7 @@ public class AdminProductionJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "프로덕션 상세 조회", notes = "프로덕션을 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "프로덕션 상세 조회 성공", response = AdminProductionDTO.class),
+            @ApiResponse(code = 200, message = "프로덕션 상세 조회 성공", response = AdminProductionDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -76,7 +76,7 @@ public class AdminProductionJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}")
-    public ResponseEntity<AdminProductionDTO> findOneProduction(@PathVariable Long idx) {
+    public ResponseEntity<AdminProductionDto> findOneProduction(@PathVariable Long idx) {
         return ResponseEntity.ok(adminProductionJpaService.findOneProduction(idx));
     }
 
@@ -92,7 +92,7 @@ public class AdminProductionJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "이전 프로덕션 상세 조회", notes = "이전 프로덕션을 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "이전 프로덕션 상세조회 성공", response = AdminProductionDTO.class),
+            @ApiResponse(code = 200, message = "이전 프로덕션 상세조회 성공", response = AdminProductionDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -100,7 +100,7 @@ public class AdminProductionJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}/prev")
-    public ResponseEntity<AdminProductionDTO> findPrevOneProduction(@PathVariable Long idx) {
+    public ResponseEntity<AdminProductionDto> findPrevOneProduction(@PathVariable Long idx) {
         return ResponseEntity.ok(adminProductionJpaService.findPrevOneProduction(idx));
     }
 
@@ -116,7 +116,7 @@ public class AdminProductionJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "다음 프로덕션 상세 조회", notes = "다음 프로덕션을 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "다음 프로덕션 상세조회 성공", response = AdminProductionDTO.class),
+            @ApiResponse(code = 200, message = "다음 프로덕션 상세조회 성공", response = AdminProductionDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -124,7 +124,7 @@ public class AdminProductionJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}/next")
-    public ResponseEntity<AdminProductionDTO> findNextOneProduction(@PathVariable Long idx) {
+    public ResponseEntity<AdminProductionDto> findNextOneProduction(@PathVariable Long idx) {
         return ResponseEntity.ok(adminProductionJpaService.findNextOneProduction(idx));
     }
 
@@ -140,7 +140,7 @@ public class AdminProductionJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "프로덕션 저장", notes = "프로덕션을 저장한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "프로덕션 등록성공", response = AdminProductionDTO.class),
+            @ApiResponse(code = 201, message = "프로덕션 등록성공", response = AdminProductionDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -148,7 +148,7 @@ public class AdminProductionJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<AdminProductionDTO> insertProduction(@Valid @RequestBody AdminProductionEntity adminProductionEntity) {
+    public ResponseEntity<AdminProductionDto> insertProduction(@Valid @RequestBody AdminProductionEntity adminProductionEntity) {
         return ResponseEntity.created(URI.create("")).body(adminProductionJpaService.insertProduction(adminProductionEntity));
     }
 
@@ -164,7 +164,7 @@ public class AdminProductionJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "프로덕션 수정", notes = "프로덕션을 수정한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "프로덕션 수정 성공", response = AdminProductionDTO.class),
+            @ApiResponse(code = 200, message = "프로덕션 수정 성공", response = AdminProductionDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -172,7 +172,7 @@ public class AdminProductionJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PutMapping(value = "/{idx}")
-    public ResponseEntity<AdminProductionDTO> updateProduction(@PathVariable Long idx, @Valid @RequestBody AdminProductionEntity adminProductionEntity) {
+    public ResponseEntity<AdminProductionDto> updateProduction(@PathVariable Long idx, @Valid @RequestBody AdminProductionEntity adminProductionEntity) {
         return ResponseEntity.ok(adminProductionJpaService.updateProduction(idx, adminProductionEntity));
     }
 

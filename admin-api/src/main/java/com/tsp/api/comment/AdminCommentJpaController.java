@@ -1,7 +1,7 @@
 package com.tsp.api.comment;
 
 import com.tsp.api.comment.service.AdminCommentJpaService;
-import com.tsp.api.comment.domain.AdminCommentDTO;
+import com.tsp.api.comment.domain.AdminCommentDto;
 import com.tsp.api.comment.domain.AdminCommentEntity;
 import com.tsp.common.Paging;
 import io.swagger.annotations.Api;
@@ -49,7 +49,7 @@ public class AdminCommentJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping
-    public ResponseEntity<Page<AdminCommentDTO>> findAdminCommentList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
+    public ResponseEntity<Page<AdminCommentDto>> findAdminCommentList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
         return ResponseEntity.ok().body(adminCommentJpaService.findAdminCommentList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }
 
@@ -65,7 +65,7 @@ public class AdminCommentJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "어드민 코멘트 상세 조회", notes = "어드민 코멘트를 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "어드민 코멘트 상세 조회 성공", response = AdminCommentDTO.class),
+            @ApiResponse(code = 200, message = "어드민 코멘트 상세 조회 성공", response = AdminCommentDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -73,7 +73,7 @@ public class AdminCommentJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}")
-    public ResponseEntity<AdminCommentDTO> findOneAdminComment(@PathVariable Long idx) {
+    public ResponseEntity<AdminCommentDto> findOneAdminComment(@PathVariable Long idx) {
         return ResponseEntity.ok(adminCommentJpaService.findOneAdminComment(idx));
     }
 
@@ -89,7 +89,7 @@ public class AdminCommentJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "어드민 코멘트 수정", notes = "어드민 코멘트를 수정한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "어드민 코멘트 수정 성공", response = AdminCommentDTO.class),
+            @ApiResponse(code = 200, message = "어드민 코멘트 수정 성공", response = AdminCommentDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = HttpClientErrorException.BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = HttpClientErrorException.Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -97,7 +97,7 @@ public class AdminCommentJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PutMapping(value = "/{idx}", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<AdminCommentDTO> updateAdminComment(@PathVariable Long idx, @Valid @RequestBody AdminCommentEntity adminCommentEntity) {
+    public ResponseEntity<AdminCommentDto> updateAdminComment(@PathVariable Long idx, @Valid @RequestBody AdminCommentEntity adminCommentEntity) {
         return ResponseEntity.ok(adminCommentJpaService.updateAdminComment(idx, adminCommentEntity));
     }
 

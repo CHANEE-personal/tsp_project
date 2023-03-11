@@ -1,7 +1,7 @@
 package com.tsp.api.notice.service;
 
 import com.tsp.api.model.service.AdminModelCommonServiceTest;
-import com.tsp.api.notice.domain.AdminNoticeDTO;
+import com.tsp.api.notice.domain.AdminNoticeDto;
 import com.tsp.api.notice.domain.AdminNoticeEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
@@ -66,16 +66,16 @@ class AdminNoticeJpaServiceTest extends AdminModelCommonServiceTest {
         Map<String, Object> noticeMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(0, 3);
 
-        List<AdminNoticeDTO> returnNoticeList = new ArrayList<>();
+        List<AdminNoticeDto> returnNoticeList = new ArrayList<>();
 
-        returnNoticeList.add(AdminNoticeDTO.builder().idx(1L).title("공지사항테스트").description("공지사항테스트").visible("Y").build());
-        returnNoticeList.add(AdminNoticeDTO.builder().idx(2L).title("productionTest").description("productionTest").visible("Y").build());
-        Page<AdminNoticeDTO> resultNotice = new PageImpl<>(returnNoticeList, pageRequest, returnNoticeList.size());
+        returnNoticeList.add(AdminNoticeDto.builder().idx(1L).title("공지사항테스트").description("공지사항테스트").visible("Y").build());
+        returnNoticeList.add(AdminNoticeDto.builder().idx(2L).title("productionTest").description("productionTest").visible("Y").build());
+        Page<AdminNoticeDto> resultNotice = new PageImpl<>(returnNoticeList, pageRequest, returnNoticeList.size());
 
         // when
         when(adminNoticeJpaQueryRepository.findNoticeList(noticeMap, pageRequest)).thenReturn(resultNotice);
-        Page<AdminNoticeDTO> noticeList = mockAdminNoticeJpaService.findNoticeList(noticeMap, pageRequest);
-        List<AdminNoticeDTO> findNoticeList = noticeList.stream().collect(Collectors.toList());
+        Page<AdminNoticeDto> noticeList = mockAdminNoticeJpaService.findNoticeList(noticeMap, pageRequest);
+        List<AdminNoticeDto> findNoticeList = noticeList.stream().collect(Collectors.toList());
 
         // then
         assertAll(
@@ -104,16 +104,16 @@ class AdminNoticeJpaServiceTest extends AdminModelCommonServiceTest {
         Map<String, Object> noticeMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(0, 3);
 
-        List<AdminNoticeDTO> returnNoticeList = new ArrayList<>();
+        List<AdminNoticeDto> returnNoticeList = new ArrayList<>();
 
-        returnNoticeList.add(AdminNoticeDTO.builder().idx(1L).title("공지사항테스트").description("공지사항테스트").visible("Y").build());
-        returnNoticeList.add(AdminNoticeDTO.builder().idx(2L).title("productionTest").description("productionTest").visible("Y").build());
-        Page<AdminNoticeDTO> resultNotice = new PageImpl<>(returnNoticeList, pageRequest, returnNoticeList.size());
+        returnNoticeList.add(AdminNoticeDto.builder().idx(1L).title("공지사항테스트").description("공지사항테스트").visible("Y").build());
+        returnNoticeList.add(AdminNoticeDto.builder().idx(2L).title("productionTest").description("productionTest").visible("Y").build());
+        Page<AdminNoticeDto> resultNotice = new PageImpl<>(returnNoticeList, pageRequest, returnNoticeList.size());
 
         // when
         given(adminNoticeJpaQueryRepository.findNoticeList(noticeMap, pageRequest)).willReturn(resultNotice);
-        Page<AdminNoticeDTO> noticeList = mockAdminNoticeJpaService.findNoticeList(noticeMap, pageRequest);
-        List<AdminNoticeDTO> findNoticeList = noticeList.stream().collect(Collectors.toList());
+        Page<AdminNoticeDto> noticeList = mockAdminNoticeJpaService.findNoticeList(noticeMap, pageRequest);
+        List<AdminNoticeDto> findNoticeList = noticeList.stream().collect(Collectors.toList());
 
         // then
         assertAll(
@@ -137,7 +137,7 @@ class AdminNoticeJpaServiceTest extends AdminModelCommonServiceTest {
     void 공지사항상세Mockito조회테스트() {
         // when
         when(adminNoticeJpaRepository.findById(adminNoticeEntity.getIdx())).thenReturn(Optional.ofNullable(adminNoticeEntity));
-        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.findOneNotice(adminNoticeEntity.getIdx());
+        AdminNoticeDto noticeInfo = mockAdminNoticeJpaService.findOneNotice(adminNoticeEntity.getIdx());
 
         // then
         assertThat(noticeInfo.getIdx()).isEqualTo(adminNoticeEntity.getIdx());
@@ -159,7 +159,7 @@ class AdminNoticeJpaServiceTest extends AdminModelCommonServiceTest {
     void 공지사항상세BDD조회테스트() {
         // when
         given(adminNoticeJpaRepository.findById(adminNoticeEntity.getIdx())).willReturn(Optional.ofNullable(adminNoticeEntity));
-        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.findOneNotice(adminNoticeEntity.getIdx());
+        AdminNoticeDto noticeInfo = mockAdminNoticeJpaService.findOneNotice(adminNoticeEntity.getIdx());
 
         // then
         assertThat(noticeInfo.getIdx()).isEqualTo(adminNoticeEntity.getIdx());
@@ -198,7 +198,7 @@ class AdminNoticeJpaServiceTest extends AdminModelCommonServiceTest {
         adminNoticeDTO = adminNoticeJpaService.findPrevOneNotice(adminNoticeEntity.getIdx());
 
         when(mockAdminNoticeJpaService.findPrevOneNotice(adminNoticeEntity.getIdx())).thenReturn(adminNoticeDTO);
-        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.findPrevOneNotice(adminNoticeEntity.getIdx());
+        AdminNoticeDto noticeInfo = mockAdminNoticeJpaService.findPrevOneNotice(adminNoticeEntity.getIdx());
 
         // then
         assertThat(noticeInfo.getIdx()).isEqualTo(1);
@@ -222,7 +222,7 @@ class AdminNoticeJpaServiceTest extends AdminModelCommonServiceTest {
         adminNoticeDTO = adminNoticeJpaService.findPrevOneNotice(adminNoticeEntity.getIdx());
 
         given(mockAdminNoticeJpaService.findPrevOneNotice(adminNoticeEntity.getIdx())).willReturn(adminNoticeDTO);
-        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.findPrevOneNotice(adminNoticeEntity.getIdx());
+        AdminNoticeDto noticeInfo = mockAdminNoticeJpaService.findPrevOneNotice(adminNoticeEntity.getIdx());
 
         // then
         assertThat(noticeInfo.getIdx()).isEqualTo(1);
@@ -243,7 +243,7 @@ class AdminNoticeJpaServiceTest extends AdminModelCommonServiceTest {
         adminNoticeDTO = adminNoticeJpaService.findNextOneNotice(adminNoticeEntity.getIdx());
 
         when(mockAdminNoticeJpaService.findNextOneNotice(adminNoticeEntity.getIdx())).thenReturn(adminNoticeDTO);
-        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.findNextOneNotice(adminNoticeEntity.getIdx());
+        AdminNoticeDto noticeInfo = mockAdminNoticeJpaService.findNextOneNotice(adminNoticeEntity.getIdx());
 
         // then
         assertThat(noticeInfo.getIdx()).isEqualTo(3);
@@ -267,7 +267,7 @@ class AdminNoticeJpaServiceTest extends AdminModelCommonServiceTest {
         adminNoticeDTO = adminNoticeJpaService.findNextOneNotice(adminNoticeEntity.getIdx());
 
         given(mockAdminNoticeJpaService.findNextOneNotice(adminNoticeEntity.getIdx())).willReturn(adminNoticeDTO);
-        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.findNextOneNotice(adminNoticeEntity.getIdx());
+        AdminNoticeDto noticeInfo = mockAdminNoticeJpaService.findNextOneNotice(adminNoticeEntity.getIdx());
 
         // then
         assertThat(noticeInfo.getIdx()).isEqualTo(3);
@@ -283,7 +283,7 @@ class AdminNoticeJpaServiceTest extends AdminModelCommonServiceTest {
     void 공지사항등록Mockito테스트() {
         // when
         when(adminNoticeJpaRepository.save(adminNoticeEntity)).thenReturn(adminNoticeEntity);
-        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.insertNotice(adminNoticeEntity);
+        AdminNoticeDto noticeInfo = mockAdminNoticeJpaService.insertNotice(adminNoticeEntity);
 
         // then
         assertThat(noticeInfo.getTitle()).isEqualTo(adminNoticeEntity.getTitle());
@@ -304,7 +304,7 @@ class AdminNoticeJpaServiceTest extends AdminModelCommonServiceTest {
     void 공지사항등록BDD테스트() {
         // when
         given(adminNoticeJpaRepository.save(adminNoticeEntity)).willReturn(adminNoticeEntity);
-        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.insertNotice(adminNoticeEntity);
+        AdminNoticeDto noticeInfo = mockAdminNoticeJpaService.insertNotice(adminNoticeEntity);
 
         // then
         assertThat(noticeInfo.getTitle()).isEqualTo(adminNoticeEntity.getTitle());
@@ -330,7 +330,7 @@ class AdminNoticeJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         when(adminNoticeJpaRepository.findById(updateNoticeEntity.getIdx())).thenReturn(Optional.of(updateNoticeEntity));
         when(adminNoticeJpaRepository.save(updateNoticeEntity)).thenReturn(updateNoticeEntity);
-        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.updateNotice(updateNoticeEntity.getIdx(), updateNoticeEntity);
+        AdminNoticeDto noticeInfo = mockAdminNoticeJpaService.updateNotice(updateNoticeEntity.getIdx(), updateNoticeEntity);
 
         // then
         assertThat(noticeInfo.getTitle()).isEqualTo(updateNoticeEntity.getTitle());
@@ -358,7 +358,7 @@ class AdminNoticeJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         given(adminNoticeJpaRepository.findById(updateNoticeEntity.getIdx())).willReturn(Optional.of(updateNoticeEntity));
         given(adminNoticeJpaRepository.save(updateNoticeEntity)).willReturn(updateNoticeEntity);
-        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaService.updateNotice(updateNoticeEntity.getIdx(), updateNoticeEntity);
+        AdminNoticeDto noticeInfo = mockAdminNoticeJpaService.updateNotice(updateNoticeEntity.getIdx(), updateNoticeEntity);
 
         // then
         assertThat(noticeInfo.getTitle()).isEqualTo(updateNoticeEntity.getTitle());

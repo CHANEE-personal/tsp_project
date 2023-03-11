@@ -1,6 +1,6 @@
 package com.tsp.api.common.service;
 
-import com.tsp.api.common.domain.NewCodeDTO;
+import com.tsp.api.common.domain.NewCodeDto;
 import com.tsp.api.common.domain.NewCodeEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +18,7 @@ public interface AdminCommonJpaService {
      * 5. 작성일       : 2022. 05. 02.
      * </pre>
      */
-    Page<NewCodeDTO> findCommonCodeList(Map<String, Object> commonMap, PageRequest pageRequest);
+    Page<NewCodeDto> findCommonCodeList(Map<String, Object> commonMap, PageRequest pageRequest);
 
     /**
      * <pre>
@@ -29,7 +29,7 @@ public interface AdminCommonJpaService {
      * 5. 작성일       : 2022. 05. 02.
      * </pre>
      */
-    NewCodeDTO findOneCommonCode(Long idx);
+    NewCodeDto findOneCommonCode(Long idx);
 
     /**
      * <pre>
@@ -40,7 +40,7 @@ public interface AdminCommonJpaService {
      * 5. 작성일       : 2022. 05. 02.
      * </pre>
      */
-    NewCodeDTO insertCommonCode(NewCodeEntity newCodeEntity);
+    NewCodeDto insertCommonCode(NewCodeEntity newCodeEntity);
 
     /**
      * <pre>
@@ -51,7 +51,7 @@ public interface AdminCommonJpaService {
      * 5. 작성일       : 2022. 05. 02.
      * </pre>
      */
-    NewCodeDTO updateCommonCode(Long idx, NewCodeEntity newCodeEntity);
+    NewCodeDto updateCommonCode(Long idx, NewCodeEntity newCodeEntity);
 
     /**
      * <pre>

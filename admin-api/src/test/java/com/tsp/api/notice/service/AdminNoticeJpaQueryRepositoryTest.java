@@ -1,6 +1,6 @@
 package com.tsp.api.notice.service;
 
-import com.tsp.api.notice.domain.AdminNoticeDTO;
+import com.tsp.api.notice.domain.AdminNoticeDto;
 import com.tsp.api.notice.domain.AdminNoticeEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +51,7 @@ class AdminNoticeJpaQueryRepositoryTest {
     private final AdminNoticeJpaQueryRepository adminNoticeJpaQueryRepository;
 
     private AdminNoticeEntity adminNoticeEntity;
-    private AdminNoticeDTO adminNoticeDTO;
+    private AdminNoticeDto adminNoticeDTO;
 
     void createNotice() {
         adminNoticeEntity = AdminNoticeEntity.builder()
@@ -90,16 +90,16 @@ class AdminNoticeJpaQueryRepositoryTest {
         Map<String, Object> noticeMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<AdminNoticeDTO> noticeList = new ArrayList<>();
-        noticeList.add(AdminNoticeDTO.builder().idx(1L).title("공지사항 테스트")
+        List<AdminNoticeDto> noticeList = new ArrayList<>();
+        noticeList.add(AdminNoticeDto.builder().idx(1L).title("공지사항 테스트")
                 .description("공지사항 테스트").build());
 
-        Page<AdminNoticeDTO> resultNotice = new PageImpl<>(noticeList, pageRequest, noticeList.size());
+        Page<AdminNoticeDto> resultNotice = new PageImpl<>(noticeList, pageRequest, noticeList.size());
 
         // when
         when(mockAdminNoticeJpaQueryRepository.findNoticeList(noticeMap, pageRequest)).thenReturn(resultNotice);
-        Page<AdminNoticeDTO> newNoticeList = mockAdminNoticeJpaQueryRepository.findNoticeList(noticeMap, pageRequest);
-        List<AdminNoticeDTO> findNoticeList = newNoticeList.stream().collect(Collectors.toList());
+        Page<AdminNoticeDto> newNoticeList = mockAdminNoticeJpaQueryRepository.findNoticeList(noticeMap, pageRequest);
+        List<AdminNoticeDto> findNoticeList = newNoticeList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findNoticeList.get(0).getIdx()).isEqualTo(noticeList.get(0).getIdx());
@@ -123,16 +123,16 @@ class AdminNoticeJpaQueryRepositoryTest {
         Map<String, Object> noticeMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<AdminNoticeDTO> noticeList = new ArrayList<>();
-        noticeList.add(AdminNoticeDTO.builder().idx(1L).title("공지사항 테스트")
+        List<AdminNoticeDto> noticeList = new ArrayList<>();
+        noticeList.add(AdminNoticeDto.builder().idx(1L).title("공지사항 테스트")
                 .description("공지사항 테스트").build());
 
-        Page<AdminNoticeDTO> resultNotice = new PageImpl<>(noticeList, pageRequest, noticeList.size());
+        Page<AdminNoticeDto> resultNotice = new PageImpl<>(noticeList, pageRequest, noticeList.size());
 
         // when
         given(mockAdminNoticeJpaQueryRepository.findNoticeList(noticeMap, pageRequest)).willReturn(resultNotice);
-        Page<AdminNoticeDTO> newNoticeList = mockAdminNoticeJpaQueryRepository.findNoticeList(noticeMap, pageRequest);
-        List<AdminNoticeDTO> findNoticeList = newNoticeList.stream().collect(Collectors.toList());
+        Page<AdminNoticeDto> newNoticeList = mockAdminNoticeJpaQueryRepository.findNoticeList(noticeMap, pageRequest);
+        List<AdminNoticeDto> findNoticeList = newNoticeList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findNoticeList.get(0).getIdx()).isEqualTo(noticeList.get(0).getIdx());
@@ -168,7 +168,7 @@ class AdminNoticeJpaQueryRepositoryTest {
         adminNoticeDTO = adminNoticeJpaQueryRepository.findPrevOneNotice(adminNoticeEntity.getIdx());
 
         when(mockAdminNoticeJpaQueryRepository.findPrevOneNotice(adminNoticeEntity.getIdx())).thenReturn(adminNoticeDTO);
-        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaQueryRepository.findPrevOneNotice(adminNoticeEntity.getIdx());
+        AdminNoticeDto noticeInfo = mockAdminNoticeJpaQueryRepository.findPrevOneNotice(adminNoticeEntity.getIdx());
 
         // then
         assertThat(noticeInfo.getIdx()).isEqualTo(1);
@@ -192,7 +192,7 @@ class AdminNoticeJpaQueryRepositoryTest {
         adminNoticeDTO = adminNoticeJpaQueryRepository.findPrevOneNotice(adminNoticeEntity.getIdx());
 
         given(mockAdminNoticeJpaQueryRepository.findPrevOneNotice(adminNoticeEntity.getIdx())).willReturn(adminNoticeDTO);
-        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaQueryRepository.findPrevOneNotice(adminNoticeEntity.getIdx());
+        AdminNoticeDto noticeInfo = mockAdminNoticeJpaQueryRepository.findPrevOneNotice(adminNoticeEntity.getIdx());
 
         // then
         assertThat(noticeInfo.getIdx()).isEqualTo(1);
@@ -213,7 +213,7 @@ class AdminNoticeJpaQueryRepositoryTest {
         adminNoticeDTO = adminNoticeJpaQueryRepository.findNextOneNotice(adminNoticeEntity.getIdx());
 
         when(mockAdminNoticeJpaQueryRepository.findNextOneNotice(adminNoticeEntity.getIdx())).thenReturn(adminNoticeDTO);
-        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaQueryRepository.findNextOneNotice(adminNoticeEntity.getIdx());
+        AdminNoticeDto noticeInfo = mockAdminNoticeJpaQueryRepository.findNextOneNotice(adminNoticeEntity.getIdx());
 
         // then
         assertThat(noticeInfo.getIdx()).isEqualTo(3);
@@ -237,7 +237,7 @@ class AdminNoticeJpaQueryRepositoryTest {
         adminNoticeDTO = adminNoticeJpaQueryRepository.findNextOneNotice(adminNoticeEntity.getIdx());
 
         given(mockAdminNoticeJpaQueryRepository.findNextOneNotice(adminNoticeEntity.getIdx())).willReturn(adminNoticeDTO);
-        AdminNoticeDTO noticeInfo = mockAdminNoticeJpaQueryRepository.findNextOneNotice(adminNoticeEntity.getIdx());
+        AdminNoticeDto noticeInfo = mockAdminNoticeJpaQueryRepository.findNextOneNotice(adminNoticeEntity.getIdx());
 
         // then
         assertThat(noticeInfo.getIdx()).isEqualTo(3);

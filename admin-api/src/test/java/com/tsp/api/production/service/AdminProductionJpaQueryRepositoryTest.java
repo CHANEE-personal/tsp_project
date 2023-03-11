@@ -1,11 +1,11 @@
 package com.tsp.api.production.service;
 
 import com.tsp.api.common.EntityType;
-import com.tsp.api.comment.domain.AdminCommentDTO;
+import com.tsp.api.comment.domain.AdminCommentDto;
 import com.tsp.api.comment.domain.AdminCommentEntity;
-import com.tsp.api.common.domain.CommonImageDTO;
+import com.tsp.api.common.domain.CommonImageDto;
 import com.tsp.api.common.domain.CommonImageEntity;
-import com.tsp.api.production.domain.AdminProductionDTO;
+import com.tsp.api.production.domain.AdminProductionDto;
 import com.tsp.api.production.domain.AdminProductionEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,11 +58,11 @@ class AdminProductionJpaQueryRepositoryTest {
     private final AdminProductionJpaRepository adminProductionJpaRepository;
 
     private AdminProductionEntity adminProductionEntity;
-    private AdminProductionDTO adminProductionDTO;
+    private AdminProductionDto adminProductionDTO;
     private CommonImageEntity commonImageEntity;
-    private CommonImageDTO commonImageDTO;
+    private CommonImageDto commonImageDTO;
     private AdminCommentEntity adminCommentEntity;
-    private AdminCommentDTO adminCommentDTO;
+    private AdminCommentDto adminCommentDTO;
 
     void createProductionAndImage() {
         adminProductionEntity = AdminProductionEntity.builder()
@@ -140,18 +140,18 @@ class AdminProductionJpaQueryRepositoryTest {
         Map<String, Object> productionMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
+        List<CommonImageDto> commonImageDtoList = new ArrayList<>();
         commonImageDtoList.add(commonImageDTO);
 
-        List<AdminProductionDTO> productionList = new ArrayList<>();
-        productionList.add(AdminProductionDTO.builder().idx(1L).title("프로덕션 테스트")
+        List<AdminProductionDto> productionList = new ArrayList<>();
+        productionList.add(AdminProductionDto.builder().idx(1L).title("프로덕션 테스트")
                 .description("프로덕션 테스트").productionImage(commonImageDtoList).build());
-        Page<AdminProductionDTO> resultProduction = new PageImpl<>(productionList, pageRequest, productionList.size());
+        Page<AdminProductionDto> resultProduction = new PageImpl<>(productionList, pageRequest, productionList.size());
 
         // when
         when(mockAdminProductionJpaQueryRepository.findProductionList(productionMap, pageRequest)).thenReturn(resultProduction);
-        Page<AdminProductionDTO> newProductionList = mockAdminProductionJpaQueryRepository.findProductionList(productionMap, pageRequest);
-        List<AdminProductionDTO> findProductionList = newProductionList.stream().collect(Collectors.toList());
+        Page<AdminProductionDto> newProductionList = mockAdminProductionJpaQueryRepository.findProductionList(productionMap, pageRequest);
+        List<AdminProductionDto> findProductionList = newProductionList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findProductionList.get(0).getIdx()).isEqualTo(productionList.get(0).getIdx());
@@ -175,18 +175,18 @@ class AdminProductionJpaQueryRepositoryTest {
         Map<String, Object> productionMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<CommonImageDTO> commonImageDtoList = new ArrayList<>();
+        List<CommonImageDto> commonImageDtoList = new ArrayList<>();
         commonImageDtoList.add(commonImageDTO);
 
-        List<AdminProductionDTO> productionList = new ArrayList<>();
-        productionList.add(AdminProductionDTO.builder().idx(1L).title("프로덕션 테스트")
+        List<AdminProductionDto> productionList = new ArrayList<>();
+        productionList.add(AdminProductionDto.builder().idx(1L).title("프로덕션 테스트")
                 .description("프로덕션 테스트").productionImage(commonImageDtoList).build());
-        Page<AdminProductionDTO> resultProduction = new PageImpl<>(productionList, pageRequest, productionList.size());
+        Page<AdminProductionDto> resultProduction = new PageImpl<>(productionList, pageRequest, productionList.size());
 
         // when
         given(mockAdminProductionJpaQueryRepository.findProductionList(productionMap, pageRequest)).willReturn(resultProduction);
-        Page<AdminProductionDTO> newProductionList = mockAdminProductionJpaQueryRepository.findProductionList(productionMap, pageRequest);
-        List<AdminProductionDTO> findProductionList = newProductionList.stream().collect(Collectors.toList());
+        Page<AdminProductionDto> newProductionList = mockAdminProductionJpaQueryRepository.findProductionList(productionMap, pageRequest);
+        List<AdminProductionDto> findProductionList = newProductionList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findProductionList.get(0).getIdx()).isEqualTo(productionList.get(0).getIdx());
@@ -209,7 +209,7 @@ class AdminProductionJpaQueryRepositoryTest {
 
         AdminProductionEntity adminProductionEntity = AdminProductionEntity.builder().idx(1L).commonImageEntityList(commonImageEntityList).build();
 
-        AdminProductionDTO adminProductionDTO = AdminProductionDTO.builder()
+        AdminProductionDto adminProductionDTO = AdminProductionDto.builder()
                 .idx(1L)
                 .title("프로덕션 테스트")
                 .description("프로덕션 테스트")
@@ -219,7 +219,7 @@ class AdminProductionJpaQueryRepositoryTest {
 
         // when
         when(mockAdminProductionJpaQueryRepository.findOneProduction(adminProductionEntity.getIdx())).thenReturn(adminProductionDTO);
-        AdminProductionDTO productionInfo = mockAdminProductionJpaQueryRepository.findOneProduction(adminProductionEntity.getIdx());
+        AdminProductionDto productionInfo = mockAdminProductionJpaQueryRepository.findOneProduction(adminProductionEntity.getIdx());
 
         // then
         assertThat(productionInfo.getIdx()).isEqualTo(1);
@@ -250,7 +250,7 @@ class AdminProductionJpaQueryRepositoryTest {
 
         AdminProductionEntity adminProductionEntity = AdminProductionEntity.builder().idx(1L).commonImageEntityList(commonImageEntityList).build();
 
-        AdminProductionDTO adminProductionDTO = AdminProductionDTO.builder()
+        AdminProductionDto adminProductionDTO = AdminProductionDto.builder()
                 .idx(1L)
                 .title("프로덕션 테스트")
                 .description("프로덕션 테스트")
@@ -260,7 +260,7 @@ class AdminProductionJpaQueryRepositoryTest {
 
         // when
         given(mockAdminProductionJpaQueryRepository.findOneProduction(adminProductionEntity.getIdx())).willReturn(adminProductionDTO);
-        AdminProductionDTO productionInfo = mockAdminProductionJpaQueryRepository.findOneProduction(adminProductionEntity.getIdx());
+        AdminProductionDto productionInfo = mockAdminProductionJpaQueryRepository.findOneProduction(adminProductionEntity.getIdx());
 
         // then
         assertThat(productionInfo.getIdx()).isEqualTo(1);
@@ -304,7 +304,7 @@ class AdminProductionJpaQueryRepositoryTest {
         adminProductionDTO = adminProductionJpaQueryRepository.findOneProduction(adminProductionEntity.getIdx());
 
         when(mockAdminProductionJpaQueryRepository.findPrevOneProduction(adminProductionEntity.getIdx())).thenReturn(adminProductionDTO);
-        AdminProductionDTO productionInfo = mockAdminProductionJpaQueryRepository.findPrevOneProduction(adminProductionEntity.getIdx());
+        AdminProductionDto productionInfo = mockAdminProductionJpaQueryRepository.findPrevOneProduction(adminProductionEntity.getIdx());
 
         // then
         assertThat(productionInfo.getIdx()).isEqualTo(117);
@@ -328,7 +328,7 @@ class AdminProductionJpaQueryRepositoryTest {
         adminProductionDTO = adminProductionJpaQueryRepository.findOneProduction(adminProductionEntity.getIdx());
 
         given(mockAdminProductionJpaQueryRepository.findPrevOneProduction(adminProductionEntity.getIdx())).willReturn(adminProductionDTO);
-        AdminProductionDTO productionInfo = mockAdminProductionJpaQueryRepository.findPrevOneProduction(adminProductionEntity.getIdx());
+        AdminProductionDto productionInfo = mockAdminProductionJpaQueryRepository.findPrevOneProduction(adminProductionEntity.getIdx());
 
         // then
         assertThat(productionInfo.getIdx()).isEqualTo(117);
@@ -349,7 +349,7 @@ class AdminProductionJpaQueryRepositoryTest {
         adminProductionDTO = adminProductionJpaQueryRepository.findOneProduction(adminProductionEntity.getIdx());
 
         when(mockAdminProductionJpaQueryRepository.findNextOneProduction(adminProductionEntity.getIdx())).thenReturn(adminProductionDTO);
-        AdminProductionDTO productionInfo = mockAdminProductionJpaQueryRepository.findNextOneProduction(adminProductionEntity.getIdx());
+        AdminProductionDto productionInfo = mockAdminProductionJpaQueryRepository.findNextOneProduction(adminProductionEntity.getIdx());
 
         // then
         assertThat(productionInfo.getIdx()).isEqualTo(119);
@@ -373,7 +373,7 @@ class AdminProductionJpaQueryRepositoryTest {
         adminProductionDTO = adminProductionJpaQueryRepository.findOneProduction(adminProductionEntity.getIdx());
 
         given(mockAdminProductionJpaQueryRepository.findNextOneProduction(adminProductionEntity.getIdx())).willReturn(adminProductionDTO);
-        AdminProductionDTO productionInfo = mockAdminProductionJpaQueryRepository.findNextOneProduction(adminProductionEntity.getIdx());
+        AdminProductionDto productionInfo = mockAdminProductionJpaQueryRepository.findNextOneProduction(adminProductionEntity.getIdx());
 
         // then
         assertThat(productionInfo.getIdx()).isEqualTo(119);

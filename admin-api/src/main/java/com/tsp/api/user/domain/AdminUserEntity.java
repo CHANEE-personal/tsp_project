@@ -2,7 +2,6 @@ package com.tsp.api.user.domain;
 
 import com.tsp.api.common.domain.NewCommonMappedClass;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -76,22 +75,22 @@ public class AdminUserEntity extends NewCommonMappedClass {
         this.userRefreshToken = refreshToken;
     }
 
-    public static AdminUserDTO toDto(AdminUserEntity entity) {
+    public static AdminUserDto toDto(AdminUserEntity entity) {
         if (entity == null) return null;
-        return AdminUserDTO.builder()
-                .idx(entity.getIdx())
-                .userId(entity.getUserId())
-                .password(entity.getPassword())
-                .name(entity.getName())
-                .email(entity.getEmail())
-                .visible(entity.getVisible())
-                .userToken(entity.getUserToken())
-                .userRefreshToken(entity.getUserRefreshToken())
-                .role(entity.getRole())
+        return AdminUserDto.builder()
+                .idx(entity.idx)
+                .userId(entity.userId)
+                .password(entity.password)
+                .name(entity.name)
+                .email(entity.email)
+                .visible(entity.visible)
+                .userToken(entity.userToken)
+                .userRefreshToken(entity.userRefreshToken)
+                .role(entity.role)
                 .build();
     }
 
-    public static List<AdminUserDTO> toDtoList(List<AdminUserEntity> entityList) {
+    public static List<AdminUserDto> toDtoList(List<AdminUserEntity> entityList) {
         if (entityList == null) return null;
         return entityList.stream()
                 .map(AdminUserEntity::toDto)

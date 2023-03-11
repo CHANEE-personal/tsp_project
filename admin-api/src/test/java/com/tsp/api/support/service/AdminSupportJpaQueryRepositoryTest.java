@@ -1,10 +1,10 @@
 package com.tsp.api.support.service;
 
-import com.tsp.api.comment.domain.AdminCommentDTO;
+import com.tsp.api.comment.domain.AdminCommentDto;
 import com.tsp.api.comment.domain.AdminCommentEntity;
-import com.tsp.api.support.domain.AdminSupportDTO;
+import com.tsp.api.support.domain.AdminSupportDto;
 import com.tsp.api.support.domain.AdminSupportEntity;
-import com.tsp.api.support.domain.evaluation.EvaluationDTO;
+import com.tsp.api.support.domain.evaluation.EvaluationDto;
 import com.tsp.api.support.domain.evaluation.EvaluationEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,12 +53,12 @@ class AdminSupportJpaQueryRepositoryTest {
     private final AdminSupportJpaRepository adminSupportJpaRepository;
 
     private AdminSupportEntity adminSupportEntity;
-    private AdminSupportDTO adminSupportDTO;
+    private AdminSupportDto adminSupportDTO;
 
     private EvaluationEntity evaluationEntity;
-    private EvaluationDTO evaluationDTO;
+    private EvaluationDto evaluationDTO;
     private AdminCommentEntity adminCommentEntity;
-    private AdminCommentDTO adminCommentDTO;
+    private AdminCommentDto adminCommentDTO;
 
     void createSupport() {
         adminSupportEntity = AdminSupportEntity.builder()
@@ -98,14 +98,14 @@ class AdminSupportJpaQueryRepositoryTest {
         Map<String, Object> supportMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<AdminSupportDTO> supportList = new ArrayList<>();
-        supportList.add(AdminSupportDTO.builder().idx(1L).supportName("조찬희").supportPhone("010-9466-2702").build());
-        Page<AdminSupportDTO> resultSupport = new PageImpl<>(supportList, pageRequest, supportList.size());
+        List<AdminSupportDto> supportList = new ArrayList<>();
+        supportList.add(AdminSupportDto.builder().idx(1L).supportName("조찬희").supportPhone("010-9466-2702").build());
+        Page<AdminSupportDto> resultSupport = new PageImpl<>(supportList, pageRequest, supportList.size());
 
         // when
         when(mockAdminSupportJpaQueryRepository.findSupportList(supportMap, pageRequest)).thenReturn(resultSupport);
-        Page<AdminSupportDTO> supportInfo = mockAdminSupportJpaQueryRepository.findSupportList(supportMap, pageRequest);
-        List<AdminSupportDTO> findSupportList = supportInfo.stream().collect(Collectors.toList());
+        Page<AdminSupportDto> supportInfo = mockAdminSupportJpaQueryRepository.findSupportList(supportMap, pageRequest);
+        List<AdminSupportDto> findSupportList = supportInfo.stream().collect(Collectors.toList());
 
         // then
         assertThat(findSupportList.get(0).getIdx()).isEqualTo(supportList.get(0).getIdx());
@@ -127,14 +127,14 @@ class AdminSupportJpaQueryRepositoryTest {
         Map<String, Object> supportMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<AdminSupportDTO> supportList = new ArrayList<>();
-        supportList.add(AdminSupportDTO.builder().idx(1L).supportName("조찬희").supportPhone("010-9466-2702").build());
-        Page<AdminSupportDTO> resultSupport = new PageImpl<>(supportList, pageRequest, supportList.size());
+        List<AdminSupportDto> supportList = new ArrayList<>();
+        supportList.add(AdminSupportDto.builder().idx(1L).supportName("조찬희").supportPhone("010-9466-2702").build());
+        Page<AdminSupportDto> resultSupport = new PageImpl<>(supportList, pageRequest, supportList.size());
 
         // when
         given(mockAdminSupportJpaQueryRepository.findSupportList(supportMap, pageRequest)).willReturn(resultSupport);
-        Page<AdminSupportDTO> supportInfo = mockAdminSupportJpaQueryRepository.findSupportList(supportMap, pageRequest);
-        List<AdminSupportDTO> findSupportList = supportInfo.stream().collect(Collectors.toList());
+        Page<AdminSupportDto> supportInfo = mockAdminSupportJpaQueryRepository.findSupportList(supportMap, pageRequest);
+        List<AdminSupportDto> findSupportList = supportInfo.stream().collect(Collectors.toList());
 
         // then
         assertThat(findSupportList.get(0).getIdx()).isEqualTo(supportList.get(0).getIdx());
@@ -153,15 +153,15 @@ class AdminSupportJpaQueryRepositoryTest {
         Map<String, Object> evaluationMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<EvaluationDTO> evaluationList = new ArrayList<>();
+        List<EvaluationDto> evaluationList = new ArrayList<>();
 //        evaluationList.add(EvaluationDTO.builder().idx(1L)
 //                .supportIdx(adminSupportEntity.getIdx()).evaluateComment("합격").visible("Y").build());
-        Page<EvaluationDTO> resultEvaluate = new PageImpl<>(evaluationList, pageRequest, evaluationList.size());
+        Page<EvaluationDto> resultEvaluate = new PageImpl<>(evaluationList, pageRequest, evaluationList.size());
 
         // when
         when(mockAdminSupportJpaQueryRepository.findEvaluationList(evaluationMap, pageRequest)).thenReturn(resultEvaluate);
-        Page<EvaluationDTO> evaluationInfo = mockAdminSupportJpaQueryRepository.findEvaluationList(evaluationMap, pageRequest);
-        List<EvaluationDTO> findEvaluationList = evaluationInfo.stream().collect(Collectors.toList());
+        Page<EvaluationDto> evaluationInfo = mockAdminSupportJpaQueryRepository.findEvaluationList(evaluationMap, pageRequest);
+        List<EvaluationDto> findEvaluationList = evaluationInfo.stream().collect(Collectors.toList());
 
         // then
         assertThat(findEvaluationList.get(0).getIdx()).isEqualTo(evaluationList.get(0).getIdx());
@@ -184,15 +184,15 @@ class AdminSupportJpaQueryRepositoryTest {
         Map<String, Object> evaluationMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<EvaluationDTO> evaluationList = new ArrayList<>();
+        List<EvaluationDto> evaluationList = new ArrayList<>();
 //        evaluationList.add(EvaluationDTO.builder().idx(1L)
 //                .supportIdx(adminSupportEntity.getIdx()).evaluateComment("합격").visible("Y").build());
-        Page<EvaluationDTO> resultEvaluate = new PageImpl<>(evaluationList, pageRequest, evaluationList.size());
+        Page<EvaluationDto> resultEvaluate = new PageImpl<>(evaluationList, pageRequest, evaluationList.size());
 
         // when
         given(mockAdminSupportJpaQueryRepository.findEvaluationList(evaluationMap, pageRequest)).willReturn(resultEvaluate);
-        Page<EvaluationDTO> evaluationInfo = mockAdminSupportJpaQueryRepository.findEvaluationList(evaluationMap, pageRequest);
-        List<EvaluationDTO> findEvaluationList = evaluationInfo.stream().collect(Collectors.toList());
+        Page<EvaluationDto> evaluationInfo = mockAdminSupportJpaQueryRepository.findEvaluationList(evaluationMap, pageRequest);
+        List<EvaluationDto> findEvaluationList = evaluationInfo.stream().collect(Collectors.toList());
 
         // then
         assertThat(findEvaluationList.get(0).getIdx()).isEqualTo(evaluationList.get(0).getIdx());
@@ -227,8 +227,8 @@ class AdminSupportJpaQueryRepositoryTest {
                 .visible("Y")
                 .build();
 
-        List<AdminCommentDTO> adminCommentList = new ArrayList<>();
-        adminCommentList.add(AdminCommentDTO.builder()
+        List<AdminCommentDto> adminCommentList = new ArrayList<>();
+        adminCommentList.add(AdminCommentDto.builder()
                 .comment("코멘트 테스트")
                 .commentType("support")
                 .commentTypeIdx(supportIdx)
@@ -236,7 +236,7 @@ class AdminSupportJpaQueryRepositoryTest {
                 .build());
 
         when(mockAdminSupportJpaQueryRepository.findSupportAdminComment(adminSupportEntity.getIdx())).thenReturn(adminCommentList);
-        List<AdminCommentDTO> newAdminCommentList = mockAdminSupportJpaQueryRepository.findSupportAdminComment(adminSupportEntity.getIdx());
+        List<AdminCommentDto> newAdminCommentList = mockAdminSupportJpaQueryRepository.findSupportAdminComment(adminSupportEntity.getIdx());
 
         assertThat(newAdminCommentList.get(0).getCommentType()).isEqualTo("support");
         assertThat(newAdminCommentList.get(0).getCommentTypeIdx()).isEqualTo(adminSupportEntity.getIdx());
@@ -270,8 +270,8 @@ class AdminSupportJpaQueryRepositoryTest {
                 .visible("Y")
                 .build();
 
-        List<AdminCommentDTO> adminCommentList = new ArrayList<>();
-        adminCommentList.add(AdminCommentDTO.builder()
+        List<AdminCommentDto> adminCommentList = new ArrayList<>();
+        adminCommentList.add(AdminCommentDto.builder()
                 .comment("코멘트 테스트")
                 .commentType("support")
                 .commentTypeIdx(supportIdx)
@@ -279,7 +279,7 @@ class AdminSupportJpaQueryRepositoryTest {
                 .build());
 
         given(mockAdminSupportJpaQueryRepository.findSupportAdminComment(adminSupportEntity.getIdx())).willReturn(adminCommentList);
-        List<AdminCommentDTO> newAdminCommentList = mockAdminSupportJpaQueryRepository.findSupportAdminComment(adminSupportEntity.getIdx());
+        List<AdminCommentDto> newAdminCommentList = mockAdminSupportJpaQueryRepository.findSupportAdminComment(adminSupportEntity.getIdx());
 
         assertThat(newAdminCommentList.get(0).getCommentType()).isEqualTo("support");
         assertThat(newAdminCommentList.get(0).getCommentTypeIdx()).isEqualTo(adminSupportEntity.getIdx());

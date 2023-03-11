@@ -78,22 +78,30 @@ public class AdminNegotiationEntity extends NewCommonMappedClass {
         this.visible = adminNegotiationEntity.visible;
     }
 
-    public static AdminNegotiationDTO toDto(AdminNegotiationEntity entity) {
+    public static AdminNegotiationDto toDto(AdminNegotiationEntity entity) {
         if (entity == null) return null;
-        return AdminNegotiationDTO.builder()
-                .idx(entity.getIdx())
-                .adminModelDTO(AdminModelEntity.toDto(entity.getAdminModelEntity()))
-                .modelKorName(entity.getModelKorName())
-                .modelNegotiationDesc(entity.getModelNegotiationDesc())
-                .modelNegotiationDate(entity.getModelNegotiationDate())
-                .name(entity.getName())
-                .email(entity.getEmail())
-                .phone(entity.getPhone())
-                .visible(entity.getVisible())
+        return AdminNegotiationDto.builder()
+                .idx(entity.idx)
+                .categoryCd(entity.adminModelEntity.getCategoryCd())
+                .categoryAge(entity.adminModelEntity.getCategoryAge())
+                .modelKorName(entity.adminModelEntity.getModelKorName())
+                .modelEngName(entity.adminModelEntity.getModelEngName())
+                .modelKorFirstName(entity.adminModelEntity.getModelKorFirstName())
+                .modelKorSecondName(entity.adminModelEntity.getModelKorSecondName())
+                .modelFirstName(entity.adminModelEntity.getModelFirstName())
+                .modelSecondName(entity.adminModelEntity.getModelSecondName())
+                .height(entity.adminModelEntity.getHeight())
+                .shoes(entity.adminModelEntity.getShoes())
+                .modelNegotiationDesc(entity.modelNegotiationDesc)
+                .modelNegotiationDate(entity.modelNegotiationDate)
+                .name(entity.name)
+                .email(entity.email)
+                .phone(entity.phone)
+                .visible(entity.visible)
                 .build();
     }
 
-    public static List<AdminNegotiationDTO> toDtoList(List<AdminNegotiationEntity> entityList) {
+    public static List<AdminNegotiationDto> toDtoList(List<AdminNegotiationEntity> entityList) {
         if (entityList == null) return null;
         return entityList.stream()
                 .map(AdminNegotiationEntity::toDto)

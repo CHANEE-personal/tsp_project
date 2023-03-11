@@ -1,6 +1,6 @@
 package com.tsp.api.faq.service;
 
-import com.tsp.api.faq.domain.AdminFaqDTO;
+import com.tsp.api.faq.domain.AdminFaqDto;
 import com.tsp.api.faq.domain.AdminFaqEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class AdminFaqJpaServiceImpl implements AdminFaqJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<AdminFaqDTO> findFaqList(Map<String, Object> faqMap, PageRequest pageRequest) {
+    public Page<AdminFaqDto> findFaqList(Map<String, Object> faqMap, PageRequest pageRequest) {
         return adminFaqJpaQueryRepository.findFaqList(faqMap, pageRequest);
     }
 
@@ -51,7 +51,7 @@ public class AdminFaqJpaServiceImpl implements AdminFaqJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminFaqDTO findOneFaq(Long idx) {
+    public AdminFaqDto findOneFaq(Long idx) {
         return AdminFaqEntity.toDto(oneFaq(idx));
     }
 
@@ -66,7 +66,7 @@ public class AdminFaqJpaServiceImpl implements AdminFaqJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminFaqDTO findPrevOneFaq(Long idx) {
+    public AdminFaqDto findPrevOneFaq(Long idx) {
         return adminFaqJpaQueryRepository.findPrevOneFaq(idx);
     }
 
@@ -81,7 +81,7 @@ public class AdminFaqJpaServiceImpl implements AdminFaqJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminFaqDTO findNextOneFaq(Long idx) {
+    public AdminFaqDto findNextOneFaq(Long idx) {
         return adminFaqJpaQueryRepository.findNextOneFaq(idx);
     }
 
@@ -96,7 +96,7 @@ public class AdminFaqJpaServiceImpl implements AdminFaqJpaService {
      */
     @Override
     @Transactional
-    public AdminFaqDTO insertFaq(AdminFaqEntity adminFaqEntity) {
+    public AdminFaqDto insertFaq(AdminFaqEntity adminFaqEntity) {
         try {
             return AdminFaqEntity.toDto(adminFaqJpaRepository.save(adminFaqEntity));
         } catch (Exception e) {
@@ -115,7 +115,7 @@ public class AdminFaqJpaServiceImpl implements AdminFaqJpaService {
      */
     @Override
     @Transactional
-    public AdminFaqDTO updateFaq(Long idx, AdminFaqEntity adminFaqEntity) {
+    public AdminFaqDto updateFaq(Long idx, AdminFaqEntity adminFaqEntity) {
         try {
             Optional.ofNullable(oneFaq(idx))
                     .ifPresent(adminFaq -> adminFaq.update(adminFaqEntity));

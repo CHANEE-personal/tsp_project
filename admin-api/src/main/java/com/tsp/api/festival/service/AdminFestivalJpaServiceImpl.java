@@ -1,6 +1,6 @@
 package com.tsp.api.festival.service;
 
-import com.tsp.api.festival.domain.AdminFestivalDTO;
+import com.tsp.api.festival.domain.AdminFestivalDto;
 import com.tsp.api.festival.domain.AdminFestivalEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ public class AdminFestivalJpaServiceImpl implements AdminFestivalJpaService {
      * 5. 작성일      : 2023. 01. 09.
      * </pre>
      */
-    public Page<AdminFestivalDTO> findFestivalList(Map<String, Object> festivalMap, PageRequest pageRequest) {
+    public Page<AdminFestivalDto> findFestivalList(Map<String, Object> festivalMap, PageRequest pageRequest) {
         return adminFestivalJpaQueryRepository.findFestivalList(festivalMap, pageRequest);
     }
 
@@ -47,7 +47,7 @@ public class AdminFestivalJpaServiceImpl implements AdminFestivalJpaService {
      * 5. 작성일      : 2023. 01. 09.
      * </pre>
      */
-    public AdminFestivalDTO findOneFestival(Long idx) {
+    public AdminFestivalDto findOneFestival(Long idx) {
         return AdminFestivalEntity.toDto(oneFestival(idx));
     }
 
@@ -60,7 +60,7 @@ public class AdminFestivalJpaServiceImpl implements AdminFestivalJpaService {
      * 5. 작성일      : 2023. 01. 09.
      * </pre>
      */
-    public AdminFestivalDTO insertFestival(AdminFestivalEntity adminFestivalEntity) {
+    public AdminFestivalDto insertFestival(AdminFestivalEntity adminFestivalEntity) {
         try {
             return AdminFestivalEntity.toDto(adminFestivalJpaRepository.save(adminFestivalEntity));
         } catch (Exception e) {
@@ -77,7 +77,7 @@ public class AdminFestivalJpaServiceImpl implements AdminFestivalJpaService {
      * 5. 작성일      : 2023. 01. 09.
      * </pre>
      */
-    public AdminFestivalDTO updateFestival(Long idx, AdminFestivalEntity adminFestivalEntity) {
+    public AdminFestivalDto updateFestival(Long idx, AdminFestivalEntity adminFestivalEntity) {
         try {
             Optional.ofNullable(oneFestival(idx))
                     .ifPresent(adminFestival -> adminFestival.update(adminFestivalEntity));

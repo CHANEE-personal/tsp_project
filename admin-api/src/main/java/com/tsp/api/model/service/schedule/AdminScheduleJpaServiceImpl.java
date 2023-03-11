@@ -1,7 +1,7 @@
 package com.tsp.api.model.service.schedule;
 
 import com.tsp.api.model.domain.AdminModelEntity;
-import com.tsp.api.model.domain.schedule.AdminScheduleDTO;
+import com.tsp.api.model.domain.schedule.AdminScheduleDto;
 import com.tsp.api.model.domain.schedule.AdminScheduleEntity;
 import com.tsp.api.model.service.AdminModelJpaRepository;
 import com.tsp.exception.TspException;
@@ -44,7 +44,7 @@ public class AdminScheduleJpaServiceImpl implements AdminScheduleJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<AdminScheduleDTO> findScheduleList(Map<String, Object> scheduleMap, PageRequest pageRequest) {
+    public Page<AdminScheduleDto> findScheduleList(Map<String, Object> scheduleMap, PageRequest pageRequest) {
         return adminScheduleJpaQueryRepository.findScheduleList(scheduleMap, pageRequest);
     }
 
@@ -59,7 +59,7 @@ public class AdminScheduleJpaServiceImpl implements AdminScheduleJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminScheduleDTO findOneSchedule(Long idx) {
+    public AdminScheduleDto findOneSchedule(Long idx) {
         return AdminScheduleEntity.toDto(oneSchedule(idx));
     }
 
@@ -74,7 +74,7 @@ public class AdminScheduleJpaServiceImpl implements AdminScheduleJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminScheduleDTO findPrevOneSchedule(Long idx) {
+    public AdminScheduleDto findPrevOneSchedule(Long idx) {
         return adminScheduleJpaQueryRepository.findPrevOneSchedule(idx);
     }
 
@@ -89,7 +89,7 @@ public class AdminScheduleJpaServiceImpl implements AdminScheduleJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminScheduleDTO findNextOneSchedule(Long idx) {
+    public AdminScheduleDto findNextOneSchedule(Long idx) {
         return adminScheduleJpaQueryRepository.findNextOneSchedule(idx);
     }
 
@@ -104,7 +104,7 @@ public class AdminScheduleJpaServiceImpl implements AdminScheduleJpaService {
      */
     @Override
     @Transactional
-    public AdminScheduleDTO insertSchedule(Long idx, AdminScheduleEntity adminScheduleEntity) {
+    public AdminScheduleDto insertSchedule(Long idx, AdminScheduleEntity adminScheduleEntity) {
         try {
             oneModel(idx).addSchedule(adminScheduleEntity);
             return AdminScheduleEntity.toDto(adminScheduleJpaRepository.save(adminScheduleEntity));
@@ -124,7 +124,7 @@ public class AdminScheduleJpaServiceImpl implements AdminScheduleJpaService {
      */
     @Override
     @Transactional
-    public AdminScheduleDTO updateSchedule(Long idx, AdminScheduleEntity adminScheduleEntity) {
+    public AdminScheduleDto updateSchedule(Long idx, AdminScheduleEntity adminScheduleEntity) {
         try {
             Optional<AdminScheduleEntity> oneSchedule = Optional.ofNullable(adminScheduleJpaRepository.findById(idx)
                     .orElseThrow(() -> new TspException(NOT_FOUND_MODEL_SCHEDULE)));

@@ -1,6 +1,6 @@
 package com.tsp.api.user.service;
 
-import com.tsp.api.user.domain.AdminUserDTO;
+import com.tsp.api.user.domain.AdminUserDto;
 import com.tsp.api.user.domain.AdminUserEntity;
 import com.tsp.api.user.domain.LoginRequest;
 import com.tsp.api.user.service.repository.AdminUserJpaQueryRepository;
@@ -59,7 +59,7 @@ class AdminUserJpaServiceTest {
         // given
         Map<String, Object> userMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(0, 100);
-        Page<AdminUserDTO> adminUserList = adminUserJpaService.findUserList(userMap, pageRequest);
+        Page<AdminUserDto> adminUserList = adminUserJpaService.findUserList(userMap, pageRequest);
 
         // then
         assertThat(adminUserList).isNotEmpty();
@@ -72,15 +72,15 @@ class AdminUserJpaServiceTest {
         Map<String, Object> userMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<AdminUserDTO> returnUserList = new ArrayList<>();
-        returnUserList.add(AdminUserDTO.builder()
+        List<AdminUserDto> returnUserList = new ArrayList<>();
+        returnUserList.add(AdminUserDto.builder()
                 .idx(1L).userId("admin05").password("test1234").name("admin05").visible("Y").build());
-        Page<AdminUserDTO> resultUser = new PageImpl<>(returnUserList, pageRequest, returnUserList.size());
+        Page<AdminUserDto> resultUser = new PageImpl<>(returnUserList, pageRequest, returnUserList.size());
 
         // when
         when(adminUserJpaQueryRepository.findUserList(userMap, pageRequest)).thenReturn(resultUser);
-        Page<AdminUserDTO> userList = mockAdminUserJpaService.findUserList(userMap, pageRequest);
-        List<AdminUserDTO> findUserList = userList.stream().collect(Collectors.toList());
+        Page<AdminUserDto> userList = mockAdminUserJpaService.findUserList(userMap, pageRequest);
+        List<AdminUserDto> findUserList = userList.stream().collect(Collectors.toList());
 
         // then
         assertAll(
@@ -110,15 +110,15 @@ class AdminUserJpaServiceTest {
         Map<String, Object> userMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(0, 3);
 
-        List<AdminUserDTO> returnUserList = new ArrayList<>();
-        returnUserList.add(AdminUserDTO.builder()
+        List<AdminUserDto> returnUserList = new ArrayList<>();
+        returnUserList.add(AdminUserDto.builder()
                 .idx(1L).userId("admin05").password("test1234").name("admin05").visible("Y").build());
-        Page<AdminUserDTO> resultUser = new PageImpl<>(returnUserList, pageRequest, returnUserList.size());
+        Page<AdminUserDto> resultUser = new PageImpl<>(returnUserList, pageRequest, returnUserList.size());
 
         // when
         given(adminUserJpaQueryRepository.findUserList(userMap, pageRequest)).willReturn(resultUser);
-        Page<AdminUserDTO> userList = mockAdminUserJpaService.findUserList(userMap, pageRequest);
-        List<AdminUserDTO> findUserList = userList.stream().collect(Collectors.toList());
+        Page<AdminUserDto> userList = mockAdminUserJpaService.findUserList(userMap, pageRequest);
+        List<AdminUserDto> findUserList = userList.stream().collect(Collectors.toList());
 
         // then
         assertAll(
@@ -142,7 +142,7 @@ class AdminUserJpaServiceTest {
     @DisplayName("관리자 회원 상세 조회 테스트")
     void 관리자회원상세조회테스트() {
         // given
-        AdminUserDTO adminUserEntity = adminUserJpaService.findOneUser("admin01");
+        AdminUserDto adminUserEntity = adminUserJpaService.findOneUser("admin01");
         // then
         assertThat(adminUserEntity).isNotNull();
     }
@@ -164,7 +164,7 @@ class AdminUserJpaServiceTest {
 
         // when
         when(adminUserJpaRepository.findByUserId(adminUserEntity.getUserId())).thenReturn(Optional.of(adminUserEntity));
-        AdminUserDTO userInfo = mockAdminUserJpaService.findOneUser(adminUserEntity.getUserId());
+        AdminUserDto userInfo = mockAdminUserJpaService.findOneUser(adminUserEntity.getUserId());
 
         // then
         assertThat(userInfo.getIdx()).isEqualTo(adminUserEntity.getIdx());
@@ -198,7 +198,7 @@ class AdminUserJpaServiceTest {
 
         // when
         given(adminUserJpaRepository.findByUserId(adminUserEntity.getUserId())).willReturn(Optional.of(adminUserEntity));
-        AdminUserDTO userInfo = mockAdminUserJpaService.findOneUser(adminUserEntity.getUserId());
+        AdminUserDto userInfo = mockAdminUserJpaService.findOneUser(adminUserEntity.getUserId());
 
         // then
         assertThat(userInfo.getIdx()).isEqualTo(adminUserEntity.getIdx());
@@ -249,7 +249,7 @@ class AdminUserJpaServiceTest {
 
         // when
         when(adminUserJpaRepository.save(adminUserEntity)).thenReturn(adminUserEntity);
-        AdminUserDTO userInfo = mockAdminUserJpaService.insertAdminUser(adminUserEntity);
+        AdminUserDto userInfo = mockAdminUserJpaService.insertAdminUser(adminUserEntity);
 
         // then
         assertThat(userInfo.getUserId()).isEqualTo(adminUserEntity.getUserId());
@@ -279,7 +279,7 @@ class AdminUserJpaServiceTest {
 
         // when
         given(adminUserJpaRepository.save(adminUserEntity)).willReturn(adminUserEntity);
-        AdminUserDTO userInfo = mockAdminUserJpaService.insertAdminUser(adminUserEntity);
+        AdminUserDto userInfo = mockAdminUserJpaService.insertAdminUser(adminUserEntity);
 
         // then
         assertThat(userInfo.getUserId()).isEqualTo(adminUserEntity.getUserId());
@@ -319,7 +319,7 @@ class AdminUserJpaServiceTest {
         // when
         when(adminUserJpaRepository.findById(newAdminUserEntity.getIdx())).thenReturn(Optional.of(newAdminUserEntity));
         when(adminUserJpaRepository.save(newAdminUserEntity)).thenReturn(newAdminUserEntity);
-        AdminUserDTO userInfo = mockAdminUserJpaService.updateAdminUser(newAdminUserEntity.getIdx(), newAdminUserEntity);
+        AdminUserDto userInfo = mockAdminUserJpaService.updateAdminUser(newAdminUserEntity.getIdx(), newAdminUserEntity);
 
         // then
         assertThat(userInfo.getUserId()).isEqualTo(newAdminUserEntity.getUserId());
@@ -363,7 +363,7 @@ class AdminUserJpaServiceTest {
         // when
         given(adminUserJpaRepository.findById(newAdminUserEntity.getIdx())).willReturn(Optional.of(newAdminUserEntity));
         given(adminUserJpaRepository.save(newAdminUserEntity)).willReturn(newAdminUserEntity);
-        AdminUserDTO userInfo = mockAdminUserJpaService.updateAdminUser(newAdminUserEntity.getIdx(), newAdminUserEntity);
+        AdminUserDto userInfo = mockAdminUserJpaService.updateAdminUser(newAdminUserEntity.getIdx(), newAdminUserEntity);
 
         // then
         assertThat(userInfo.getUserId()).isEqualTo(newAdminUserEntity.getUserId());

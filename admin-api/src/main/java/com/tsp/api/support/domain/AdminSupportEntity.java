@@ -3,7 +3,6 @@ package com.tsp.api.support.domain;
 import com.tsp.api.common.domain.NewCommonMappedClass;
 import com.tsp.api.support.domain.evaluation.EvaluationEntity;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -99,24 +98,24 @@ public class AdminSupportEntity extends NewCommonMappedClass {
         this.passTime = LocalDateTime.now();
     }
 
-    public static AdminSupportDTO toDto(AdminSupportEntity entity) {
+    public static AdminSupportDto toDto(AdminSupportEntity entity) {
         if (entity == null) return null;
-        return AdminSupportDTO.builder()
-                .idx(entity.getIdx())
-                .supportName(entity.getSupportName())
-                .supportHeight(entity.getSupportHeight())
-                .supportSize3(entity.getSupportSize3())
-                .supportInstagram(entity.getSupportInstagram())
-                .supportPhone(entity.getSupportPhone())
-                .supportMessage(entity.getSupportMessage())
-                .supportTime(entity.getSupportTime())
-                .passYn(entity.getPassYn())
-                .passTime(entity.getPassTime())
-                .visible(entity.getVisible())
+        return AdminSupportDto.builder()
+                .idx(entity.idx)
+                .supportName(entity.supportName)
+                .supportHeight(entity.supportHeight)
+                .supportSize3(entity.supportSize3)
+                .supportInstagram(entity.supportInstagram)
+                .supportPhone(entity.supportPhone)
+                .supportMessage(entity.supportMessage)
+                .supportTime(entity.supportTime)
+                .passYn(entity.passYn)
+                .passTime(entity.passTime)
+                .visible(entity.visible)
                 .build();
     }
 
-    public static List<AdminSupportDTO> toDtoList(List<AdminSupportEntity> entityList) {
+    public static List<AdminSupportDto> toDtoList(List<AdminSupportEntity> entityList) {
         if (entityList == null) return null;
         return entityList.stream()
                 .map(AdminSupportEntity::toDto)

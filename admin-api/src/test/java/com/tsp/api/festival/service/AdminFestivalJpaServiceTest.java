@@ -1,6 +1,6 @@
 package com.tsp.api.festival.service;
 
-import com.tsp.api.festival.domain.AdminFestivalDTO;
+import com.tsp.api.festival.domain.AdminFestivalDto;
 import com.tsp.api.festival.domain.AdminFestivalEntity;
 import com.tsp.api.model.service.AdminModelCommonServiceTest;
 import lombok.RequiredArgsConstructor;
@@ -59,14 +59,14 @@ class AdminFestivalJpaServiceTest extends AdminModelCommonServiceTest {
         Map<String, Object> festivalMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(0, 3);
 
-        List<AdminFestivalDTO> festivalList = new ArrayList<>();
+        List<AdminFestivalDto> festivalList = new ArrayList<>();
         festivalList.add(adminFestivalDTO);
-        Page<AdminFestivalDTO> resultFestival = new PageImpl<>(festivalList, pageRequest, festivalList.size());
+        Page<AdminFestivalDto> resultFestival = new PageImpl<>(festivalList, pageRequest, festivalList.size());
 
         // when
         when(adminFestivalJpaQueryRepository.findFestivalList(festivalMap, pageRequest)).thenReturn(resultFestival);
-        Page<AdminFestivalDTO> findFestivalList = mockAdminFestivalJpaService.findFestivalList(festivalMap, pageRequest);
-        List<AdminFestivalDTO> newFestivalList = findFestivalList.stream().collect(Collectors.toList());
+        Page<AdminFestivalDto> findFestivalList = mockAdminFestivalJpaService.findFestivalList(festivalMap, pageRequest);
+        List<AdminFestivalDto> newFestivalList = findFestivalList.stream().collect(Collectors.toList());
 
         // then
         assertThat(newFestivalList.get(0).getFestivalTitle()).isEqualTo("축제 제목");
@@ -84,7 +84,7 @@ class AdminFestivalJpaServiceTest extends AdminModelCommonServiceTest {
     @Test
     @DisplayName("축제 상세 조회 테스트")
     void 축제상세조회테스트() {
-        AdminFestivalDTO oneFestival = adminFestivalJpaService.findOneFestival(adminFestivalDTO.getIdx());
+        AdminFestivalDto oneFestival = adminFestivalJpaService.findOneFestival(adminFestivalDTO.getIdx());
         assertThat(oneFestival.getFestivalTitle()).isEqualTo("축제 제목");
         assertThat(oneFestival.getFestivalDescription()).isEqualTo("축제 내용");
     }
@@ -94,7 +94,7 @@ class AdminFestivalJpaServiceTest extends AdminModelCommonServiceTest {
     void 축제상세조회Mockito테스트() {
         // when
         when(adminFestivalJpaRepository.findById(adminFestivalEntity.getIdx())).thenReturn(Optional.ofNullable(adminFestivalEntity));
-        AdminFestivalDTO oneFestival = mockAdminFestivalJpaService.findOneFestival(adminFestivalEntity.getIdx());
+        AdminFestivalDto oneFestival = mockAdminFestivalJpaService.findOneFestival(adminFestivalEntity.getIdx());
 
         // then
         assertThat(oneFestival.getFestivalTitle()).isEqualTo(adminFestivalEntity.getFestivalTitle());
@@ -124,7 +124,7 @@ class AdminFestivalJpaServiceTest extends AdminModelCommonServiceTest {
                 .festivalTime(dateTime)
                 .build();
 
-        AdminFestivalDTO oneFestival = adminFestivalJpaService.insertFestival(insertFestivalEntity);
+        AdminFestivalDto oneFestival = adminFestivalJpaService.insertFestival(insertFestivalEntity);
         assertThat(oneFestival.getFestivalTitle()).isEqualTo("축제 등록 제목");
         assertThat(oneFestival.getFestivalDescription()).isEqualTo("축제 등록 내용");
     }
@@ -144,7 +144,7 @@ class AdminFestivalJpaServiceTest extends AdminModelCommonServiceTest {
 
         // when
         when(adminFestivalJpaRepository.save(insertFestivalEntity)).thenReturn(insertFestivalEntity);
-        AdminFestivalDTO oneFestival = mockAdminFestivalJpaService.insertFestival(insertFestivalEntity);
+        AdminFestivalDto oneFestival = mockAdminFestivalJpaService.insertFestival(insertFestivalEntity);
 
         // then
         assertThat(oneFestival.getIdx()).isEqualTo(insertFestivalEntity.getIdx());
@@ -174,7 +174,7 @@ class AdminFestivalJpaServiceTest extends AdminModelCommonServiceTest {
                 .festivalTime(dateTime)
                 .build();
 
-        AdminFestivalDTO updateFestival = adminFestivalJpaService.updateFestival(adminFestivalEntity.getIdx(), updateFestivalEntity);
+        AdminFestivalDto updateFestival = adminFestivalJpaService.updateFestival(adminFestivalEntity.getIdx(), updateFestivalEntity);
         assertThat(updateFestival.getFestivalTitle()).isEqualTo("축제 수정 제목");
         assertThat(updateFestival.getFestivalDescription()).isEqualTo("축제 수정 내용");
     }
@@ -196,7 +196,7 @@ class AdminFestivalJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         when(adminFestivalJpaRepository.findById(updateFestivalEntity.getIdx())).thenReturn(Optional.of(updateFestivalEntity));
         when(adminFestivalJpaRepository.save(updateFestivalEntity)).thenReturn(updateFestivalEntity);
-        AdminFestivalDTO oneFestival = mockAdminFestivalJpaService.updateFestival(updateFestivalEntity.getIdx(), updateFestivalEntity);
+        AdminFestivalDto oneFestival = mockAdminFestivalJpaService.updateFestival(updateFestivalEntity.getIdx(), updateFestivalEntity);
 
         // then
         assertThat(oneFestival.getIdx()).isEqualTo(updateFestivalEntity.getIdx());

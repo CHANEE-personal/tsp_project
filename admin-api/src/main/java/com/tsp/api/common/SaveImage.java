@@ -1,7 +1,7 @@
 package com.tsp.api.common;
 
 import com.tsp.api.common.image.AdminCommonImageJpaRepository;
-import com.tsp.api.common.domain.CommonImageDTO;
+import com.tsp.api.common.domain.CommonImageDto;
 import com.tsp.api.common.domain.CommonImageEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +28,7 @@ public class SaveImage {
     @Value("${image.uploadPath}")
     private String fileDirPath;
 
-    public List<CommonImageDTO> saveFile(List<MultipartFile> multipartFiles, CommonImageEntity commonImageEntity) throws IOException {
+    public List<CommonImageDto> saveFile(List<MultipartFile> multipartFiles, CommonImageEntity commonImageEntity) throws IOException {
         if (adminCommonImageJpaRepository.findById(commonImageEntity.getIdx()).isPresent()) {
             adminCommonImageJpaRepository.delete(commonImageEntity);
         }

@@ -1,8 +1,8 @@
 package com.tsp.api.model.service.agency;
 
-import com.tsp.api.common.domain.CommonImageDTO;
+import com.tsp.api.common.domain.CommonImageDto;
 import com.tsp.api.common.domain.CommonImageEntity;
-import com.tsp.api.model.domain.agency.AdminAgencyDTO;
+import com.tsp.api.model.domain.agency.AdminAgencyDto;
 import com.tsp.api.model.domain.agency.AdminAgencyEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +22,7 @@ public interface AdminAgencyJpaService {
      * 5. 작성일      : 2022. 08. 14.
      * </pre>
      */
-    Page<AdminAgencyDTO> findAgencyList(Map<String, Object> agencyMap, PageRequest pageRequest);
+    Page<AdminAgencyDto> findAgencyList(Map<String, Object> agencyMap, PageRequest pageRequest);
 
     /**
      * <pre>
@@ -33,7 +33,7 @@ public interface AdminAgencyJpaService {
      * 5. 작성일      : 2022. 08. 14.
      * </pre>
      */
-    AdminAgencyDTO findOneAgency(Long idx);
+    AdminAgencyDto findOneAgency(Long idx);
 
     /**
      * <pre>
@@ -44,7 +44,7 @@ public interface AdminAgencyJpaService {
      * 5. 작성일      : 2022. 08. 14.
      * </pre>
      */
-    AdminAgencyDTO insertAgency(AdminAgencyEntity adminAgencyEntity);
+    AdminAgencyDto insertAgency(AdminAgencyEntity adminAgencyEntity);
 
     /**
      * <pre>
@@ -55,7 +55,7 @@ public interface AdminAgencyJpaService {
      * 5. 작성일      : 2022. 08. 14.
      * </pre>
      */
-    AdminAgencyDTO updateAgency(Long idx, AdminAgencyEntity adminAgencyEntity);
+    AdminAgencyDto updateAgency(Long idx, AdminAgencyEntity adminAgencyEntity);
 
     /**
      * <pre>
@@ -77,7 +77,7 @@ public interface AdminAgencyJpaService {
      * 5. 작성일      : 2022. 08. 14.
      * </pre>
      */
-    List<CommonImageDTO> insertAgencyImage(CommonImageEntity commonImageEntity, List<MultipartFile> fileName);
+    List<CommonImageDto> insertAgencyImage(CommonImageEntity commonImageEntity, List<MultipartFile> fileName);
 
     /**
      * <pre>

@@ -2,7 +2,7 @@ package com.tsp.api.festival.service;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tsp.api.festival.domain.AdminFestivalDTO;
+import com.tsp.api.festival.domain.AdminFestivalDto;
 import com.tsp.api.festival.domain.AdminFestivalEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -48,7 +48,7 @@ public class AdminFestivalJpaQueryRepository {
      * 5. 작성일      : 2023. 01. 09.
      * </pre>
      */
-    public Page<AdminFestivalDTO> findFestivalList(Map<String, Object> festivalMap, PageRequest pageRequest) {
+    public Page<AdminFestivalDto> findFestivalList(Map<String, Object> festivalMap, PageRequest pageRequest) {
         List<AdminFestivalEntity> festivalList = queryFactory
                 .selectFrom(adminFestivalEntity)
                 .where(searchFestival(festivalMap))

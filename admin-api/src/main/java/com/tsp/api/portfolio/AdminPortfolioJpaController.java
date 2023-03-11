@@ -1,6 +1,6 @@
 package com.tsp.api.portfolio;
 
-import com.tsp.api.portfolio.domain.AdminPortFolioDTO;
+import com.tsp.api.portfolio.domain.AdminPortFolioDto;
 import com.tsp.api.portfolio.domain.AdminPortFolioEntity;
 import com.tsp.api.portfolio.service.AdminPortfolioJpaService;
 import com.tsp.common.Paging;
@@ -51,7 +51,7 @@ public class AdminPortfolioJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping
-    public ResponseEntity<Page<AdminPortFolioDTO>> findPortfolioList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
+    public ResponseEntity<Page<AdminPortFolioDto>> findPortfolioList(@RequestParam(required = false) Map<String, Object> paramMap, Paging paging) {
         return ResponseEntity.ok().body(adminPortfolioJpaService.findPortfolioList(paramMap, PageRequest.of(paging.getPageNum(), paging.getSize())));
     }
 
@@ -67,7 +67,7 @@ public class AdminPortfolioJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "포트폴리오 상세 조회", notes = "포트폴리오를 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "포트폴리오 상세 조회 성공", response = AdminPortFolioDTO.class),
+            @ApiResponse(code = 200, message = "포트폴리오 상세 조회 성공", response = AdminPortFolioDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -75,7 +75,7 @@ public class AdminPortfolioJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping(value = "/{idx}")
-    public ResponseEntity<AdminPortFolioDTO> findOnePortfolio(@PathVariable Long idx) {
+    public ResponseEntity<AdminPortFolioDto> findOnePortfolio(@PathVariable Long idx) {
         return ResponseEntity.ok(adminPortfolioJpaService.findOnePortfolio(idx));
     }
 
@@ -91,7 +91,7 @@ public class AdminPortfolioJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "이전 포트폴리오 상세 조회", notes = "이전 포트폴리오를 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "이전 포트폴리오 상세조회 성공", response = AdminPortFolioDTO.class),
+            @ApiResponse(code = 200, message = "이전 포트폴리오 상세조회 성공", response = AdminPortFolioDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -99,7 +99,7 @@ public class AdminPortfolioJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}/prev")
-    public ResponseEntity<AdminPortFolioDTO> findPrevOnePortfolio(@PathVariable Long idx) {
+    public ResponseEntity<AdminPortFolioDto> findPrevOnePortfolio(@PathVariable Long idx) {
         return ResponseEntity.ok(adminPortfolioJpaService.findPrevOnePortfolio(idx));
     }
 
@@ -115,7 +115,7 @@ public class AdminPortfolioJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "다음 포트폴리오 상세 조회", notes = "다음 포트폴리오를 상세 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "다음 포트폴리오 상세조회 성공", response = AdminPortFolioDTO.class),
+            @ApiResponse(code = 200, message = "다음 포트폴리오 상세조회 성공", response = AdminPortFolioDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -123,7 +123,7 @@ public class AdminPortfolioJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @GetMapping("/{idx}/next")
-    public ResponseEntity<AdminPortFolioDTO> findNextOnePortfolio(@PathVariable Long idx) {
+    public ResponseEntity<AdminPortFolioDto> findNextOnePortfolio(@PathVariable Long idx) {
         return ResponseEntity.ok(adminPortfolioJpaService.findNextOnePortfolio(idx));
     }
 
@@ -139,7 +139,7 @@ public class AdminPortfolioJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "포트폴리오 저장", notes = "포트폴리오를 저장한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "포트폴리오 등록성공", response = AdminPortFolioDTO.class),
+            @ApiResponse(code = 201, message = "포트폴리오 등록성공", response = AdminPortFolioDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -147,7 +147,7 @@ public class AdminPortfolioJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PostMapping
-    public ResponseEntity<AdminPortFolioDTO> insertPortfolio(@Valid @RequestBody AdminPortFolioEntity adminPortFolioEntity) {
+    public ResponseEntity<AdminPortFolioDto> insertPortfolio(@Valid @RequestBody AdminPortFolioEntity adminPortFolioEntity) {
         return ResponseEntity.created(URI.create("")).body(adminPortfolioJpaService.insertPortfolio(adminPortFolioEntity));
     }
 
@@ -163,7 +163,7 @@ public class AdminPortfolioJpaController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     @ApiOperation(value = "포트폴리오 수정", notes = "포트폴리오를 수정한다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "포트폴리오 수정성공", response = AdminPortFolioDTO.class),
+            @ApiResponse(code = 200, message = "포트폴리오 수정성공", response = AdminPortFolioDto.class),
             @ApiResponse(code = 400, message = "잘못된 요청", response = BadRequest.class),
             @ApiResponse(code = 401, message = "허용되지 않는 관리자", response = Unauthorized.class),
             @ApiResponse(code = 403, message = "접근거부", response = HttpClientErrorException.class),
@@ -171,7 +171,7 @@ public class AdminPortfolioJpaController {
             @ApiResponse(code = 500, message = "서버 에러", response = ServerError.class)
     })
     @PutMapping("/{idx}")
-    public ResponseEntity<AdminPortFolioDTO> updatePortfolio(@PathVariable Long idx, @Valid @RequestBody AdminPortFolioEntity adminPortFolioEntity) {
+    public ResponseEntity<AdminPortFolioDto> updatePortfolio(@PathVariable Long idx, @Valid @RequestBody AdminPortFolioEntity adminPortFolioEntity) {
         return ResponseEntity.ok(adminPortfolioJpaService.updatePortfolio(idx, adminPortFolioEntity));
     }
 

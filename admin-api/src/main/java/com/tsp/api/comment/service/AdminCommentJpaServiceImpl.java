@@ -1,6 +1,6 @@
 package com.tsp.api.comment.service;
 
-import com.tsp.api.comment.domain.AdminCommentDTO;
+import com.tsp.api.comment.domain.AdminCommentDto;
 import com.tsp.api.comment.domain.AdminCommentEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ public class AdminCommentJpaServiceImpl implements AdminCommentJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<AdminCommentDTO> findAdminCommentList(Map<String, Object> commentMap, PageRequest pageRequest) {
+    public Page<AdminCommentDto> findAdminCommentList(Map<String, Object> commentMap, PageRequest pageRequest) {
         return adminCommentJpaQueryRepository.findAdminCommentList(commentMap, pageRequest);
     }
 
@@ -50,7 +50,7 @@ public class AdminCommentJpaServiceImpl implements AdminCommentJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminCommentDTO findOneAdminComment(Long idx) {
+    public AdminCommentDto findOneAdminComment(Long idx) {
         return AdminCommentEntity.toDto(oneComment(idx));
     }
 
@@ -65,7 +65,7 @@ public class AdminCommentJpaServiceImpl implements AdminCommentJpaService {
      */
     @Override
     @Transactional
-    public AdminCommentDTO updateAdminComment(Long idx, AdminCommentEntity adminCommentEntity) {
+    public AdminCommentDto updateAdminComment(Long idx, AdminCommentEntity adminCommentEntity) {
         try {
             oneComment(idx).update(adminCommentEntity);
             return AdminCommentEntity.toDto(adminCommentEntity);

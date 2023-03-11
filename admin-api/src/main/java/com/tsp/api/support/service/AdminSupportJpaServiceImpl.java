@@ -1,9 +1,9 @@
 package com.tsp.api.support.service;
 
-import com.tsp.api.comment.domain.AdminCommentDTO;
-import com.tsp.api.support.domain.AdminSupportDTO;
+import com.tsp.api.comment.domain.AdminCommentDto;
+import com.tsp.api.support.domain.AdminSupportDto;
 import com.tsp.api.support.domain.AdminSupportEntity;
-import com.tsp.api.support.domain.evaluation.EvaluationDTO;
+import com.tsp.api.support.domain.evaluation.EvaluationDto;
 import com.tsp.api.support.domain.evaluation.EvaluationEntity;
 import com.tsp.api.support.evaluation.AdminEvaluationJpaRepository;
 import com.tsp.exception.TspException;
@@ -47,7 +47,7 @@ public class AdminSupportJpaServiceImpl implements AdminSupportJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<AdminSupportDTO> findSupportList(Map<String, Object> supportMap, PageRequest pageRequest) {
+    public Page<AdminSupportDto> findSupportList(Map<String, Object> supportMap, PageRequest pageRequest) {
         return adminSupportJpaQueryRepository.findSupportList(supportMap, pageRequest);
     }
 
@@ -62,13 +62,13 @@ public class AdminSupportJpaServiceImpl implements AdminSupportJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminSupportDTO findOneSupportModel(Long idx) {
+    public AdminSupportDto findOneSupportModel(Long idx) {
         return AdminSupportEntity.toDto(oneSupport(idx));
     }
 
     @Override
     @Transactional
-    public AdminSupportDTO insertSupportModel(AdminSupportEntity adminSupportEntity) {
+    public AdminSupportDto insertSupportModel(AdminSupportEntity adminSupportEntity) {
         try {
             return AdminSupportEntity.toDto(adminSupportJpaRepository.save(adminSupportEntity));
         } catch (Exception e) {
@@ -87,7 +87,7 @@ public class AdminSupportJpaServiceImpl implements AdminSupportJpaService {
      */
     @Override
     @Transactional
-    public AdminSupportDTO updateSupportModel(Long idx, AdminSupportEntity adminSupportEntity) {
+    public AdminSupportDto updateSupportModel(Long idx, AdminSupportEntity adminSupportEntity) {
         try {
             oneSupport(idx).update(adminSupportEntity);
             return AdminSupportEntity.toDto(adminSupportEntity);
@@ -127,7 +127,7 @@ public class AdminSupportJpaServiceImpl implements AdminSupportJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<EvaluationDTO> findEvaluationList(Map<String, Object> evaluationMap, PageRequest pageRequest) {
+    public List<EvaluationDto> findEvaluationList(Map<String, Object> evaluationMap, PageRequest pageRequest) {
         return adminEvaluationJpaRepository.findAll(pageRequest)
                 .stream().map(EvaluationEntity::toDto)
                 .collect(Collectors.toList());
@@ -144,7 +144,7 @@ public class AdminSupportJpaServiceImpl implements AdminSupportJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public EvaluationDTO findOneEvaluation(Long idx) {
+    public EvaluationDto findOneEvaluation(Long idx) {
         return EvaluationEntity.toDto(oneEvaluation(idx));
     }
 
@@ -159,7 +159,7 @@ public class AdminSupportJpaServiceImpl implements AdminSupportJpaService {
      */
     @Override
     @Transactional
-    public EvaluationDTO evaluationSupportModel(Long idx, EvaluationEntity evaluationEntity) {
+    public EvaluationDto evaluationSupportModel(Long idx, EvaluationEntity evaluationEntity) {
         try {
             oneSupport(idx).addSupport(evaluationEntity);
             return EvaluationEntity.toDto(adminEvaluationJpaRepository.save(evaluationEntity));
@@ -179,7 +179,7 @@ public class AdminSupportJpaServiceImpl implements AdminSupportJpaService {
      */
     @Override
     @Transactional
-    public EvaluationDTO updateEvaluation(Long idx, EvaluationEntity evaluationEntity) {
+    public EvaluationDto updateEvaluation(Long idx, EvaluationEntity evaluationEntity) {
         try {
             oneEvaluation(idx).update(evaluationEntity);
             return EvaluationEntity.toDto(evaluationEntity);
@@ -219,7 +219,7 @@ public class AdminSupportJpaServiceImpl implements AdminSupportJpaService {
      */
     @Override
     @Transactional
-    public AdminSupportDTO updatePass(Long idx) {
+    public AdminSupportDto updatePass(Long idx) {
         try {
             AdminSupportEntity oneSupport = oneSupport(idx);
             oneSupport.togglePassYn(oneSupport.getPassYn());
@@ -240,7 +240,7 @@ public class AdminSupportJpaServiceImpl implements AdminSupportJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<AdminCommentDTO> findSupportAdminComment(Long idx) {
+    public List<AdminCommentDto> findSupportAdminComment(Long idx) {
         return adminSupportJpaQueryRepository.findSupportAdminComment(idx);
     }
 }

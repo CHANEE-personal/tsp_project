@@ -1,14 +1,14 @@
 package com.tsp.api.model.service;
 
-import com.tsp.api.comment.domain.AdminCommentDTO;
+import com.tsp.api.comment.domain.AdminCommentDto;
 import com.tsp.api.comment.domain.AdminCommentEntity;
-import com.tsp.api.common.domain.CommonImageDTO;
+import com.tsp.api.common.domain.CommonImageDto;
 import com.tsp.api.common.domain.CommonImageEntity;
-import com.tsp.api.model.domain.AdminModelDTO;
+import com.tsp.api.model.domain.AdminModelDto;
 import com.tsp.api.model.domain.AdminModelEntity;
-import com.tsp.api.model.domain.recommend.AdminRecommendDTO;
+import com.tsp.api.model.domain.recommend.AdminRecommendDto;
 import com.tsp.api.model.domain.recommend.AdminRecommendEntity;
-import com.tsp.api.model.domain.schedule.AdminScheduleDTO;
+import com.tsp.api.model.domain.schedule.AdminScheduleDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +27,7 @@ public interface AdminModelJpaService {
      * 5. 작성일      : 2022. 05. 02.
      * </pre>
      */
-    Page<AdminModelDTO> findModelList(Map<String, Object> modelMap, PageRequest pageRequest);
+    Page<AdminModelDto> findModelList(Map<String, Object> modelMap, PageRequest pageRequest);
 
     /**
      * <pre>
@@ -38,7 +38,7 @@ public interface AdminModelJpaService {
      * 5. 작성일      : 2022. 05. 02.
      * </pre>
      */
-    AdminModelDTO findOneModel(Long idx);
+    AdminModelDto findOneModel(Long idx);
 
     /**
      * <pre>
@@ -49,7 +49,7 @@ public interface AdminModelJpaService {
      * 5. 작성일      : 2022. 09. 12.
      * </pre>
      */
-    AdminModelDTO findPrevOneModel(AdminModelEntity adminModelEntity);
+    AdminModelDto findPrevOneModel(AdminModelEntity adminModelEntity);
 
     /**
      * <pre>
@@ -60,7 +60,7 @@ public interface AdminModelJpaService {
      * 5. 작성일      : 2022. 09. 12.
      * </pre>
      */
-    AdminModelDTO findNextOneModel(AdminModelEntity adminModelEntity);
+    AdminModelDto findNextOneModel(AdminModelEntity adminModelEntity);
 
     /**
      * <pre>
@@ -71,7 +71,7 @@ public interface AdminModelJpaService {
      * 5. 작성일      : 2022. 05. 07.
      * </pre>
      */
-    AdminModelDTO insertModel(AdminModelEntity adminModelEntity);
+    AdminModelDto insertModel(AdminModelEntity adminModelEntity);
 
     /**
      * <pre>
@@ -82,7 +82,7 @@ public interface AdminModelJpaService {
      * 5. 작성일      : 2022. 05. 07.
      * </pre>
      */
-    AdminModelDTO updateModel(Long idx, AdminModelEntity adminModelEntity);
+    AdminModelDto updateModel(Long idx, AdminModelEntity adminModelEntity);
 
     /**
      * <pre>
@@ -104,7 +104,7 @@ public interface AdminModelJpaService {
      * 5. 작성일      : 2022. 05. 07.
      * </pre>
      */
-    List<CommonImageDTO> insertModelImage(CommonImageEntity commonImageEntity, List<MultipartFile> fileName);
+    List<CommonImageDto> insertModelImage(CommonImageEntity commonImageEntity, List<MultipartFile> fileName);
 
     /**
      * <pre>
@@ -126,7 +126,7 @@ public interface AdminModelJpaService {
      * 5. 작성일      : 2022. 08. 14.
      * </pre>
      */
-    AdminModelDTO updateModelAgency(Long idx, AdminModelEntity adminModelEntity);
+    AdminModelDto updateModelAgency(Long idx, AdminModelEntity adminModelEntity);
 
     /**
      * <pre>
@@ -137,7 +137,7 @@ public interface AdminModelJpaService {
      * 5. 작성일      : 2022. 08. 24.
      * </pre>
      */
-    AdminCommentDTO insertModelAdminComment(Long idx, AdminCommentEntity adminCommentEntity);
+    AdminCommentDto insertModelAdminComment(Long idx, AdminCommentEntity adminCommentEntity);
 
     /**
      * <pre>
@@ -148,7 +148,7 @@ public interface AdminModelJpaService {
      * 5. 작성일      : 2022. 08. 26.
      * </pre>
      */
-    List<AdminCommentDTO> findModelAdminComment(Long idx);
+    List<AdminCommentDto> findModelAdminComment(Long idx);
 
     /**
      * <pre>
@@ -159,7 +159,7 @@ public interface AdminModelJpaService {
      * 5. 작성일      : 2022. 08. 29.
      * </pre>
      */
-    AdminModelDTO toggleModelNewYn(Long idx);
+    AdminModelDto toggleModelNewYn(Long idx);
 
     /**
      * <pre>
@@ -170,7 +170,7 @@ public interface AdminModelJpaService {
      * 5. 작성일      : 2022. 09. 03.
      * </pre>
      */
-    List<AdminScheduleDTO> findOneModelSchedule(Long idx);
+    List<AdminScheduleDto> findOneModelSchedule(Long idx);
 
     /**
      * <pre>
@@ -181,7 +181,7 @@ public interface AdminModelJpaService {
      * 5. 작성일      : 2023. 01. 05.
      * </pre>
      */
-    List<AdminRecommendDTO> findRecommendList(Map<String, Object> recommendMap);
+    List<AdminRecommendDto> findRecommendList(Map<String, Object> recommendMap);
 
     /**
      * <pre>
@@ -192,7 +192,7 @@ public interface AdminModelJpaService {
      * 5. 작성일      : 2023. 01. 05.
      * </pre>
      */
-    AdminRecommendDTO findOneRecommend(Long idx);
+    AdminRecommendDto findOneRecommend(Long idx);
 
     /**
      * <pre>
@@ -203,7 +203,7 @@ public interface AdminModelJpaService {
      * 5. 작성일      : 2023. 01. 05.
      * </pre>
      */
-    AdminRecommendDTO insertRecommend(AdminRecommendEntity adminRecommendEntity);
+    AdminRecommendDto insertRecommend(AdminRecommendEntity adminRecommendEntity);
 
     /**
      * <pre>
@@ -214,7 +214,7 @@ public interface AdminModelJpaService {
      * 5. 작성일      : 2023. 01. 05.
      * </pre>
      */
-    AdminRecommendDTO updateRecommend(AdminRecommendEntity adminRecommendEntity);
+    AdminRecommendDto updateRecommend(AdminRecommendEntity adminRecommendEntity);
 
     /**
      * <pre>

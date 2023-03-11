@@ -49,17 +49,18 @@ public class AdminFaqEntity extends NewCommonMappedClass {
         this.visible = adminFaqEntity.visible;
     }
 
-    public static AdminFaqDTO toDto(AdminFaqEntity entity) {
+    public static AdminFaqDto toDto(AdminFaqEntity entity) {
         if (entity == null) return null;
-        return AdminFaqDTO.builder().idx(entity.getIdx())
-                .title(entity.getTitle())
-                .description(entity.getDescription())
-                .viewCount(entity.getViewCount())
-                .visible(entity.getVisible())
+        return AdminFaqDto.builder()
+                .idx(entity.idx)
+                .title(entity.title)
+                .description(entity.description)
+                .viewCount(entity.viewCount)
+                .visible(entity.visible)
                 .build();
     }
 
-    public static List<AdminFaqDTO> toDtoList(List<AdminFaqEntity> entityList) {
+    public static List<AdminFaqDto> toDtoList(List<AdminFaqEntity> entityList) {
         if (entityList == null) return null;
         return entityList.stream()
                 .map(AdminFaqEntity::toDto)

@@ -1,10 +1,9 @@
 package com.tsp.api.model.domain;
 
-import com.tsp.api.common.domain.CommonImageDTO;
+import com.tsp.api.common.domain.CommonImageDto;
 import com.tsp.api.common.domain.NewCommonDTO;
-import com.tsp.api.model.domain.agency.AdminAgencyDTO;
-import com.tsp.api.model.domain.negotiation.AdminNegotiationDTO;
-import com.tsp.api.model.domain.schedule.AdminScheduleDTO;
+import com.tsp.api.model.domain.negotiation.AdminNegotiationDto;
+import com.tsp.api.model.domain.schedule.AdminScheduleDto;
 import com.tsp.common.CustomConverter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -28,7 +27,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ApiModel(value = "모델 관련 변수")
-public class AdminModelDTO extends NewCommonDTO {
+public class AdminModelDto extends NewCommonDTO {
 
     @ApiModelProperty(required = true, value = "idx", hidden = true, example = "1")
     private Long idx;
@@ -103,6 +102,12 @@ public class AdminModelDTO extends NewCommonDTO {
     @ApiModelProperty(position = 9, value = "소속사 idx((ex)1", example = "1")
     private Long agencyIdx;
 
+    @ApiModelProperty(position = 10, value = "소속사명((ex)소속사", example = "소속사")
+    private String agencyName;
+
+    @ApiModelProperty(position = 10, value = "소속사 내용((ex)소속사", example = "소속사")
+    private String agencyDescription;
+
     @Convert(converter = CustomConverter.class)
     @ApiModelProperty(value = "model career")
     private List<CareerJson> careerList = new ArrayList<>();
@@ -121,14 +126,11 @@ public class AdminModelDTO extends NewCommonDTO {
     private List<String> modelKeyword = new ArrayList<>();
 
     @ApiModelProperty(value = "modelImageList", hidden = true)
-    private List<CommonImageDTO> modelImage = new ArrayList<>();
-
-    @ApiModelProperty(value = "modelAgency", hidden = true)
-    private AdminAgencyDTO modelAgency;
+    private List<CommonImageDto> modelImage = new ArrayList<>();
 
     @ApiModelProperty(value = "modelScheduleList", hidden = true)
-    private List<AdminScheduleDTO> modelSchedule = new ArrayList<>();
+    private List<AdminScheduleDto> modelSchedule = new ArrayList<>();
 
     @ApiModelProperty(value = "modelNegotiationList", hidden = true)
-    private List<AdminNegotiationDTO> modelNegotiation = new ArrayList<>();
+    private List<AdminNegotiationDto> modelNegotiation = new ArrayList<>();
 }

@@ -16,7 +16,7 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ApiModel
-public class AdminUserDTO extends NewCommonDTO {
+public class AdminUserDto extends NewCommonDTO {
 
     @ApiModelProperty(required = true, value = "user Seq", hidden = true, example = "1")
     private Long idx;

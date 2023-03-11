@@ -1,6 +1,6 @@
 package com.tsp.api.production.service;
 
-import com.tsp.api.production.domain.AdminProductionDTO;
+import com.tsp.api.production.domain.AdminProductionDto;
 import com.tsp.api.production.domain.AdminProductionEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +18,7 @@ public interface AdminProductionJpaService {
      * 5. 작성일      : 2022. 05. 09.
      * </pre>
      */
-    Page<AdminProductionDTO> findProductionList(Map<String, Object> productionMap, PageRequest pageRequest);
+    Page<AdminProductionDto> findProductionList(Map<String, Object> productionMap, PageRequest pageRequest);
 
     /**
      * <pre>
@@ -29,7 +29,7 @@ public interface AdminProductionJpaService {
      * 5. 작성일      : 2022. 05. 15.
      * </pre>
      */
-    AdminProductionDTO findOneProduction(Long idx);
+    AdminProductionDto findOneProduction(Long idx);
 
     /**
      * <pre>
@@ -40,7 +40,7 @@ public interface AdminProductionJpaService {
      * 5. 작성일      : 2022. 09. 13.
      * </pre>
      */
-    AdminProductionDTO findPrevOneProduction(Long idx);
+    AdminProductionDto findPrevOneProduction(Long idx);
 
     /**
      * <pre>
@@ -51,7 +51,7 @@ public interface AdminProductionJpaService {
      * 5. 작성일      : 2022. 09. 13.
      * </pre>
      */
-    AdminProductionDTO findNextOneProduction(Long idx);
+    AdminProductionDto findNextOneProduction(Long idx);
 
     /**
      * <pre>
@@ -62,7 +62,7 @@ public interface AdminProductionJpaService {
      * 5. 작성일      : 2022. 05. 16.
      * </pre>
      */
-    AdminProductionDTO insertProduction(AdminProductionEntity adminProductionEntity);
+    AdminProductionDto insertProduction(AdminProductionEntity adminProductionEntity);
 
     /**
      * <pre>
@@ -73,7 +73,7 @@ public interface AdminProductionJpaService {
      * 5. 작성일      : 2022. 05. 16.
      * </pre>
      */
-    AdminProductionDTO updateProduction(Long idx, AdminProductionEntity adminProductionEntity);
+    AdminProductionDto updateProduction(Long idx, AdminProductionEntity adminProductionEntity);
 
     /**
      * <pre>

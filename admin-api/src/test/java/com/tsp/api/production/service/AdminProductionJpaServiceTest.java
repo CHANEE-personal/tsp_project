@@ -1,7 +1,7 @@
 package com.tsp.api.production.service;
 
 import com.tsp.api.model.service.AdminModelCommonServiceTest;
-import com.tsp.api.production.domain.AdminProductionDTO;
+import com.tsp.api.production.domain.AdminProductionDto;
 import com.tsp.api.production.domain.AdminProductionEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
@@ -64,16 +64,16 @@ class AdminProductionJpaServiceTest extends AdminModelCommonServiceTest {
         Map<String, Object> productionMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(0, 3);
 
-        List<AdminProductionDTO> returnProductionList = new ArrayList<>();
+        List<AdminProductionDto> returnProductionList = new ArrayList<>();
 
-        returnProductionList.add(AdminProductionDTO.builder().idx(1L).title("프로덕션테스트").description("프로덕션테스트").visible("Y").build());
-        returnProductionList.add(AdminProductionDTO.builder().idx(2L).title("productionTest").description("productionTest").visible("Y").build());
-        Page<AdminProductionDTO> resultProduction = new PageImpl<>(returnProductionList, pageRequest, returnProductionList.size());
+        returnProductionList.add(AdminProductionDto.builder().idx(1L).title("프로덕션테스트").description("프로덕션테스트").visible("Y").build());
+        returnProductionList.add(AdminProductionDto.builder().idx(2L).title("productionTest").description("productionTest").visible("Y").build());
+        Page<AdminProductionDto> resultProduction = new PageImpl<>(returnProductionList, pageRequest, returnProductionList.size());
 
         // when
         when(adminProductionJpaQueryRepository.findProductionList(productionMap, pageRequest)).thenReturn(resultProduction);
-        Page<AdminProductionDTO> productionList = mockAdminProductionJpaService.findProductionList(productionMap, pageRequest);
-        List<AdminProductionDTO> findProductionList = productionList.stream().collect(Collectors.toList());
+        Page<AdminProductionDto> productionList = mockAdminProductionJpaService.findProductionList(productionMap, pageRequest);
+        List<AdminProductionDto> findProductionList = productionList.stream().collect(Collectors.toList());
 
         // then
         assertAll(
@@ -102,16 +102,16 @@ class AdminProductionJpaServiceTest extends AdminModelCommonServiceTest {
         Map<String, Object> productionMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(0, 3);
 
-        List<AdminProductionDTO> returnProductionList = new ArrayList<>();
+        List<AdminProductionDto> returnProductionList = new ArrayList<>();
 
-        returnProductionList.add(AdminProductionDTO.builder().idx(1L).title("프로덕션테스트").description("프로덕션테스트").visible("Y").build());
-        returnProductionList.add(AdminProductionDTO.builder().idx(2L).title("productionTest").description("productionTest").visible("Y").build());
-        Page<AdminProductionDTO> resultProduction = new PageImpl<>(returnProductionList, pageRequest, returnProductionList.size());
+        returnProductionList.add(AdminProductionDto.builder().idx(1L).title("프로덕션테스트").description("프로덕션테스트").visible("Y").build());
+        returnProductionList.add(AdminProductionDto.builder().idx(2L).title("productionTest").description("productionTest").visible("Y").build());
+        Page<AdminProductionDto> resultProduction = new PageImpl<>(returnProductionList, pageRequest, returnProductionList.size());
 
         // when
         given(adminProductionJpaQueryRepository.findProductionList(productionMap, pageRequest)).willReturn(resultProduction);
-        Page<AdminProductionDTO> productionList = mockAdminProductionJpaService.findProductionList(productionMap, pageRequest);
-        List<AdminProductionDTO> findProductionList = productionList.stream().collect(Collectors.toList());
+        Page<AdminProductionDto> productionList = mockAdminProductionJpaService.findProductionList(productionMap, pageRequest);
+        List<AdminProductionDto> findProductionList = productionList.stream().collect(Collectors.toList());
 
         // then
         assertAll(
@@ -142,7 +142,7 @@ class AdminProductionJpaServiceTest extends AdminModelCommonServiceTest {
     void 프로덕션상세조회Mockito테스트() {
         // when
         when(adminProductionJpaRepository.findByIdx(adminProductionEntity.getIdx())).thenReturn(Optional.ofNullable(adminProductionEntity));
-        AdminProductionDTO productionInfo = mockAdminProductionJpaService.findOneProduction(adminProductionEntity.getIdx());
+        AdminProductionDto productionInfo = mockAdminProductionJpaService.findOneProduction(adminProductionEntity.getIdx());
 
         // then
         assertThat(productionInfo.getIdx()).isEqualTo(adminProductionEntity.getIdx());
@@ -164,7 +164,7 @@ class AdminProductionJpaServiceTest extends AdminModelCommonServiceTest {
     void 프로덕션상세조회BDD테스트() {
         // when
         given(adminProductionJpaRepository.findByIdx(adminProductionEntity.getIdx())).willReturn(Optional.ofNullable(adminProductionEntity));
-        AdminProductionDTO productionInfo = mockAdminProductionJpaService.findOneProduction(adminProductionEntity.getIdx());
+        AdminProductionDto productionInfo = mockAdminProductionJpaService.findOneProduction(adminProductionEntity.getIdx());
 
         // then
         assertThat(productionInfo.getIdx()).isEqualTo(adminProductionEntity.getIdx());
@@ -188,7 +188,7 @@ class AdminProductionJpaServiceTest extends AdminModelCommonServiceTest {
         adminProductionDTO = adminProductionJpaService.findOneProduction(adminProductionEntity.getIdx());
 
         when(mockAdminProductionJpaService.findPrevOneProduction(adminProductionEntity.getIdx())).thenReturn(adminProductionDTO);
-        AdminProductionDTO productionInfo = mockAdminProductionJpaService.findPrevOneProduction(adminProductionEntity.getIdx());
+        AdminProductionDto productionInfo = mockAdminProductionJpaService.findPrevOneProduction(adminProductionEntity.getIdx());
 
         // then
         assertThat(productionInfo.getIdx()).isEqualTo(117);
@@ -212,7 +212,7 @@ class AdminProductionJpaServiceTest extends AdminModelCommonServiceTest {
         adminProductionDTO = adminProductionJpaService.findOneProduction(adminProductionEntity.getIdx());
 
         given(mockAdminProductionJpaService.findPrevOneProduction(adminProductionEntity.getIdx())).willReturn(adminProductionDTO);
-        AdminProductionDTO productionInfo = mockAdminProductionJpaService.findPrevOneProduction(adminProductionEntity.getIdx());
+        AdminProductionDto productionInfo = mockAdminProductionJpaService.findPrevOneProduction(adminProductionEntity.getIdx());
 
         // then
         assertThat(productionInfo.getIdx()).isEqualTo(117);
@@ -233,7 +233,7 @@ class AdminProductionJpaServiceTest extends AdminModelCommonServiceTest {
         adminProductionDTO = adminProductionJpaService.findOneProduction(adminProductionEntity.getIdx());
 
         when(mockAdminProductionJpaService.findNextOneProduction(adminProductionEntity.getIdx())).thenReturn(adminProductionDTO);
-        AdminProductionDTO productionInfo = mockAdminProductionJpaService.findNextOneProduction(adminProductionEntity.getIdx());
+        AdminProductionDto productionInfo = mockAdminProductionJpaService.findNextOneProduction(adminProductionEntity.getIdx());
 
         // then
         assertThat(productionInfo.getIdx()).isEqualTo(119);
@@ -257,7 +257,7 @@ class AdminProductionJpaServiceTest extends AdminModelCommonServiceTest {
         adminProductionDTO = adminProductionJpaService.findOneProduction(adminProductionEntity.getIdx());
 
         given(mockAdminProductionJpaService.findNextOneProduction(adminProductionEntity.getIdx())).willReturn(adminProductionDTO);
-        AdminProductionDTO productionInfo = mockAdminProductionJpaService.findNextOneProduction(adminProductionEntity.getIdx());
+        AdminProductionDto productionInfo = mockAdminProductionJpaService.findNextOneProduction(adminProductionEntity.getIdx());
 
         // then
         assertThat(productionInfo.getIdx()).isEqualTo(119);
@@ -273,7 +273,7 @@ class AdminProductionJpaServiceTest extends AdminModelCommonServiceTest {
     void 프로덕션등록Mockito테스트() {
         // when
         when(adminProductionJpaRepository.save(adminProductionEntity)).thenReturn(adminProductionEntity);
-        AdminProductionDTO productionInfo = mockAdminProductionJpaService.insertProduction(adminProductionEntity);
+        AdminProductionDto productionInfo = mockAdminProductionJpaService.insertProduction(adminProductionEntity);
 
         // then
         assertThat(productionInfo.getTitle()).isEqualTo(adminProductionEntity.getTitle());
@@ -293,7 +293,7 @@ class AdminProductionJpaServiceTest extends AdminModelCommonServiceTest {
     void 프로덕션등록BDD테스트() {
         // when
         given(adminProductionJpaRepository.save(adminProductionEntity)).willReturn(adminProductionEntity);
-        AdminProductionDTO productionInfo = mockAdminProductionJpaService.insertProduction(adminProductionEntity);
+        AdminProductionDto productionInfo = mockAdminProductionJpaService.insertProduction(adminProductionEntity);
 
         // then
         assertThat(productionInfo.getTitle()).isEqualTo(adminProductionEntity.getTitle());
@@ -319,7 +319,7 @@ class AdminProductionJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         when(adminProductionJpaRepository.findById(updateProduction.getIdx())).thenReturn(Optional.of(updateProduction));
         when(adminProductionJpaRepository.save(updateProduction)).thenReturn(updateProduction);
-        AdminProductionDTO productionInfo = mockAdminProductionJpaService.updateProduction(updateProduction.getIdx(), updateProduction);
+        AdminProductionDto productionInfo = mockAdminProductionJpaService.updateProduction(updateProduction.getIdx(), updateProduction);
 
         // then
         assertThat(productionInfo.getTitle()).isEqualTo(updateProduction.getTitle());
@@ -348,7 +348,7 @@ class AdminProductionJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         given(adminProductionJpaRepository.findById(updateProduction.getIdx())).willReturn(Optional.of(updateProduction));
         given(adminProductionJpaRepository.save(updateProduction)).willReturn(updateProduction);
-        AdminProductionDTO productionInfo = mockAdminProductionJpaService.updateProduction(updateProduction.getIdx(), updateProduction);
+        AdminProductionDto productionInfo = mockAdminProductionJpaService.updateProduction(updateProduction.getIdx(), updateProduction);
 
         // then
         assertThat(productionInfo.getTitle()).isEqualTo(updateProduction.getTitle());

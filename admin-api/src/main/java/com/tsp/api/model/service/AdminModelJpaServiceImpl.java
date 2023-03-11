@@ -3,16 +3,16 @@ package com.tsp.api.model.service;
 import com.tsp.api.comment.service.AdminCommentJpaRepository;
 import com.tsp.api.common.SaveImage;
 import com.tsp.api.common.image.AdminCommonImageJpaRepository;
-import com.tsp.api.comment.domain.AdminCommentDTO;
+import com.tsp.api.comment.domain.AdminCommentDto;
 import com.tsp.api.comment.domain.AdminCommentEntity;
-import com.tsp.api.common.domain.CommonImageDTO;
+import com.tsp.api.common.domain.CommonImageDto;
 import com.tsp.api.common.domain.CommonImageEntity;
-import com.tsp.api.model.domain.AdminModelDTO;
+import com.tsp.api.model.domain.AdminModelDto;
 import com.tsp.api.model.domain.AdminModelEntity;
 import com.tsp.api.model.domain.agency.AdminAgencyEntity;
-import com.tsp.api.model.domain.recommend.AdminRecommendDTO;
+import com.tsp.api.model.domain.recommend.AdminRecommendDto;
 import com.tsp.api.model.domain.recommend.AdminRecommendEntity;
-import com.tsp.api.model.domain.schedule.AdminScheduleDTO;
+import com.tsp.api.model.domain.schedule.AdminScheduleDto;
 import com.tsp.api.model.domain.schedule.AdminScheduleEntity;
 import com.tsp.api.model.service.agency.AdminAgencyJpaRepository;
 import com.tsp.api.model.service.recommend.AdminRecommendJpaRepository;
@@ -72,7 +72,7 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<AdminModelDTO> findModelList(Map<String, Object> modelMap, PageRequest pageRequest) {
+    public Page<AdminModelDto> findModelList(Map<String, Object> modelMap, PageRequest pageRequest) {
         return adminModelJpaQueryRepository.findModelList(modelMap, pageRequest);
     }
 
@@ -87,7 +87,7 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminModelDTO findOneModel(Long idx) {
+    public AdminModelDto findOneModel(Long idx) {
         return AdminModelEntity.toDto(adminModelJpaRepository.findByIdx(idx)
                 .orElseThrow(() -> new TspException(NOT_FOUND_MODEL)));
     }
@@ -103,7 +103,7 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminModelDTO findPrevOneModel(AdminModelEntity adminModelEntity) {
+    public AdminModelDto findPrevOneModel(AdminModelEntity adminModelEntity) {
         return adminModelJpaQueryRepository.findPrevOneModel(adminModelEntity);
     }
 
@@ -118,7 +118,7 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminModelDTO findNextOneModel(AdminModelEntity adminModelEntity) {
+    public AdminModelDto findNextOneModel(AdminModelEntity adminModelEntity) {
         return adminModelJpaQueryRepository.findNextOneModel(adminModelEntity);
     }
 
@@ -132,7 +132,7 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
      * </pre>
      */
     @Override
-    public AdminModelDTO insertModel(AdminModelEntity adminModelEntity) {
+    public AdminModelDto insertModel(AdminModelEntity adminModelEntity) {
         try {
             return toDto(adminModelJpaRepository.save(adminModelEntity));
         } catch (Exception e) {
@@ -150,7 +150,7 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
      * </pre>
      */
     @Override
-    public AdminModelDTO updateModel(Long idx, AdminModelEntity adminModelEntity) {
+    public AdminModelDto updateModel(Long idx, AdminModelEntity adminModelEntity) {
         try {
             Optional.ofNullable(oneModel(idx))
                     .ifPresent(adminModel -> adminModel.update(adminModelEntity));
@@ -188,7 +188,7 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
      * </pre>
      */
     @Override
-    public List<CommonImageDTO> insertModelImage(CommonImageEntity commonImageEntity, List<MultipartFile> fileName) {
+    public List<CommonImageDto> insertModelImage(CommonImageEntity commonImageEntity, List<MultipartFile> fileName) {
         try {
             oneModel(commonImageEntity.getTypeIdx()).addImage(commonImageEntity);
             return saveImage.saveFile(fileName, commonImageEntity);
@@ -225,7 +225,7 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
      * </pre>
      */
     @Override
-    public AdminModelDTO updateModelAgency(Long agencyIdx, AdminModelEntity adminModelEntity) {
+    public AdminModelDto updateModelAgency(Long agencyIdx, AdminModelEntity adminModelEntity) {
         // 기존 소속사 존재 여부 판단
         Optional.ofNullable(oneAgency(agencyIdx))
                 .ifPresent(adminAgencyEntity -> adminAgencyEntity.addAgency(adminModelEntity));
@@ -243,7 +243,7 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
      */
     @Override
     @Transactional
-    public AdminCommentDTO insertModelAdminComment(Long idx, AdminCommentEntity adminCommentEntity) {
+    public AdminCommentDto insertModelAdminComment(Long idx, AdminCommentEntity adminCommentEntity) {
         try {
             oneModel(idx).addComment(adminCommentEntity);
             return AdminCommentEntity.toDto(adminCommentJpaRepository.save(adminCommentEntity));
@@ -263,7 +263,7 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<AdminCommentDTO> findModelAdminComment(Long idx) {
+    public List<AdminCommentDto> findModelAdminComment(Long idx) {
         return AdminCommentEntity.toDtoList(adminCommentJpaRepository.findByAdminModelEntityIdxAndCommentType(idx, "model"));
     }
 
@@ -277,7 +277,7 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
      * </pre>
      */
     @Override
-    public AdminModelDTO toggleModelNewYn(Long idx) {
+    public AdminModelDto toggleModelNewYn(Long idx) {
         try {
             AdminModelEntity oneModelEntity = oneModel(idx);
             Optional.ofNullable(oneModelEntity)
@@ -299,7 +299,7 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<AdminScheduleDTO> findOneModelSchedule(Long idx) {
+    public List<AdminScheduleDto> findOneModelSchedule(Long idx) {
         return adminScheduleJpaRepository.findAllById(idx)
                 .stream().map(AdminScheduleEntity::toDto)
                 .collect(Collectors.toList());
@@ -316,7 +316,7 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<AdminRecommendDTO> findRecommendList(Map<String, Object> recommendMap) {
+    public List<AdminRecommendDto> findRecommendList(Map<String, Object> recommendMap) {
         return adminRecommendJpaRepository.findAll(PageRequest.of(0, 10))
                 .stream().map(AdminRecommendEntity::toDto)
                 .collect(Collectors.toList());
@@ -333,7 +333,7 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminRecommendDTO findOneRecommend(Long idx) {
+    public AdminRecommendDto findOneRecommend(Long idx) {
         AdminRecommendEntity oneRecommend = oneRecommend(idx);
         return AdminRecommendEntity.toDto(oneRecommend);
     }
@@ -348,7 +348,7 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
      * </pre>
      */
     @Override
-    public AdminRecommendDTO insertRecommend(AdminRecommendEntity adminRecommendEntity) {
+    public AdminRecommendDto insertRecommend(AdminRecommendEntity adminRecommendEntity) {
         try {
             return AdminRecommendEntity.toDto(adminRecommendJpaRepository.save(adminRecommendEntity));
         } catch (Exception e) {
@@ -366,7 +366,7 @@ public class AdminModelJpaServiceImpl implements AdminModelJpaService {
      * </pre>
      */
     @Override
-    public AdminRecommendDTO updateRecommend(AdminRecommendEntity adminRecommendEntity) {
+    public AdminRecommendDto updateRecommend(AdminRecommendEntity adminRecommendEntity) {
         try {
             Optional.ofNullable(oneRecommend(adminRecommendEntity.getIdx()))
                     .ifPresent(adminRecommend -> adminRecommend.update(adminRecommendEntity));

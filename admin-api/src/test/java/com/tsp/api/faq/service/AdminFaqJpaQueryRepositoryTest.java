@@ -1,6 +1,6 @@
 package com.tsp.api.faq.service;
 
-import com.tsp.api.faq.domain.AdminFaqDTO;
+import com.tsp.api.faq.domain.AdminFaqDto;
 import com.tsp.api.faq.domain.AdminFaqEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +53,7 @@ class AdminFaqJpaQueryRepositoryTest {
     private final AdminFaqJpaRepository adminFaqJpaRepository;
 
     private AdminFaqEntity adminFaqEntity;
-    private AdminFaqDTO adminFaqDTO;
+    private AdminFaqDto adminFaqDTO;
 
     void createFaq() {
         adminFaqEntity = AdminFaqEntity.builder()
@@ -90,15 +90,15 @@ class AdminFaqJpaQueryRepositoryTest {
         Map<String, Object> faqMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<AdminFaqDTO> faqList = new ArrayList<>();
-        faqList.add(AdminFaqDTO.builder().idx(1L).title("FAQ 테스트")
+        List<AdminFaqDto> faqList = new ArrayList<>();
+        faqList.add(AdminFaqDto.builder().idx(1L).title("FAQ 테스트")
                 .description("FAQ 테스트").build());
-        Page<AdminFaqDTO> resultFaq = new PageImpl<>(faqList, pageRequest, faqList.size());
+        Page<AdminFaqDto> resultFaq = new PageImpl<>(faqList, pageRequest, faqList.size());
 
         // when
         when(mockAdminFaqJpaQueryRepository.findFaqList(faqMap, pageRequest)).thenReturn(resultFaq);
-        Page<AdminFaqDTO> newFaqList = mockAdminFaqJpaQueryRepository.findFaqList(faqMap, pageRequest);
-        List<AdminFaqDTO> findFaqList = newFaqList.stream().collect(Collectors.toList());
+        Page<AdminFaqDto> newFaqList = mockAdminFaqJpaQueryRepository.findFaqList(faqMap, pageRequest);
+        List<AdminFaqDto> findFaqList = newFaqList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findFaqList.get(0).getIdx()).isEqualTo(faqList.get(0).getIdx());
@@ -122,15 +122,15 @@ class AdminFaqJpaQueryRepositoryTest {
         Map<String, Object> faqMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<AdminFaqDTO> faqList = new ArrayList<>();
-        faqList.add(AdminFaqDTO.builder().idx(1L).title("FAQ 테스트")
+        List<AdminFaqDto> faqList = new ArrayList<>();
+        faqList.add(AdminFaqDto.builder().idx(1L).title("FAQ 테스트")
                 .description("FAQ 테스트").build());
-        Page<AdminFaqDTO> resultFaq = new PageImpl<>(faqList, pageRequest, faqList.size());
+        Page<AdminFaqDto> resultFaq = new PageImpl<>(faqList, pageRequest, faqList.size());
 
         // when
         given(mockAdminFaqJpaQueryRepository.findFaqList(faqMap, pageRequest)).willReturn(resultFaq);
-        Page<AdminFaqDTO> newFaqList = mockAdminFaqJpaQueryRepository.findFaqList(faqMap, pageRequest);
-        List<AdminFaqDTO> findFaqList = newFaqList.stream().collect(Collectors.toList());
+        Page<AdminFaqDto> newFaqList = mockAdminFaqJpaQueryRepository.findFaqList(faqMap, pageRequest);
+        List<AdminFaqDto> findFaqList = newFaqList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findFaqList.get(0).getIdx()).isEqualTo(faqList.get(0).getIdx());
@@ -166,7 +166,7 @@ class AdminFaqJpaQueryRepositoryTest {
         adminFaqDTO = adminFaqJpaQueryRepository.findPrevOneFaq(adminFaqEntity.getIdx());
 
         when(mockAdminFaqJpaQueryRepository.findPrevOneFaq(adminFaqEntity.getIdx())).thenReturn(adminFaqDTO);
-        AdminFaqDTO faqInfo = mockAdminFaqJpaQueryRepository.findPrevOneFaq(adminFaqEntity.getIdx());
+        AdminFaqDto faqInfo = mockAdminFaqJpaQueryRepository.findPrevOneFaq(adminFaqEntity.getIdx());
 
         // then
         assertThat(faqInfo.getIdx()).isEqualTo(1);
@@ -190,7 +190,7 @@ class AdminFaqJpaQueryRepositoryTest {
         adminFaqDTO = adminFaqJpaQueryRepository.findPrevOneFaq(adminFaqEntity.getIdx());
 
         given(mockAdminFaqJpaQueryRepository.findPrevOneFaq(adminFaqEntity.getIdx())).willReturn(adminFaqDTO);
-        AdminFaqDTO faqInfo = mockAdminFaqJpaQueryRepository.findPrevOneFaq(adminFaqEntity.getIdx());
+        AdminFaqDto faqInfo = mockAdminFaqJpaQueryRepository.findPrevOneFaq(adminFaqEntity.getIdx());
 
         // then
         assertThat(faqInfo.getIdx()).isEqualTo(1);
@@ -211,7 +211,7 @@ class AdminFaqJpaQueryRepositoryTest {
         adminFaqDTO = adminFaqJpaQueryRepository.findNextOneFaq(adminFaqEntity.getIdx());
 
         when(mockAdminFaqJpaQueryRepository.findNextOneFaq(adminFaqEntity.getIdx())).thenReturn(adminFaqDTO);
-        AdminFaqDTO faqInfo = mockAdminFaqJpaQueryRepository.findNextOneFaq(adminFaqEntity.getIdx());
+        AdminFaqDto faqInfo = mockAdminFaqJpaQueryRepository.findNextOneFaq(adminFaqEntity.getIdx());
 
         // then
         assertThat(faqInfo.getIdx()).isEqualTo(1);
@@ -235,7 +235,7 @@ class AdminFaqJpaQueryRepositoryTest {
         adminFaqDTO = adminFaqJpaQueryRepository.findNextOneFaq(adminFaqEntity.getIdx());
 
         given(mockAdminFaqJpaQueryRepository.findNextOneFaq(adminFaqEntity.getIdx())).willReturn(adminFaqDTO);
-        AdminFaqDTO faqInfo = mockAdminFaqJpaQueryRepository.findNextOneFaq(adminFaqEntity.getIdx());
+        AdminFaqDto faqInfo = mockAdminFaqJpaQueryRepository.findNextOneFaq(adminFaqEntity.getIdx());
 
         // then
         assertThat(faqInfo.getIdx()).isEqualTo(1);

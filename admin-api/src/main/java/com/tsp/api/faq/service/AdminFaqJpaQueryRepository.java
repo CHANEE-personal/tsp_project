@@ -2,7 +2,7 @@ package com.tsp.api.faq.service;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tsp.api.faq.domain.AdminFaqDTO;
+import com.tsp.api.faq.domain.AdminFaqDto;
 import com.tsp.api.faq.domain.AdminFaqEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +54,7 @@ public class AdminFaqJpaQueryRepository {
      * 5. 작성일      : 2022. 08. 18.
      * </pre>
      */
-    public Page<AdminFaqDTO> findFaqList(Map<String, Object> faqMap, PageRequest pageRequest) {
+    public Page<AdminFaqDto> findFaqList(Map<String, Object> faqMap, PageRequest pageRequest) {
         List<AdminFaqEntity> faqList = queryFactory
                 .selectFrom(adminFaqEntity)
                 .orderBy(adminFaqEntity.idx.desc())
@@ -75,7 +75,7 @@ public class AdminFaqJpaQueryRepository {
      * 5. 작성일      : 2022. 09. 18.
      * </pre>
      */
-    public AdminFaqDTO findPrevOneFaq(Long idx) {
+    public AdminFaqDto findPrevOneFaq(Long idx) {
         AdminFaqEntity findPrevOneFaq = Optional.ofNullable(queryFactory
                 .selectFrom(adminFaqEntity)
                 .orderBy(adminFaqEntity.idx.desc())
@@ -95,7 +95,7 @@ public class AdminFaqJpaQueryRepository {
      * 5. 작성일      : 2022. 09. 18.
      * </pre>
      */
-    public AdminFaqDTO findNextOneFaq(Long idx) {
+    public AdminFaqDto findNextOneFaq(Long idx) {
         AdminFaqEntity findNextOneFaq = Optional.ofNullable(queryFactory
                 .selectFrom(adminFaqEntity)
                 .orderBy(adminFaqEntity.idx.desc())

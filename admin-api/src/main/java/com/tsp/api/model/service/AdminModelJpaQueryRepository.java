@@ -2,15 +2,15 @@ package com.tsp.api.model.service;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tsp.api.comment.domain.AdminCommentDTO;
+import com.tsp.api.comment.domain.AdminCommentDto;
 import com.tsp.api.comment.domain.AdminCommentEntity;
 import com.tsp.api.comment.domain.QAdminCommentEntity;
-import com.tsp.api.model.domain.AdminModelDTO;
+import com.tsp.api.model.domain.AdminModelDto;
 import com.tsp.api.model.domain.AdminModelEntity;
-import com.tsp.api.model.domain.recommend.AdminRecommendDTO;
+import com.tsp.api.model.domain.recommend.AdminRecommendDto;
 import com.tsp.api.model.domain.recommend.AdminRecommendEntity;
 import com.tsp.api.model.domain.recommend.QAdminRecommendEntity;
-import com.tsp.api.model.domain.schedule.AdminScheduleDTO;
+import com.tsp.api.model.domain.schedule.AdminScheduleDto;
 import com.tsp.api.model.domain.schedule.AdminScheduleEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -80,7 +80,7 @@ public class AdminModelJpaQueryRepository {
      * 5. 작성일      : 2022. 05. 02.
      * </pre>
      */
-    public Page<AdminModelDTO> findModelList(Map<String, Object> modelMap, PageRequest pageRequest) {
+    public Page<AdminModelDto> findModelList(Map<String, Object> modelMap, PageRequest pageRequest) {
         List<AdminModelEntity> modelList = queryFactory
                 .selectFrom(adminModelEntity)
                 .orderBy(adminModelEntity.idx.desc())
@@ -102,7 +102,7 @@ public class AdminModelJpaQueryRepository {
      * 5. 작성일      : 2022. 05. 02.
      * </pre>
      */
-    public AdminModelDTO findOneModel(Long idx) {
+    public AdminModelDto findOneModel(Long idx) {
         //모델 상세 조회
         AdminModelEntity findOneModel = Optional.ofNullable(queryFactory
                 .selectFrom(adminModelEntity)
@@ -126,7 +126,7 @@ public class AdminModelJpaQueryRepository {
      * 5. 작성일      : 2022. 09. 12.
      * </pre>
      */
-    public AdminModelDTO findPrevOneModel(AdminModelEntity existAdminModelEntity) {
+    public AdminModelDto findPrevOneModel(AdminModelEntity existAdminModelEntity) {
         // 이전 모델 조회
         AdminModelEntity findPrevOneModel = Optional.ofNullable(queryFactory
                 .selectFrom(adminModelEntity)
@@ -148,7 +148,7 @@ public class AdminModelJpaQueryRepository {
      * 5. 작성일      : 2022. 09. 12.
      * </pre>
      */
-    public AdminModelDTO findNextOneModel(AdminModelEntity existAdminModelEntity) {
+    public AdminModelDto findNextOneModel(AdminModelEntity existAdminModelEntity) {
         // 다음 모델 조회
         AdminModelEntity findNextOneModel = Optional.ofNullable(queryFactory
                 .selectFrom(adminModelEntity)
@@ -170,7 +170,7 @@ public class AdminModelJpaQueryRepository {
      * 5. 작성일      : 2022. 08. 26.
      * </pre>
      */
-    public List<AdminCommentDTO> findModelAdminComment(Long idx) {
+    public List<AdminCommentDto> findModelAdminComment(Long idx) {
         List<AdminCommentEntity> commentEntity = queryFactory
                 .selectFrom(QAdminCommentEntity.adminCommentEntity)
                 .where(QAdminCommentEntity.adminCommentEntity.commentType.eq("model")
@@ -190,7 +190,7 @@ public class AdminModelJpaQueryRepository {
      * 5. 작성일      : 2022. 09. 03.
      * </pre>
      */
-    public List<AdminScheduleDTO> findOneModelSchedule(Long idx) {
+    public List<AdminScheduleDto> findOneModelSchedule(Long idx) {
         List<AdminScheduleEntity> scheduleList = queryFactory
                 .selectFrom(adminScheduleEntity)
                 .orderBy(adminScheduleEntity.idx.desc())
@@ -210,7 +210,7 @@ public class AdminModelJpaQueryRepository {
      * 5. 작성일      : 2023. 01. 05.
      * </pre>
      */
-    public List<AdminRecommendDTO> findRecommendList(Map<String, Object> recommendMap) {
+    public List<AdminRecommendDto> findRecommendList(Map<String, Object> recommendMap) {
         List<AdminRecommendEntity> recommendList = queryFactory
                 .selectFrom(QAdminRecommendEntity.adminRecommendEntity)
                 .orderBy(QAdminRecommendEntity.adminRecommendEntity.idx.desc())

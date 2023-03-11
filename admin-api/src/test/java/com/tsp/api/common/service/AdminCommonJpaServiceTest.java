@@ -1,6 +1,6 @@
 package com.tsp.api.common.service;
 
-import com.tsp.api.common.domain.NewCodeDTO;
+import com.tsp.api.common.domain.NewCodeDto;
 import com.tsp.api.common.domain.NewCodeEntity;
 import com.tsp.api.model.service.AdminModelCommonServiceTest;
 import lombok.RequiredArgsConstructor;
@@ -61,13 +61,13 @@ class AdminCommonJpaServiceTest extends AdminModelCommonServiceTest {
         Map<String, Object> commonMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 100);
 
-        List<NewCodeDTO> commonCodeList = new ArrayList<>();
-        commonCodeList.add(NewCodeDTO.builder().idx(1L).categoryCd(1).categoryNm("men").cmmType("model").visible("Y").build());
-        Page<NewCodeDTO> resultCommon = new PageImpl<>(commonCodeList, pageRequest, commonCodeList.size());
+        List<NewCodeDto> commonCodeList = new ArrayList<>();
+        commonCodeList.add(NewCodeDto.builder().idx(1L).categoryCd(1).categoryNm("men").cmmType("model").visible("Y").build());
+        Page<NewCodeDto> resultCommon = new PageImpl<>(commonCodeList, pageRequest, commonCodeList.size());
         // when
         when(adminCommonJpaQueryRepository.findCommonCodeList(commonMap, pageRequest)).thenReturn(resultCommon);
-        Page<NewCodeDTO> newCommonCodeList = mockAdminCommonJpaService.findCommonCodeList(commonMap, pageRequest);
-        List<NewCodeDTO> findCommonCodeList = newCommonCodeList.stream().collect(Collectors.toList());
+        Page<NewCodeDto> newCommonCodeList = mockAdminCommonJpaService.findCommonCodeList(commonMap, pageRequest);
+        List<NewCodeDto> findCommonCodeList = newCommonCodeList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findCommonCodeList.get(0).getIdx()).isEqualTo(commonCodeList.get(0).getIdx());
@@ -90,13 +90,13 @@ class AdminCommonJpaServiceTest extends AdminModelCommonServiceTest {
         Map<String, Object> commonMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 100);
 
-        List<NewCodeDTO> commonCodeList = new ArrayList<>();
-        commonCodeList.add(NewCodeDTO.builder().idx(1L).categoryCd(1).categoryNm("men").cmmType("model").visible("Y").build());
-        Page<NewCodeDTO> resultCommon = new PageImpl<>(commonCodeList, pageRequest, commonCodeList.size());
+        List<NewCodeDto> commonCodeList = new ArrayList<>();
+        commonCodeList.add(NewCodeDto.builder().idx(1L).categoryCd(1).categoryNm("men").cmmType("model").visible("Y").build());
+        Page<NewCodeDto> resultCommon = new PageImpl<>(commonCodeList, pageRequest, commonCodeList.size());
         // when
         when(adminCommonJpaQueryRepository.findCommonCodeList(commonMap, pageRequest)).thenReturn(resultCommon);
-        Page<NewCodeDTO> newCommonCodeList = mockAdminCommonJpaService.findCommonCodeList(commonMap, pageRequest);
-        List<NewCodeDTO> findCommonCodeList = newCommonCodeList.stream().collect(Collectors.toList());
+        Page<NewCodeDto> newCommonCodeList = mockAdminCommonJpaService.findCommonCodeList(commonMap, pageRequest);
+        List<NewCodeDto> findCommonCodeList = newCommonCodeList.stream().collect(Collectors.toList());
 
         // then
         assertThat(findCommonCodeList.get(0).getIdx()).isEqualTo(commonCodeList.get(0).getIdx());
@@ -115,7 +115,7 @@ class AdminCommonJpaServiceTest extends AdminModelCommonServiceTest {
     void 공통코드상세조회Mockito테스트() {
         // when
         when(adminCommonJpaRepository.findById(newCodeEntity.getIdx())).thenReturn(Optional.ofNullable(newCodeEntity));
-        NewCodeDTO commonCodeInfo = mockAdminCommonJpaService.findOneCommonCode(newCodeEntity.getIdx());
+        NewCodeDto commonCodeInfo = mockAdminCommonJpaService.findOneCommonCode(newCodeEntity.getIdx());
 
         // then
         assertThat(commonCodeInfo.getIdx()).isEqualTo(newCodeEntity.getIdx());
@@ -137,7 +137,7 @@ class AdminCommonJpaServiceTest extends AdminModelCommonServiceTest {
     void 공통코드상세조회BDD테스트() {
         // when
         given(adminCommonJpaRepository.findById(newCodeEntity.getIdx())).willReturn(Optional.ofNullable(newCodeEntity));
-        NewCodeDTO commonCodeInfo = mockAdminCommonJpaService.findOneCommonCode(newCodeEntity.getIdx());
+        NewCodeDto commonCodeInfo = mockAdminCommonJpaService.findOneCommonCode(newCodeEntity.getIdx());
 
         // then
         assertThat(commonCodeInfo.getIdx()).isEqualTo(newCodeEntity.getIdx());
@@ -156,7 +156,7 @@ class AdminCommonJpaServiceTest extends AdminModelCommonServiceTest {
     void 공통코드등록Mockito테스트() {
         // when
         when(adminCommonJpaRepository.save(newCodeEntity)).thenReturn(newCodeEntity);
-        NewCodeDTO commonInfo = mockAdminCommonJpaService.insertCommonCode(newCodeEntity);
+        NewCodeDto commonInfo = mockAdminCommonJpaService.insertCommonCode(newCodeEntity);
 
         // then
         assertThat(commonInfo.getCategoryCd()).isEqualTo(newCodeEntity.getCategoryCd());
@@ -177,7 +177,7 @@ class AdminCommonJpaServiceTest extends AdminModelCommonServiceTest {
     void 공통코드등록BDD테스트() {
         // when
         given(adminCommonJpaRepository.save(newCodeEntity)).willReturn(newCodeEntity);
-        NewCodeDTO commonInfo = mockAdminCommonJpaService.insertCommonCode(newCodeEntity);
+        NewCodeDto commonInfo = mockAdminCommonJpaService.insertCommonCode(newCodeEntity);
 
         // then
         assertThat(commonInfo.getCategoryCd()).isEqualTo(newCodeEntity.getCategoryCd());
@@ -205,7 +205,7 @@ class AdminCommonJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         when(adminCommonJpaRepository.findById(updateCodeEntity.getIdx())).thenReturn(Optional.of(updateCodeEntity));
         when(adminCommonJpaRepository.save(updateCodeEntity)).thenReturn(updateCodeEntity);
-        NewCodeDTO commonCodeInfo = mockAdminCommonJpaService.updateCommonCode(updateCodeEntity.getIdx(), updateCodeEntity);
+        NewCodeDto commonCodeInfo = mockAdminCommonJpaService.updateCommonCode(updateCodeEntity.getIdx(), updateCodeEntity);
 
         // then
         assertThat(commonCodeInfo.getCategoryNm()).isEqualTo(updateCodeEntity.getCategoryNm());
@@ -235,7 +235,7 @@ class AdminCommonJpaServiceTest extends AdminModelCommonServiceTest {
         // when
         given(adminCommonJpaRepository.findById(updateCodeEntity.getIdx())).willReturn(Optional.of(updateCodeEntity));
         given(adminCommonJpaRepository.save(updateCodeEntity)).willReturn(updateCodeEntity);
-        NewCodeDTO commonCodeInfo = mockAdminCommonJpaService.updateCommonCode(updateCodeEntity.getIdx(), updateCodeEntity);
+        NewCodeDto commonCodeInfo = mockAdminCommonJpaService.updateCommonCode(updateCodeEntity.getIdx(), updateCodeEntity);
 
         // then
         assertThat(commonCodeInfo.getCategoryNm()).isEqualTo(updateCodeEntity.getCategoryNm());

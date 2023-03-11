@@ -2,7 +2,7 @@ package com.tsp.api.model.service.negotiation;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tsp.api.model.domain.negotiation.AdminNegotiationDTO;
+import com.tsp.api.model.domain.negotiation.AdminNegotiationDto;
 import com.tsp.api.model.domain.negotiation.AdminNegotiationEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +52,7 @@ public class AdminNegotiationJpaQueryRepository {
      * 5. 작성일      : 2022. 09. 09.
      * </pre>
      */
-    public Page<AdminNegotiationDTO> findNegotiationList(Map<String, Object> negotiationMap, PageRequest pageRequest) {
+    public Page<AdminNegotiationDto> findNegotiationList(Map<String, Object> negotiationMap, PageRequest pageRequest) {
         List<AdminNegotiationEntity> negotiationList = queryFactory
                 .selectFrom(adminNegotiationEntity)
                 .orderBy(adminNegotiationEntity.idx.desc())
@@ -74,7 +74,7 @@ public class AdminNegotiationJpaQueryRepository {
      * 5. 작성일      : 2022. 09. 21.
      * </pre>
      */
-    public AdminNegotiationDTO findPrevOneNegotiation(Long idx) {
+    public AdminNegotiationDto findPrevOneNegotiation(Long idx) {
         // 이전 모델 섭외 조회
         AdminNegotiationEntity findPrevOneNegotiation = Optional.ofNullable(queryFactory
                 .selectFrom(adminNegotiationEntity)
@@ -95,7 +95,7 @@ public class AdminNegotiationJpaQueryRepository {
      * 5. 작성일      : 2022. 09. 21.
      * </pre>
      */
-    public AdminNegotiationDTO findNextOneNegotiation(Long idx) {
+    public AdminNegotiationDto findNextOneNegotiation(Long idx) {
         // 다음 모델 섭외 조회
         AdminNegotiationEntity findNextOneNegotiation = Optional.ofNullable(queryFactory
                 .selectFrom(adminNegotiationEntity)

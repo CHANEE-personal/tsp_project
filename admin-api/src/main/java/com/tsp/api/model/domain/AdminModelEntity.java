@@ -198,36 +198,37 @@ public class AdminModelEntity extends NewCommonMappedClass {
         this.newYn = Objects.equals(newYn, "Y") ? "N" : "Y";
     }
 
-    public static AdminModelDTO toDto(AdminModelEntity entity) {
+    public static AdminModelDto toDto(AdminModelEntity entity) {
         if (entity == null) return null;
-        return AdminModelDTO.builder()
-                .idx(entity.getIdx())
-                .modelAgency(AdminAgencyEntity.toDto(entity.getAdminAgencyEntity()))
-                .categoryCd(entity.getCategoryCd())
-                .modelKorName(entity.getModelKorName())
-                .modelEngName(entity.getModelEngName())
-                .modelDescription(entity.getModelDescription())
-                .visible(entity.getVisible())
-                .height(entity.getHeight())
-                .shoes(entity.getShoes())
-                .size3(entity.getSize3())
-                .categoryAge(entity.getCategoryAge())
-                .modelMainYn(entity.getModelMainYn())
-                .modelFirstName(entity.getModelFirstName())
-                .modelSecondName(entity.getModelSecondName())
-                .modelKorFirstName(entity.getModelKorFirstName())
-                .modelKorSecondName(entity.getModelKorSecondName())
-                .favoriteCount(entity.getFavoriteCount())
-                .viewCount(entity.getViewCount())
-                .careerList(entity.getCareerList())
-                .status(entity.getStatus())
-                .newYn(entity.getNewYn())
-                .modelKeyword(entity.getModelKeyword())
-                .modelImage(CommonImageEntity.toDtoList(entity.getCommonImageEntityList()))
+        return AdminModelDto.builder()
+                .idx(entity.idx)
+                .agencyName(entity.adminAgencyEntity.getAgencyName())
+                .agencyDescription(entity.adminAgencyEntity.getAgencyDescription())
+                .categoryCd(entity.categoryCd)
+                .modelKorName(entity.modelKorName)
+                .modelEngName(entity.modelEngName)
+                .modelDescription(entity.modelDescription)
+                .visible(entity.visible)
+                .height(entity.height)
+                .shoes(entity.shoes)
+                .size3(entity.size3)
+                .categoryAge(entity.categoryAge)
+                .modelMainYn(entity.modelMainYn)
+                .modelFirstName(entity.modelFirstName)
+                .modelSecondName(entity.modelSecondName)
+                .modelKorFirstName(entity.modelKorFirstName)
+                .modelKorSecondName(entity.modelKorSecondName)
+                .favoriteCount(entity.favoriteCount)
+                .viewCount(entity.viewCount)
+                .careerList(entity.careerList)
+                .status(entity.status)
+                .newYn(entity.newYn)
+                .modelKeyword(entity.modelKeyword)
+                .modelImage(CommonImageEntity.toDtoList(entity.commonImageEntityList))
                 .build();
     }
 
-    public static List<AdminModelDTO> toDtoList(List<AdminModelEntity> entityList) {
+    public static List<AdminModelDto> toDtoList(List<AdminModelEntity> entityList) {
         if (entityList == null) return null;
         return entityList.stream()
                 .map(AdminModelEntity::toDto)

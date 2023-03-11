@@ -1,6 +1,6 @@
 package com.tsp.api.festival.service;
 
-import com.tsp.api.festival.domain.AdminFestivalDTO;
+import com.tsp.api.festival.domain.AdminFestivalDto;
 import com.tsp.api.festival.domain.AdminFestivalEntity;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +51,7 @@ class AdminFestivalJpaQueryRepositoryTest {
     private final EntityManager em;
 
     private AdminFestivalEntity adminFestivalEntity;
-    private AdminFestivalDTO adminFestivalDTO;
+    private AdminFestivalDto adminFestivalDTO;
 
     void createFestival() {
         // 등록
@@ -91,14 +91,14 @@ class AdminFestivalJpaQueryRepositoryTest {
         Map<String, Object> festivalMap = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(1, 3);
 
-        List<AdminFestivalDTO> festivalList = new ArrayList<>();
+        List<AdminFestivalDto> festivalList = new ArrayList<>();
         festivalList.add(adminFestivalDTO);
-        Page<AdminFestivalDTO> resultFestival = new PageImpl<>(festivalList, pageRequest, festivalList.size());
+        Page<AdminFestivalDto> resultFestival = new PageImpl<>(festivalList, pageRequest, festivalList.size());
 
         // when
         when(mockAdminFestivalJpaQueryRepository.findFestivalList(festivalMap, pageRequest)).thenReturn(resultFestival);
-        Page<AdminFestivalDTO> findFestivalList = mockAdminFestivalJpaQueryRepository.findFestivalList(festivalMap, pageRequest);
-        List<AdminFestivalDTO> newFestivalList = findFestivalList.stream().collect(Collectors.toList());
+        Page<AdminFestivalDto> findFestivalList = mockAdminFestivalJpaQueryRepository.findFestivalList(festivalMap, pageRequest);
+        List<AdminFestivalDto> newFestivalList = findFestivalList.stream().collect(Collectors.toList());
 
         // then
         assertThat(newFestivalList.get(0).getFestivalTitle()).isEqualTo("축제 제목");

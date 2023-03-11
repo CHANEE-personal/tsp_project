@@ -1,6 +1,6 @@
 package com.tsp.api.notice.service;
 
-import com.tsp.api.notice.domain.AdminNoticeDTO;
+import com.tsp.api.notice.domain.AdminNoticeDto;
 import com.tsp.api.notice.domain.AdminNoticeEntity;
 import com.tsp.exception.TspException;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class AdminNoticeJpaServiceImpl implements AdminNoticeJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<AdminNoticeDTO> findNoticeList(Map<String, Object> noticeMap, PageRequest pageRequest) {
+    public Page<AdminNoticeDto> findNoticeList(Map<String, Object> noticeMap, PageRequest pageRequest) {
         return adminNoticeJpaQueryRepository.findNoticeList(noticeMap, pageRequest);
     }
 
@@ -52,7 +52,7 @@ public class AdminNoticeJpaServiceImpl implements AdminNoticeJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminNoticeDTO findOneNotice(Long idx) {
+    public AdminNoticeDto findOneNotice(Long idx) {
         return AdminNoticeEntity.toDto(oneNotice(idx));
     }
 
@@ -67,7 +67,7 @@ public class AdminNoticeJpaServiceImpl implements AdminNoticeJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminNoticeDTO findPrevOneNotice(Long idx) {
+    public AdminNoticeDto findPrevOneNotice(Long idx) {
         return adminNoticeJpaQueryRepository.findPrevOneNotice(idx);
     }
 
@@ -82,7 +82,7 @@ public class AdminNoticeJpaServiceImpl implements AdminNoticeJpaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public AdminNoticeDTO findNextOneNotice(Long idx) {
+    public AdminNoticeDto findNextOneNotice(Long idx) {
         return adminNoticeJpaQueryRepository.findNextOneNotice(idx);
     }
 
@@ -97,7 +97,7 @@ public class AdminNoticeJpaServiceImpl implements AdminNoticeJpaService {
      */
     @Override
     @Transactional
-    public AdminNoticeDTO insertNotice(AdminNoticeEntity adminNoticeEntity) {
+    public AdminNoticeDto insertNotice(AdminNoticeEntity adminNoticeEntity) {
         try {
             return AdminNoticeEntity.toDto(adminNoticeJpaRepository.save(adminNoticeEntity));
         } catch (Exception e) {
@@ -116,7 +116,7 @@ public class AdminNoticeJpaServiceImpl implements AdminNoticeJpaService {
      */
     @Override
     @Transactional
-    public AdminNoticeDTO updateNotice(Long idx, AdminNoticeEntity adminNoticeEntity) {
+    public AdminNoticeDto updateNotice(Long idx, AdminNoticeEntity adminNoticeEntity) {
         try {
             oneNotice(idx).update(adminNoticeEntity);
             return AdminNoticeEntity.toDto(adminNoticeEntity);
