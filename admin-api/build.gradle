@@ -15,7 +15,6 @@ plugins {
     id "org.asciidoctor.convert" version "1.5.9.2"
 }
 
-apply plugin: 'war'
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
@@ -37,8 +36,7 @@ repositories {
 dependencies {
 
     // dependencies alphabet order
-    annotationProcessor "org.projectlombok:lombok:1.18.22"
-    annotationProcessor('org.projectlombok:lombok')
+    annotationProcessor "org.projectlombok:lombok"
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 
@@ -48,7 +46,7 @@ dependencies {
     compile 'org.springframework.security:spring-security-web:5.7.3'
     compile 'org.springframework.security:spring-security-config:5.7.3'
     compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'
-    compileOnly "org.projectlombok:lombok:1.18.22"
+    compileOnly "org.projectlombok:lombok"
     compileOnly 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4:1.16'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -70,9 +68,6 @@ dependencies {
     implementation group: 'com.vladmihalcea', name: 'hibernate-types-52', version: '1.0.0'
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
 
-    providedRuntime 'org.springframework.boot:spring-boot-starter'
-    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-
     runtimeOnly 'mysql:mysql-connector-java'
 
     testAnnotationProcessor('org.projectlombok:lombok')
@@ -85,10 +80,6 @@ dependencies {
 
 ext {
     snippetsDir = file('build/generated-snippets')
-}
-
-bootJar {
-    enabled = false
 }
 
 // build시 junit 제외
