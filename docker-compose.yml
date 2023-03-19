@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  mysql:
+    container_name: tsp-db
+    image: "mysql:latest"
+    ports:
+      - "3306:3306"
+    command:
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+    env_file:
+      - .env
+    restart: always
+
+  admin:
+    container_name: tsp-admin-api
+    build:
+      context: ./admin-api
+      dockerfile: Dockerfile
+    ports:
+      - "29000:8080"
+    depends_on:
+      - mysql
+    env_file:
+      - .env
+    restart: always
+
+  front:
+    container_name: tsp-front-api
+    build:
+      context: ./front-api
+      dockerfile: Dockerfile
+    ports:
+      - "29001:8080"
+    depends_on:
+      - mysql
+    env_file:
+      - .env
+    restart: always
